@@ -14,6 +14,8 @@ MATLAB 스크립트와 동일한 수식·모델을 먼저 Python으로 실행해
 | tb_c2_cllc_bidir.py | (tb_c1_cllc.m 확장 예정) | CLLC 양방향 전환, f_s 편이 전류 제한 | `python tb_c2_cllc_bidir.py` |
 | tb_s2_b3.py | (tb_b_pprc.m 확장 예정) | 150 kW CC-CV, 바이패스 전이 | `python tb_s2_b3.py` |
 | tb_s3_s5.py | (tb_b_pprc.m 확장 예정) | TB-S3/S4/S5 시스템 시나리오 | `python tb_s3_s5.py` |
+| tb_a1_ringing.py | — | 소자 피크 전압(턴온 에지·L_pkg 스윕) | `python tb_a1_ringing.py` |
+| sals_montecarlo.py | — | SALS 최악값 창 몬테카를로 300회 | `python sals_montecarlo.py` |
 | wp45_predictor.py | — | 합성 데이터·분위수 GBM 예측기·폐루프 | `python wp45_predictor.py` (sklearn) |
 
 의존성: numpy, scipy, matplotlib. 그림은 `../docs/fig/`에 저장된다.

@@ -4,7 +4,7 @@
 
 > 이 README는 프로젝트의 **현재 상태 요약**이며 지속적으로 갱신된다. 상세 근거는 `docs/`의 두 문서, 재현은 `matlab/`·`python/`, 진행 이력은 `logs/EXECUTION_LOG.md`와 `CHANGELOG.md`를 본다.
 
-최종 갱신: 2026-09-21 | 상태: **설계검증서 v1.1 — 전면 재검토 완료, 부록 A–I 결과를 본문에 통합, 제안서 정오표 추가. 남은 항목: Simscape 스위칭 모델 실제 실행, 논문 구조 결정, 선행기술 전수 검색**
+최종 갱신: 2026-09-21 | 상태: **시뮬레이션 단계 종료 — 부록 A–K, 논문 구조안(docs/03), Simulink 재현 대조표(docs/04). 남은 항목: Simscape 모델 실행(대조표 기준), 선행기술 전수 검색(IEEE Xplore/특허), 논문 집필**
 
 ---
 
@@ -62,6 +62,8 @@
 | TB-S6 B | SALS 부하 셰이핑, 냉시동 110 A 사건 | B0 붕괴 / 반응형 차단 −12.5 % 딥 / HW 150 A 3.9 V / SALS 단순+오차 붕괴 / **SALS 강건+오차 4.0 V** | **PASS — 논문 핵심 표** |
 | TB-C1 | CLLC 이득·ZVS·손실 | 이득 0.998, FHA 대비 ≤ 0.5 %, ZVS 3.7–5.9×, η 97.85 % (예측 97.8 %) | PASS (부록 E) |
 | TB-S3/S4/S5 | 800 V 충전 중 보조 스텝 / 회생 전환 / 600→920 V 스윕 | 2.0 V / 0.6 V / 버스 396–401 V, 600 V 코너 PPRC 8.4 kW → 디레이팅 규칙 | PASS(조건부, 부록 I) |
+| TB-A1x | 소자 피크 전압(링잉) | 턴온 에지 ≥ 20 ns, L_pkg ≤ 10 nH → ≤ 500 V; 5 ns 에지는 600 V 초과 | PASS(설계 규칙, 부록 J) |
+| SALS MC | 300 에피소드 | 정격 초과 사건 25 % → SALS 붕괴 0, 지연 중앙값 1 ms·최대 200 ms; 반응형 덤프 딥 22–58 V | PASS (부록 K) |
 | TB-C2 | CLLC 양방향 전환 | φ=0 동기 DC 변압기 운전, 90 % 반전 57.5 µs, f_s 편이로 회생 전류 제한 | PASS (부록 G) |
 | TB-S2 | 150 kW CC-CV, PPRC 바이패스 | 충전기 단자 331–460 V(창 200–500 V 내), 충전기 자체 루프로 CV 전환, 경로 99.77 % | PASS (부록 F) |
 | TB-B3 | 바이패스 전이 | 폐로 점프 0.09 V, 재개방 1.2 V, 전류 피크 13.2 A | PASS (부록 F) |
@@ -86,6 +88,8 @@
 ```
 docs/   01_제안서_EV컨버터_아키텍처.md   상위 제안서 (조사·아키텍처·ARL 개념·WP·KPI·참고문헌 23건)
         02_엔지니어링_설계검증서.md     적용 대상 → 비교 → 수치 검증 → Simulink 가이드 → 테스트벤치 → 검토, 부록 A–C
+        03_논문_구조안.md               두 편 분리 구조, 기여·그림 목록, 최근접 선행연구
+        04_Simulink_검증대조표.md       Simscape 재현 시 대조할 기대값
         fig/                            수치 검증·시뮬레이션 그래프
 matlab/ prism_design_params.m           WP1 파라미터 스크립트 (모든 수식) → prism_params.mat
         tb_a1_rsc_phase.m               TB-A1 단상 셀 스위칭 ODE (Simulink 불필요)
@@ -124,15 +128,17 @@ python tb_s6_sals.py A|B       # TB-S6 (A: anti-windup/캡 축소, B: SALS)
 python tb_c1_cllc.py           # TB-C1
 python tb_c2_cllc_bidir.py     # TB-C2
 python tb_s3_s5.py             # TB-S3/S4/S5
+python tb_a1_ringing.py        # TB-A1x 링잉
+python sals_montecarlo.py      # SALS 몬테카를로
 python tb_s2_b3.py             # TB-S2 / TB-B3
 python wp45_predictor.py       # WP4.5 예측기 (sklearn)
 ```
 
 ## 8. 다음 단계
 
-1. Simscape 스위칭 모델 실제 생성·실행(`build_rsc_phase.m`부터) — 기생 인덕턴스·링잉·소자 피크 전압 확인, 부록 A–C 재현
-2. SALS 몬테카를로(지연·서지·결측 난수화 수백 에피소드) 생존율 통계 — 논문 표
-3. 논문 구조 결정: 토폴로지·시스템 논문(부록 A–G·I) + 강건 스케줄링 논문(부록 D·H)
+1. Simscape 스위칭 모델 실행 — `docs/04_Simulink_검증대조표.md` 기준으로 재현 확인(사용자 MATLAB 환경)
+2. 선행기술 전수 검색(IEEE Xplore, Google Patents, Espacenet) — 검색식은 docs/03 공통 절
+3. 논문 집필 — docs/03 구조안(논문 1 토폴로지·시스템, 논문 2 강건 스케줄링)
 4. Simulink 모델 실제 생성(build_rsc_phase.m 실행·배선 확인), 스위칭 모델 기반 TB-S1 재검증
 5. 선행기술 전수 검색(IEEE Xplore, Google Patents, Espacenet)
 
