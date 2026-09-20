@@ -71,14 +71,14 @@ B.Rser    = 2*(4e-3/4);                       % 직렬 경로 도통저항 (200 
 B.Pser_drive = P.aux.Imax^2*B.Rser;           % 7.8 W
 B.Pser_chg   = P.chg.Ibus^2*B.Rser + P.chg.Ibus^2*0.3e-3;  % 323 W (0.22 %) - 바이패스 채택 근거
 B.eta_dab = 0.96;  B.Pidle = 15;
-B.Isat_Vmin = B.Prated/abs(B.dV(1));          % 105 A : Vbat,min에서 조정 가능한 최대 부하전류
-% 제어 대역폭 상한 (직렬 경로 공진)
+B.Isat_Vmin = min(B.Iser_max, B.Prated/abs(B.dV(1)));   % 100 A : min(직렬 전류 정격, 8 kW/|dV|)  (v1.1 정정 12)
+B.derate_Vbat = 640; B.derate_Paux = 20e3;      % V_bat < 640 V 에서 보조부하 20 kW 디레이팅 (TB-S5)
+% 제어 (v1.1): 직렬 경로 공진 14.5 kHz(Q~10) -> PI 단독 1.8 kHz 상한, 상태궤환+적분(tb_b_pprc.m 극배치 8 kHz) 채택
 B.Lpath  = 1.5e-6;  B.Cbus = 400e-6;
 B.Ceff   = B.Cser*B.Cbus/(B.Cser+B.Cbus);
 B.fres   = 1/(2*pi*sqrt(B.Lpath*B.Ceff));     % 14.5 kHz
-B.BW     = B.fres/3;                          % 4.8 kHz
-B.tresp  = 0.35/B.BW;                         % 72 us
-B.droop  = @(dI) dI*B.tresp/(B.Cser+B.Cbus);  % 60 A -> 8.7 V
+B.fbw    = 8e3;                               % 상태궤환 설계 대역폭 (TB-S1: 60 A droop 4.7 V)
+B.Iheadroom = @(Iload) B.Iser_max - Iload;    % 포화 절벽 (TB-S1: 87.5 A @ 12.5 A 초기부하)
 
 %% 4. Stage C : 고정이득 CLLC 400 -> 48 V, 3 kW ------------------------------
 C.Vo = 48; C.Po = 3e3; C.n = P.bus.V/C.Vo; C.turns = [25 3];
@@ -103,16 +103,17 @@ BUS.preboost = 0.02;
 BUS.E_pb = 0.5*(BUS.C+B.Cser)*((P.bus.V*(1+BUS.preboost))^2 - P.bus.V^2);  % 1.6 J
 BUS.t_pb_60A = BUS.E_pb/(P.bus.V*60);                               % 67 us
 
-%% 6. ARL ---------------------------------------------------------------------
-ARL.Ts = 1e-3; ARL.H = 15; ARL.win = 20;       % 1 ms 주기, 15 ms 지평선, 20 ms 입력 윈도우
-ARL.hidden = 48; ARL.type = 'GRU';
-ARL.k_pb = 0.02*P.bus.V/60;                   % 60 A 예측 시 +2 % pre-boost
-ARL.pb_max = 0.02*P.bus.V;  ARL.gate_sigma = 0.35;
-ARL.mpc.q = 1; ARL.mpc.r = 0.01; ARL.mpc.s = 5;
-ARL.mpc.Irated = B.Iser_max; ARL.mpc.Vmin = 392; ARL.mpc.Vmax = 408;
+%% 6. SALS (v1.1: ARL 대체, 부록 D·H) ---------------------------------------------
+SALS.Tc = 1e-3; SALS.H = 15;                  % 1 ms 주기, 15 ms 지평선
+SALS.Imax = 95;                               % 헤드룸 상한 = min(95 A, 0.95*8 kW/|dV|) (런타임 계산)
+SALS.win.comp = [0.020 0.220]; SALS.win.comp_k = 2.2;   % 컴프레서 명령 후 서지 가능 창 [s], 서지 계수
+SALS.win.v2l  = 0.005;                        % V2L 요청 후 지연
+SALS.win.susp = 7.5;                          % 서스펜션 상시 마진 [A]
+SALS.w = [1.0 0.7 0.5];                       % 우선순위: 캐빈 PTC / 배터리 히터 / 48 V 저우선
+SALS.uv_trip = 388; SALS.uv_act = 1e-3; SALS.uv_restore = 20e-3;   % 반응형 백업 부하 덤프
 
 %% 7. 출력 ---------------------------------------------------------------------
-P.A = A; P.B = B; P.C = C; P.D = D; P.BUS = BUS; P.ARL = ARL;
+P.A = A; P.B = B; P.C = C; P.D = D; P.BUS = BUS; P.SALS = SALS;
 fprintf('Stage A: Cfly=%.1f uF, Lr=%.0f nH, eta_full=%.2f %%, Rout_sys=%.2f mohm, Iinrush(no precharge)=%.0f A\n', ...
     A.Cfly*1e6, A.Lr*1e9, A.eta_full*100, A.Rout_sys*1e3, A.Iinrush);
 disp(array2table(A.sweep,'VariableNames',A.sweep_cols));
