@@ -1,0 +1,140 @@
+{
+ "A": {
+  "0.25": {
+   "fbw": 10000.0,
+   "Kaw": 0.6,
+   "vmin": 50.0,
+   "vmax": 391.7323946956976,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 1200.0
+  },
+  "0.5": {
+   "fbw": 8000.0,
+   "Kaw": 0.0,
+   "vmin": 392.3866203468362,
+   "vmax": 402.006196509639,
+   "droop": 7.613379653163804,
+   "collapse": false,
+   "outside2pct_us": 0.0
+  },
+  "1.0": {
+   "fbw": 8000.0,
+   "Kaw": 0.0,
+   "vmin": 395.2629912956935,
+   "vmax": 400.0000000039353,
+   "droop": 4.737008704306504,
+   "collapse": false,
+   "outside2pct_us": 0.0
+  }
+ },
+ "B": {
+  "B0_100A": {
+   "vmin": 50.0,
+   "vmax": 400.0000000030406,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 73733.59999999999
+  },
+  "HW_150A": {
+   "vmin": 396.0506640045259,
+   "vmax": 403.9393854293711,
+   "droop": 3.9493359954740868,
+   "collapse": false,
+   "outside2pct_us": 0.0
+  },
+  "SALS_perfect": {
+   "vmin": 392.0139384867471,
+   "vmax": 402.4263906359507,
+   "droop": 7.986061513252878,
+   "collapse": false,
+   "outside2pct_us": 0.0,
+   "batheater_delay_ms": 19.000000000000004,
+   "ptc_delay_ms": null
+  },
+  "SALS_under20": {
+   "vmin": 50.0,
+   "vmax": 400.0000000030406,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 73754.79999999999
+  },
+  "SALS_late5ms": {
+   "vmin": 50.0,
+   "vmax": 400.0000000030406,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 73796.2
+  },
+  "SALS_under20_late5ms": {
+   "vmin": 50.0,
+   "vmax": 400.0000000030406,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 73796.2
+  },
+  "SALS_early5ms": {
+   "vmin": 50.0,
+   "vmax": 400.0000000030406,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 59999.399999999994
+  },
+  "SALS_margin_85": {
+   "vmin": 50.0,
+   "vmax": 400.0000000030406,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 73796.2
+  },
+  "SALS_margin_90": {
+   "vmin": 50.0,
+   "vmax": 400.0000000030406,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 73796.2
+  },
+  "SALS_margin_95": {
+   "vmin": 50.0,
+   "vmax": 400.0000000030406,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 73796.2
+  },
+  "SALS_margin_98": {
+   "vmin": 50.0,
+   "vmax": 400.0000000030406,
+   "droop": 350.0,
+   "collapse": true,
+   "outside2pct_us": 73796.2
+  },
+  "SALSrobust_under20_late5ms": {
+   "vmin": 395.98226295462564,
+   "vmax": 403.9297430755479,
+   "droop": 4.017737045374361,
+   "collapse": false,
+   "outside2pct_us": 0.0
+  },
+  "SALSrobust_early5ms": {
+   "vmin": 396.0344379084095,
+   "vmax": 402.60076947684456,
+   "droop": 3.9655620915905274,
+   "collapse": false,
+   "outside2pct_us": 0.0
+  },
+  "SALSrobust_under20": {
+   "vmin": 395.98226295462564,
+   "vmax": 403.9297430755479,
+   "droop": 4.017737045374361,
+   "collapse": false,
+   "outside2pct_us": 0.0
+  },
+  "Reactive": {
+   "vmin": 349.96880315758284,
+   "vmax": 403.91495092869974,
+   "droop": 50.03119684241716,
+   "collapse": true,
+   "outside2pct_us": 2087.0
+  }
+ }
+}

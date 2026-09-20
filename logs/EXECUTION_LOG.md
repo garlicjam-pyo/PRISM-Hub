@@ -53,10 +53,17 @@
 - 프로젝트명 PRISM-Hub 유지 결정, 제어 계층 ARL → SALS(Saturation-Aware Anticipatory Load Shaping) 개명 검토.
 - 저장소 초기 구성(이 로그, README, CHANGELOG).
 
+### 세션 6 (2026-09-21): TB-S6 / TB-C1 (python/tb_s6_sals.py, tb_c1_cllc.py)
+- V4: s=1 Kaw=0 60 A → 4.7 V (부록 C 재현).
+- anti-windup 스케일 버그 수정(∂u/∂q = −K5로 정규화). s=0.25: I_sat=1000 A에서도 선형 폐루프 진동(4 kHz: droop 137 V) → 원인 DAB 지연 + 29 kHz 공진. MPC 불가 판정. s=0.5 7.6 V.
+- SALS 시나리오 수정 2회(초기 피크 60 A·55 A로 정격 미달 → 서지 50 A 상수 20 ms 모델로 110 A). 결과: B0 붕괴 / HW 150 A 3.9 V / SALS 완전 8.0 V / SALS 단순+오차(−20 %, ±5 ms) 붕괴 / SALS 강건(±5 ms 최악, +25 %) 4.0 V / 반응형 부하 덤프(388 V 트립) 350 V 딥 2.1 ms. 발견: 타이밍 오차 민감 → 구간 예측·최악값 제약 필수.
+- TB-C1: 6상태 CLLC ODE. 이득 0.998, FHA 오차 ≤ 0.5 %(V5), Im 5.9 A(예측 6.1), rms 9.1/68.3 A, η 97.85 %, ±2 % 입력 → 47.1–49.1 V.
+- 산출: matlab/tb_s6_sals.m, tb_c1_cllc.m; 부록 D·E; README 0.4.0.
+
 ---
 
 ## 미결 항목
-- TB-S6 ARL-MPC, TB-C1/C2, TB-B3, TB-S2~S5.
+- TB-C2, TB-B3, TB-S2~S5; SALS 예측기 학습(WP4.5-2/3).
 - 설계검증서 본문 2.4·3.5·4.3.3 재작성(현재는 "검증 후 갱신" 주석으로 표시).
 - 참고문헌 [21](열관리 부하) 1차 문헌 교체, 선행기술 전수 검색.
 - Simulink 모델 실제 생성·배선 확인(build_rsc_phase.m는 미실행).
