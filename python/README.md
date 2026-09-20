@@ -11,5 +11,8 @@ MATLAB 스크립트와 동일한 수식·모델을 먼저 Python으로 실행해
 | tb_b_pprc2.py | tb_b_pprc.m | 상태궤환 PPRC, TB-B2/TB-S1 | `python tb_b_pprc2.py` |
 | tb_s6_sals.py | tb_s6_sals.m | anti-windup/캡 축소(A), SALS 강건 LP 부하 셰이핑(B) | `python tb_s6_sals.py A` / `B` |
 | tb_c1_cllc.py | tb_c1_cllc.m | CLLC 스위칭, 이득·ZVS·손실 | `python tb_c1_cllc.py` |
+| tb_c2_cllc_bidir.py | (tb_c1_cllc.m 확장 예정) | CLLC 양방향 전환, f_s 편이 전류 제한 | `python tb_c2_cllc_bidir.py` |
+| tb_s2_b3.py | (tb_b_pprc.m 확장 예정) | 150 kW CC-CV, 바이패스 전이 | `python tb_s2_b3.py` |
+| wp45_predictor.py | — | 합성 데이터·분위수 GBM 예측기·폐루프 | `python wp45_predictor.py` (sklearn) |
 
 의존성: numpy, scipy, matplotlib. 그림은 `../docs/fig/`에 저장된다.

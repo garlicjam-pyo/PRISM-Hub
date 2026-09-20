@@ -4,13 +4,13 @@
 
 > 이 README는 프로젝트의 **현재 상태 요약**이며 지속적으로 갱신된다. 상세 근거는 `docs/`의 두 문서, 재현은 `matlab/`·`python/`, 진행 이력은 `logs/EXECUTION_LOG.md`와 `CHANGELOG.md`를 본다.
 
-최종 갱신: 2026-09-21 | 상태: **Stage A·PPRC·CLLC 검증 완료, SALS(부하 셰이핑) 검증 완료 — 남은 항목: TB-C2, TB-B3, TB-S2~S5, 본문 재작성**
+최종 갱신: 2026-09-21 | 상태: **회로·제어 검증 일단락(TB-A1~A4, B2, B3, C1, C2, S1, S2, S6, WP4.5). 남은 항목: TB-S3~S5, 본문 재작성, Simulink 모델 실행, 선행기술 전수 검색**
 
 ---
 
 ## 1. 한 줄 요약
 
-배터리 640–920 V를 **2:1 고정비 공진형 스위치드-커패시터**(개루프 ZCS, 150 kW)로 400 V 중간버스에 연결하고, 전압 조정은 **8 kW 부분전력 직렬 셀(절연 DAB)** 하나에 몰아넣으며, 48/12 V는 **고정이득 CLLC**로 공급하는 단일 장치. 400 V 급속충전기는 2:1 고정비만으로 호환된다(충전 모드에서 직렬 셀 바이패스). 제어 측에서는 차량 선행 신호로 부하를 예측해 **직렬 셀의 포화를 회피**하는 계층 **SALS**(Saturation-Aware Anticipatory Load Shaping, 구 ARL)를 얹는다. 검증 결과 SALS는 1 ms 주기의 강건(최악값 제약) LP 스케줄러로 확정되었고, 빠른 시간 스케일의 droop 절감 역할은 없다.
+배터리 640–920 V를 **2:1 고정비 공진형 스위치드-커패시터**(개루프 ZCS, 150 kW)로 400 V 중간버스에 연결하고, 전압 조정은 **8 kW 부분전력 직렬 셀(절연 DAB)** 하나에 몰아넣으며, 48/12 V는 **고정이득 CLLC**로 공급하는 단일 장치. 400 V 급속충전기는 2:1 고정비만으로 호환된다(충전 모드에서 직렬 셀 바이패스). 제어 측에서는 차량 선행 신호로 부하를 예측해 **직렬 셀의 포화를 회피**하는 계층 **SALS**(Saturation-Aware Anticipatory Load Shaping, 구 ARL)를 얹는다. 검증 결과 SALS는 선행 신호 → 최악값 창 → 강건 LP(1 ms)의 규칙 기반 스케줄러로 확정되었다. 빠른 시간 스케일의 droop 절감 역할은 없으며, 학습 예측기는 현재 신호 집합에서 지속 예측과 차이가 없어(부록 H) 조건부 역할로 축소했다.
 
 ## 2. 아키텍처 (확정판)
 
@@ -61,7 +61,10 @@
 | TB-S6 A | 캡 축소 s=0.25 + anti-windup | 포화 제거해도 불안정 → 원인은 DAB 지연(15 µs)+29 kHz 공진, MPC로 불가 | 캡 축소 주장 완전 철회 (부록 D) |
 | TB-S6 B | SALS 부하 셰이핑, 냉시동 110 A 사건 | B0 붕괴 / 반응형 차단 −12.5 % 딥 / HW 150 A 3.9 V / SALS 단순+오차 붕괴 / **SALS 강건+오차 4.0 V** | **PASS — 논문 핵심 표** |
 | TB-C1 | CLLC 이득·ZVS·손실 | 이득 0.998, FHA 대비 ≤ 0.5 %, ZVS 3.7–5.9×, η 97.85 % (예측 97.8 %) | PASS (부록 E) |
-| TB-C2 | CLLC 역방향 전환 | — | 대기 |
+| TB-C2 | CLLC 양방향 전환 | φ=0 동기 DC 변압기 운전, 90 % 반전 57.5 µs, f_s 편이로 회생 전류 제한 | PASS (부록 G) |
+| TB-S2 | 150 kW CC-CV, PPRC 바이패스 | 충전기 단자 331–460 V(창 200–500 V 내), 충전기 자체 루프로 CV 전환, 경로 99.77 % | PASS (부록 F) |
+| TB-B3 | 바이패스 전이 | 폐로 점프 0.09 V, 재개방 1.2 V, 전류 피크 13.2 A | PASS (부록 F) |
+| WP4.5 | SALS 예측기 학습 | 학습 예측 = 지속 예측(MAE 1.4 vs 1.3 A), q0.9 구간은 서지 미포함 → 폐루프 붕괴; **최악값 창 규칙은 지연 20–190 ms 전부 생존** | 학습 요소 조건부 축소 (부록 H) |
 | TB-B3 | 바이패스 전이 | — | 대기 |
 | TB-S2~S5 | 충전 CC-CV, 800 V 충전, V2L, 전압 스윕 | — | 대기 |
 
@@ -73,7 +76,8 @@
 4. f_s = 0.98 f_r → 자기발진 ZC 추종(블랭킹 창 0.80–1.12) + C_in 100 µF
 5. PPRC 제어: PI 캐스케이드 → 상태궤환 + 적분
 6. ARL 기여: "droop 절감·캡 축소" → **"PPRC 포화 예측 회피(부하 셰이핑)"** — 제약 인지 MPC 역할도 철회(부록 D)
-7. 제어 계층 명칭 ARL → **SALS** 확정 제안; 예측기는 점추정이 아닌 구간(분위수) 출력 필수(타이밍 오차 5 ms에 단순 예측은 붕괴)
+7. 제어 계층 명칭 ARL → **SALS** 확정 제안; 예측은 점추정·분위수가 아닌 **최악값 창(집합값)** 이어야 함 — 분위수 구간조차 서지를 놓쳐 붕괴(부록 H)
+8. 학습(GRU/GBM) 요소: 현재 신호 집합에서는 정당화되지 않음 → 지연 결정 신호가 있을 때 창을 좁히는 용도, 창 폭·서지 계수 온라인 식별로 한정
 
 ## 6. 저장소 구조
 
@@ -88,7 +92,7 @@ matlab/ prism_design_params.m           WP1 파라미터 스크립트 (모든 �
         tb_s6_sals.m                    SALS 강건 LP 스케줄러 + 직렬 경로 모델 (Control System·Optimization Toolbox)
         tb_c1_cllc.m                    CLLC 스위칭 ODE, 이득·ZVS
         build_rsc_phase.m               Simscape Electrical 모델 자동 생성 (수동 확인 목록 출력)
-python/ calc.py, tb_a1_sim.py, tb_a_array.py, tb_b_pprc2.py, tb_s6_sals.py, tb_c1_cllc.py   검증용 원본
+python/ calc.py, tb_a1_sim.py, tb_a_array.py, tb_b_pprc2.py, tb_s6_sals.py, tb_c1_cllc.py, tb_c2_cllc_bidir.py, tb_s2_b3.py, wp45_predictor.py
         results/*.json                  실행 결과 원본 수치
 logs/   EXECUTION_LOG.md                실행 내역·발견·결정 타임라인
 CHANGELOG.md                            문서·설계 변경 이력
@@ -116,13 +120,16 @@ python tb_a_array.py mc|a2|a3|a4
 python tb_b_pprc2.py           # TB-B2/S1
 python tb_s6_sals.py A|B       # TB-S6 (A: anti-windup/캡 축소, B: SALS)
 python tb_c1_cllc.py           # TB-C1
+python tb_c2_cllc_bidir.py     # TB-C2
+python tb_s2_b3.py             # TB-S2 / TB-B3
+python wp45_predictor.py       # WP4.5 예측기 (sklearn)
 ```
 
 ## 8. 다음 단계
 
-1. TB-C2(CLLC 역방향 회생 전환), TB-B3(바이패스 전이), TB-S2(150 kW CC-CV), TB-S3~S5
-2. SALS 예측기(분위수 GRU) 학습·데이터 생성(WP4.5-2/3) — 강건 스케줄러에 구간 예측 연결
-3. 설계검증서 본문 2.4·3.5·3.6·4.3.3·4.3.8·KPI 6 재작성(부록 C·D 반영), 제안서 3.6절 개정(ARL → SALS)
+1. TB-S3(800 V 충전 중 보조부하), TB-S4(V2L + 48 V 회생), TB-S5(전압 스윕) — 평균값 모델로 단기 완료 가능
+2. 설계검증서 본문 2.4·3.5·3.6·4.3.3·4.3.8·KPI 6 재작성(부록 C·D·H 반영), 제안서 3.6절 개정(ARL → SALS, 학습 요소 축소)
+3. 논문 구조 결정: 토폴로지·시스템 논문(부록 A–G) + 강건 스케줄링 논문(부록 D·H)으로 분리 여부
 4. Simulink 모델 실제 생성(build_rsc_phase.m 실행·배선 확인), 스위칭 모델 기반 TB-S1 재검증
 5. 선행기술 전수 검색(IEEE Xplore, Google Patents, Espacenet)
 
