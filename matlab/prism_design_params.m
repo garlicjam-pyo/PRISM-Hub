@@ -1,0 +1,124 @@
+%% prism_design_params.m
+%  PRISM-Hub  --  WP1 설계 파라미터 스크립트 (수식 기반 산정 + 스윕)
+%  실행: >> prism_design_params
+%  결과: 구조체 P (Simulink 모델의 Model Workspace/Base Workspace 파라미터로 사용)
+%  각 수식의 근거는 "PRISM-Hub_엔지니어링_설계검증서.md" 3장 참조
+clear; clc;
+
+%% 1. 시스템 사양 ---------------------------------------------------------
+P.bat.Ns    = 216;                 % NMC 직렬 셀 수 (3.0~4.2 V/cell)
+P.bat.Vmin  = P.bat.Ns*3.0;        % 648 V
+P.bat.Vnom  = P.bat.Ns*3.65;       % 788 V
+P.bat.Vmax  = P.bat.Ns*4.2;        % 907 V
+P.bat.Vabs  = 920;                 % 소자 선정용 절대 최대
+P.bus.V     = 400;                 % 중간버스 정격
+P.chg.P     = 150e3;               % 400 V 급속충전 최대
+P.chg.Ibus  = P.chg.P/P.bus.V;     % 375 A (충전기 측)
+P.chg.Ibat  = P.chg.P/(2*P.bus.V); % 187.5 A (배터리 측)
+P.aux.Pmax  = 25e3;                % 주행 모드 400 V 보조부하 최대
+P.aux.Imax  = P.aux.Pmax/P.bus.V;  % 62.5 A
+
+%% 2. Stage A : 2:1 공진형 스위치드-커패시터 (RSC) -------------------------
+A.Nmod   = 4;   A.Nph = 2;                    % 4 모듈 x 2 위상 = 8 위상
+A.Pmod   = P.chg.P/A.Nmod;                    % 37.5 kW
+A.Iph    = A.Pmod/P.bus.V/A.Nph;              % 46.9 A (위상당 평균 출력전류)
+A.Ipk    = pi/2*A.Iph;                        % 73.6 A (반파 정현 피크)
+A.Irms_sw= A.Ipk/2;                           % 36.8 A (스위치 rms, 반주기 도통)
+A.Irms_c = A.Ipk/sqrt(2);                     % 52.1 A (플라잉 캡 rms)
+A.Vsw    = P.bat.Vabs/2;                      % 460 V (스위치 차단전압)
+A.fr     = 150e3;                             % 공진주파수 (스윕 결과로 선정, 3.2절)
+A.dVc    = 0.05*P.bus.V;                      % 캡 전압 스윙 5 % (20 V)
+A.Cfly   = A.Iph/(2*A.fr*A.dVc);              % 7.8 uF
+A.Lr     = 1/((2*pi*A.fr)^2*A.Cfly);          % 144 nH
+A.tdead  = 100e-9;                            % 데드타임
+% 이론: 도통구간(T/2 - tdead)이 공진 반주기와 일치 -> fs = fr_eff/(1+2*tdead*fr_eff), fr_eff = fr*(1+Cfly/(2*Cout))
+% TB-A1 미세 스윕(Cout=400 uF) 결과 최적 fs/fr = 0.975~0.98 -> 0.98 채택 (147 kHz)
+A.fs     = 0.98*A.fr;
+A.Zr     = sqrt(A.Lr/A.Cfly);                 % 0.136 ohm
+A.Iinrush= A.Vsw/A.Zr;                        % 3.4 kA (프리차지 없을 때) -> 프리차지 필수
+% 소자 (750 V SiC, 12 mohm@125C, 2병렬)
+A.Rds    = 12e-3/2;  A.Eoss = 12e-6*2;  A.Qg_E = 1e-6*2;
+A.ESRc   = 1.5e-3;   A.RL = 1e-3;       A.Rmisc = 1.5e-3;
+A.Pcond  = 4*A.Irms_sw^2*A.Rds;
+A.Psw    = 4*A.Eoss*A.fs;                     % Coss 손실 (ZCS, 보수적 100 %)  [TB-A1 검증: 59.4 W/위상 @0.98fr]
+A.Pgate  = 4*A.Qg_E*A.fs;
+A.Pcap   = A.Irms_c^2*A.ESRc;  A.Pind = A.Irms_c^2*A.RL;  A.Pmisc = A.Irms_c^2*A.Rmisc;
+A.Pph    = A.Pcond+A.Psw+A.Pgate+A.Pcap+A.Pind+A.Pmisc;   % 59 W/위상
+A.Pmod_loss = A.Pph*A.Nph;                    % 118 W/모듈
+A.eta_full  = 1 - A.Pmod_loss/A.Pmod;         % 99.69 %
+A.Rout_mod  = A.Pmod_loss/(A.Pmod/P.bus.V)^2; % 13.4 mohm
+A.Rout_sys  = A.Rout_mod/A.Nmod;              % 3.35 mohm
+A.Rout_avg  = A.Rout_mod;                     % 평균값 모델(모듈)용 등가 출력저항
+% fs 스윕 (효율 vs 수동소자 크기)
+fs_sw = [50 100 150 200 300 400]*1e3;
+for k = 1:numel(fs_sw)
+    f = fs_sw(k); C = A.Iph/(2*f*A.dVc); L = 1/((2*pi*f)^2*C);
+    Pl = A.Pcond + 4*A.Eoss*f + 4*A.Qg_E*f + A.Pcap + A.Pind + A.Pmisc;
+    A.sweep(k,:) = [f/1e3, C*1e6, L*1e9, Pl, (1-Pl/(A.Pmod/A.Nph))*100];
+end
+A.sweep_cols = {'fs[kHz]','Cfly[uF]','Lr[nH]','Ploss/ph[W]','eta[%]'};
+
+%% 3. Stage B : 부분전력 직렬 조정 셀 (PPRC, 절연 DAB) -----------------------
+B.VA_mid  = [P.bat.Vmin P.bat.Vnom P.bat.Vmax]/2 - P.aux.Imax*A.Rout_mod; % 주행 모드(1모듈)
+B.dV      = P.bus.V - B.VA_mid;               % +76 / +6 / -53 V
+B.kpr     = abs(B.dV)/P.bus.V;                % 19 % / 1.5 % / 13 %
+B.P_need  = abs(B.dV)*P.aux.Imax;             % 4.76 / 0.38 / 3.34 kW
+B.Prated  = 8e3;  B.Vser_max = 90;  B.Iser_max = 100;   % 정격 결정 (3.3절)
+B.n       = 4;  B.V1 = 400;  B.V2 = 100;  B.fs = 200e3;  B.phi_max = pi/3;
+B.Ls      = B.V1*(B.n*B.V2)*B.phi_max*(1-B.phi_max/pi)/(2*pi*B.fs*B.Prated); % 11.1 uH (1차 환산)
+B.Cser    = 100e-6;                           % 직렬 출력 캡 (150 V 정격)
+B.Rser    = 2*(4e-3/4);                       % 직렬 경로 도통저항 (200 V GaN 4병렬 x 2)
+B.Pser_drive = P.aux.Imax^2*B.Rser;           % 7.8 W
+B.Pser_chg   = P.chg.Ibus^2*B.Rser + P.chg.Ibus^2*0.3e-3;  % 323 W (0.22 %) - 바이패스 채택 근거
+B.eta_dab = 0.96;  B.Pidle = 15;
+B.Isat_Vmin = B.Prated/abs(B.dV(1));          % 105 A : Vbat,min에서 조정 가능한 최대 부하전류
+% 제어 대역폭 상한 (직렬 경로 공진)
+B.Lpath  = 1.5e-6;  B.Cbus = 400e-6;
+B.Ceff   = B.Cser*B.Cbus/(B.Cser+B.Cbus);
+B.fres   = 1/(2*pi*sqrt(B.Lpath*B.Ceff));     % 14.5 kHz
+B.BW     = B.fres/3;                          % 4.8 kHz
+B.tresp  = 0.35/B.BW;                         % 72 us
+B.droop  = @(dI) dI*B.tresp/(B.Cser+B.Cbus);  % 60 A -> 8.7 V
+
+%% 4. Stage C : 고정이득 CLLC 400 -> 48 V, 3 kW ------------------------------
+C.Vo = 48; C.Po = 3e3; C.n = P.bus.V/C.Vo; C.turns = [25 3];
+C.fr = 250e3; C.m = 6; C.Q = 0.4;
+C.RL = C.Vo^2/C.Po;  C.Rac = 8*C.n^2*C.RL/pi^2;
+C.Lr = C.Q*C.Rac/(2*pi*C.fr);  C.Cr = 1/((2*pi*C.fr)^2*C.Lr);  C.Lm = C.m*C.Lr;
+C.Lr2 = C.Lr/C.n^2;  C.Cr2 = C.Cr*C.n^2;      % 2차측 대칭 탱크
+C.Im_pk = P.bus.V/(4*C.Lm*C.fr);              % 6.1 A
+C.Coss  = 100e-12;  C.tdead_min = 2*C.Coss*P.bus.V/C.Im_pk;
+gain = @(fn,Q,m) 1./sqrt((1+(1/m)*(1-1./fn.^2)).^2 + (Q*(fn-1./fn)).^2);
+C.gain_tol = gain([0.97 1 1.03], C.Q, C.m);   % +-1 %
+C.eta_target = 0.97;
+% 12 V : 48->12 V 4상 동기 벅 1.5 kW
+D.P = 1.5e3; D.Io = 125; D.Nph = 4; D.fs = 300e3; D.dI_ratio = 0.3;
+D.L = (48-12)*(12/48)/(D.fs*D.dI_ratio*D.Io/D.Nph);   % 3.2 uH
+
+%% 5. 버스 커패시터 ------------------------------------------------------------
+BUS.C = 400e-6;  BUS.Vrated = 500;  BUS.E = 0.5*BUS.C*P.bus.V^2;   % 32 J
+BUS.Rcpl = -P.bus.V^2/P.aux.Pmax;                                   % -6.4 ohm (CPL)
+BUS.Cmin_cpl = B.Lpath/BUS.Rcpl^2;                                  % 37 nF (충분조건)
+BUS.preboost = 0.02;
+BUS.E_pb = 0.5*(BUS.C+B.Cser)*((P.bus.V*(1+BUS.preboost))^2 - P.bus.V^2);  % 1.6 J
+BUS.t_pb_60A = BUS.E_pb/(P.bus.V*60);                               % 67 us
+
+%% 6. ARL ---------------------------------------------------------------------
+ARL.Ts = 1e-3; ARL.H = 15; ARL.win = 20;       % 1 ms 주기, 15 ms 지평선, 20 ms 입력 윈도우
+ARL.hidden = 48; ARL.type = 'GRU';
+ARL.k_pb = 0.02*P.bus.V/60;                   % 60 A 예측 시 +2 % pre-boost
+ARL.pb_max = 0.02*P.bus.V;  ARL.gate_sigma = 0.35;
+ARL.mpc.q = 1; ARL.mpc.r = 0.01; ARL.mpc.s = 5;
+ARL.mpc.Irated = B.Iser_max; ARL.mpc.Vmin = 392; ARL.mpc.Vmax = 408;
+
+%% 7. 출력 ---------------------------------------------------------------------
+P.A = A; P.B = B; P.C = C; P.D = D; P.BUS = BUS; P.ARL = ARL;
+fprintf('Stage A: Cfly=%.1f uF, Lr=%.0f nH, eta_full=%.2f %%, Rout_sys=%.2f mohm, Iinrush(no precharge)=%.0f A\n', ...
+    A.Cfly*1e6, A.Lr*1e9, A.eta_full*100, A.Rout_sys*1e3, A.Iinrush);
+disp(array2table(A.sweep,'VariableNames',A.sweep_cols));
+fprintf('Stage B: dV = [%+.0f %+.0f %+.0f] V, P_need = [%.2f %.2f %.2f] kW, Ls=%.1f uH, droop(60A)=%.1f V\n', ...
+    B.dV, B.P_need/1e3, B.Ls*1e6, B.droop(60));
+fprintf('Stage C: Lr=%.1f uH, Cr=%.1f nF, Lm=%.0f uH, Im=%.1f A, gain(0.97/1/1.03)=[%.3f %.3f %.3f]\n', ...
+    C.Lr*1e6, C.Cr*1e9, C.Lm*1e6, C.Im_pk, C.gain_tol);
+fprintf('Bus: E=%.0f J, preboost 2%% = %.2f J -> %.0f us @60 A\n', BUS.E, BUS.E_pb, BUS.t_pb_60A*1e6);
+save('prism_params.mat','P');

@@ -1,0 +1,7 @@
+*.mat
+*.slx.autosave
+*.asv
+slprj/
+__pycache__/
+*.pyc
+.DS_Store
