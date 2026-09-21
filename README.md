@@ -94,6 +94,8 @@ docs/   01_제안서_EV컨버터_아키텍처.md   상위 제안서 (조사·아
         02_엔지니어링_설계검증서.md     적용 대상 → 비교 → 수치 검증 → Simulink 가이드 → 테스트벤치 → 검토, 부록 A–C
         03_논문_구조안.md               두 편 분리 구조, 기여·그림 목록, 최근접 선행연구
         04_Simulink_검증대조표.md       Simscape 재현 시 대조할 기대값
+        05_작업_동기화_규칙.md          두 컴퓨터 간 pull/push 루틴, 커밋 대상, 문서 갱신 규칙
+tools/  sync.ps1, sync.sh               세션 시작/종료 동기화 도우미
         fig/                            수치 검증·시뮬레이션 그래프
 matlab/ prism_design_params.m           WP1 파라미터 스크립트 (모든 수식) → prism_params.mat
         tb_a1_rsc_phase.m               TB-A1 단상 셀 스위칭 ODE (Simulink 불필요)
@@ -146,6 +148,10 @@ python wp45_predictor.py       # WP4.5 예측기 (sklearn)
 4. Simulink 모델 실제 생성(build_rsc_phase.m 실행·배선 확인), 스위칭 모델 기반 TB-S1 재검증
 5. 선행기술 전수 검색(IEEE Xplore, Google Patents, Espacenet)
 
-## 9. 참고문헌
+## 9. 두 컴퓨터 작업 규칙
+
+세션 시작 `.\tools\sync.ps1 start`, 종료 `.\tools\sync.ps1 end "메시지"` (macOS/Linux는 `tools/sync.sh`). 상세는 `docs/05_작업_동기화_규칙.md`.
+
+## 10. 참고문헌
 
 설계검증서 7장(IEEE TPEL/TTE/JESTPE/Access, IET 등 20건 + 표준·산업자료 3건). 학회지 2건은 선행기술 식별 목적으로만 인용.
