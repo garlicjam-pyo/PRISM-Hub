@@ -8,7 +8,8 @@ MATLAB 스크립트와 동일한 수식·모델을 먼저 Python으로 실행해
 | tb_a1_sim.py | tb_a1_rsc_phase.m | TB-A1 단상 셀 | `python tb_a1_sim.py` |
 | tb_a_array.py | tb_a_array.m | 8위상 어레이, 자기발진 ZC, MC/A2/A3/A4 | `python tb_a_array.py mc` / `a2` / `a3` / `a4` |
 | tb_b_pprc.py | (참고) | PI 단독 설계·주파수응답 | 모듈로 사용 |
-| tb_b_pprc2.py | tb_b_pprc.m | 상태궤환 PPRC, TB-B2/TB-S1 | `python tb_b_pprc2.py` |
+| tb_b_pprc2.py | tb_b_pprc.m | 상태궤환 PPRC, TB-B2/TB-S1 (v1.1, 전력수지 누락 — 이력용) | `python tb_b_pprc2.py` |
+| tb_b_pprc3.py | (tb_b_pprc.m 갱신 예정) | **PPRC 수지 보정판**(DAB 버스 입력전류, 2단 셀 한계), 정상상태 표, TB-S1 재실행 | `python tb_b_pprc3.py` |
 | tb_s6_sals.py | tb_s6_sals.m | anti-windup/캡 축소(A), SALS 강건 LP 부하 셰이핑(B) | `python tb_s6_sals.py A` / `B` |
 | tb_c1_cllc.py | tb_c1_cllc.m | CLLC 스위칭, 이득·ZVS·손실 | `python tb_c1_cllc.py` |
 | tb_c2_cllc_bidir.py | (tb_c1_cllc.m 확장 예정) | CLLC 양방향 전환, f_s 편이 전류 제한 | `python tb_c2_cllc_bidir.py` |

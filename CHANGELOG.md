@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [0.9.0] — 2026-09-21 (독립 검토 대응 1차)
+- docs/reviews/2026-09-21/response_v0.9.md: 검토 지적 항목별 판정(대부분 수용), v1.2 계획.
+- python/tb_b_pprc3.py: PPRC 전력수지 보정(DAB 버스 입력전류), 2단 PPRC 한계(링크 8 kW·80 A, 직렬 포트 100 A), 정상상태 수지 표, 60 A 스텝 재실행.
+- python/tb_a_array.py: 극성 무관 ZC 검출 → 역방향 ZCS 0.8–1.1 %.
+- python/sals_montecarlo.py: 창 기준 수정(관측 + max(0, d_min − τ_comm)), 반례 해소, 미공급 수요 지표, 명칭 정정.
+- tb_b_pprc2.py entrypoint 가드, prism_design_params.m B.droop 결함 수정, 8 kHz 고정.
+- 설계검증서 9.1 정정 15–24, 3.6 종합 재표기; README 0절 추가, 상태 문구 변경.
+
 ## [0.8.0] — 2026-09-21 (논문 초고)
 - docs/06 논문 1 초고(영문), docs/07 논문 2 초고(영문).
 - 선행 특허 2건 확인(GM US 10363828/10632863, EP 3987646) → 설계검증서 2.5·7장 [25]–[28], docs/03 갱신, README 신규성 문장 축소.

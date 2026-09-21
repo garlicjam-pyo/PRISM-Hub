@@ -48,7 +48,7 @@ A.Pmod_loss = A.Pph*A.Nph;                    % 118 W/모듈
 A.eta_full  = 1 - A.Pmod_loss/A.Pmod;         % 99.69 %
 A.Rout_mod  = A.Pmod_loss/(A.Pmod/P.bus.V)^2; % 13.4 mohm
 A.Rout_sys  = A.Rout_mod/A.Nmod;              % 3.35 mohm
-A.Rout_avg  = A.Rout_mod;                     % 평균값 모델(모듈)용 등가 출력저항
+A.Rout_avg  = A.Rout_mod;                     % 평균값 모델(모듈)용 등가 출력저항 (위상 단위 모델은 2*Rout_mod: 2위상 병렬)
 % fs 스윕 (효율 vs 수동소자 크기)
 fs_sw = [50 100 150 200 300 400]*1e3;
 for k = 1:numel(fs_sw)
@@ -62,7 +62,8 @@ A.sweep_cols = {'fs[kHz]','Cfly[uF]','Lr[nH]','Ploss/ph[W]','eta[%]'};
 B.VA_mid  = [P.bat.Vmin P.bat.Vnom P.bat.Vmax]/2 - P.aux.Imax*A.Rout_mod; % 주행 모드(1모듈)
 B.dV      = P.bus.V - B.VA_mid;               % +76 / +6 / -53 V
 B.kpr     = abs(B.dV)/P.bus.V;                % 19 % / 1.5 % / 13 %
-B.P_need  = abs(B.dV)*P.aux.Imax;             % 4.76 / 0.38 / 3.34 kW
+B.P_need  = abs(B.dV)*P.aux.Imax;             % 4.76 / 0.38 / 3.34 kW  (NOTE: uses load current; true series current with DAB fed from the bus is 78 A at 648 V -> 6.0 kW, see tb_b_pprc3.py steady())
+B.Ilink_max = B.Prated/B.V2;                  % 80 A: DAB link current limit (P/100 V); series-port H-bridge carries i_path <= 100 A
 B.Prated  = 8e3;  B.Vser_max = 90;  B.Iser_max = 100;   % 정격 결정 (3.3절)
 B.n       = 4;  B.V1 = 400;  B.V2 = 100;  B.fs = 200e3;  B.phi_max = pi/3;
 B.Ls      = B.V1*(B.n*B.V2)*B.phi_max*(1-B.phi_max/pi)/(2*pi*B.fs*B.Prated); % 11.1 uH (1차 환산)
@@ -117,8 +118,8 @@ P.A = A; P.B = B; P.C = C; P.D = D; P.BUS = BUS; P.SALS = SALS;
 fprintf('Stage A: Cfly=%.1f uF, Lr=%.0f nH, eta_full=%.2f %%, Rout_sys=%.2f mohm, Iinrush(no precharge)=%.0f A\n', ...
     A.Cfly*1e6, A.Lr*1e9, A.eta_full*100, A.Rout_sys*1e3, A.Iinrush);
 disp(array2table(A.sweep,'VariableNames',A.sweep_cols));
-fprintf('Stage B: dV = [%+.0f %+.0f %+.0f] V, P_need = [%.2f %.2f %.2f] kW, Ls=%.1f uH, droop(60A)=%.1f V\n', ...
-    B.dV, B.P_need/1e3, B.Ls*1e6, B.droop(60));
+fprintf('Stage B: dV = [%+.0f %+.0f %+.0f] V, P_need(ideal, review-corrected balance in tb_b_pprc3.py) = [%.2f %.2f %.2f] kW, Ls=%.1f uH, f_bw=%.0f kHz\n', ...
+    B.dV, B.P_need/1e3, B.Ls*1e6, B.fbw/1e3);
 fprintf('Stage C: Lr=%.1f uH, Cr=%.1f nF, Lm=%.0f uH, Im=%.1f A, gain(0.97/1/1.03)=[%.3f %.3f %.3f]\n', ...
     C.Lr*1e6, C.Cr*1e9, C.Lm*1e6, C.Im_pk, C.gain_tol);
 fprintf('Bus: E=%.0f J, preboost 2%% = %.2f J -> %.0f us @60 A\n', BUS.E, BUS.E_pb, BUS.t_pb_60A*1e6);

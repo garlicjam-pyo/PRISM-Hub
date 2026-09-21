@@ -36,8 +36,12 @@ def nondef(e,t):
 def envelope(e,t):
     """worst-case window as seen by SALS: compressor command observed at t_c+seen_delay; window [+20,+220] ms with 2.4x P_c (upper bound of surge factor);
        V2L request observed at t_v; suspension margin 7.5 A; base measured."""
-    t=np.asarray(t,float); tc=e["t_c"]+e["seen_delay"]
-    comp=np.where((t>=tc+0.02)&(t<tc+0.22),2.4*e["P_c"],np.where(t>=tc+0.22,e["P_c"],0.0))
+    t=np.asarray(t,float); t_obs=e["t_c"]+e["seen_delay"]
+    # review fix (2026-09-21): the command may have been issued up to tau_comm_max=30 ms before it was observed,
+    # so the reachable surge-onset set starts at t_obs + max(0, d_min - tau_comm_max) = t_obs (d_min 20 ms < 30 ms)
+    # and ends at t_obs + d_max + surge duration = t_obs + 0.220. With a timestamped command the start would be t_cmd+0.02.
+    ts=t_obs+max(0.0,0.020-0.030); te=t_obs+0.220
+    comp=np.where((t>=ts)&(t<te),2.4*e["P_c"],np.where(t>=te,e["P_c"],0.0))
     v2l=np.where((t>=e["t_v"])&e["v2l"],9.0,0.0)
     return e["base"]+comp+v2l+7.5
 def schedule(e):
@@ -58,11 +62,12 @@ def evaluate(e,names,al):
     over=tot>Irate; collapse=bool(np.any(np.convolve(over.astype(float),np.ones(1),mode="same")>0))   # any ms above rating -> deficit persists >=1 ms > 0.4 ms
     steps=np.diff(tot,prepend=tot[0]); maxstep=float(steps.max())
     # deferral: time from request to full allowance
-    defer={}
+    defer={}; unmet={}
     for j,nm in enumerate(names):
         req,tr,w=e["req"][nm]; idx=np.where((tg>=tr)&(al[:,j]>=0.99*req))[0]
         defer[nm]=float((tg[idx[0]]-tr)*1e3) if len(idx) else float((T-tr)*1e3)
-    return dict(collapse=collapse,peak=float(tot.max()),maxstep=maxstep,defer=defer)
+        unmet[nm]=float(np.sum(np.maximum(0.0,req*(tg>=tr)-al[:,j]))*Tc*1e3)     # A*ms of curtailed demand (review: service loss)
+    return dict(collapse=collapse,peak=float(tot.max()),maxstep=maxstep,defer=defer,unmet=unmet)
 def evaluate_noshape(e):
     nd=nondef(e,tg); tot=nd+sum(req*(tg>=tr) for req,tr,w in e["req"].values()); return dict(collapse=bool(np.any(tot>100.)),peak=float(tot.max()))
 def evaluate_reactive(e):
@@ -77,9 +82,10 @@ if __name__=="__main__":
         e=episode(); names,al=schedule(e); R["sals"].append(evaluate(e,names,al)); R["none"].append(evaluate_noshape(e)); R["react"].append(evaluate_reactive(e))
     s=R["sals"]; nn=R["none"]; rr=R["react"]
     print(f"episodes {N}: events exceeding 100 A without shaping: {sum(x['collapse'] for x in nn)} ({sum(x['collapse'] for x in nn)/N*100:.0f} %)")
-    print(f"SALS: collapse {sum(x['collapse'] for x in s)} / {N}, peak max {max(x['peak'] for x in s):.1f} A, max single step {max(x['maxstep'] for x in s):.1f} A")
+    print(f"SALS: rating violations (>100 A for >=1 ms) {sum(x['collapse'] for x in s)} / {N}, peak max {max(x['peak'] for x in s):.1f} A, max single step {max(x['maxstep'] for x in s):.1f} A (note: current-based reduced criterion, not a voltage simulation)")
     for nm in ["PTC","BH","V48"]:
-        d=[x["defer"][nm] for x in s]; print(f"  deferral {nm}: median {np.median(d):.0f} ms, 95th {np.percentile(d,95):.0f} ms, max {max(d):.0f} ms")
+        d=[x["defer"][nm] for x in s]; u=[x["unmet"][nm] for x in s]
+        print(f"  {nm}: first-full-allowance delay median {np.median(d):.0f} / max {max(d):.0f} ms; curtailed demand median {np.median(u):.0f} / 95th {np.percentile(u,95):.0f} / max {max(u):.0f} A*ms (of {[v for v in e['req'].values()][0][0]*500:.0f} A*ms window)")
     dips=[x["dip"] for x in rr if x["dip"]>0]; print(f"reactive: dips in {len(dips)} events, median dip {np.median(dips):.0f} V, max {max(dips):.0f} V, collapses {sum(x['collapse'] for x in rr)}")
     out=dict(N=N,none_exceed=sum(x['collapse'] for x in nn),sals_collapse=sum(x['collapse'] for x in s),sals_peak_max=max(x['peak'] for x in s),
              defer={nm:dict(median=float(np.median([x['defer'][nm] for x in s])),p95=float(np.percentile([x['defer'][nm] for x in s],95)),max=float(max(x['defer'][nm] for x in s))) for nm in ["PTC","BH","V48"]},

@@ -64,7 +64,7 @@ def simulate(K,L,Cs,Cb,dI=60.,t_step=1.0e-3,tend=2.5e-3,ff="none",pred_err=0.0,t
 def max_bw(L,Cs,Cb):
     """largest f_bw for which the sampled/delayed loop is stable with overshoot <= 4 V after a 60 A step and recovery <= 400 us"""
     best=None
-    for fbw in [2e3,3e3,4e3,5e3,6e3,7e3,8e3,9e3,10e3,12e3,14e3]:
+    for fbw in [2e3,3e3,4e3,5e3,6e3,7e3,8e3]:   # capped at 8 kHz = the documented nominal design (README/App. C: 4.7 V)
         K=design(L,Cs,Cb,fbw); r=simulate(K,L,Cs,Cb)
         if not r["unstable"] and r["overshoot"]<=4.0 and r["rec"] is not None and r["rec"]<=400e-6: best=(fbw,K,r)
     return best
@@ -103,12 +103,13 @@ if __name__=="__main__":
     scal={}
     for s in [0.25,0.5,1.0,2.0]:
         Cs_,Cb_=100e-6*s,400e-6*s; bb=max_bw(L,Cs_,Cb_)
+        if bb is None: print(f"  s={s}: no stable design (actuator delay vs resonance)"); scal[str(s)]=dict(fbw=None,B0=None,B1=None,B2=None,ARL=None); continue
         r0=simulate(bb[1],L,Cs_,Cb_); r2=simulate(bb[1],L,Cs_,Cb_,ff="B2"); ra=simulate(bb[1],L,Cs_,Cb_,ff="ARL",pred_err=0.2,t_err=50e-6,pre_boost=8.0)
         rb1=simulate(bb[1],L,Cs_,Cb_,ff="B1")
         print(f"  s={s}: f_bw={bb[0]/1e3:.1f} kHz  B0 {r0['droop']:.1f} V  B1 {rb1['droop']:.1f} V  B2 {r2['droop']:.1f} V  ARL {ra['droop']:.1f} V")
         scal[str(s)]=dict(fbw=bb[0],B0=r0["droop"],B1=rb1["droop"],B2=r2["droop"],ARL=ra["droop"])
     out["cap_scaling"]=scal
-    fig,ax=plt.subplots(figsize=(6,3.6)); ss=[0.25,0.5,1.0,2.0]
+    fig,ax=plt.subplots(figsize=(6,3.6)); ss=[s for s in [0.25,0.5,1.0,2.0] if scal[str(s)]["B0"] is not None]
     for key,lab,mk in [("B0","B0 state-feedback only","o-"),("B1","B1 measured-current ff","d-"),("B2","B2 ideal predictive ff","s-"),("ARL","ARL (20 % err, +50 us, pre-boost 8 V)","^-")]:
         ax.plot(ss,[scal[str(s)][key] for s in ss],mk,label=lab)
     ax.axhline(8,color="r",ls=":",label="2 % (8 V)"); ax.set_xlabel("capacitor bank scale (1 = 100 uF + 400 uF)"); ax.set_ylabel("droop, 60 A step (V)"); ax.grid(True); ax.legend(fontsize=7)

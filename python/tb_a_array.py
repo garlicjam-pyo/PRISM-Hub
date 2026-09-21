@@ -33,7 +33,7 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, fratio=0.98, mode="fixed"
     # per-phase adaptive state
     forced_off=np.zeros(N,bool); det_cnt=np.zeros(N,int); armed=np.zeros(N,bool)
     # self-oscillating (zcp): per-phase state machine: ph_state 1/2 conducting, 0 dead; timer counts steps in dead; max on-time guard
-    ph_state=np.zeros(N,int); ph_next=np.ones(N,int); ph_timer=np.zeros(N,int); on_cnt=np.zeros(N,int)
+    ph_state=np.zeros(N,int); ph_next=np.ones(N,int); ph_timer=np.zeros(N,int); on_cnt=np.zeros(N,int); pol=np.zeros(N)
     ph_timer=-off.copy()              # stagger start by interleave offsets
     t_on_nom=0.5/fr0*(1-2*td*fr0)
     min_on=int(round(0.80*t_on_nom/dt)); max_on=int(round(1.12*t_on_nom/dt))   # ZC window [0.80,1.12] x nominal (blanking + guard)
@@ -65,8 +65,9 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, fratio=0.98, mode="fixed"
             ph_state=np.where(start,ph_next,ph_state); ph_next=np.where(start,3-ph_next,ph_next)
             armed=np.where(start,False,armed); det_cnt=np.where(start,0,det_cnt); on_cnt=np.where(start,0,on_cnt)
             ph_timer=np.where(start,0,ph_timer)
-            armed|=(ph_state!=0)&(np.abs(iC)>i_thr*5)
-            cross=(ph_state!=0)&armed&(((ph_state==1)&(iC<i_thr))|((ph_state==2)&(iC>-i_thr)))
+            newarm=(ph_state!=0)&(~armed)&(np.abs(iC)>i_thr*5)
+            pol=np.where(newarm,np.sign(iC),pol); armed|=newarm          # review fix: polarity-agnostic (charging direction reverses iC)
+            cross=(ph_state!=0)&armed&(iC*pol<i_thr)
             det_cnt=np.where(cross,det_cnt+1,det_cnt); on_cnt=np.where(ph_state!=0,on_cnt+1,on_cnt)
             stop=(ph_state!=0)&(((on_cnt>=min_on)&cross&(det_cnt>ndet))|(on_cnt>=max_on))
             ph_state=np.where(stop,0,ph_state); ph_timer=np.where(stop,0,ph_timer)
