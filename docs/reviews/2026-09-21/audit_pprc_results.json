@@ -1,0 +1,177 @@
+{
+  "commit": "959efdfb8fa504d407309eb9b1217041dd93f15d",
+  "environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "numpy": "2.3.5"
+  },
+  "ideal_power_conserving_equilibria": [
+    {
+      "Vbat": 648,
+      "Pload_W": 25000,
+      "path_A": 77.40459078054174,
+      "vser_V": 77.02174059830315,
+      "PPRC_output_W": 5961.836312216694,
+      "PPRC_bus_input_A": 14.904590780541735,
+      "ratio_abs": 0.23847345248866775,
+      "battery_input_W": 25079.087412895522,
+      "R_loss_W": 79.08741289552127
+    },
+    {
+      "Vbat": 788,
+      "Pload_W": 25000,
+      "path_A": 63.587238699022436,
+      "vser_V": 6.839351550827097,
+      "PPRC_output_W": 434.89547960897187,
+      "PPRC_bus_input_A": 1.0872386990224296,
+      "ratio_abs": 0.017395819184358875,
+      "battery_input_W": 25053.37204741484,
+      "R_loss_W": 53.372047414837226
+    },
+    {
+      "Vbat": 907,
+      "Pload_W": 25000,
+      "path_A": 55.2155315656543,
+      "vser_V": -52.77115498333336,
+      "PPRC_output_W": -2913.7873737382783,
+      "PPRC_bus_input_A": -7.284468434345696,
+      "ratio_abs": 0.11655149494953114,
+      "battery_input_W": 25040.243565024226,
+      "R_loss_W": 40.24356502422652
+    },
+    {
+      "Vbat": 600,
+      "Pload_W": 20000,
+      "path_A": 66.86337796443048,
+      "vser_V": 100.88259658913049,
+      "PPRC_output_W": 6745.351185772197,
+      "PPRC_bus_input_A": 16.86337796443049,
+      "ratio_abs": 0.33726755928860985,
+      "battery_input_W": 20059.013389329146,
+      "R_loss_W": 59.013389329148595
+    },
+    {
+      "Vbat": 640,
+      "Pload_W": 25000,
+      "path_A": 78.37840594891257,
+      "vser_V": 81.03459495852564,
+      "PPRC_output_W": 6351.362379565027,
+      "PPRC_bus_input_A": 15.878405948912569,
+      "ratio_abs": 0.2540544951826011,
+      "battery_input_W": 25081.089903652024,
+      "R_loss_W": 81.08990365202145
+    }
+  ],
+  "original_model_energy_residual": [
+    {
+      "Vbat": 648,
+      "Pload_W": 25000,
+      "battery_input_W": 20250.0,
+      "R_loss_W": 51.5625,
+      "unaccounted_DAB_input_W": 4801.5625
+    },
+    {
+      "Vbat": 788,
+      "Pload_W": 25000,
+      "battery_input_W": 24625.0,
+      "R_loss_W": 51.5625,
+      "unaccounted_DAB_input_W": 426.5625
+    },
+    {
+      "Vbat": 907,
+      "Pload_W": 25000,
+      "battery_input_W": 28343.75,
+      "R_loss_W": 51.5625,
+      "unaccounted_DAB_input_W": -3292.1875
+    }
+  ],
+  "SPS_DAB": {
+    "current_max_at_60deg_A": 80.0800800800801,
+    "power_at_V2_90_W": 7207.207207207209,
+    "power_at_V2_77_W": 6166.166166166167,
+    "L_required_100A_at_60deg_uH": 8.88888888888889
+  },
+  "bypass_bus": [
+    {
+      "Vbat": 648,
+      "Vbus_ideal": 324.0,
+      "V48_fixed_gain": 38.88,
+      "power_at_375A_W": 121500.0,
+      "input_current_for_150kW_A": 462.962962962963
+    },
+    {
+      "Vbat": 788,
+      "Vbus_ideal": 394.0,
+      "V48_fixed_gain": 47.28,
+      "power_at_375A_W": 147750.0,
+      "input_current_for_150kW_A": 380.71065989847716
+    },
+    {
+      "Vbat": 907,
+      "Vbus_ideal": 453.5,
+      "V48_fixed_gain": 54.42,
+      "power_at_375A_W": 170062.5,
+      "input_current_for_150kW_A": 330.76074972436606
+    },
+    {
+      "Vbat": 920,
+      "Vbus_ideal": 460.0,
+      "V48_fixed_gain": 55.2,
+      "power_at_375A_W": 172500.0,
+      "input_current_for_150kW_A": 326.0869565217391
+    }
+  ],
+  "original_B0_8000Hz": {
+    "droop": 4.7365893588810195,
+    "overshoot": 9.729944849823369e-09,
+    "rec": 8.080000000000001e-05,
+    "ipeak": 99.66081808330276
+  },
+  "original_B0_10000Hz": {
+    "droop": 5.129322225733063,
+    "overshoot": 1.0936370951906156,
+    "rec": 8.730000000000001e-05,
+    "ipeak": 99.9519368758332
+  },
+  "original_TBS2": {
+    "eta": 0.9977134787969651,
+    "t_cv_s": 3.0432,
+    "charger_power_max_W": 170456.2485880565,
+    "charger_voltage_min_V": 447.6725,
+    "charger_voltage_max_V": 454.5500707460915,
+    "charger_current_max_A": 374.9999999999996
+  },
+  "original_TBB3": {
+    "vb_min": 393.7451452261987,
+    "vb_end": 399.99999999999994,
+    "path_peak_A": 14.426603059161526
+  },
+  "modified_average_sensitivity": [
+    {
+      "Vbat": 648,
+      "droop_V": 5.312084898612284,
+      "vbus_end_V": 399.99999994781825,
+      "path_end_A": 89.83496586635371,
+      "vser_end_V": 77.1858221071774,
+      "energy_residual_max_W": 1.2732925824820995e-11,
+      "note": "Sensitivity only: original gains, ideal bipolar actuator, corrected bus input, not a replacement hardware validation."
+    },
+    {
+      "Vbat": 788,
+      "droop_V": 4.760823408742283,
+      "vbus_end_V": 400.000000002087,
+      "path_end_A": 73.78646341200051,
+      "vser_end_V": 6.973981269540327,
+      "energy_residual_max_W": 1.3642420526593924e-11,
+      "note": "Sensitivity only: original gains, ideal bipolar actuator, corrected bus input, not a replacement hardware validation."
+    },
+    {
+      "Vbat": 907,
+      "droop_V": 4.418403036527252,
+      "vbus_end_V": 399.9999999962729,
+      "path_end_A": 64.06654847745664,
+      "vser_end_V": -52.654321553698715,
+      "energy_residual_max_W": 1.1823431123048067e-11,
+      "note": "Sensitivity only: original gains, ideal bipolar actuator, corrected bus input, not a replacement hardware validation."
+    }
+  ]
+}

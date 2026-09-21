@@ -1,0 +1,20 @@
+TB-B2 (state feedback + integral): max stable bandwidth vs L_path, Cs=100 uF, Cb=400 uF
+  L=0.5 uH f_res=25.2 kHz : max f_bw=10.0 kHz  droop=4.1 V rec=61 us  K=[-2.65200000e+00  6.62600000e+00  8.44000000e+00  2.02400000e+00
+ -1.63210499e+05]
+  L=1.5 uH f_res=14.5 kHz : max f_bw=10.0 kHz  droop=5.1 V rec=87 us  K=[-7.30000000e-01  2.84610000e+01  1.67370000e+01  2.20000000e+00
+ -4.89631496e+05]
+  L=3.0 uH f_res=10.3 kHz : max f_bw=10.0 kHz  droop=5.1 V rec=81 us  K=[ 2.78800000e+00  3.40160000e+01  5.63800000e+01  2.24400000e+00
+ -9.79262991e+05]
+nominal design f_bw=10.0 kHz
+TB-S1 B0: droop 5.13 V, overshoot 1.09 V, rec 87 us, i_dab pk 100 A
+TB-S1 B1: droop 4.20 V, overshoot 1.44 V, rec 58 us, i_dab pk 100 A
+TB-S1 B2: droop 3.48 V, overshoot 0.79 V, rec nan us, i_dab pk 100 A
+TB-S1 ARL(err20%,+50us): droop 5.13 V, overshoot 1.90 V, rec 87 us, i_dab pk 100 A
+TB-S1 ARL+preboost8V: droop 0.11 V, overshoot 8.42 V, rec 34 us, i_dab pk 95 A
+Traceback (most recent call last):
+TB-S1 preboost only: droop 0.68 V, overshoot 8.42 V, rec 34 us, i_dab pk 97 A
+Cap scaling (state feedback re-designed to max bandwidth per bank):
+  File "python/tb_b_pprc2.py", line 106, in <module>
+    r0=simulate(bb[1],L,Cs_,Cb_); r2=simulate(bb[1],L,Cs_,Cb_,ff="B2"); ra=simulate(bb[1],L,Cs_,Cb_,ff="ARL",pred_err=0.2,t_err=50e-6,pre_boost=8.0)
+                ~~^^^
+TypeError: 'NoneType' object is not subscriptable

@@ -1,0 +1,7 @@
+Review runtime: Python 3.12.14
+numpy==2.3.5
+scipy==1.18.1
+matplotlib==3.11.2
+scikit-learn==1.9.1 (original predictor inspection; not needed for the four audit scripts)
+
+Only review-relevant packages are listed. The original environment contained unrelated desktop artifact packages, which are omitted.

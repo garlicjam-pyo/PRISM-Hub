@@ -1,0 +1,82 @@
+{
+  "horizon_equivalence": [
+    {
+      "pe": 0.0,
+      "te": 0.0,
+      "robust": null,
+      "max_abs_difference_A": 0.0
+    },
+    {
+      "pe": -0.2,
+      "te": 0.005,
+      "robust": null,
+      "max_abs_difference_A": 0.0
+    },
+    {
+      "pe": -0.2,
+      "te": 0.005,
+      "robust": [
+        0.005,
+        0.25
+      ],
+      "max_abs_difference_A": 0.0
+    },
+    {
+      "pe": 0.0,
+      "te": -0.005,
+      "robust": [
+        0.005,
+        0.25
+      ],
+      "max_abs_difference_A": 0.0
+    }
+  ],
+  "admissible_late_CAN_counterexample": {
+    "collapse": true,
+    "peak": 122.161,
+    "maxstep": 59.511,
+    "defer": {
+      "PTC": 0.0,
+      "BH": 0.0,
+      "V48": 0.0
+    },
+    "envelope_underbound_max_A": 52.011,
+    "first_over_ms": 71.00000000000001,
+    "time_over_ms": 14,
+    "interruption_ms": {
+      "PTC": 200.0,
+      "BH": 200.0,
+      "V48": 415.0
+    }
+  },
+  "hold_comparison": {
+    "perfect_linear": {
+      "vmin": 392.0139384867488,
+      "vmax": 402.4263906359534,
+      "droop": 7.9860615132511725,
+      "collapse": false,
+      "outside2pct_us": 0.0
+    },
+    "perfect_previous": {
+      "vmin": 396.0506640044632,
+      "vmax": 402.7375076348503,
+      "droop": 3.949335995536785,
+      "collapse": false,
+      "outside2pct_us": 0.0
+    },
+    "robust_linear": {
+      "vmin": 395.9822629545607,
+      "vmax": 403.92974307561,
+      "droop": 4.017737045439276,
+      "collapse": false,
+      "outside2pct_us": 0.0
+    },
+    "robust_previous": {
+      "vmin": 396.0506640044632,
+      "vmax": 403.9297430756145,
+      "droop": 3.949335995536785,
+      "collapse": false,
+      "outside2pct_us": 0.0
+    }
+  }
+}
