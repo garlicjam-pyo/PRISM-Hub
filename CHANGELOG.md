@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [Unreleased] — 2026-09-22 (MATLAB 실행 및 핵심 모델 수정)
+
+- MATLAB R2024b Update 8에서 파라미터·Stage A 회귀시험·PPRC 시험을 실행하고 JSON 결과 보관.
+- Stage A ZCS 검출을 pulse 전류 극성 기준으로 수정하고 입력 회생전류 부호 정정. MATLAB 커널을 `prism_sim_array.m`으로 분리.
+- 출력 버스에서 급전하는 PPRC의 입력전력 항, 정상상태, CPL Jacobian을 MATLAB/Python 핵심 모델에 반영. SPS 한계 약80.08 A와8 kW 액추에이터 명령 제한 적용.
+- `prism_design_params.m`의 C 스칼라/구조체 충돌 및 미정의 B.droop 수정. HV 입력 캡 전압은1200 V 잠정 사양으로 분리; 실제 부품 선정은 미완료.
+- TB-S2에150 kW/375 A 충전기 envelope 추가. 커패시터 스윕에서 해가 없는 경우 Python 실행이 중단되는 문제 수정.
+- PPRC Simulink 평균 모델 생성·컴파일·실행 및 MATLAB 파형 비교. 물리 스위칭 모델 검증과 구분.
+- 기존 리뷰 결과는 보존. 최신 실행은 `validation/2026-09-22/`, 미완료 사항은 docs/06에서 추적.
+
 ## [0.7.0] — 2026-09-21 (시뮬레이션 단계 종료)
 - 부록 J: 소자 피크 전압 해석(턴온 에지 ≥ 20 ns, L_pkg ≤ 10 nH 규칙). 부록 K: SALS 몬테카를로 300 에피소드(붕괴 0, 지연 ≤ 200 ms).
 - docs/03 논문 구조안(2편 분리), docs/04 Simulink 재현 대조표. 참고문헌 [21] 교체, [24] 최근접 선행연구 추가.

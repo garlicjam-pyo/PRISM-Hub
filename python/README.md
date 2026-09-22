@@ -1,6 +1,8 @@
 # python/ — 검증용 원본 계산 스크립트
 
-MATLAB 스크립트와 동일한 수식·모델을 먼저 Python으로 실행해 결과를 확정한 뒤 MATLAB으로 이식했다. 결과 JSON은 `results/`.
+초기 모델을 Python으로 작성한 뒤 MATLAB으로 이식했다. `results/`에는 이전 버전 결과도 있으므로 현재 코드의 검증 완료를 의미하지 않는다.
+
+2026-09-22 수정: `tb_a_array.py`, `tb_b_pprc2.py`와 `pprc_model.py`, `tb_s2_b3.py`의 충전 함수. 최신 회귀시험은 저장소 루트에서 `python python/validate_review_fixes.py`로 실행하며 결과는 `validation/2026-09-22/`에 저장된다. SALS·WP4.5·TB-S3~5·TB-B3 및 PI 참고 모델은 아직 수정된 공통 plant로 이전하지 않았다. 이들의 기존 성능 수치는 재검증 대상이다.
 
 | 스크립트 | 대응 MATLAB | 내용 | 실행 |
 |---|---|---|---|

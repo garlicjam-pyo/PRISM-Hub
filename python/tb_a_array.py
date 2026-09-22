@@ -31,7 +31,7 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, fratio=0.98, mode="fixed"
     iC=np.zeros(N); vC=np.full(N,Vo0) if vC0 is None else np.full(N,float(vC0)); Vb=Vo0 if Vbus0 is None else float(Vbus0)
     Vin=float(Vbat) if R_in==0 else 0.0   # input cap voltage (precharge starts at 0)
     # per-phase adaptive state
-    forced_off=np.zeros(N,bool); det_cnt=np.zeros(N,int); armed=np.zeros(N,bool)
+    forced_off=np.zeros(N,bool); det_cnt=np.zeros(N,int); armed=np.zeros(N,bool); pulse_sign=np.zeros(N)
     # self-oscillating (zcp): per-phase state machine: ph_state 1/2 conducting, 0 dead; timer counts steps in dead; max on-time guard
     ph_state=np.zeros(N,int); ph_next=np.ones(N,int); ph_timer=np.zeros(N,int); on_cnt=np.zeros(N,int)
     ph_timer=-off.copy()              # stagger start by interleave offsets
@@ -47,16 +47,17 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, fratio=0.98, mode="fixed"
         di=np.where(s==1,(Vin_eff-Vb-vC-iC*R)/L, np.where(s==2,(Vb-vC-iC*R)/L,
              np.where(iC>1e-3,(-vC-iC*R-2*Vf)/L, np.where(iC<-1e-3,(Vin_eff-vC-iC*R+2*Vf)/L,0.0))))
         io=np.where(s==1,iC,np.where(s==2,-iC,0.0))
-        iin=np.where(s==1,iC,np.where((s==0)&(iC<-1e-3),-iC,0.0))
+        iin=np.where(s==1,iC,np.where((s==0)&(iC<-1e-3),iC,0.0))
         return di, iC/C, io, iin
     for k in range(n):
         s,newhalf=sched(k)
         if mode=="zc":
             forced_off[newhalf]=False; armed[newhalf]=False; det_cnt[newhalf]=0
-            armed|= (s!=0)&(np.abs(iC)>i_thr*5)          # current has built up
-            # detect crossing: current sign opposite to conduction direction
-            cross=(s!=0)&armed&(((s==1)&(iC<i_thr))|((s==2)&(iC>-i_thr)))
-            det_cnt=np.where(cross,det_cnt+1,det_cnt)
+            new_arm=(s!=0)&(~armed)&(np.abs(iC)>i_thr*5)
+            pulse_sign[new_arm]=np.sign(iC[new_arm]); armed|=new_arm          # current has built up
+            # Detect return toward zero relative to this pulse, in either power direction.
+            cross=(s!=0)&armed&(pulse_sign*iC<i_thr)
+            det_cnt=np.where(cross,det_cnt+1,0)
             forced_off|= cross&(det_cnt>ndet)
             s=np.where(forced_off,0,s)
         if mode=="zcp":
@@ -65,9 +66,10 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, fratio=0.98, mode="fixed"
             ph_state=np.where(start,ph_next,ph_state); ph_next=np.where(start,3-ph_next,ph_next)
             armed=np.where(start,False,armed); det_cnt=np.where(start,0,det_cnt); on_cnt=np.where(start,0,on_cnt)
             ph_timer=np.where(start,0,ph_timer)
-            armed|=(ph_state!=0)&(np.abs(iC)>i_thr*5)
-            cross=(ph_state!=0)&armed&(((ph_state==1)&(iC<i_thr))|((ph_state==2)&(iC>-i_thr)))
-            det_cnt=np.where(cross,det_cnt+1,det_cnt); on_cnt=np.where(ph_state!=0,on_cnt+1,on_cnt)
+            new_arm=(ph_state!=0)&(~armed)&(np.abs(iC)>i_thr*5)
+            pulse_sign[new_arm]=np.sign(iC[new_arm]); armed|=new_arm
+            cross=(ph_state!=0)&armed&(pulse_sign*iC<i_thr)
+            det_cnt=np.where(cross,det_cnt+1,0); on_cnt=np.where(ph_state!=0,on_cnt+1,on_cnt)
             stop=(ph_state!=0)&(((on_cnt>=min_on)&cross&(det_cnt>ndet))|(on_cnt>=max_on))
             ph_state=np.where(stop,0,ph_state); ph_timer=np.where(stop,0,ph_timer)
             ph_timer=np.where(ph_state==0,ph_timer+1,ph_timer)

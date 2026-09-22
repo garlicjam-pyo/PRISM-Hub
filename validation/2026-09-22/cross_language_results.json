@@ -1,0 +1,6 @@
+{
+  "status": "PASS",
+  "max_MATLAB_Python_step_metric_difference": 1.026535301207332e-09,
+  "Simulink_Euler_max_waveform_difference_V": 0.39747471148263,
+  "note": "Stage A tolerance samples differ between MATLAB and NumPy RNGs."
+}

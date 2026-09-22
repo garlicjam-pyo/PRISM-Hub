@@ -1,0 +1,120 @@
+{
+  "scope": "Ideal average model and Stage A ODE regressions; not hardware certification",
+  "SPS_current_max": 80.0800800800801,
+  "equilibrium": [
+    {
+      "Vbat": 648,
+      "x": [
+        77.40459078054174,
+        77.02174059830315,
+        400.0,
+        77.40459078054174
+      ],
+      "energy_residual": 1.5916157281026244e-12
+    },
+    {
+      "Vbat": 788,
+      "x": [
+        63.587238699022436,
+        6.839351550827097,
+        400.0,
+        63.587238699022436
+      ],
+      "energy_residual": 7.958078640513122e-13
+    },
+    {
+      "Vbat": 907,
+      "x": [
+        55.2155315656543,
+        -52.77115498333336,
+        400.0,
+        55.2155315656543
+      ],
+      "energy_residual": 4.888534022029489e-12
+    }
+  ],
+  "step": [
+    {
+      "Vbat": 648.0,
+      "droop": 38.20625532420172,
+      "vbus_end": 361.7937446757983,
+      "current_peak": 79.0398448492385,
+      "within_port_limits": true,
+      "voltage_quality_pass": false
+    },
+    {
+      "Vbat": 788.0,
+      "droop": 4.739352995362708,
+      "vbus_end": 400.000017245276,
+      "current_peak": 80.08008008007445,
+      "within_port_limits": true,
+      "voltage_quality_pass": true
+    },
+    {
+      "Vbat": 907.0,
+      "droop": 4.58142042554374,
+      "vbus_end": 400.0000000030778,
+      "current_peak": 79.86009475428082,
+      "within_port_limits": true,
+      "voltage_quality_pass": true
+    }
+  ],
+  "rated_low_battery": {
+    "droop": 4.126481596824249,
+    "vbus_end": 400.0000000000003
+  },
+  "stage_a": [
+    {
+      "direction": 1,
+      "tolerance": false,
+      "zcs_max": 0.009889933280646801,
+      "Vbus": 393.1221618652344,
+      "Vbus_ripple": 0.065826416015625,
+      "Iout": 375.2569885253906
+    },
+    {
+      "direction": -1,
+      "tolerance": false,
+      "zcs_max": 0.009889933280646801,
+      "Vbus": 394.8778381347656,
+      "Vbus_ripple": 0.065826416015625,
+      "Iout": -375.2569885253906
+    },
+    {
+      "direction": 1,
+      "tolerance": true,
+      "zcs_max": 0.011458459310233593,
+      "Vbus": 393.1368103027344,
+      "Vbus_ripple": 0.2275390625,
+      "Iout": 374.2965393066406
+    },
+    {
+      "direction": -1,
+      "tolerance": true,
+      "zcs_max": 0.011458459310233593,
+      "Vbus": 394.8631896972656,
+      "Vbus_ripple": 0.2275390625,
+      "Iout": -374.2965393066406
+    }
+  ],
+  "charger": [
+    {
+      "SoC0": 0.0,
+      "peak_power_W": 124006.60549741155
+    },
+    {
+      "SoC0": 0.5,
+      "peak_power_W": 148287.85549741375
+    },
+    {
+      "SoC0": 0.955,
+      "peak_power_W": 150000.00000000003
+    }
+  ],
+  "charger_cc_cv": {
+    "t_cv": 14.901100000000001,
+    "peak_power_W": 150000.00000000003,
+    "voltage_max": 907.0001753212574
+  },
+  "status": "PASS: scoped regression assertions"
+}

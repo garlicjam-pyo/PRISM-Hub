@@ -1,0 +1,6 @@
+WP3-1 fixed 0.98fr: ZCS max 40.1%  loss mean 62.1 W  fail 16/20
+WP3-1 self-osc   : ZCS max 1.1%  loss mean 59.9 W  fail 0/20
+WP3-1 reverse    : ZCS max 1.1%  loss mean 59.9 W  fail 0/20
+TB-A2: module dev % = [2.2 -0.2 -3.3 1.2] | Vbus 393.2 ripple 0.32 V | loss 466 W | ZCS max 1.1%
+TB-A3: peak |i| 15.5 A, t95 13.2 ms
+TB-A4 3 kW: 1 module 31.6 W (eta 98.96%) | 8 phases 120.5 W (eta 96.14%)

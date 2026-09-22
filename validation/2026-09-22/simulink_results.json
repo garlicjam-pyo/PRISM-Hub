@@ -1,0 +1,11 @@
+{
+  "matlab_version": "24.2.0.3157250 (R2024b) Update 8",
+  "model": "prism_pprc_average_tb",
+  "model_type": "lossless bipolar averaged Simulink model",
+  "droop": 4.7018797106943,
+  "vbus_end": 400.00003068804671,
+  "current_peak": 80.080080080064221,
+  "vser_peak": 9.8504381477472887,
+  "power_peak": 785.97039646304415,
+  "max_voltage_difference_vs_euler": 0.39747471148263
+}

@@ -1,7 +1,7 @@
 """TB-S2: 400 V fast charge 150 kW CC-CV through Stage A array (4 modules, R_out 2.6 mOhm), PPRC bypassed.
 Charger: current-controlled source, CC ramp 20 A/s? (too slow for sim) -> use 20 A/ms ramp to 375 A (worst case for transient),
 current loop BW 100 Hz (1st order), CV when battery reaches 907 V. Battery: 216s pack, OCV(SoC) linear 648->907 V from 0->100 %,
-R_int 60 mOhm, capacity 80 kWh -> C = 80e3/788 = 101 Ah. Simulated over 5 s with SoC starting at 78 % (near CV) to show CC->CV.
+R_int 60 mOhm, capacity 80 kWh -> C = 80e3/788 = 101 Ah. Default 20 s at SoC 95.5% to show power-limited CC->CV.
 TB-B3: Drive->Chg400 transition sequence on the series-path model: PPRC phi->0 ramp (v_ser -> 0 over 2 ms), bypass close, PPRC off;
        and reverse. Metrics: bus deviation, series current surge.
 """
@@ -9,7 +9,8 @@ import numpy as np, json, os
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 FIG="../docs/fig"
 
-def tb_s2(SoC0=0.955, tend=6.0, dt=1e-4, I_cc=375., ramp=20e3, Vmax=907., R_int=0.06, R_out_arr=2.6e-3, C_bus=400e-6, Rbyp=0.2e-3, Ah=101.):
+def tb_s2(SoC0=0.955, tend=20.0, dt=1e-4, I_cc=375., ramp=20e3, Vmax=907., R_int=0.06, R_out_arr=2.6e-3, C_bus=400e-6, Rbyp=0.2e-3, Ah=101., P_max=150e3):
+    """Ideal charger with current/power envelope; C_bus dynamics are not modeled."""
     n=int(tend/dt); t=np.arange(n)*dt
     soc=SoC0; ocv=lambda s: 648+(907-648)*s
     i_chg=0.; i_ref_cc=0.; tau_loop=1/(2*np.pi*100.)
@@ -23,7 +24,15 @@ def tb_s2(SoC0=0.955, tend=6.0, dt=1e-4, I_cc=375., ramp=20e3, Vmax=907., R_int=
         if not cv: i_ref=min(I_cc, i_ref_cc+ramp*dt); i_ref_cc=i_ref
         else:      # CV: reduce current to hold v_bat = Vmax: i_bat_ref = (Vmax - ocv)/R_int
             i_ref=max(0., 2*(Vmax-vb_ocv)/R_int); i_ref=min(i_ref,I_cc)
+        # Terminal voltage is a+b*I, so impose the power limit consistently
+        # rather than Pmax divided by a stale terminal-voltage sample.
+        a=vb_ocv/2; b=R_int/4+R_out_arr+Rbyp
+        i_power=2*P_max/(a+np.sqrt(a*a+4*b*P_max))
+        i_ref=min(i_ref,i_power)
         i_chg+=dt*(i_ref-i_chg)/tau_loop
+        i_chg=np.clip(i_chg,0.,min(I_cc,i_power))  # ideal instantaneous EVSE protection envelope
+        v_bat=vb_ocv+R_int*i_chg/2
+        v_A=v_bat/2+i_chg*(R_out_arr+Rbyp)
         soc+=dt*(i_chg/2)/(Ah*3600)
         P_loss=i_chg**2*(R_out_arr+Rbyp)+ (i_chg/2)**2*0.0 ; P_in=v_A*i_chg
         log[k]=(v_bat,v_A,i_chg,i_chg/2,soc,P_loss)
@@ -65,7 +74,8 @@ def tb_b3(Vbat=788., P_aux=5e3, L=1.5e-6, Cs=100e-6, Cb=400e-6, R_A=10.2e-3, R_p
 if __name__=="__main__":
     out={}
     r=tb_s2(); L=r["log"]
-    print(f"TB-S2: charger terminal (bus) voltage range {r['v_A_range'][0]:.1f}–{r['v_A_range'][1]:.1f} V, CC->CV at t={r['t_cv']:.2f} s, path efficiency (Stage A + bypass) {r['eta_cc']*100:.2f} %")
+    cv_label=f"{r['t_cv']:.2f} s" if r['t_cv'] is not None else "not reached"
+    print(f"TB-S2: charger terminal (bus) voltage range {r['v_A_range'][0]:.1f}–{r['v_A_range'][1]:.1f} V, CC->CV at t={cv_label}, path efficiency (Stage A + bypass) {r['eta_cc']*100:.2f} %")
     out["tbs2"]=dict(vA_min=r["v_A_range"][0],vA_max=r["v_A_range"][1],t_cv=r["t_cv"],eta=r["eta_cc"])
     fig,ax=plt.subplots(2,1,figsize=(8,5),sharex=True)
     ax[0].plot(r["t"],L[:,0],label="V_bat"); ax[0].plot(r["t"],2*L[:,1],label="2 x V_charger (bus)"); ax[0].axhline(907,color="r",ls="--",label="V_max 907"); ax[0].legend(fontsize=8); ax[0].grid(True); ax[0].set_ylabel("V")

@@ -3,7 +3,7 @@
 %  플랜트 x=[i_p; v_ser; v_bus; i_dab], u=DAB 전류 지령, w=i_load(정전력)
 %    di_p/dt   = (Vbat/2 - (R_A+R_p) i_p + v_ser - v_bus)/L
 %    dv_ser/dt = (i_dab - i_p)/C_ser
-%    dv_bus/dt = (i_p - w)/C_bus
+%    dv_bus/dt = (i_p - w - v_ser*i_dab/v_bus)/C_bus
 %    di_dab/dt = (u - i_dab)/tau      (+ 전송지연 d, 샘플 Ts, 포화 +-100 A)
 %  제어: u = -Kx*x - Kq*q + i_ff,  dq/dt = v_ref - v_bus
 clear; clc;
@@ -42,8 +42,7 @@ end
 
 %% ----------------------------------------------------------------- 함수
 function K = design_sf(L,Cs,Cb,fbw,R_A,R_p,tau)
-    A=[-(R_A+R_p)/L 1/L -1/L 0; -1/Cs 0 0 1/Cs; 1/Cb 0 0 0; 0 0 0 -1/tau]; B=[0;0;0;1/tau];
-    Aa=blkdiag(A,0); Aa(5,3)=-1; Ba=[B;0];
+    [Aa,Ba]=prism_pprc_linearize(L,Cs,Cb,788,5e3,R_A+R_p,tau);
     w=2*pi*fbw; z=0.7;
     p=[-z*w+1i*w*sqrt(1-z^2), -z*w-1i*w*sqrt(1-z^2), -w, -w/3, -min(2.5*w,2*pi*30e3)];
     K=place(Aa,Ba,p);
@@ -52,8 +51,8 @@ end
 function r = sim_path(K,L,Cs,Cb,dI,opt,Vbat,R_A,R_p,tau,d,Ts)
     ff=''; pe=0; te=0; pb=0; if isfield(opt,'ff'), ff=opt.ff; end
     if isfield(opt,'pred_err'), pe=opt.pred_err; end; if isfield(opt,'t_err'), te=opt.t_err; end; if isfield(opt,'pre_boost'), pb=opt.pre_boost; end
-    dt=0.1e-6; tend=2.5e-3; tstep=1e-3; tlead=1e-3; n=round(tend/dt); t=(0:n-1)'*dt; P0=5e3; Isat=100;
-    ip=P0/400; vs=400-(Vbat/2-R_A*ip); vb=400; idab=ip;
+    dt=0.1e-6; tend=2.5e-3; tstep=1e-3; tlead=1e-3; n=round(tend/dt); t=(0:n-1)'*dt; P0=5e3; Isat=400*4*(pi/3)*(1-1/3)/(2*pi*200e3*11.1e-6);
+    x0=prism_pprc_equilibrium(Vbat,P0,R_A+R_p); ip=x0(1); vs=x0(2); vb=x0(3); idab=x0(4);
     q=-(ip+K(1:4)*[ip;vs;vb;idab])/K(5);
     nd=round(d/dt); dbuf=ip*ones(nd+1,1); cmd=ip; kc=round(Ts/dt);
     vbl=zeros(n,1); idl=zeros(n,1);
@@ -67,17 +66,19 @@ function r = sim_path(K,L,Cs,Cb,dI,opt,Vbat,R_A,R_p,tau,d,Ts)
                 otherwise,  iff=0;
             end
             vr=400; if pb>0 && tt<tstep, vr=400+pb*min(1,max(0,(tt-(tstep-tlead))/(tlead*0.5))); end
-            cmd=min(Isat,max(-Isat, -K(1:4)*[ip;vs;vb;idab] - K(5)*q + iff));
+            limit=min([Isat,Isat*max(vb,0)/400,8000/max(abs(vs),1e-9)]);
+            cmd=min(limit,max(-limit, -K(1:4)*[ip;vs;vb;idab] - K(5)*q + iff));
             q=q+Ts*(vr-vb);
         end
         dbuf=[cmd; dbuf(1:end-1)]; u=dbuf(end);
-        dip=(Vbat/2-(R_A+R_p)*ip+vs-vb)/L; dvs=(idab-ip)/Cs; dvb=(ip-iload)/Cb; did=(u-idab)/tau;
+        dip=(Vbat/2-(R_A+R_p)*ip+vs-vb)/L; dvs=(idab-ip)/Cs; dvb=(ip-iload-vs*idab/vb)/Cb; did=(u-idab)/tau;
         ip=ip+dt*dip; vs=vs+dt*dvs; vb=vb+dt*dvb; idab=idab+dt*did;
         vbl(k+1)=vb; idl(k+1)=idab;
+        if ~isfinite(vb) || vb<50, vbl(k+1:end)=vb; idl(k+1:end)=idab; break; end
     end
     m=t>=tstep; r.droop=400-min(vbl(m)); r.over=max(vbl)-400; r.ipk=max(abs(idl));
     ok=abs(vbl-400)<=4; r.rec=NaN;
     for k=round(tstep/dt):n, if all(ok(k:end)), r.rec=t(k)-tstep; break; end, end
-    tail=vbl(t>tend-0.5e-3); r.unstable=(max(tail)-min(tail)>2) || any(isnan(tail));
+    tail=vbl(t>tend-0.5e-3); r.unstable=(max(tail)-min(tail)>2) || any(~isfinite(tail)) || min(tail)<50;
     r.t=t; r.vb=vbl; r.idab=idl;
 end

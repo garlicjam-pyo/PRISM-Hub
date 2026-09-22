@@ -1,0 +1,25 @@
+TB-B2 (state feedback + integral): max stable bandwidth vs L_path, Cs=100 uF, Cb=400 uF
+  L=0.5 uH f_res=25.2 kHz : max f_bw=12.0 kHz  droop=3.1 V rec=0 us  K=[-2.78500000e+00  2.23840000e+01  9.37500000e+00  2.68300000e+00
+ -4.12655554e+05]
+  L=1.5 uH f_res=14.5 kHz : max f_bw=12.0 kHz  droop=4.7 V rec=100 us  K=[ 8.95000000e-01  4.55330000e+01  4.97830000e+01  2.85900000e+00
+ -1.23796666e+06]
+  L=3.0 uH f_res=10.3 kHz : max f_bw=9.0 kHz  droop=4.9 V rec=137 us  K=[ 1.33600000e+00  2.67870000e+01  3.35450000e+01  1.91600000e+00
+ -5.87550583e+05]
+nominal design f_bw=8.0 kHz
+TB-S1 B0: droop 4.74 V, overshoot 3.12 V, rec 128 us, i_dab pk 80 A
+TB-S1 B1: droop 4.58 V, overshoot 3.35 V, rec 65 us, i_dab pk 80 A
+TB-S1 B2: droop 2.33 V, overshoot 1.13 V, rec 0 us, i_dab pk 80 A
+TB-S1 ARL(err20%,+50us): droop 4.72 V, overshoot 3.65 V, rec 79 us, i_dab pk 80 A
+TB-S1 ARL+preboost8V: droop 0.00 V, overshoot 8.00 V, rec 33 us, i_dab pk 80 A
+TB-S1 preboost only: droop 0.00 V, overshoot 8.00 V, rec 33 us, i_dab pk 74 A
+Cap scaling (state feedback re-designed to max bandwidth per bank):
+  s=0.25: no feasible design in bandwidth grid
+  s=0.5: no feasible design in bandwidth grid
+  s=1.0: f_bw=12.0 kHz  B0 4.7 V  B1 3.6 V  B2 5.0 V  ARL 2.7 V
+  s=2.0: f_bw=10.0 kHz  B0 2.5 V  B1 2.5 V  B2 2.3 V  ARL 0.2 V
+ARL sensitivity err=0.0: droop(V) for t_err[-100,0,50,100,200 us] = [np.float64(3.9), np.float64(2.3), np.float64(4.7), np.float64(4.7), np.float64(4.7)]
+ARL sensitivity err=0.2: droop(V) for t_err[-100,0,50,100,200 us] = [np.float64(4.1), np.float64(2.7), np.float64(4.7), np.float64(4.7), np.float64(4.7)]
+ARL sensitivity err=0.4: droop(V) for t_err[-100,0,50,100,200 us] = [np.float64(4.2), np.float64(3.1), np.float64(4.7), np.float64(4.7), np.float64(4.7)]
+ARL sensitivity err=0.6: droop(V) for t_err[-100,0,50,100,200 us] = [np.float64(4.4), np.float64(3.5), np.float64(4.7), np.float64(4.7), np.float64(4.7)]
+robustness: K(1.5uH) on L=0.75 uH -> droop 4.0 V, overshoot 2.3 V, unstable=False
+robustness: K(1.5uH) on L=3.0 uH -> droop 5.9 V, overshoot 4.4 V, unstable=False
