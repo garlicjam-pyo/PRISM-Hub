@@ -1,5 +1,7 @@
 # python/ — 검증용 원본 계산 스크립트
 
+**최신 개발:** `pprc_two_stage.py` + `validate_two_stage.py`는 유한 링크/브리지 필터 모델, `sals_admission.py`는 정적 전력 예산 기반 승인 함수다. `validate_sals_contract.py`가 관측 전 사건 반례를 재현한다. 결과: [통합 검증](../validation/2026-09-22-integration/README.md).
+
 초기 모델을 Python으로 작성한 뒤 MATLAB으로 이식했다. `results/`에는 이전 버전 결과도 있으므로 현재 코드의 검증 완료를 의미하지 않는다.
 
 2026-09-22 수정: `tb_a_array.py`, `tb_b_pprc2.py`와 `pprc_model.py`, `tb_s2_b3.py`의 충전 함수. 최신 회귀시험은 저장소 루트에서 `python python/validate_review_fixes.py`로 실행하며 결과는 `validation/2026-09-22/`에 저장된다. SALS·WP4.5·TB-S3~5·TB-B3 및 PI 참고 모델은 아직 수정된 공통 plant로 이전하지 않았다. 이들의 기존 성능 수치는 재검증 대상이다.
@@ -10,8 +12,8 @@
 | tb_a1_sim.py | tb_a1_rsc_phase.m | TB-A1 단상 셀 | `python tb_a1_sim.py` |
 | tb_a_array.py | tb_a_array.m | 8위상 어레이, 자기발진 ZC, MC/A2/A3/A4 | `python tb_a_array.py mc` / `a2` / `a3` / `a4` |
 | tb_b_pprc.py | (참고) | PI 단독 설계·주파수응답 | 모듈로 사용 |
-| tb_b_pprc2.py | tb_b_pprc.m | 상태궤환 PPRC, TB-B2/TB-S1 (v1.1, 전력수지 누락 — 이력용) | `python tb_b_pprc2.py` |
-| tb_b_pprc3.py | (tb_b_pprc.m 갱신 예정) | **PPRC 수지 보정판**(DAB 버스 입력전류, 2단 셀 한계), 정상상태 표, TB-S1 재실행 | `python tb_b_pprc3.py` |
+| tb_b_pprc2.py | tb_b_pprc.m | 이상 양극성 PPRC: 전력수지·SPS 한계 수정됨, 물리 링크는 생략 | `python tb_b_pprc2.py` |
+| tb_b_pprc3.py | (tb_b_pprc.m 갱신 예정) | v0.9 수지 보정판. 2단 링크·H-브리지 필터 동특성 생략, 이력 비교용 | `python tb_b_pprc3.py` |
 | tb_s6_sals.py | tb_s6_sals.m | anti-windup/캡 축소(A), SALS 강건 LP 부하 셰이핑(B) | `python tb_s6_sals.py A` / `B` |
 | tb_c1_cllc.py | tb_c1_cllc.m | CLLC 스위칭, 이득·ZVS·손실 | `python tb_c1_cllc.py` |
 | tb_c2_cllc_bidir.py | (tb_c1_cllc.m 확장 예정) | CLLC 양방향 전환, f_s 편이 전류 제한 | `python tb_c2_cllc_bidir.py` |

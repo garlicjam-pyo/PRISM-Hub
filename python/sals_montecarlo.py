@@ -1,3 +1,4 @@
+# Historical surrogate with a known pre-observation counterexample; see validate_sals_contract.py.
 """SALS Monte Carlo (reduced-order): survival statistics of the worst-case-window LP scheduler vs no shaping vs reactive load dump.
 Reduced-order survival criterion (from verified fast-scale results, App. C/D): the bus stays within spec if the shaped 400 V load current
 never exceeds I_rated(100 A) - 5 A margin AND no single step exceeds 80 A (droop <= 6.3 V). Collapse if load > 100 A for > 0.4 ms.

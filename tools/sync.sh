@@ -1,14 +1,33 @@
 #!/usr/bin/env bash
-# tools/sync.sh -- 두 컴퓨터 간 작업 동기화 도우미 (macOS/Linux)
-# 사용: 작업 시작 전  ./tools/sync.sh start ;  작업 끝난 뒤  ./tools/sync.sh end "메시지"
-set -e; cd "$(dirname "$0")/.."
-case "${1:-start}" in
-  start)
-    git fetch origin
-    if [ -n "$(git status --porcelain)" ]; then echo "주의: 커밋되지 않은 변경이 있습니다. 먼저 end 로 커밋하세요."; git status --short; exit 1; fi
-    git pull --ff-only origin main; echo "동기화 완료: $(git log -1 --oneline)";;
-  end)
-    msg="${2:-$(read -p '커밋 메시지: ' m; echo "$m")}"
-    git add -A; git commit -m "$msg"; git pull --rebase origin main; git push origin main; echo "푸시 완료: $(git log -1 --oneline)";;
-  *) echo "mode 는 start 또는 end";;
-esac
+# Synchronize the current branch; stop on any failed command.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+mode="${1:-start}"
+case "$mode" in start|end) ;; *) echo 'Use start or end' >&2; exit 1;; esac
+branch=$(git symbolic-ref --quiet --short HEAD)
+if [ -n "$(git ls-files --unmerged)" ]; then echo 'Resolve merge conflicts first.' >&2; exit 1; fi
+if [ -d "$(git rev-parse --git-path rebase-merge)" ] || [ -d "$(git rev-parse --git-path rebase-apply)" ]; then
+  echo 'Finish the current rebase first.' >&2; exit 1
+fi
+if [ "$mode" = end ]; then
+  msg="${2:-}"
+  if [ -z "$msg" ]; then echo 'Provide a commit message.' >&2; exit 1; fi
+  git add -A
+  if git diff --cached --quiet; then :
+  else
+    status=$?
+    if [ "$status" -ne 1 ]; then exit "$status"; fi
+    git commit -m "$msg"
+  fi
+elif [ -n "$(git status --porcelain)" ]; then
+  echo 'Working tree has changes. Commit or stash before start.' >&2; exit 1
+fi
+git fetch origin
+if git show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+  if [ "$mode" = start ]; then git merge --ff-only "origin/$branch"; else git rebase "origin/$branch"; fi
+else
+  status=$?
+  if [ "$status" -ne 1 ]; then exit "$status"; fi
+fi
+if [ "$mode" = end ]; then git push -u origin "HEAD:refs/heads/$branch"; fi
+echo "Synchronized branch: $branch"

@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "max_absolute_metric_error": 1.9099388737231493e-10,
+  "by_case": {
+    "rated_640": 2.2737367544323206e-13,
+    "rated_648": 2.7284841053187847e-12,
+    "rated_788": 1.9099388737231493e-10,
+    "rated_907": 2.7284841053187847e-12,
+    "rated_920": 9.094947017729282e-13,
+    "unload_640": 1.1368683772161603e-13,
+    "unload_920": 9.094947017729282e-13,
+    "regeneration_640": 1.1368683772161603e-11,
+    "regeneration_920": 5.684341886080802e-14,
+    "zero_crossing_800": 9.697487257653847e-11,
+    "overload_648": 9.237055564881302e-13,
+    "no_control_reserve_640": 1.7053025658242404e-13
+  },
+  "note": "Same gains, independent equilibrium and plant implementations; not physical validation"
+}

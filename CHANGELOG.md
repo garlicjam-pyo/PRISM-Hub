@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## [Unreleased: integration] — 2026-09-22
+
+- 첨부 v0.7.1–v0.9.1 bundle의 네 커밋을 MATLAB 검증 ddb3bb3와 병합. 문서 번호 충돌 해결.
+- 유한100 V 링크·H-브리지/LC·전력수지·방향별 효율·포트 제한을 갖춘6상태 후보 모델 및 MATLAB 독립 적분 추가.
+- 12개 동적 사례: 정격/회생 등10개 통과, 과부하·100 A 지령의 정격 위반2개 의도한 실패 검출.
+- SALS 관측 전10 ms,122.161 A 반례 재현. 실제25 kW 예산 기반 정적 승인과 불가능 상태 구현.
+- README·논문 초고2편을 현재 증거로 수정. NIO 특허의 GM 오기 정정, 신규성/전수검색/전압강건성 주장 제한.
+- sync 도우미가 현재 브랜치를 동기화하고 Git 오류 시 중단하도록 수정.
+- 새 결과는 validation/2026-09-22-integration/, 상세는 docs/10.
+
 ## [Unreleased] — 2026-09-22 (MATLAB 실행 및 핵심 모델 수정)
 
 - MATLAB R2024b Update 8에서 파라미터·Stage A 회귀시험·PPRC 시험을 실행하고 JSON 결과 보관.

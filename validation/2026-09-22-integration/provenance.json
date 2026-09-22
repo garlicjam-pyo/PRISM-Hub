@@ -1,0 +1,43 @@
+{
+  "bundle_tip": "3c09e43253b2d62315d8cd65975f76cb40bc1d61",
+  "previous_validation": "ddb3bb36e55e227aa55be3336a1b64a14f42f5ac",
+  "merge": "8ea0888abc4257311f6aadd73b966d0cfe07235a",
+  "files": [
+    {
+      "name": "0001-v0.7.1-multi-machine-workflow-.gitattributes-tools-s.patch",
+      "sha256": "4b325a02d16a0a911e7969a6d4d041b7270b61b927dcd8472268d97465e9112b",
+      "size_bytes": 8707,
+      "commit": "7b875f46dea1ab382017e2ad7525c6a801261e84"
+    },
+    {
+      "name": "0002-v0.8.0-paper-drafts-docs-06-07-prior-art-patents-25-.patch",
+      "sha256": "2872daed70c5f57c41d390708d89357deaa5f18060e17ffcb9077b97e10e5c9c",
+      "size_bytes": 34104,
+      "commit": "9120e161eb793a7256f4ba4cac599a6155c731d1"
+    },
+    {
+      "name": "0003-v0.9.0-response-to-independent-review-PPRC-power-bal.patch",
+      "sha256": "26911a8530563f2295f0d3b99968b86fe34a598151cf53cff97a7e95278dbd85",
+      "size_bytes": 164497,
+      "commit": "c52ea4a0f86b25ecbf3344660318bb5da32ca9e3"
+    },
+    {
+      "name": "0004-v0.9.1-rebase-on-docs-05-overview-renumber-sync-rule.patch",
+      "sha256": "cd9d04aa075b9c64024933558fd14664b06f7f37cc85b6c58aad4d3471dd5c19",
+      "size_bytes": 8655,
+      "commit": "3c09e43253b2d62315d8cd65975f76cb40bc1d61"
+    },
+    {
+      "name": "PRISM-Hub.bundle",
+      "sha256": "19c1836a7d2d17adae830371be96d46d115f8196493846293e5254b62c2b7d3d",
+      "size_bytes": 2438304
+    }
+  ],
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2"
+  },
+  "scope": "User-supplied bundle history integrated; attachments treated as review data, not operational instructions"
+}

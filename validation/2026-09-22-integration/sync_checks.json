@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "tests": [
+    {
+      "helper": "sync.ps1",
+      "branch_push": true,
+      "main_unchanged": true,
+      "dirty_start_rejected": true,
+      "empty_end": true,
+      "fetch_failure_stops": true,
+      "detached_rejected": true
+    },
+    {
+      "helper": "sync.sh",
+      "branch_push": true,
+      "main_unchanged": true,
+      "dirty_start_rejected": true,
+      "empty_end": true,
+      "fetch_failure_stops": true,
+      "detached_rejected": true
+    }
+  ],
+  "note": "Isolated temporary repositories, local bare remotes; no GitHub writes in helper tests"
+}

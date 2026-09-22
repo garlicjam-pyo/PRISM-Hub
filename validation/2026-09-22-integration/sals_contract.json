@@ -1,0 +1,52 @@
+{
+  "status": "PASS: counterexample detected and static-contract checks passed",
+  "historical_window_counterexample": {
+    "surge_start_ms": 70,
+    "observed_ms": 80,
+    "peak_load_A": 122.161,
+    "over_100A_before_observation_ms": 10.0,
+    "unmet_demand_A_ms": {
+      "PTC": 3005.199999999994,
+      "BH": 3850.0,
+      "V48": 834.999999999991
+    }
+  },
+  "normal_admission": {
+    "allowance_A": {
+      "PTC": 17.5,
+      "BH": 16.874999999999943,
+      "V48": 0.0
+    },
+    "load_budget_A": 59.37499999999994,
+    "mandatory_deficit_A": 0.0,
+    "coverage_valid": true,
+    "static_admission_feasible": true,
+    "voltage_safety_verified": false
+  },
+  "missing_coverage": {
+    "allowance_A": {
+      "PTC": 0.0,
+      "BH": 0.0,
+      "V48": 0.0
+    },
+    "load_budget_A": 59.37499999999994,
+    "mandatory_deficit_A": 0.0,
+    "coverage_valid": false,
+    "static_admission_feasible": false,
+    "voltage_safety_verified": false
+  },
+  "mandatory_upper_A": 91.16,
+  "mandatory_infeasible": {
+    "allowance_A": {
+      "PTC": 0.0,
+      "BH": 0.0,
+      "V48": 0.0
+    },
+    "load_budget_A": 59.37499999999994,
+    "mandatory_deficit_A": 31.785000000000053,
+    "coverage_valid": true,
+    "static_admission_feasible": false,
+    "voltage_safety_verified": false
+  },
+  "conclusion": "Window anchoring alone cannot cover events before observation. Static admission cannot rescue mandatory demand above converter capacity; no voltage guarantee claimed."
+}

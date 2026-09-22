@@ -1,3 +1,4 @@
+# Historical v0.9 surrogate: finite-link development is in pprc_two_stage.py.
 """tb_b_pprc3.py -- PPRC series-path averaged model, v2 (review fix 2026-09-21).
 Changes vs tb_b_pprc2.py (kept for history):
   (1) POWER BALANCE: the DAB primary is fed from the 400 V bus, so the bus equation includes the DAB input current
