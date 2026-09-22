@@ -122,11 +122,15 @@ def design(vbat, power, p=Parameters()):
 
 
 def simulate(vbat=788., power0=5000., power1=25000., p=Parameters(),
-             dt=2e-7, duration=.006, step=.001, K=None, keep_trace=False):
+             dt=2e-7, duration=.006, step=.001, K=None, keep_trace=False,
+             control_p=None):
+    # Separate actual plant values from the controller's nominal parameters.
+    # None preserves the historical per-case design and parameter knowledge.
+    cp=p if control_p is None else control_p
     if not (dt>0 and 0<=step<duration):
         raise ValueError('Require dt>0 and 0<=step<duration')
-    sample=int(round(p.Ts/dt)); lag=int(round(p.delay/dt))
-    if sample<1 or abs(sample*dt-p.Ts)>1e-12 or abs(lag*dt-p.delay)>1e-12:
+    sample=int(round(cp.Ts/dt)); lag=int(round(p.delay/dt))
+    if sample<1 or abs(sample*dt-cp.Ts)>1e-12 or abs(lag*dt-p.delay)>1e-12:
         raise ValueError('dt must divide sample period and transport delay')
     if not steady_feasible(vbat,power0,p):
         raise ValueError('Initial steady state exceeds candidate operating envelope')
@@ -134,19 +138,19 @@ def simulate(vbat=788., power0=5000., power1=25000., p=Parameters(),
     x,u=equilibrium(vbat,power0,p); q=-(x[0]+K[:4]@x[:4])/K[4]; qlink=0.
     buffer=np.tile(u,(lag+1,1)); tick=0
     n=int(round(duration/dt)); log=np.empty((n,6)); controls=np.empty((n,2))
-    residual=0.; stop=None; wlink=2*np.pi*p.link_bw
+    residual=0.; stop=None; wlink=2*np.pi*cp.link_bw
     for k in range(n):
         t=k*dt; power=power1 if t>=step else power0
         if k%sample==0:
             raw=-K[:4]@x[:4]-K[4]*q
-            iref=np.clip(raw,-p.reference_max,p.reference_max)
-            q+=p.Ts*(p.vref-x[2])+.1*(iref-raw)/(-K[4])
-            mraw=(x[1]+p.Rh*x[3]+p.Lh/p.inner_tau*(iref-x[3]))/x[4]
-            m=float(np.clip(mraw,-p.modulation_max,p.modulation_max))
-            rawlink=m*x[3]+p.Clink*(2*.7*wlink*(p.vlink-x[4])+wlink*wlink*qlink)
-            limit=current_limit(x[2],x[4],p)
+            iref=np.clip(raw,-cp.reference_max,cp.reference_max)
+            q+=cp.Ts*(cp.vref-x[2])+.1*(iref-raw)/(-K[4])
+            mraw=(x[1]+cp.Rh*x[3]+cp.Lh/cp.inner_tau*(iref-x[3]))/x[4]
+            m=float(np.clip(mraw,-cp.modulation_max,cp.modulation_max))
+            rawlink=m*x[3]+cp.Clink*(2*.7*wlink*(cp.vlink-x[4])+wlink*wlink*qlink)
+            limit=current_limit(x[2],x[4],cp)
             ilink=float(np.clip(rawlink,-limit,limit))
-            qlink+=p.Ts*(p.vlink-x[4])+.1*(ilink-rawlink)/(p.Clink*wlink*wlink)
+            qlink+=cp.Ts*(cp.vlink-x[4])+.1*(ilink-rawlink)/(cp.Clink*wlink*wlink)
             u=np.array([m,ilink])
         buffer[tick]=u; applied=buffer[(tick+1)%len(buffer)].copy(); tick=(tick+1)%len(buffer)
         # Explicit midpoint; sample/delay input is held for the integration step.

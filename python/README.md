@@ -1,6 +1,8 @@
 # python/ — 검증용 원본 계산 스크립트
 
-**최신 개발:** `pprc_two_stage.py` + `validate_two_stage.py`는 유한 링크/브리지 필터 모델, `sals_admission.py`는 정적 전력 예산 기반 승인 함수다. `validate_sals_contract.py`가 관측 전 사건 반례를 재현한다. 결과: [통합 검증](../validation/2026-09-22-integration/README.md).
+**공통 제어기 후속:** `pprc_fixed_control.run()`은 모든 운전점에서 같은 이득·공칭 파라미터를 사용한다. `validate_fixed_control.py`와 MATLAB 독립 검증 후 `compare_fixed_control.py`로 결과를 대조한다. [검증 조건](../validation/2026-09-22-fixed-control/README.md).
+
+**2단 모델 개발:** `pprc_two_stage.py` + `validate_two_stage.py`는 유한 링크/브리지 필터 모델, `sals_admission.py`는 정적 전력 예산 기반 승인 함수다. `validate_sals_contract.py`가 관측 전 사건 반례를 재현한다. 결과: [통합 검증](../validation/2026-09-22-integration/README.md).
 
 초기 모델을 Python으로 작성한 뒤 MATLAB으로 이식했다. `results/`에는 이전 버전 결과도 있으므로 현재 코드의 검증 완료를 의미하지 않는다.
 

@@ -1,0 +1,145 @@
+{
+  "reason": "5000 Hz candidate passed nominal grid but failed one filter-inductance tolerance case; retune before adoption",
+  "controller": {
+    "K": [
+      -1.486527803088366,
+      0.22289588838354787,
+      2.6507668740272194,
+      0.5568942102125048,
+      -15559.755499934156
+    ],
+    "parameters": {
+      "L": 1.5e-06,
+      "Cs": 0.0001,
+      "Cb": 0.0004,
+      "R": 0.0132,
+      "Lh": 5e-06,
+      "Rh": 0.002,
+      "Clink": 0.002,
+      "eta": 0.96,
+      "tau": 1e-05,
+      "Ts": 5e-06,
+      "delay": 5e-06,
+      "vref": 400.0,
+      "vlink": 100.0,
+      "modulation_max": 0.95,
+      "path_max": 100.0,
+      "reference_max": 84.0,
+      "link_max": 80.0,
+      "power_max": 8000.0,
+      "series_max": 90.0,
+      "link_bw": 1000.0,
+      "inner_tau": 1e-05,
+      "bus_bw": 5000.0,
+      "Ldab": 1.11e-05,
+      "fs": 200000.0,
+      "turns": 4.0,
+      "phase_max": 1.0471975511965976
+    },
+    "design_vbat": 788,
+    "design_power": 5000
+  },
+  "summary": {
+    "nominal": {
+      "total": 41,
+      "passed": 41
+    },
+    "outside_continuous_rating": {
+      "total": 3,
+      "passed": 2
+    },
+    "tolerance": {
+      "total": 28,
+      "passed": 27
+    },
+    "sensitivity": {
+      "total": 8,
+      "passed": 4
+    }
+  },
+  "failures": [
+    {
+      "vbat": 920,
+      "power0": 1000,
+      "power1": 25000,
+      "dt": 2e-07,
+      "duration": 0.02,
+      "droop": 4.425973254402322,
+      "vbus_end": 399.62483703905684,
+      "vbus_max": 400.1813629169273,
+      "vlink_min": 99.79671921256976,
+      "vlink_max": 100.33395502662987,
+      "path_peak": 86.73757194503892,
+      "bridge_peak": 95.96252294453257,
+      "link_peak": 60.036336571214505,
+      "series_peak": 61.76600360388451,
+      "dab_power_peak": 6017.829717562712,
+      "modulation_peak": 0.95,
+      "energy_residual_max": 1.4551915228366852e-11,
+      "completed": true,
+      "end_time": 0.02,
+      "violations": {
+        "path_current": false,
+        "bridge_current": false,
+        "series_voltage": false,
+        "link_current_rating": false,
+        "instantaneous_dab_envelope": false,
+        "dab_power": false,
+        "link_voltage_band": false,
+        "modulation": false
+      },
+      "within_port_limits": true,
+      "voltage_quality_pass": true,
+      "K": [
+        -1.486527803088366,
+        0.22289588838354787,
+        2.6507668740272194,
+        0.5568942102125048,
+        -15559.755499934156
+      ],
+      "parameters": {
+        "L": 1.5e-06,
+        "Cs": 0.0001,
+        "Cb": 0.0004,
+        "R": 0.0132,
+        "Lh": 4.5e-06,
+        "Rh": 0.002,
+        "Clink": 0.002,
+        "eta": 0.96,
+        "tau": 1e-05,
+        "Ts": 5e-06,
+        "delay": 5e-06,
+        "vref": 400.0,
+        "vlink": 100.0,
+        "modulation_max": 0.95,
+        "path_max": 100.0,
+        "reference_max": 84.0,
+        "link_max": 80.0,
+        "power_max": 8000.0,
+        "series_max": 90.0,
+        "link_bw": 1000.0,
+        "inner_tau": 1e-05,
+        "bus_bw": 5000.0,
+        "Ldab": 1.11e-05,
+        "fs": 200000.0,
+        "turns": 4.0,
+        "phase_max": 1.0471975511965976
+      },
+      "recovery_s": 6.379999999999992e-05,
+      "tail_ripple_V": 0.32212339561874614,
+      "checks": {
+        "completed": true,
+        "ports": true,
+        "voltage_excursion": true,
+        "final_voltage": true,
+        "recovery_1ms": true,
+        "final_1ms_ripple": false
+      },
+      "requirements_pass": false,
+      "delta_current_equivalent_A": 60.0,
+      "continuous_rating_exceeded": false,
+      "name": "tolerance_Lh_0.9_920",
+      "group": "tolerance"
+    }
+  ]
+}
