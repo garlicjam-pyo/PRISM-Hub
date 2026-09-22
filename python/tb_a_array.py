@@ -33,7 +33,7 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, fratio=0.98, mode="fixed"
     # per-phase adaptive state
     forced_off=np.zeros(N,bool); det_cnt=np.zeros(N,int); armed=np.zeros(N,bool); pulse_sign=np.zeros(N)
     # self-oscillating (zcp): per-phase state machine: ph_state 1/2 conducting, 0 dead; timer counts steps in dead; max on-time guard
-    ph_state=np.zeros(N,int); ph_next=np.ones(N,int); ph_timer=np.zeros(N,int); on_cnt=np.zeros(N,int)
+    ph_state=np.zeros(N,int); ph_next=np.ones(N,int); ph_timer=np.zeros(N,int); on_cnt=np.zeros(N,int); pol=np.zeros(N)
     ph_timer=-off.copy()              # stagger start by interleave offsets
     t_on_nom=0.5/fr0*(1-2*td*fr0)
     min_on=int(round(0.80*t_on_nom/dt)); max_on=int(round(1.12*t_on_nom/dt))   # ZC window [0.80,1.12] x nominal (blanking + guard)

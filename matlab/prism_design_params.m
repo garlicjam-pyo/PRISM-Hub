@@ -48,7 +48,7 @@ A.Pmod_loss = A.Pph*A.Nph;                    % 118 W/모듈
 A.eta_full  = 1 - A.Pmod_loss/A.Pmod;         % 99.69 %
 A.Rout_mod  = A.Pmod_loss/(A.Pmod/P.bus.V)^2; % 13.4 mohm
 A.Rout_sys  = A.Rout_mod/A.Nmod;              % 3.35 mohm
-A.Rout_avg  = A.Rout_mod;                     % 평균값 모델(모듈)용 등가 출력저항
+A.Rout_avg  = A.Rout_mod;                     % 평균값 모델(모듈)용 등가 출력저항 (위상 단위 모델은 2*Rout_mod: 2위상 병렬)
 % fs 스윕 (효율 vs 수동소자 크기)
 fs_sw = [50 100 150 200 300 400]*1e3;
 for k = 1:numel(fs_sw)
