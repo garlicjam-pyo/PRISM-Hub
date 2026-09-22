@@ -98,7 +98,8 @@ docs/   01_제안서_EV컨버터_아키텍처.md   상위 제안서 (조사·아
         02_엔지니어링_설계검증서.md     적용 대상 → 비교 → 수치 검증 → Simulink 가이드 → 테스트벤치 → 검토, 부록 A–C
         03_논문_구조안.md               두 편 분리 구조, 기여·그림 목록, 최근접 선행연구
         04_Simulink_검증대조표.md       Simscape 재현 시 대조할 기대값
-        05_작업_동기화_규칙.md          두 컴퓨터 간 pull/push 루틴, 커밋 대상, 문서 갱신 규칙
+        05_프로젝트_기술개요_및_검토결과.md 배경·약어·구성·모드·검토 결과를 순서대로 설명(v0.7.0 기준, 15절에 v0.9 반영 현황)
+        08_작업_동기화_규칙.md          두 컴퓨터 간 pull/push 루틴, 커밋 대상, 문서 갱신 규칙
         06_논문1_초고_EN.md             토폴로지·시스템 논문 초고(영문, 초록·본문·그림 매핑)
         07_논문2_초고_EN.md             강건 스케줄링 논문 초고(영문, 초록·절 구성·결과 매핑)
 tools/  sync.ps1, sync.sh               세션 시작/종료 동기화 도우미
@@ -156,7 +157,7 @@ python wp45_predictor.py       # WP4.5 예측기 (sklearn)
 
 ## 9. 두 컴퓨터 작업 규칙
 
-세션 시작 `.\tools\sync.ps1 start`, 종료 `.\tools\sync.ps1 end "메시지"` (macOS/Linux는 `tools/sync.sh`). 상세는 `docs/05_작업_동기화_규칙.md`.
+세션 시작 `.\tools\sync.ps1 start`, 종료 `.\tools\sync.ps1 end "메시지"` (macOS/Linux는 `tools/sync.sh`). 상세는 `docs/08_작업_동기화_규칙.md`.
 
 ## 10. 참고문헌
 
