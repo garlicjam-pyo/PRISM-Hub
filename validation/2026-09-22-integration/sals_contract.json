@@ -5,6 +5,9 @@
     "observed_ms": 80,
     "peak_load_A": 122.161,
     "over_100A_before_observation_ms": 10.0,
+    "static_load_budget_A": 59.37499999999994,
+    "peak_above_static_budget_A": 62.78600000000006,
+    "surge_interval_above_static_budget_ms": 10.0,
     "unmet_demand_A_ms": {
       "PTC": 3005.199999999994,
       "BH": 3850.0,
@@ -48,5 +51,5 @@
     "static_admission_feasible": false,
     "voltage_safety_verified": false
   },
-  "conclusion": "Window anchoring alone cannot cover events before observation. Static admission cannot rescue mandatory demand above converter capacity; no voltage guarantee claimed."
+  "conclusion": "The 122.161 A peak is aggregate 400 V load demand. During the pre-observation surge interval, it exceeds the 59.375 A static load budget by 62.786 A; it is not a calculated Stage B path current. Window anchoring alone cannot cover events before observation. Static admission cannot rescue mandatory demand above converter capacity; no voltage guarantee claimed."
 }

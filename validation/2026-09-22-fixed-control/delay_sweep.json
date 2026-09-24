@@ -1,0 +1,410 @@
+{
+  "status": "PASS: diagnostic boundary reproduced",
+  "scope": "Frozen gain; nominal finite-link average plant; 1 to 25 kW step; 640 and 920 V; dt=0.1 us",
+  "controller_parameters": {
+    "L": 1.5e-06,
+    "Cs": 0.0001,
+    "Cb": 0.0004,
+    "R": 0.0132,
+    "Lh": 5e-06,
+    "Rh": 0.002,
+    "Clink": 0.002,
+    "eta": 0.96,
+    "tau": 1e-05,
+    "Ts": 5e-06,
+    "delay": 5e-06,
+    "vref": 400.0,
+    "vlink": 100.0,
+    "modulation_max": 0.95,
+    "path_max": 100.0,
+    "reference_max": 84.0,
+    "link_max": 80.0,
+    "power_max": 8000.0,
+    "series_max": 90.0,
+    "link_bw": 1000.0,
+    "inner_tau": 1e-05,
+    "bus_bw": 4800.0,
+    "Ldab": 1.11e-05,
+    "fs": 200000.0,
+    "turns": 4.0,
+    "phase_max": 1.0471975511965976
+  },
+  "last_tested_delay_all_cases_pass_us": 6.2,
+  "first_tested_delay_any_case_fails_us": 6.3,
+  "boundary_note": "Discrete tested bracket, not a certified maximum delay or hardware stability margin.",
+  "cases": [
+    {
+      "delay_us": 5.0,
+      "vbat_V": 640,
+      "requirements_pass": true,
+      "droop_V": 5.07685600811476,
+      "path_peak_A": 98.03796371418017,
+      "bridge_peak_A": 87.40531324484671,
+      "recovery_us": 352.9,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 5.0,
+      "vbat_V": 920,
+      "requirements_pass": true,
+      "droop_V": 4.499207101716593,
+      "path_peak_A": 86.69231114622598,
+      "bridge_peak_A": 85.60463477789015,
+      "recovery_us": 66.29999999999983,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 5.5,
+      "vbat_V": 640,
+      "requirements_pass": true,
+      "droop_V": 5.210669873852851,
+      "path_peak_A": 98.79020464964549,
+      "bridge_peak_A": 88.38081941859876,
+      "recovery_us": 370.09999999999997,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 5.5,
+      "vbat_V": 920,
+      "requirements_pass": true,
+      "droop_V": 4.53429474407767,
+      "path_peak_A": 87.49262326213324,
+      "bridge_peak_A": 85.97725608685191,
+      "recovery_us": 67.1999999999999,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 6.0,
+      "vbat_V": 640,
+      "requirements_pass": true,
+      "droop_V": 5.360690375034778,
+      "path_peak_A": 99.57519951816734,
+      "bridge_peak_A": 89.68870771970948,
+      "recovery_us": 385.1999999999998,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 6.0,
+      "vbat_V": 920,
+      "requirements_pass": true,
+      "droop_V": 4.5689038985768775,
+      "path_peak_A": 88.39222895132009,
+      "bridge_peak_A": 87.14077027175591,
+      "recovery_us": 68.09999999999998,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 6.1,
+      "vbat_V": 640,
+      "requirements_pass": true,
+      "droop_V": 5.392658806950408,
+      "path_peak_A": 99.73444836016026,
+      "bridge_peak_A": 89.9775805324536,
+      "recovery_us": 388.9,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 6.1,
+      "vbat_V": 920,
+      "requirements_pass": true,
+      "droop_V": 4.575778314730371,
+      "path_peak_A": 88.58442460323228,
+      "bridge_peak_A": 87.41788797446155,
+      "recovery_us": 68.20000000000003,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 6.2,
+      "vbat_V": 640,
+      "requirements_pass": true,
+      "droop_V": 5.425255898313935,
+      "path_peak_A": 99.89399926479,
+      "bridge_peak_A": 90.27131099392686,
+      "recovery_us": 393.2,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 6.2,
+      "vbat_V": 920,
+      "requirements_pass": true,
+      "droop_V": 4.582639051601404,
+      "path_peak_A": 88.78077090766368,
+      "bridge_peak_A": 87.71034763444378,
+      "recovery_us": 68.39999999999993,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 6.3,
+      "vbat_V": 640,
+      "requirements_pass": false,
+      "droop_V": 5.4584492102652575,
+      "path_peak_A": 100.0536787687131,
+      "bridge_peak_A": 90.56947149620049,
+      "recovery_us": 398.1999999999998,
+      "failed_checks": [
+        "ports"
+      ],
+      "violated_ports": [
+        "path_current"
+      ]
+    },
+    {
+      "delay_us": 6.3,
+      "vbat_V": 920,
+      "requirements_pass": true,
+      "droop_V": 4.589493692079088,
+      "path_peak_A": 88.9812870925379,
+      "bridge_peak_A": 88.01838876860829,
+      "recovery_us": 68.49999999999999,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 6.4,
+      "vbat_V": 640,
+      "requirements_pass": false,
+      "droop_V": 5.492204685892716,
+      "path_peak_A": 100.21330603514751,
+      "bridge_peak_A": 90.87160574439164,
+      "recovery_us": 403.99999999999983,
+      "failed_checks": [
+        "ports"
+      ],
+      "violated_ports": [
+        "path_current"
+      ]
+    },
+    {
+      "delay_us": 6.4,
+      "vbat_V": 920,
+      "requirements_pass": true,
+      "droop_V": 4.596334393749032,
+      "path_peak_A": 89.18598068565501,
+      "bridge_peak_A": 88.34221355009765,
+      "recovery_us": 68.69999999999987,
+      "failed_checks": [],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 6.5,
+      "vbat_V": 640,
+      "requirements_pass": false,
+      "droop_V": 5.526482442187046,
+      "path_peak_A": 100.37269203066155,
+      "bridge_peak_A": 91.17722872406158,
+      "recovery_us": 409.7999999999999,
+      "failed_checks": [
+        "ports"
+      ],
+      "violated_ports": [
+        "path_current"
+      ]
+    },
+    {
+      "delay_us": 6.5,
+      "vbat_V": 920,
+      "requirements_pass": false,
+      "droop_V": 4.603162467235791,
+      "path_peak_A": 89.39501020260504,
+      "bridge_peak_A": 94.78562360106741,
+      "recovery_us": 68.79999999999994,
+      "failed_checks": [
+        "final_1ms_ripple"
+      ],
+      "violated_ports": []
+    },
+    {
+      "delay_us": 7.0,
+      "vbat_V": 640,
+      "requirements_pass": false,
+      "droop_V": 5.703760517053809,
+      "path_peak_A": 101.15779097527565,
+      "bridge_peak_A": 92.73869515797719,
+      "recovery_us": 438.19999999999993,
+      "failed_checks": [
+        "ports",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "path_current"
+      ]
+    },
+    {
+      "delay_us": 7.0,
+      "vbat_V": 920,
+      "requirements_pass": false,
+      "droop_V": 4.637216258659919,
+      "path_peak_A": 90.50429824318033,
+      "bridge_peak_A": 105.04613536425046,
+      "recovery_us": 69.4999999999999,
+      "failed_checks": [
+        "ports",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "bridge_current"
+      ]
+    },
+    {
+      "delay_us": 7.5,
+      "vbat_V": 640,
+      "requirements_pass": false,
+      "droop_V": 8.297312375569106,
+      "path_peak_A": 101.80460752280753,
+      "bridge_peak_A": 101.86022137634794,
+      "recovery_us": null,
+      "failed_checks": [
+        "ports",
+        "voltage_excursion",
+        "final_voltage",
+        "recovery_1ms",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "path_current",
+        "bridge_current"
+      ]
+    },
+    {
+      "delay_us": 7.5,
+      "vbat_V": 920,
+      "requirements_pass": false,
+      "droop_V": 4.6711880710743685,
+      "path_peak_A": 91.72278092296756,
+      "bridge_peak_A": 113.30641773162638,
+      "recovery_us": null,
+      "failed_checks": [
+        "ports",
+        "final_voltage",
+        "recovery_1ms",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "bridge_current"
+      ]
+    },
+    {
+      "delay_us": 8.0,
+      "vbat_V": 640,
+      "requirements_pass": false,
+      "droop_V": 23.576835684602088,
+      "path_peak_A": 102.15000324229136,
+      "bridge_peak_A": 118.13047626511266,
+      "recovery_us": 18123.1,
+      "failed_checks": [
+        "ports",
+        "voltage_excursion",
+        "recovery_1ms",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "path_current",
+        "bridge_current"
+      ]
+    },
+    {
+      "delay_us": 8.0,
+      "vbat_V": 920,
+      "requirements_pass": false,
+      "droop_V": 5.320844508065591,
+      "path_peak_A": 92.57446397613869,
+      "bridge_peak_A": 118.4650128902898,
+      "recovery_us": null,
+      "failed_checks": [
+        "ports",
+        "final_voltage",
+        "recovery_1ms",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "bridge_current"
+      ]
+    },
+    {
+      "delay_us": 9.0,
+      "vbat_V": 640,
+      "requirements_pass": false,
+      "droop_V": 106.66690921806827,
+      "path_peak_A": 125.57964642478017,
+      "bridge_peak_A": 205.68645331675563,
+      "recovery_us": null,
+      "failed_checks": [
+        "ports",
+        "voltage_excursion",
+        "final_voltage",
+        "recovery_1ms",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "path_current",
+        "bridge_current"
+      ]
+    },
+    {
+      "delay_us": 9.0,
+      "vbat_V": 920,
+      "requirements_pass": false,
+      "droop_V": 7.3827915037002185,
+      "path_peak_A": 100.41623099605283,
+      "bridge_peak_A": 137.94383569056322,
+      "recovery_us": null,
+      "failed_checks": [
+        "ports",
+        "final_voltage",
+        "recovery_1ms",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "path_current",
+        "bridge_current"
+      ]
+    },
+    {
+      "delay_us": 10.0,
+      "vbat_V": 640,
+      "requirements_pass": false,
+      "droop_V": 127.58092830301314,
+      "path_peak_A": 170.15508464692962,
+      "bridge_peak_A": 235.69632438439888,
+      "recovery_us": null,
+      "failed_checks": [
+        "ports",
+        "voltage_excursion",
+        "final_voltage",
+        "recovery_1ms",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "path_current",
+        "bridge_current"
+      ]
+    },
+    {
+      "delay_us": 10.0,
+      "vbat_V": 920,
+      "requirements_pass": false,
+      "droop_V": 4.843082199107755,
+      "path_peak_A": 130.28019411927283,
+      "bridge_peak_A": 174.7617977609592,
+      "recovery_us": 71.69999999999985,
+      "failed_checks": [
+        "ports",
+        "final_1ms_ripple"
+      ],
+      "violated_ports": [
+        "path_current",
+        "bridge_current"
+      ]
+    }
+  ]
+}

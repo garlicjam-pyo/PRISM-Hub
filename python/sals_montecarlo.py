@@ -10,7 +10,6 @@ steady compressor power U(6,10) kW, requests for PTC/battery heater/48 V lowprio
 """
 import numpy as np, json
 from scipy.optimize import linprog
-import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 FIG="../docs/fig"; rng=np.random.default_rng(7)
 Tc=1e-3; H=15; T=0.5; n=int(T/Tc); tg=np.arange(n)*Tc
 
@@ -78,6 +77,10 @@ def evaluate_reactive(e):
     t_trip=12.0/rate; dip=rate*(t_trip+1.0)                      # dip at shed time (trip 388 V + 1 ms actuation)
     return dict(collapse=bool(dip>300),dip=float(dip))
 if __name__=="__main__":
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
     N=300; R={"sals":[],"none":[],"react":[]}
     for i in range(N):
         e=episode(); names,al=schedule(e); R["sals"].append(evaluate(e,names,al)); R["none"].append(evaluate_noshape(e)); R["react"].append(evaluate_reactive(e))

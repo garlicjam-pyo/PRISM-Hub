@@ -10,6 +10,7 @@
 
 ```sh
 python python/validate_fixed_control.py
+python python/sweep_fixed_control_delay.py
 ```
 
 MATLAB에서 `cd matlab; validate_fixed_control` 실행 후:
@@ -44,9 +45,12 @@ Python은 NumPy/SciPy/Matplotlib, MATLAB은 R2024b에서 확인한다. 수치가
 | cases.json | 독립 MATLAB 재현 입력. 제어기 설정과 실제 회로값을 별도 저장 |
 | matlab_results.json | MATLAB 독립 적분. 기존 12사례 공유 커널 회귀검사도 수행 |
 | cross_language.json | 전압·전류·회복 시간·모든 판정 일치 검사 |
+| delay_sweep.json | 전달지연 5.0–10.0 µs 진단 스윕. 시험한 640/920 V 조건은 6.2 µs까지 모두 통과하고 6.3 µs에서 640 V 경로전류 한계를 처음 위반 |
 | tuning_5000.json | 초기 5 kHz 후보의 시험 요약. 필터 공차에서 잔류 진동으로 탈락한 이력 |
 | fixed_control.png | 기존/새 공통 제어기 비교 |
 
 정상 운전점 표본과 한 변수씩 바꾼 공차 시험은 전 운전영역의 강건성 증명이 아니다. 공차 조합, 센서 지연·잡음, 동적 배터리 전압, 실제 스위칭, 고장 차단 및 열 시험은 포함되지 않는다.
+
+지연 스윕의 6.2–6.3 µs 경계는 이산 시험점에서 얻은 진단 결과이며, 연속시간 안정성 증명이나 하드웨어 허용지연 인증이 아니다.
 
 ![Fixed-controller comparison](fixed_control.png)

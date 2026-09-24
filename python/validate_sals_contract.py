@@ -18,6 +18,10 @@ def main():
     blind=(legacy.tg>=.070)&(legacy.tg<.080)
     peak=float(np.max(total[blind])); exceed_ms=float(np.sum(blind&(total>100))*legacy.Tc*1000)
     assert peak>120 and exceed_ms>=9
+    static_budget=admit(800,0.,{},coverage_valid=True)['load_budget_A']
+    budget_excess=peak-static_budget
+    budget_exceed_ms=float(np.sum(blind&(total>static_budget))*legacy.Tc*1000)
+    assert budget_excess>60 and budget_exceed_ms>=9
     requests={'PTC':(17.5,1.),'BH':(17.5,.7),'V48':(3.75,.5)}
     safe=admit(648,25.,requests,coverage_valid=True)
     assert safe['static_admission_feasible'] and abs(safe['load_budget_A']-59.375)<1e-9
@@ -37,10 +41,13 @@ def main():
     out=dict(status='PASS: counterexample detected and static-contract checks passed',
              historical_window_counterexample=dict(surge_start_ms=70,observed_ms=80,
                  peak_load_A=peak,over_100A_before_observation_ms=exceed_ms,
+                 static_load_budget_A=static_budget,
+                 peak_above_static_budget_A=budget_excess,
+                 surge_interval_above_static_budget_ms=budget_exceed_ms,
                  unmet_demand_A_ms=dict(zip(names,map(float,unmet_A_ms)))),
              normal_admission=safe,missing_coverage=blind_action,
              mandatory_upper_A=mandatory_bound,mandatory_infeasible=infeasible,
-             conclusion='Window anchoring alone cannot cover events before observation. Static admission cannot rescue mandatory demand above converter capacity; no voltage guarantee claimed.')
+             conclusion='The 122.161 A peak is aggregate 400 V load demand. During the pre-observation surge interval, it exceeds the 59.375 A static load budget by 62.786 A; it is not a calculated Stage B path current. Window anchoring alone cannot cover events before observation. Static admission cannot rescue mandatory demand above converter capacity; no voltage guarantee claimed.')
     folder=Path(__file__).resolve().parents[1]/'validation'/'2026-09-22-integration'
     folder.mkdir(parents=True,exist_ok=True)
     (folder/'sals_contract.json').write_text(json.dumps(out,indent=2),encoding='utf-8')
