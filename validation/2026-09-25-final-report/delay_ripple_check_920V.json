@@ -1,0 +1,19 @@
+{
+ "vbat": 920,
+ "step": "1->25 kW",
+ "dt": 1e-07,
+ "results": {
+  "6.4us": {
+   "pass_": true,
+   "tail_ripple_V": 7.762802169963834e-05,
+   "failed": []
+  },
+  "6.5us": {
+   "pass_": false,
+   "tail_ripple_V": 0.4062951224967719,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  }
+ }
+}

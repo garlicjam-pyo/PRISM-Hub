@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [1.0.1] — 2026-09-25 (최종 중간보고서)
+- docs/13_PRISM-Hub_중간보고서_최종본.docx: 논리 검토 반영 최종 제출본(표 18개·그림 8개, 표·그림 출처 표기).
+- 추가 분석(Python): 25 kW 정상상태 스윕, 640 V 코너 여유, 배터리 전압별 과도 허용 전력, SALS 반례 성분 분해, 920 V 지연 리플 재계산 — validation/2026-09-25-final-report/.
+- python/report_final_analysis.py, python/report_figures.py, report/(빌드 소스), docs/fig/report/.
+- docs/02 2.5절의 특허 원출원인 GM 잔재를 NIO USA로 정정.
+
 ## [Unreleased: project status report] — 2026-09-24
 
 - 연구 배경과 아이디어 도출, 선행연구·특허 비교, 아키텍처 필요성, 최신 검증 결과, 기술적 한계와 후속 수락 기준을 연결한 제출용 텍스트 보고서 `docs/12` 추가.

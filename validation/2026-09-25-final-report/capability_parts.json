@@ -1,0 +1,151 @@
+{
+ "640": {
+  "vbat": 640.0,
+  "power0": 5000.0,
+  "max_power1_W": 26093.75,
+  "first_fail_power1_W": 26250.0,
+  "first_fail_checks": [
+   "recovery_1ms"
+  ],
+  "first_fail_ports": [],
+  "path_peak_at_max_A": 97.39433180247002
+ },
+ "660": {
+  "vbat": 660.0,
+  "power0": 5000.0,
+  "max_power1_W": 27031.25,
+  "first_fail_power1_W": 27187.5,
+  "first_fail_checks": [
+   "recovery_1ms"
+  ],
+  "first_fail_ports": [],
+  "path_peak_at_max_A": 98.14083243357953
+ },
+ "680": {
+  "vbat": 680.0,
+  "power0": 5000.0,
+  "max_power1_W": 27812.5,
+  "first_fail_power1_W": 27968.75,
+  "first_fail_checks": [
+   "recovery_1ms"
+  ],
+  "first_fail_ports": [],
+  "path_peak_at_max_A": 98.85194186185942
+ },
+ "700": {
+  "vbat": 700.0,
+  "power0": 5000.0,
+  "max_power1_W": 28593.75,
+  "first_fail_power1_W": 28750.0,
+  "first_fail_checks": [
+   "recovery_1ms"
+  ],
+  "first_fail_ports": [],
+  "path_peak_at_max_A": 99.15859484289142
+ },
+ "720": {
+  "vbat": 720.0,
+  "power0": 5000.0,
+  "max_power1_W": 29531.25,
+  "first_fail_power1_W": 29687.5,
+  "first_fail_checks": [
+   "ports",
+   "recovery_1ms"
+  ],
+  "first_fail_ports": [
+   "path_current"
+  ],
+  "path_peak_at_max_A": 99.78040059071893
+ },
+ "740": {
+  "vbat": 740.0,
+  "power0": 5000.0,
+  "max_power1_W": 30000.0,
+  "first_fail_power1_W": 30156.25,
+  "first_fail_checks": [
+   "ports"
+  ],
+  "first_fail_ports": [
+   "path_current"
+  ],
+  "path_peak_at_max_A": 99.85308107680402
+ },
+ "760": {
+  "vbat": 760.0,
+  "power0": 5000.0,
+  "max_power1_W": 30468.75,
+  "first_fail_power1_W": 30625.0,
+  "first_fail_checks": [
+   "ports"
+  ],
+  "first_fail_ports": [
+   "path_current"
+  ],
+  "path_peak_at_max_A": 99.96435928988167
+ },
+ "788": {
+  "vbat": 788.0,
+  "power0": 5000.0,
+  "max_power1_W": 30937.5,
+  "first_fail_power1_W": 31093.75,
+  "first_fail_checks": [
+   "ports"
+  ],
+  "first_fail_ports": [
+   "path_current"
+  ],
+  "path_peak_at_max_A": 99.841034253035
+ },
+ "820": {
+  "vbat": 820.0,
+  "power0": 5000.0,
+  "max_power1_W": 31562.5,
+  "first_fail_power1_W": 31718.75,
+  "first_fail_checks": [
+   "ports"
+  ],
+  "first_fail_ports": [
+   "path_current"
+  ],
+  "path_peak_at_max_A": 99.925376674224
+ },
+ "860": {
+  "vbat": 860.0,
+  "power0": 5000.0,
+  "max_power1_W": 32343.75,
+  "first_fail_power1_W": 32500.0,
+  "first_fail_checks": [
+   "ports"
+  ],
+  "first_fail_ports": [
+   "path_current"
+  ],
+  "path_peak_at_max_A": 99.84218673352048
+ },
+ "900": {
+  "vbat": 900.0,
+  "power0": 5000.0,
+  "max_power1_W": 33281.25,
+  "first_fail_power1_W": 33437.5,
+  "first_fail_checks": [
+   "ports"
+  ],
+  "first_fail_ports": [
+   "path_current"
+  ],
+  "path_peak_at_max_A": 99.93561122011465
+ },
+ "920": {
+  "vbat": 920.0,
+  "power0": 5000.0,
+  "max_power1_W": 33593.75,
+  "first_fail_power1_W": 33750.0,
+  "first_fail_checks": [
+   "ports"
+  ],
+  "first_fail_ports": [
+   "path_current"
+  ],
+  "path_peak_at_max_A": 99.8179236884872
+ }
+}

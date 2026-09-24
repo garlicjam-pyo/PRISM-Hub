@@ -4,6 +4,7 @@
 
 최종 갱신: **2026-09-24**. 첨부 v0.9.1 이력과 MATLAB 검증을 통합했다. **2단 PPRC의 에너지 보존 평균 모델을 Python/MATLAB에서 검증했으며, 전체 회로의 스위칭·열·보호·모드 통합 검증은 후속 과제로 남아 있다.**
 
+- [최종 중간보고서(Word, v1.0)](docs/13_PRISM-Hub_중간보고서_최종본.docx) — 추가 분석: [validation/2026-09-25-final-report](validation/2026-09-25-final-report/README.md)
 - [제출용 프로젝트 개요 및 진행 상황 보고서](docs/12_PRISM-Hub_프로젝트_개요_및_진행상황_보고서.txt)
 - [최신 공통 제어기·60 A 검증](docs/11_공통제어기_60A_검증.md)
 - [공통 제어기 실행 결과](validation/2026-09-22-fixed-control/README.md)
