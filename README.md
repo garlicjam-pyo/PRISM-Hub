@@ -2,8 +2,9 @@
 
 **P**artial-power **R**egulated, fixed-ratio **I**ntegrated, **S**oft-switched **M**ulti-port **Hub** — 800 V 전기자동차용 통합 DC 전력 허브 연구.
 
-최종 갱신: **2026-09-22**. 첨부 v0.9.1 이력과 MATLAB 검증을 통합했다. **2단 PPRC의 에너지 보존 평균 모델을 Python/MATLAB에서 검증했으며, 전체 회로의 스위칭·열·보호·모드 통합 검증은 진행 중이다.**
+최종 갱신: **2026-09-24**. 첨부 v0.9.1 이력과 MATLAB 검증을 통합했다. **2단 PPRC의 에너지 보존 평균 모델을 Python/MATLAB에서 검증했으며, 전체 회로의 스위칭·열·보호·모드 통합 검증은 후속 과제로 남아 있다.**
 
+- [제출용 프로젝트 개요 및 진행 상황 보고서](docs/12_PRISM-Hub_프로젝트_개요_및_진행상황_보고서.txt)
 - [최신 공통 제어기·60 A 검증](docs/11_공통제어기_60A_검증.md)
 - [공통 제어기 실행 결과](validation/2026-09-22-fixed-control/README.md)
 - [2단 모델 개발·검증 보고서](docs/10_검토대응_통합개발.md)
