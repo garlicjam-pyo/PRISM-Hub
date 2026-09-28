@@ -1,0 +1,492 @@
+{
+ "scope": "Requirements analysis (2026-09-28), static part: R1 bus-window check and R3 minimum battery voltage.\n\nR1  Compares the unregulated Stage A output V_A with published input ranges of 400 V-class\n    components and with the 48 V range of ISO 21780 seen through a fixed-gain Stage C.\n    Also evaluates a window-regulation variant (bus capped at V_CAP, pass-through below it).\nR3  Guaranteed minimum battery voltage from the finite-link averaged model:\n      V_g,static : 25 kW steady point feasible with the link at its 90 V lower band limit,\n                   path resistance +10 %, modulation <= 0.95, DAB limits.\n      V_deg      : same, but the bus reference lowered to the Tier-2 floor of 384 V.\nPython only. Not a hardware margin.",
+ "R1": {
+  "components": [
+   {
+    "name": "Sanden SHS33 Gen2 전동 컴프레서",
+    "vmin": 165,
+    "vmax": 432,
+    "src": "[S1]"
+   },
+   {
+    "name": "Sanden SHS33 Gen3 전동 컴프레서",
+    "vmin": 165,
+    "vmax": 470,
+    "src": "[S1]"
+   },
+   {
+    "name": "Sanden SHS45 전동 컴프레서(냉방 10 kW)",
+    "vmin": 260,
+    "vmax": 470,
+    "src": "[S1]"
+   },
+   {
+    "name": "Sanden SEE27 전동 컴프레서",
+    "vmin": 155,
+    "vmax": 460,
+    "src": "[S1]"
+   },
+   {
+    "name": "Webasto HVH 50/70 고전압 히터(5/7 kW)",
+    "vmin": 100,
+    "vmax": 490,
+    "src": "[S2]"
+   },
+   {
+    "name": "BorgWarner Gen5 HV DC/DC(1.2 kW)",
+    "vmin": 220,
+    "vmax": 800,
+    "src": "[S3]"
+   }
+  ],
+  "iso21498_upper_limits_V": {
+   "B_420": 420.0,
+   "B_470": 470.0
+  },
+  "iso21780_48V_unlimited_V": [
+   36.0,
+   52.0
+  ],
+  "stage_c_ratio": 8.333333333333334,
+  "vbat_where_VA_exceeds_B420": 840.0,
+  "vbat_where_fixed_gain_48V_exceeds_52V": 866.6666666666667,
+  "va_table": [
+   {
+    "vbat": 600,
+    "VA_noload": 300.0,
+    "VA_25kW": 298.9,
+    "v48_fixed_gain_noload": 36.0,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": true
+   },
+   {
+    "vbat": 620,
+    "VA_noload": 310.0,
+    "VA_25kW": 308.93548387096774,
+    "v48_fixed_gain_noload": 37.199999999999996,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 640,
+    "VA_noload": 320.0,
+    "VA_25kW": 318.96875,
+    "v48_fixed_gain_noload": 38.4,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 660,
+    "VA_noload": 330.0,
+    "VA_25kW": 329.0,
+    "v48_fixed_gain_noload": 39.599999999999994,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 680,
+    "VA_noload": 340.0,
+    "VA_25kW": 339.02941176470586,
+    "v48_fixed_gain_noload": 40.8,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 700,
+    "VA_noload": 350.0,
+    "VA_25kW": 349.0571428571429,
+    "v48_fixed_gain_noload": 42.0,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 720,
+    "VA_noload": 360.0,
+    "VA_25kW": 359.0833333333333,
+    "v48_fixed_gain_noload": 43.199999999999996,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 740,
+    "VA_noload": 370.0,
+    "VA_25kW": 369.1081081081081,
+    "v48_fixed_gain_noload": 44.4,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 760,
+    "VA_noload": 380.0,
+    "VA_25kW": 379.13157894736844,
+    "v48_fixed_gain_noload": 45.599999999999994,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 780,
+    "VA_noload": 390.0,
+    "VA_25kW": 389.15384615384613,
+    "v48_fixed_gain_noload": 46.8,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 800,
+    "VA_noload": 400.0,
+    "VA_25kW": 399.175,
+    "v48_fixed_gain_noload": 48.0,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 820,
+    "VA_noload": 410.0,
+    "VA_25kW": 409.1951219512195,
+    "v48_fixed_gain_noload": 49.199999999999996,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 840,
+    "VA_noload": 420.0,
+    "VA_25kW": 419.2142857142857,
+    "v48_fixed_gain_noload": 50.4,
+    "components_violated": [],
+    "above_B420": false,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 860,
+    "VA_noload": 430.0,
+    "VA_25kW": 429.2325581395349,
+    "v48_fixed_gain_noload": 51.599999999999994,
+    "components_violated": [],
+    "above_B420": true,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 866,
+    "VA_noload": 433.0,
+    "VA_25kW": 432.2378752886836,
+    "v48_fixed_gain_noload": 51.959999999999994,
+    "components_violated": [
+     "Sanden SHS33 Gen2 전동 컴프레서"
+    ],
+    "above_B420": true,
+    "above_B470": false,
+    "v48_outside_ISO21780": false
+   },
+   {
+    "vbat": 880,
+    "VA_noload": 440.0,
+    "VA_25kW": 439.25,
+    "v48_fixed_gain_noload": 52.8,
+    "components_violated": [
+     "Sanden SHS33 Gen2 전동 컴프레서"
+    ],
+    "above_B420": true,
+    "above_B470": false,
+    "v48_outside_ISO21780": true
+   },
+   {
+    "vbat": 900,
+    "VA_noload": 450.0,
+    "VA_25kW": 449.26666666666665,
+    "v48_fixed_gain_noload": 53.99999999999999,
+    "components_violated": [
+     "Sanden SHS33 Gen2 전동 컴프레서"
+    ],
+    "above_B420": true,
+    "above_B470": false,
+    "v48_outside_ISO21780": true
+   },
+   {
+    "vbat": 920,
+    "VA_noload": 460.0,
+    "VA_25kW": 459.2826086956522,
+    "v48_fixed_gain_noload": 55.199999999999996,
+    "components_violated": [
+     "Sanden SHS33 Gen2 전동 컴프레서"
+    ],
+    "above_B420": true,
+    "above_B470": false,
+    "v48_outside_ISO21780": true
+   }
+  ],
+  "regulated_link_power": [
+   {
+    "vbat": 640,
+    "link_power_W": 6436.411235257348,
+    "series_V": 81.04625163621198
+   },
+   {
+    "vbat": 660,
+    "link_power_W": 5459.724201503077,
+    "series_V": 71.01267801942667
+   },
+   {
+    "vbat": 680,
+    "link_power_W": 4543.984192632432,
+    "series_V": 60.98119945662174
+   },
+   {
+    "vbat": 700,
+    "link_power_W": 3683.6408146603517,
+    "series_V": 50.95162515300395
+   },
+   {
+    "vbat": 720,
+    "link_power_W": 2873.7997891658,
+    "series_V": 40.923786867752575
+   },
+   {
+    "vbat": 740,
+    "link_power_W": 2110.1285158377937,
+    "series_V": 30.897535667731926
+   },
+   {
+    "vbat": 760,
+    "link_power_W": 1388.7775324361214,
+    "series_V": 20.872739227677492
+   },
+   {
+    "vbat": 780,
+    "link_power_W": 706.3148276229434,
+    "series_V": 10.849279572199539
+   },
+   {
+    "vbat": 800,
+    "link_power_W": 59.67061224732485,
+    "series_V": 0.8270511772960019
+   },
+   {
+    "vbat": 820,
+    "link_power_W": -554.8124951094298,
+    "series_V": -9.192576459845066
+   },
+   {
+    "vbat": 840,
+    "link_power_W": -1140.948236656102,
+    "series_V": -19.211145240137263
+   },
+   {
+    "vbat": 860,
+    "link_power_W": -1700.6780454558016,
+    "series_V": -29.228877480480044
+   },
+   {
+    "vbat": 866,
+    "link_power_W": -1863.7133314280802,
+    "series_V": -32.23404243833964
+   },
+   {
+    "vbat": 880,
+    "link_power_W": -2235.750352154592,
+    "series_V": -39.24582857115626
+   },
+   {
+    "vbat": 900,
+    "link_power_W": -2747.7622867219184,
+    "series_V": -49.26204910924335
+   },
+   {
+    "vbat": 920,
+    "link_power_W": -3238.1757256298743,
+    "series_V": -59.27758540698795
+   }
+  ],
+  "window_variant": {
+   "v_cap": 410.0,
+   "rows": [
+    {
+     "vbat": 600.0,
+     "bus_V": 298.9,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 620.0,
+     "bus_V": 308.93548387096774,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 640.0,
+     "bus_V": 318.96875,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 660.0,
+     "bus_V": 329.0,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 680.0,
+     "bus_V": 339.02941176470586,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 700.0,
+     "bus_V": 349.0571428571429,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 720.0,
+     "bus_V": 359.0833333333333,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 740.0,
+     "bus_V": 369.1081081081081,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 760.0,
+     "bus_V": 379.13157894736844,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 780.0,
+     "bus_V": 389.15384615384613,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 800.0,
+     "bus_V": 399.175,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 820.0,
+     "bus_V": 409.1951219512195,
+     "series_V": 0.0,
+     "link_power_W": 0.0,
+     "active": false
+    },
+    {
+     "vbat": 840.0,
+     "bus_V": 410.0,
+     "series_V": -9.211900383867716,
+     "link_power_W": -542.86279875031,
+     "path_A": 59.70451637365782,
+     "active": true
+    },
+    {
+     "vbat": 860.0,
+     "bus_V": 410.0,
+     "series_V": -19.22959900552014,
+     "link_power_W": -1115.498126835346,
+     "path_A": 58.36371170301974,
+     "active": true
+    },
+    {
+     "vbat": 866.0,
+     "bus_V": 410.0,
+     "series_V": -22.234754315774886,
+     "link_power_W": -1282.2971486508402,
+     "path_A": 57.97315789584204,
+     "active": true
+    },
+    {
+     "vbat": 880.0,
+     "bus_V": 410.0,
+     "series_V": -29.246518677655185,
+     "link_power_W": -1662.9307006490187,
+     "path_A": 57.081918359455706,
+     "active": true
+    },
+    {
+     "vbat": 900.0,
+     "bus_V": 410.0,
+     "series_V": -39.262709809139864,
+     "link_power_W": -2186.7914889001777,
+     "path_A": 55.85531748940446,
+     "active": true
+    },
+    {
+     "vbat": 920.0,
+     "bus_V": 410.0,
+     "series_V": -49.278218543747045,
+     "link_power_W": -2688.5734640379474,
+     "path_A": 54.680413352496515,
+     "active": true
+    }
+   ]
+  }
+ },
+ "R3": {
+  "assumptions": {
+   "power_W": 25000.0,
+   "link_V": 90.0,
+   "R_ohm": 0.014520000000000002,
+   "modulation_max": 0.95,
+   "path_limit_A": 90.0
+  },
+  "V_g_static": 631.6564824120603,
+  "V_static_nominal_link100_R_nom": 622.1563001521197,
+  "V_degraded_bus384": 605.7854275210525,
+  "V_degraded_ref390": 613.1492186638528,
+  "V_degraded_ref390_mandatory_15p1kW": 610.6578326064382,
+  "point_at_V_g": {
+   "path_A": 80.40201005025125,
+   "series_V": 85.33919597989949,
+   "modulation": 0.9499999999999998,
+   "link_A": 76.38190954773867,
+   "link_power_W": 6874.371859296481
+  },
+  "continuous_limit_W": {
+   "600": 0.0,
+   "615": 0.0,
+   "620": 1.5543122344752192e-10,
+   "625": 24999.999999999978,
+   "630": 24999.999999999978,
+   "640": 24999.999999999978
+  }
+ }
+}

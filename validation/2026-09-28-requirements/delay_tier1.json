@@ -1,0 +1,610 @@
+{
+ "scope": "Tier-1 delay boundary of the frozen controller (2026-09-28).\n\nTransport delay swept above the nominal 5 us for three representative Tier-1 steps (15->25, 25->15,\n0->10 kW), nominal plant parameters only, at 640 and 920 V (dt 0.1 us, as in sweep_fixed_control_delay.py). Compared with the delay budget of docs/14 (+3.0 us).",
+ "nominal_delay_us": 5.0,
+ "budget_added_us": 3.0,
+ "boundary": {
+  "640": {
+   "last_pass_us": 6.4,
+   "first_fail_us": 6.5
+  },
+  "920": {
+   "last_pass_us": 6.4,
+   "first_fail_us": 6.5
+  }
+ },
+ "rows": [
+  {
+   "vbat": 640,
+   "delay_us": 5.8,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 89.40882906548809,
+   "bridge": 85.54758294716243,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 5.8,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 79.261487591816,
+   "bridge": 79.261487591816,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 5.8,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 47.35218115767921,
+   "bridge": 49.56505022305611,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.0,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 89.56810536628902,
+   "bridge": 85.7201030901677,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.0,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 79.261487591816,
+   "bridge": 79.261487591816,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.0,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 47.45527774746192,
+   "bridge": 49.75657038706946,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.2,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 89.73831954110034,
+   "bridge": 85.95167969419813,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.2,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 79.261487591816,
+   "bridge": 79.261487591816,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.2,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 47.57077673581329,
+   "bridge": 49.95904666967683,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.3,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 89.82758438362497,
+   "bridge": 86.07702019877402,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.3,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 79.261487591816,
+   "bridge": 79.261487591816,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.3,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 47.63301228419422,
+   "bridge": 50.03964324092982,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.4,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 89.91970631832062,
+   "bridge": 86.20883835948423,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.4,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 79.261487591816,
+   "bridge": 79.261487591816,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.4,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 47.69827108275178,
+   "bridge": 50.10142659881301,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.5,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": false,
+   "path": 90.01461373118532,
+   "bridge": 86.34719646208856,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.5,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": false,
+   "path": 79.261487591816,
+   "bridge": 79.261487591816,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.5,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": false,
+   "path": 47.766650249367984,
+   "bridge": 50.14602850390992,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.6,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": false,
+   "path": 90.112402643514,
+   "bridge": 86.49214003777637,
+   "failed": []
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.6,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": false,
+   "path": 79.261487591816,
+   "bridge": 79.261487591816,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 640,
+   "delay_us": 6.6,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": false,
+   "path": 47.8382905117766,
+   "bridge": 50.319292142449626,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 640,
+   "delay_us": 7.0,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": false,
+   "path": 90.53249833697367,
+   "bridge": 90.82098130681196,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 640,
+   "delay_us": 7.0,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": false,
+   "path": 79.261487591816,
+   "bridge": 79.261487591816,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 640,
+   "delay_us": 7.0,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": false,
+   "path": 48.16210226827295,
+   "bridge": 57.89590235520332,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 640,
+   "delay_us": 8.0,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": false,
+   "path": 91.7855139799039,
+   "bridge": 118.14299597490839,
+   "failed": [
+    "ports",
+    "voltage_excursion",
+    "recovery_1ms",
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 640,
+   "delay_us": 8.0,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": false,
+   "path": 79.261487591816,
+   "bridge": 88.39144549752542,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 640,
+   "delay_us": 8.0,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": false,
+   "path": 53.13285776096558,
+   "bridge": 73.27736239393425,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 5.8,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 69.05802220656237,
+   "bridge": 71.70680427108636,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 5.8,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 54.7283782584883,
+   "bridge": 54.7283782584883,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 5.8,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 35.79646956526302,
+   "bridge": 38.39759734574491,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.0,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 69.18498750501541,
+   "bridge": 71.88261289254154,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.0,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 54.7283782584883,
+   "bridge": 54.7283782584883,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.0,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 35.92339925997772,
+   "bridge": 38.56946860784885,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.2,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 69.32167280023728,
+   "bridge": 72.02335861693003,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.2,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 54.7283782584883,
+   "bridge": 54.7283782584883,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.2,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 36.05983198376778,
+   "bridge": 38.70592375595805,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.3,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 69.39381348848052,
+   "bridge": 72.07775503220937,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.3,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 54.7283782584883,
+   "bridge": 54.7283782584883,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.3,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 36.13175318876654,
+   "bridge": 38.758053814211166,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.4,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": true,
+   "path": 69.46852395785174,
+   "bridge": 72.1442448258735,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.4,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": true,
+   "path": 54.7283782584883,
+   "bridge": 54.7283782584883,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.4,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": true,
+   "path": 36.2061658152107,
+   "bridge": 38.82898846741538,
+   "failed": []
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.5,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": false,
+   "path": 69.54593323741463,
+   "bridge": 94.85306644100469,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.5,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": false,
+   "path": 54.7283782584883,
+   "bridge": 76.67397798343667,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.5,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": false,
+   "path": 36.2832053376684,
+   "bridge": 65.5327201478507,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.6,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": false,
+   "path": 69.62602435805704,
+   "bridge": 96.95729179923919,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.6,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": false,
+   "path": 54.7283782584883,
+   "bridge": 79.63344626623544,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 6.6,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": false,
+   "path": 36.36286475876772,
+   "bridge": 67.61604080293365,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 7.0,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": false,
+   "path": 69.9748189734393,
+   "bridge": 103.80377498342098,
+   "failed": [
+    "ports",
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 7.0,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": false,
+   "path": 54.7283782584883,
+   "bridge": 90.78777907824389,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 7.0,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": false,
+   "path": 42.8630064050827,
+   "bridge": 82.40920004132914,
+   "failed": [
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 8.0,
+   "p0": 15000,
+   "p1": 25000,
+   "pass_": false,
+   "path": 78.71990268603706,
+   "bridge": 119.11578373253518,
+   "failed": [
+    "ports",
+    "final_voltage",
+    "recovery_1ms",
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 8.0,
+   "p0": 25000,
+   "p1": 15000,
+   "pass_": false,
+   "path": 70.36323168144797,
+   "bridge": 120.93279959716872,
+   "failed": [
+    "ports",
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "vbat": 920,
+   "delay_us": 8.0,
+   "p0": 0,
+   "p1": 10000,
+   "pass_": false,
+   "path": 66.20143609001222,
+   "bridge": 116.44402180238333,
+   "failed": [
+    "ports",
+    "final_1ms_ripple"
+   ]
+  }
+ ]
+}

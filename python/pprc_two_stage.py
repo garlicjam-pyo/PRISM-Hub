@@ -123,7 +123,7 @@ def design(vbat, power, p=Parameters()):
 
 def simulate(vbat=788., power0=5000., power1=25000., p=Parameters(),
              dt=2e-7, duration=.006, step=.001, K=None, keep_trace=False,
-             control_p=None):
+             control_p=None, power_fn=None):
     # Separate actual plant values from the controller's nominal parameters.
     # None preserves the historical per-case design and parameter knowledge.
     cp=p if control_p is None else control_p
@@ -140,7 +140,7 @@ def simulate(vbat=788., power0=5000., power1=25000., p=Parameters(),
     n=int(round(duration/dt)); log=np.empty((n,6)); controls=np.empty((n,2))
     residual=0.; stop=None; wlink=2*np.pi*cp.link_bw
     for k in range(n):
-        t=k*dt; power=power1 if t>=step else power0
+        t=k*dt; power=(power1 if t>=step else power0) if power_fn is None else power_fn(t)
         if k%sample==0:
             raw=-K[:4]@x[:4]-K[4]*q
             iref=np.clip(raw,-cp.reference_max,cp.reference_max)

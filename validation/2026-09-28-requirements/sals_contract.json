@@ -1,0 +1,101 @@
+{
+ "scope": "SALS under the load-class contract of docs/14 (2026-09-28). Reduced 1 ms load model, no electrical coupling.\n\nClasses (400 V-side power, kW):\n  M0  uncontrolled, always reserved at declared maximum: Stage C input -3.2..5.3 (slew <= 4 kW/ms),\n      V2L 0/3.8 (instantaneous).\n  M1  mandatory with handshake: e-compressor P_c <= 6, starts only on grant, ramps up <= 0.06 kW/ms\n      (0->6 kW >= 100 ms, no surge), ramps down at 0.5 kW/ms.\n  D   deferrable: cabin PTC (priority 1.0) and battery heater (0.7), <= 7 each. Follow the latest\n      allowance (sequence-numbered), ramp up <= 0.06 kW/ms, ramp down at exactly 0.5 kW/ms,\n      watchdog 50 ms without a valid message -> allowance 0.\nMessages: one-way delay U{1..5} ms; each message lost with probability p_loss.\nPolicies compared on identical scenarios:\n  none    all loads follow their requests, compressor starts at once\n  static  M0 + P_c,max always reserved, D budget constant, compressor starts at once\n  sals    M0 always reserved, M1 reserved from the request, D reallocated by priority; the grant is\n          issued only when a causal worst-case bound (message delay, loss, watchdog, ramp rates)\n          keeps the aggregate <= budget for every future instant.\nBudget B = 0.95 * 25 kW for V_bat >= V_g (voltage-dependent budget is a later task).",
+ "N": 200,
+ "budget_kW": 23.75,
+ "m0_reserve_kW": 9.1,
+ "summary": {
+  "none": {
+   "episodes": 200,
+   "episodes_exceeding_budget": 93,
+   "budget_exceed_ms_total": 153602,
+   "episodes_over_25kW": 57,
+   "peak_kW": 28.437876927733488,
+   "max_step_up_kW": 7.8,
+   "max_step_down_kW": 4.303533190481129,
+   "compressor_starts": 488,
+   "compressor_requests_never_started": 0,
+   "grant_latency_ms_noloss": {
+    "median": 0.0,
+    "p99": 0.0,
+    "max": 0
+   },
+   "grant_latency_ms_loss": {
+    "median": 0.0,
+    "p99": 0.0,
+    "max": 0
+   },
+   "d_start_delay_ms_when_budget_available": {
+    "median": 0.0,
+    "p99": 0.0,
+    "max": 0
+   },
+   "d_unmet_fraction": {
+    "PTC": 0.005970254571625919,
+    "BH": 0.0061517122784005875,
+    "total": 0.0060608056636790066
+   }
+  },
+  "static": {
+   "episodes": 200,
+   "episodes_exceeding_budget": 0,
+   "budget_exceed_ms_total": 0,
+   "episodes_over_25kW": 0,
+   "peak_kW": 23.53233633801304,
+   "max_step_up_kW": 7.799999999999999,
+   "max_step_down_kW": 4.303533190481129,
+   "compressor_starts": 488,
+   "compressor_requests_never_started": 0,
+   "grant_latency_ms_noloss": {
+    "median": 0.0,
+    "p99": 0.0,
+    "max": 0
+   },
+   "grant_latency_ms_loss": {
+    "median": 0.0,
+    "p99": 0.0,
+    "max": 0
+   },
+   "d_start_delay_ms_when_budget_available": {
+    "median": 0.0,
+    "p99": 0.0,
+    "max": 0
+   },
+   "d_unmet_fraction": {
+    "PTC": 0.005970254571625919,
+    "BH": 0.6995039954045918,
+    "total": 0.35205771883167414
+   }
+  },
+  "sals": {
+   "episodes": 200,
+   "episodes_exceeding_budget": 0,
+   "budget_exceed_ms_total": 0,
+   "episodes_over_25kW": 0,
+   "peak_kW": 23.74571031889905,
+   "max_step_up_kW": 7.8,
+   "max_step_down_kW": 4.303533190481129,
+   "compressor_starts": 488,
+   "compressor_requests_never_started": 0,
+   "grant_latency_ms_noloss": {
+    "median": 7.0,
+    "p99": 14.0,
+    "max": 17
+   },
+   "grant_latency_ms_loss": {
+    "median": 7.0,
+    "p99": 25.43999999999997,
+    "max": 32
+   },
+   "d_start_delay_ms_when_budget_available": {
+    "median": 15.0,
+    "p99": 31.0,
+    "max": 40
+   },
+   "d_unmet_fraction": {
+    "PTC": 0.008078318939877843,
+    "BH": 0.13129447659292734,
+    "total": 0.06956569157555287
+   }
+  }
+ }
+}
