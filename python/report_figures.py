@@ -156,7 +156,37 @@ def fig8_sals():
     k=int(np.argmax(np.where((tg>=.07)&(tg<.08),nd+dfr,-1)))
     return dict(peak=float((nd+dfr)[k]),mandatory=float(nd[k]),deferrable=float(dfr[k]))
 
+def fig9_controller():
+    """Frozen vs redesigned (R1) controller: 640 V traces and linear delay margin (2026-09-29)."""
+    from dataclasses import replace
+    from pprc_fixed_control import NOMINAL
+    import ctrl_validate as cv
+    lin=json.load(open(ROOT/"validation/2026-09-29-controller/linear.json"))
+    fig,ax=plt.subplots(1,3,figsize=(7.4,2.55))
+    for kind,col,lab in [("frozen",C["gray"],"기존 고정이득"),("R1",C["blue"],"재설계 R1")]:
+        r=cv.sim(640.,1000,25000,NOMINAL,kind=kind); t=(r['t']-.001)*1e3
+        ax[0].plot(t,r['x'][:,0],color=col,lw=1.1,label=lab)
+        p3=replace(NOMINAL,delay=NOMINAL.delay+3e-6)
+        r=cv.sim(640.,15000,25000,p3,kind=kind); t=(r['t']-.001)*1e3
+        ax[1].plot(t,r['x'][:,2],color=col,lw=1.0,label=lab)
+    ax[0].axhline(93.75,color=C["red"],ls="--",lw=.9); ax[0].axhline(100,color=C["red"],ls=":",lw=.9)
+    ax[0].text(1.95,92.2,"Tier-2 기준 93.75 A",fontsize=7,color=C["red"],ha="right",va="top"); ax[0].set_xlim(-.1,2); ax[0].set_ylim(0,105)
+    ax[0].set_xlabel("스텝 후 시간 (ms)"); ax[0].set_ylabel("경로전류 (A)"); ax[0].set_title("(a) 640 V, 1→25 kW, 공칭 지연"); ax[0].legend(loc="lower right")
+    ax[1].axhline(392,color=C["red"],ls="--",lw=.9); ax[1].axhline(408,color=C["red"],ls="--",lw=.9)
+    ax[1].set_xlim(-.1,3); ax[1].set_ylim(380,420); ax[1].set_xlabel("스텝 후 시간 (ms)"); ax[1].set_ylabel("버스 전압 (V)")
+    ax[1].set_title("(b) 640 V, 15→25 kW, 지연 +3.0 µs")
+    V=sorted({r['vbat'] for r in lin['rows']})
+    for kind,col,lab,mk in [("frozen",C["gray"],"기존 고정이득","o"),("R1",C["blue"],"재설계 R1","s")]:
+        dm=[min(r['delay_margin_us'] for r in lin['rows'] if r['controller']==kind and r['vbat']==v) for v in V]
+        ax[2].plot(V,dm,marker=mk,ms=3.5,color=col,lw=1.1,label=lab)
+    ax[2].axhline(3.0,color=C["red"],ls="--",lw=.9); ax[2].text(645,3.1,"지연 예산 +3.0 µs",fontsize=7,color=C["red"])
+    ax[2].set_ylim(0,5); ax[2].set_xlabel("배터리 전압 (V)"); ax[2].set_ylabel("추가 지연 여유 (µs)"); ax[2].set_title("(c) 선형화 추가 지연 여유")
+    ax[2].legend(loc="lower right")
+    fig.tight_layout(); fig.savefig(FIG/"fig9_controller.png"); plt.close(fig)
+
 if __name__=="__main__":
     an=json.load(open(ROOT/"validation/2026-09-25-final-report/report_analysis.json"))
-    fig1_architecture(); fig2_stage_b(); fig3_steady(an); fig4_traces(); fig5_corner(an); fig6_delay(); fig7_capability(an); print(fig8_sals())
+    import sys
+    if sys.argv[1:]==["fig9"]: fig9_controller(); raise SystemExit
+    fig1_architecture(); fig2_stage_b(); fig3_steady(an); fig4_traces(); fig5_corner(an); fig6_delay(); fig7_capability(an); print(fig8_sals()); fig9_controller()
     print("figures:", sorted(p.name for p in FIG.glob("*.png")))

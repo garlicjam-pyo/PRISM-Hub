@@ -1,0 +1,304 @@
+{
+ "bandwidth_scan_frozen_structure": [
+  {
+   "bus_bw": 2500.0,
+   "fastest_pole": 1.5,
+   "delay_margin_us": 8.0
+  },
+  {
+   "bus_bw": 2500.0,
+   "fastest_pole": 2.5,
+   "delay_margin_us": 7.4
+  },
+  {
+   "bus_bw": 3000.0,
+   "fastest_pole": 1.5,
+   "delay_margin_us": 7.7
+  },
+  {
+   "bus_bw": 3000.0,
+   "fastest_pole": 2.5,
+   "delay_margin_us": 5.6
+  },
+  {
+   "bus_bw": 3500.0,
+   "fastest_pole": 1.5,
+   "delay_margin_us": 6.2
+  },
+  {
+   "bus_bw": 3500.0,
+   "fastest_pole": 2.5,
+   "delay_margin_us": 4.1
+  },
+  {
+   "bus_bw": 4000.0,
+   "fastest_pole": 1.5,
+   "delay_margin_us": 4.7
+  },
+  {
+   "bus_bw": 4000.0,
+   "fastest_pole": 2.5,
+   "delay_margin_us": 3.1
+  },
+  {
+   "bus_bw": 4800.0,
+   "fastest_pole": 1.5,
+   "delay_margin_us": 3.3
+  },
+  {
+   "bus_bw": 4800.0,
+   "fastest_pole": 2.5,
+   "delay_margin_us": 1.4
+  }
+ ],
+ "low_bandwidth_nonlinear_640V": [
+  {
+   "bus_bw": 3000.0,
+   "fastest_pole": 1.5,
+   "plant": "nominal",
+   "p0": 15000,
+   "p1": 25000,
+   "path_peak": 93.0808499865411,
+   "droop": 17.026824663958166,
+   "completed": true,
+   "tail_ripple_V": 2.7006541358787217e-07,
+   "requirements_pass": false,
+   "failed": [
+    "voltage_excursion",
+    "recovery_1ms"
+   ]
+  },
+  {
+   "bus_bw": 3000.0,
+   "fastest_pole": 1.5,
+   "plant": "nominal",
+   "p0": 1000,
+   "p1": 25000,
+   "path_peak": 106.73453749520317,
+   "droop": 45.239243735397224,
+   "completed": true,
+   "tail_ripple_V": 7.042970139536919e-06,
+   "requirements_pass": false,
+   "failed": [
+    "ports",
+    "voltage_excursion",
+    "recovery_1ms"
+   ]
+  },
+  {
+   "bus_bw": 3000.0,
+   "fastest_pole": 1.5,
+   "plant": "Lhx0.9",
+   "p0": 15000,
+   "p1": 25000,
+   "path_peak": 352.1861700899924,
+   "droop": 350.04420198084927,
+   "completed": false,
+   "tail_ripple_V": 81.2015746540839,
+   "requirements_pass": false,
+   "failed": [
+    "completed",
+    "ports",
+    "voltage_excursion",
+    "final_voltage",
+    "recovery_1ms",
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "bus_bw": 3000.0,
+   "fastest_pole": 1.5,
+   "plant": "Lhx0.9",
+   "p0": 1000,
+   "p1": 25000,
+   "path_peak": 343.80491244015906,
+   "droop": 350.0247635962113,
+   "completed": false,
+   "tail_ripple_V": 81.3327066756172,
+   "requirements_pass": false,
+   "failed": [
+    "completed",
+    "ports",
+    "voltage_excursion",
+    "final_voltage",
+    "recovery_1ms",
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "bus_bw": 2500.0,
+   "fastest_pole": 2.5,
+   "plant": "nominal",
+   "p0": 15000,
+   "p1": 25000,
+   "path_peak": 93.46696648460888,
+   "droop": 25.796020404803983,
+   "completed": true,
+   "tail_ripple_V": 0.002887761688214141,
+   "requirements_pass": false,
+   "failed": [
+    "voltage_excursion",
+    "recovery_1ms"
+   ]
+  },
+  {
+   "bus_bw": 2500.0,
+   "fastest_pole": 2.5,
+   "plant": "nominal",
+   "p0": 1000,
+   "p1": 25000,
+   "path_peak": 107.42663807938887,
+   "droop": 65.30968834525288,
+   "completed": true,
+   "tail_ripple_V": 0.0154225960938561,
+   "requirements_pass": false,
+   "failed": [
+    "ports",
+    "voltage_excursion",
+    "recovery_1ms"
+   ]
+  },
+  {
+   "bus_bw": 2500.0,
+   "fastest_pole": 2.5,
+   "plant": "Lhx0.9",
+   "p0": 15000,
+   "p1": 25000,
+   "path_peak": 340.71190547735114,
+   "droop": 350.0513112983731,
+   "completed": false,
+   "tail_ripple_V": 81.65012516423832,
+   "requirements_pass": false,
+   "failed": [
+    "completed",
+    "ports",
+    "voltage_excursion",
+    "final_voltage",
+    "recovery_1ms",
+    "final_1ms_ripple"
+   ]
+  },
+  {
+   "bus_bw": 2500.0,
+   "fastest_pole": 2.5,
+   "plant": "Lhx0.9",
+   "p0": 1000,
+   "p1": 25000,
+   "path_peak": 308.30138342837415,
+   "droop": 350.01667544063,
+   "completed": false,
+   "tail_ripple_V": 84.5331992405323,
+   "requirements_pass": false,
+   "failed": [
+    "completed",
+    "ports",
+    "voltage_excursion",
+    "final_voltage",
+    "recovery_1ms",
+    "final_1ms_ripple"
+   ]
+  }
+ ],
+ "voltage_gain_scaling_with_prediction": [
+  {
+   "alpha": 1.0,
+   "max_spectral_radius": 0.976950930884862
+  },
+  {
+   "alpha": 0.75,
+   "max_spectral_radius": 0.9806190347227539
+  },
+  {
+   "alpha": 0.5,
+   "max_spectral_radius": 0.9963094173532974
+  },
+  {
+   "alpha": 0.35,
+   "max_spectral_radius": 1.00282944140536
+  },
+  {
+   "alpha": 0.25,
+   "max_spectral_radius": 1.0064850866576065
+  },
+  {
+   "alpha": 0.0,
+   "max_spectral_radius": 1.014073118481819
+  }
+ ],
+ "hard_voltage_limit": {
+  "gain": "frozen GAIN with prediction",
+  "load_step_1_to_25kW": [
+   {
+    "E": null,
+    "path_peak": 92.89414257239739,
+    "droop": 5.106619845044293,
+    "completed": true,
+    "tail_ripple_V": 0.0,
+    "requirements_pass": true,
+    "failed": []
+   },
+   {
+    "E": 3.0,
+    "path_peak": 89.16245707119467,
+    "droop": 5.172707673809612,
+    "completed": true,
+    "tail_ripple_V": 0.0,
+    "requirements_pass": true,
+    "failed": []
+   },
+   {
+    "E": 2.0,
+    "path_peak": 86.67972034387074,
+    "droop": 5.371423170845048,
+    "completed": true,
+    "tail_ripple_V": 0.0,
+    "requirements_pass": true,
+    "failed": []
+   }
+  ],
+  "unload_25_to_1kW": [
+   {
+    "E": 2.0,
+    "path_peak": 79.261487591816,
+    "droop": 4.715331662477922,
+    "completed": true,
+    "tail_ripple_V": 0.0,
+    "requirements_pass": true,
+    "failed": []
+   },
+   {
+    "E": 1.5,
+    "path_peak": 79.261487591816,
+    "droop": 24.651149133424042,
+    "completed": true,
+    "tail_ripple_V": 45.47081676562783,
+    "requirements_pass": false,
+    "failed": [
+     "ports",
+     "voltage_excursion",
+     "final_voltage",
+     "recovery_1ms",
+     "final_1ms_ripple"
+    ]
+   }
+  ]
+ },
+ "delay_limited_mode": {
+  "delay_s": 6.5e-06,
+  "spectral_radius": 1.0008785723324622,
+  "frequency_hz": 30004.45772850866,
+  "normalized_participation": {
+   "i_h": 1.0,
+   "m(k-1)": 0.926025078845695,
+   "m(k-2)": 0.9252122130428179,
+   "m(k-3)": 0.9244000607744094,
+   "m(k-4)": 0.9235886214141291,
+   "i_p": 0.24810512972442414
+  }
+ },
+ "frozen_tolerance_linear_check": {
+  "sets": 16,
+  "max_spectral_radius": 0.9825787480861479
+ },
+ "scope": "Design exploration behind controller R1 (2026-09-29): the alternatives that were rejected.\n\n1) Frozen controller structure, pole-placement bandwidth / fastest pole scan: linear added-delay margin.\n2) Lower bandwidth (2.5 and 3.0 kHz) in nonlinear simulation: droop, path current, collapse under L_h -10 %.\n3) Bus-voltage proportional gain scaled by alpha (frozen gain + prediction): spectral radius -> instability below ~0.35-0.5.\n4) Hard deviation limit E on the voltage term (frozen gain + prediction): Tier-2 1->25 kW path current at 640 V\n   (reduced), and 25->1 kW (limit cycle at E = 1.5 V).\n5) Delay-limited mode of the frozen controller: frequency and eigenvector composition at +1.5 us.\n6) Frozen controller, one-at-a-time tolerance sets: linear spectral radius at nominal delay (no hidden oscillation).\nAveraged model, Python only."
+}

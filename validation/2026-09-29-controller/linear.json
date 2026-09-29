@@ -1,0 +1,510 @@
+{
+ "rows": [
+  {
+   "vbat": 632.0,
+   "power": -3200.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9761976856966007,
+   "mode_hz_nominal": 806.9202861548303,
+   "rho_plus3us": 1.0597227037350976,
+   "mode_hz_plus3us": 27649.20821794674
+  },
+  {
+   "vbat": 632.0,
+   "power": 0.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9774075976894983,
+   "mode_hz_nominal": 806.5521451050241,
+   "rho_plus3us": 1.0592776191314006,
+   "mode_hz_plus3us": 27667.147933390355
+  },
+  {
+   "vbat": 632.0,
+   "power": 10000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9760516215473999,
+   "mode_hz_nominal": 808.9213624443505,
+   "rho_plus3us": 1.0592216350100347,
+   "mode_hz_plus3us": 27669.03106038251
+  },
+  {
+   "vbat": 632.0,
+   "power": 25000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9759559214450114,
+   "mode_hz_nominal": 809.3464971831952,
+   "rho_plus3us": 1.0586640178100173,
+   "mode_hz_plus3us": 27697.710009392908
+  },
+  {
+   "vbat": 640.0,
+   "power": -3200.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9762239904579033,
+   "mode_hz_nominal": 806.2009907218636,
+   "rho_plus3us": 1.0597179420165908,
+   "mode_hz_plus3us": 27647.392961914622
+  },
+  {
+   "vbat": 640.0,
+   "power": 0.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9776898878307777,
+   "mode_hz_nominal": 806.3573527205456,
+   "rho_plus3us": 1.0593579536311677,
+   "mode_hz_plus3us": 27666.20616962994
+  },
+  {
+   "vbat": 640.0,
+   "power": 10000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9760869403949517,
+   "mode_hz_nominal": 808.101337971275,
+   "rho_plus3us": 1.059242183369502,
+   "mode_hz_plus3us": 27667.235536914202
+  },
+  {
+   "vbat": 640.0,
+   "power": 25000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9759965185706057,
+   "mode_hz_nominal": 808.5216401136406,
+   "rho_plus3us": 1.0587128879223933,
+   "mode_hz_plus3us": 27695.659462662734
+  },
+  {
+   "vbat": 700.0,
+   "power": -3200.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9764105884979364,
+   "mode_hz_nominal": 800.8285696558448,
+   "rho_plus3us": 1.0596985065414743,
+   "mode_hz_plus3us": 27640.836040518254
+  },
+  {
+   "vbat": 700.0,
+   "power": 0.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9778897497258519,
+   "mode_hz_nominal": 800.1484013699904,
+   "rho_plus3us": 1.059680888629313,
+   "mode_hz_plus3us": 27657.67421489875
+  },
+  {
+   "vbat": 700.0,
+   "power": 10000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9763324417035592,
+   "mode_hz_nominal": 802.0047658420091,
+   "rho_plus3us": 1.0593935925449893,
+   "mode_hz_plus3us": 27660.961535111004
+  },
+  {
+   "vbat": 700.0,
+   "power": 25000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9762769167797447,
+   "mode_hz_nominal": 802.3641926108824,
+   "rho_plus3us": 1.0590544433277032,
+   "mode_hz_plus3us": 27687.651901259687
+  },
+  {
+   "vbat": 788.0,
+   "power": -3200.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.976657194083508,
+   "mode_hz_nominal": 793.2234302284662,
+   "rho_plus3us": 1.0597217230447045,
+   "mode_hz_plus3us": 27653.605550628785
+  },
+  {
+   "vbat": 788.0,
+   "power": 0.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9772215984132706,
+   "mode_hz_nominal": 790.5550159976663,
+   "rho_plus3us": 1.060024381800731,
+   "mode_hz_plus3us": 27660.888116903825
+  },
+  {
+   "vbat": 788.0,
+   "power": 10000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9766404720083011,
+   "mode_hz_nominal": 793.5204725077418,
+   "rho_plus3us": 1.0596195995685969,
+   "mode_hz_plus3us": 27674.48523059225
+  },
+  {
+   "vbat": 788.0,
+   "power": 25000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9766229487357768,
+   "mode_hz_nominal": 793.764959240247,
+   "rho_plus3us": 1.0595028989315305,
+   "mode_hz_plus3us": 27699.061483960035
+  },
+  {
+   "vbat": 860.0,
+   "power": -3200.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9768492486675383,
+   "mode_hz_nominal": 787.0146245698711,
+   "rho_plus3us": 1.0597964673845928,
+   "mode_hz_plus3us": 27685.019862368492
+  },
+  {
+   "vbat": 860.0,
+   "power": 0.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9777723405137613,
+   "mode_hz_nominal": 785.106767833601,
+   "rho_plus3us": 1.0603441724722624,
+   "mode_hz_plus3us": 27684.98430870453
+  },
+  {
+   "vbat": 860.0,
+   "power": 10000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.976844523038751,
+   "mode_hz_nominal": 787.5181162065003,
+   "rho_plus3us": 1.0598201163758791,
+   "mode_hz_plus3us": 27702.585617755278
+  },
+  {
+   "vbat": 860.0,
+   "power": 25000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9768512666245017,
+   "mode_hz_nominal": 787.6657389429652,
+   "rho_plus3us": 1.0598552504032754,
+   "mode_hz_plus3us": 27724.063299217712
+  },
+  {
+   "vbat": 920.0,
+   "power": -3200.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9769964203102158,
+   "mode_hz_nominal": 782.1785703368267,
+   "rho_plus3us": 1.0598956832538151,
+   "mode_hz_plus3us": 27725.159289081996
+  },
+  {
+   "vbat": 920.0,
+   "power": 0.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9779214286172652,
+   "mode_hz_nominal": 780.5095552366917,
+   "rho_plus3us": 1.060722777957473,
+   "mode_hz_plus3us": 27719.951802666674
+  },
+  {
+   "vbat": 920.0,
+   "power": 10000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9769969762705174,
+   "mode_hz_nominal": 782.9143872404604,
+   "rho_plus3us": 1.0600027252978514,
+   "mode_hz_plus3us": 27740.251561000576
+  },
+  {
+   "vbat": 920.0,
+   "power": 25000.0,
+   "controller": "frozen",
+   "delay_margin_us": 1.4,
+   "rho_nominal": 0.9770190146279568,
+   "mode_hz_nominal": 783.0091246440537,
+   "rho_plus3us": 1.0601405109468063,
+   "mode_hz_plus3us": 27760.868808506162
+  },
+  {
+   "vbat": 632.0,
+   "power": -3200.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9762614565126764,
+   "mode_hz_nominal": 803.1548275776395,
+   "rho_plus3us": 0.9758464801015262,
+   "mode_hz_plus3us": 818.6609727478873
+  },
+  {
+   "vbat": 632.0,
+   "power": 0.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9775142929310547,
+   "mode_hz_nominal": 803.8852517787091,
+   "rho_plus3us": 0.9761236643993978,
+   "mode_hz_plus3us": 818.7184884758765
+  },
+  {
+   "vbat": 632.0,
+   "power": 10000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9761304107327803,
+   "mode_hz_nominal": 804.9068260055345,
+   "rho_plus3us": 0.9756849739514308,
+   "mode_hz_plus3us": 820.6858783091284
+  },
+  {
+   "vbat": 632.0,
+   "power": 25000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9760480487885056,
+   "mode_hz_nominal": 805.4804512768163,
+   "rho_plus3us": 0.9755901771993244,
+   "mode_hz_plus3us": 821.2885495066571
+  },
+  {
+   "vbat": 640.0,
+   "power": -3200.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.976284917900062,
+   "mode_hz_nominal": 802.6421994309146,
+   "rho_plus3us": 0.9758661457282926,
+   "mode_hz_plus3us": 818.2816442406939
+  },
+  {
+   "vbat": 640.0,
+   "power": 0.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9778414678992658,
+   "mode_hz_nominal": 804.6800810027133,
+   "rho_plus3us": 0.9764171664755824,
+   "mode_hz_plus3us": 820.8622365044779
+  },
+  {
+   "vbat": 640.0,
+   "power": 10000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9761626896169223,
+   "mode_hz_nominal": 804.3109329866863,
+   "rho_plus3us": 0.9757151304782617,
+   "mode_hz_plus3us": 820.2311308548477
+  },
+  {
+   "vbat": 640.0,
+   "power": 25000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9760853397983164,
+   "mode_hz_nominal": 804.8726543210179,
+   "rho_plus3us": 0.975625874153758,
+   "mode_hz_plus3us": 820.8319372771506
+  },
+  {
+   "vbat": 700.0,
+   "power": -3200.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9764482698743165,
+   "mode_hz_nominal": 798.7274091206637,
+   "rho_plus3us": 0.9760220802919752,
+   "mode_hz_plus3us": 814.7710040366411
+  },
+  {
+   "vbat": 700.0,
+   "power": 0.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.978014727184116,
+   "mode_hz_nominal": 799.5224688267897,
+   "rho_plus3us": 0.9766949802503971,
+   "mode_hz_plus3us": 817.3251125029989
+  },
+  {
+   "vbat": 700.0,
+   "power": 10000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9763824459519534,
+   "mode_hz_nominal": 799.7901368977437,
+   "rho_plus3us": 0.9759400620993618,
+   "mode_hz_plus3us": 816.0836011098698
+  },
+  {
+   "vbat": 700.0,
+   "power": 25000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9763379523009571,
+   "mode_hz_nominal": 800.246910339172,
+   "rho_plus3us": 0.9758881912014864,
+   "mode_hz_plus3us": 816.6186620078574
+  },
+  {
+   "vbat": 788.0,
+   "power": -3200.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9766600548814752,
+   "mode_hz_nominal": 792.984719331043,
+   "rho_plus3us": 0.976276289522592,
+   "mode_hz_plus3us": 808.1066227829054
+  },
+  {
+   "vbat": 788.0,
+   "power": 0.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9771727158238624,
+   "mode_hz_nominal": 789.5072007124678,
+   "rho_plus3us": 0.9760091565201237,
+   "mode_hz_plus3us": 804.6867108024583
+  },
+  {
+   "vbat": 788.0,
+   "power": 10000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9766509566012939,
+   "mode_hz_nominal": 793.3075523723949,
+   "rho_plus3us": 0.9762629924071017,
+   "mode_hz_plus3us": 808.5131398116422
+  },
+  {
+   "vbat": 788.0,
+   "power": 25000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9766418895961092,
+   "mode_hz_nominal": 793.6062788443413,
+   "rho_plus3us": 0.9762524826349807,
+   "mode_hz_plus3us": 808.8845257360807
+  },
+  {
+   "vbat": 860.0,
+   "power": -3200.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9768254139879372,
+   "mode_hz_nominal": 788.1499092978362,
+   "rho_plus3us": 0.9765078825390688,
+   "mode_hz_plus3us": 801.5669885818501
+  },
+  {
+   "vbat": 860.0,
+   "power": 0.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9777586620712164,
+   "mode_hz_nominal": 786.2319476010433,
+   "rho_plus3us": 0.9767637288825065,
+   "mode_hz_plus3us": 801.2841289263
+  },
+  {
+   "vbat": 860.0,
+   "power": 10000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9768283478600928,
+   "mode_hz_nominal": 788.5924373186043,
+   "rho_plus3us": 0.9765093287555255,
+   "mode_hz_plus3us": 802.1428509042764
+  },
+  {
+   "vbat": 860.0,
+   "power": 25000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9768416522620028,
+   "mode_hz_nominal": 788.7679065498163,
+   "rho_plus3us": 0.976523938335427,
+   "mode_hz_plus3us": 802.3722020651709
+  },
+  {
+   "vbat": 920.0,
+   "power": -3200.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9769546736744067,
+   "mode_hz_nominal": 784.3003546115303,
+   "rho_plus3us": 0.9767089106021527,
+   "mode_hz_plus3us": 795.9858120651896
+  },
+  {
+   "vbat": 920.0,
+   "power": 0.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9778990673917112,
+   "mode_hz_nominal": 782.5577848569837,
+   "rho_plus3us": 0.9770437344706513,
+   "mode_hz_plus3us": 796.2093816045913
+  },
+  {
+   "vbat": 920.0,
+   "power": 10000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9769637765014695,
+   "mode_hz_nominal": 784.895101550206,
+   "rho_plus3us": 0.9767161073710642,
+   "mode_hz_plus3us": 796.7600271774663
+  },
+  {
+   "vbat": 920.0,
+   "power": 25000.0,
+   "controller": "R1",
+   "delay_margin_us": 4.1,
+   "rho_nominal": 0.9769916830335219,
+   "mode_hz_nominal": 785.0026837116394,
+   "rho_plus3us": 0.9767469313737425,
+   "mode_hz_plus3us": 796.9140574930572
+  }
+ ],
+ "min_margin_us": {
+  "frozen": 1.4,
+  "R1": 4.1
+ },
+ "scope": "Validation of the redesigned Stage B controller (R1) against docs/14 acceptance criteria (2026-09-29).\n\nR1 = same state-feedback + integral structure and inner current law as the frozen controller, with\n  (1) one-sample prediction of [i_p, v_s, i_h] using the nominal model and the previous command,\n  (2) dominant pole damping 0.7 -> 0.95 (bus_bw 4.8 kHz, other poles unchanged), design point 788 V / 5 kW.\nParts (run individually: python ctrl_validate.py grid|delay|corners|sequences|linear|corners_lh5|all):\n  grid      Tier-1/Tier-2 grid identical to req_dynamic.py (552 runs)\n  delay     Tier-1 added-delay boundary, 640/920 V, 3 representative steps, dt 0.1 us\n  corners   all 128 combined +/-10 % corners of [L, Cs, Cb, Lh, Clink, R, Rh] at 640 V:\n            Tier-1 15->25 kW with +3.0 us delay and Tier-2 1->25 kW at nominal delay\n  sequences worst contract load sequences (req_sequence.py) with R1\n  linear    sampled-data delay margin map (ctrl_linear.py) over V_bat and load\n  corners_lh5  Tier-2 corners that failed, re-run with L_h tolerance +/-5 % (others +/-10 %)\nJudge = docs/14 Tier criteria plus an internal-oscillation check (last 1 ms: i_h peak-to-peak <= 1 A and\nmodulation peak-to-peak <= 0.01), because a sustained bridge-current oscillation can leave the bus ripple\nbelow 0.1 V. Averaged model, Python only. Not a hardware or firmware margin.",
+ "controller": {
+  "K": [
+   -1.5813581402097892,
+   1.1112552918606937,
+   1.539757867322121,
+   0.6419266519985994,
+   -12686.999839382896
+  ],
+  "bus_bw": 4800.0,
+  "zeta": 0.95,
+  "poles": [
+   1.0,
+   0.3333333333333333,
+   2.5
+  ],
+  "prediction": "one sample, [i_p, v_s, i_h], nominal model",
+  "design_point": [
+   788,
+   5000
+  ]
+ }
+}

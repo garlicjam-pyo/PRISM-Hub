@@ -105,14 +105,14 @@ for (const b of data.blocks) {
 
 const header = new Header({ children: [new Paragraph({ alignment: AlignmentType.RIGHT,
   border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: "A6A6A6", space: 4 } },
-  children: [new TextRun({ text: "PRISM-Hub 중간 연구 진행 보고서 · v1.1", size: 16, color: "7F7F7F" })] })] });
+  children: [new TextRun({ text: "PRISM-Hub 중간 연구 진행 보고서 · v1.2", size: 16, color: "7F7F7F" })] })] });
 const footer = new Footer({ children: [new Paragraph({ alignment: AlignmentType.CENTER,
   children: [new TextRun({ text: "– ", size: 18, color: "7F7F7F" }), new TextRun({ children: [PageNumber.CURRENT], size: 18, color: "7F7F7F" }),
     new TextRun({ text: " –", size: 18, color: "7F7F7F" })] })] });
 const empty = () => new Header({ children: [new Paragraph({ children: [] })] });
 
 const doc = new Document({
-  creator: "PRISM-Hub 프로젝트팀", title: C.title, description: "PRISM-Hub 1차 중간 연구 진행 보고서(최종본 v1.1)",
+  creator: "PRISM-Hub 프로젝트팀", title: C.title, description: "PRISM-Hub 1차 중간 연구 진행 보고서(최종본 v1.2)",
   features: { updateFields: true },
   styles: {
     default: { document: { run: { font: FONT, size: 21 }, paragraph: { spacing: { line: 300, after: 110 } } } },
