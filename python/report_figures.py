@@ -70,7 +70,7 @@ def fig3_steady(an):
     fig,ax=plt.subplots(1,2,figsize=(7.2,2.7))
     ax[0].plot(v,[r["series_V"] for r in s],color=C["blue"],lw=1.8,label="요구 직렬전압 v_s")
     ax[0].axhline(90,color=C["red"],ls="--",lw=1); ax[0].axhline(-90,color=C["red"],ls="--",lw=1)
-    ax[0].axhline(85.3,color=C["orange"],ls=":",lw=1.2); ax[0].text(760,76,"링크 90 V일 때 상한 ≈ 85.3 V",fontsize=7,color=C["orange"]); ax[0].set_ylim(-100,100)
+    ax[0].axhline(85.3,color=C["orange"],ls=":",lw=1.2); ax[0].text(760,80,"링크 90 V일 때 상한 ≈ 85.3 V",fontsize=7,color=C["orange"],va="top"); ax[0].set_ylim(-100,100)
     ax[0].text(655,-84,"포트 한계 ±90 V",fontsize=7,color=C["red"])
     ax[0].set_xlabel("배터리 전압 (V)"); ax[0].set_ylabel("직렬전압 (V)"); ax[0].set_title("(a) 25 kW 정상상태 요구 직렬전압")
     ax[1].plot(v,[r["link_power_W"]/1e3 for r in s],color=C["orange"],lw=1.8,label="링크전력")
@@ -216,7 +216,9 @@ def fig11_corner_r1():
     for k,(lab,items) in enumerate(res):
         u=[100*v/l for _,v,l in items]
         bars=ax.barh(y+(k-.5)*.36,u,height=.34,color=[C["blue"],C["orange"]][k],label=lab)
-        for bb,(n,v,l),uu in zip(bars,items,u): ax.text(uu+.4,bb.get_y()+bb.get_height()/2,f"{uu:.1f} %",va="center",fontsize=6.8)
+        for i,(bb,(n,v,l),uu) in enumerate(zip(bars,items,u)):
+            xm=max(uu,(90,93.75)[k]) if i<2 else uu   # 전류 행은 판정 기준 표시선 오른쪽에 라벨
+            ax.text(xm+.5,bb.get_y()+bb.get_height()/2,f"{uu:.1f} %",va="center",fontsize=6.8)
     ax.axvline(100,color=C["red"],ls="--",lw=1)
     for yy in (0,1):
         ax.plot([90,90],[yy-.36,yy],color=C["blue"],lw=2); ax.plot([93.75,93.75],[yy,yy+.36],color=C["orange"],lw=2)
