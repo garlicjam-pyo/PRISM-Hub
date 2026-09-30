@@ -163,7 +163,7 @@ def fig9_controller():
     import ctrl_validate as cv
     lin=json.load(open(ROOT/"validation/2026-09-29-controller/linear.json"))
     fig,ax=plt.subplots(1,3,figsize=(7.4,2.55))
-    for kind,col,lab in [("frozen",C["gray"],"기존 고정이득"),("R1",C["blue"],"재설계 R1")]:
+    for kind,col,lab in [("frozen",C["gray"],"지연 보상 없음(비교 설계)"),("R1",C["blue"],"채택 설계")]:
         r=cv.sim(640.,1000,25000,NOMINAL,kind=kind); t=(r['t']-.001)*1e3
         ax[0].plot(t,r['x'][:,0],color=col,lw=1.1,label=lab)
         p3=replace(NOMINAL,delay=NOMINAL.delay+3e-6)
@@ -176,7 +176,7 @@ def fig9_controller():
     ax[1].set_xlim(-.1,3); ax[1].set_ylim(380,420); ax[1].set_xlabel("스텝 후 시간 (ms)"); ax[1].set_ylabel("버스 전압 (V)")
     ax[1].set_title("(b) 640 V, 15→25 kW, 지연 +3.0 µs")
     V=sorted({r['vbat'] for r in lin['rows']})
-    for kind,col,lab,mk in [("frozen",C["gray"],"기존 고정이득","o"),("R1",C["blue"],"재설계 R1","s")]:
+    for kind,col,lab,mk in [("frozen",C["gray"],"지연 보상 없음(비교 설계)","o"),("R1",C["blue"],"채택 설계","s")]:
         dm=[min(r['delay_margin_us'] for r in lin['rows'] if r['controller']==kind and r['vbat']==v) for v in V]
         ax[2].plot(V,dm,marker=mk,ms=3.5,color=col,lw=1.1,label=lab)
     ax[2].axhline(3.0,color=C["red"],ls="--",lw=.9); ax[2].text(645,3.1,"지연 예산 +3.0 µs",fontsize=7,color=C["red"])
@@ -184,9 +184,52 @@ def fig9_controller():
     ax[2].legend(loc="lower right")
     fig.tight_layout(); fig.savefig(FIG/"fig9_controller.png"); plt.close(fig)
 
+def fig10_budget():
+    """Aux-bus power budget by load class (formal report, 2026-09-30)."""
+    fig,ax=plt.subplots(figsize=(7.2,2.3))
+    cases=[("컴프레서 정지 시",[("M0 상시 예약 9.1",9.1,C["gray"]),("D 배분 가능 14.65",14.65,C["lgreen"])]),
+           ("컴프레서 운전 시",[("M0 상시 예약 9.1",9.1,C["gray"]),("M1 컴프레서 6.0",6.0,C["orange"]),("D 배분 가능 8.65",8.65,C["lgreen"])]),
+           ("접속 부하 선언 합",[("M0 9.1",9.1,C["gray"]),("M1 6.0",6.0,C["orange"]),("D 14.0",14.0,C["green"])])]
+    for i,(name,parts) in enumerate(cases):
+        x=0
+        for lab,w,col in parts:
+            ax.barh(i,w,left=x,color=col,ec="white",height=.62); ax.text(x+w/2,i,lab,ha="center",va="center",fontsize=7.2)
+            x+=w
+    ax.axvline(23.75,color=C["blue"],ls="--",lw=1.1); ax.text(23.6,-.52,"SALS 예산 23.75",fontsize=7,color=C["blue"],ha="right")
+    ax.axvline(25,color=C["red"],ls=":",lw=1.1); ax.text(25.15,-.52,"연속정격 25",fontsize=7,color=C["red"])
+    ax.set_yticks(range(3)); ax.set_yticklabels([c[0] for c in cases]); ax.set_xlim(0,31); ax.invert_yaxis()
+    ax.set_xlabel("400 V 측 전력 (kW)"); ax.set_title("부하 등급별 보조버스 전력예산",loc="left")
+    fig.tight_layout(); fig.savefig(FIG/"fig10_budget.png"); plt.close(fig)
+
+def fig11_corner_r1():
+    """Port utilisation of the adopted controller R1 at the 640 V design corner."""
+    from pprc_fixed_control import NOMINAL
+    import ctrl_validate as cv
+    from pprc_two_stage import current_limit
+    res=[]
+    for lab,a,b in [("Tier-1 (15→25 kW)",15000,25000),("Tier-2 (1→25 kW)",1000,25000)]:
+        r=cv.sim(640.,a,b,NOMINAL)
+        res.append((lab,[("경로전류",r["path_peak"],100),("브리지 필터 전류",r["bridge_peak"],100),("DAB 링크전류",r["link_peak"],80),
+                          ("DAB 링크전력",r["dab_power_peak"]/1e3,8),("변조율",r["modulation_peak"],.95),("직렬전압",r["series_peak"],90)]))
+    names=[n for n,_,_ in res[0][1]]; y=np.arange(len(names))
+    fig,ax=plt.subplots(figsize=(7.2,3.0))
+    for k,(lab,items) in enumerate(res):
+        u=[100*v/l for _,v,l in items]
+        bars=ax.barh(y+(k-.5)*.36,u,height=.34,color=[C["blue"],C["orange"]][k],label=lab)
+        for bb,(n,v,l),uu in zip(bars,items,u): ax.text(uu+.4,bb.get_y()+bb.get_height()/2,f"{uu:.1f} %",va="center",fontsize=6.8)
+    ax.axvline(100,color=C["red"],ls="--",lw=1)
+    for yy in (0,1):
+        ax.plot([90,90],[yy-.36,yy],color=C["blue"],lw=2); ax.plot([93.75,93.75],[yy,yy+.36],color=C["orange"],lw=2)
+    ax.text(100.5,.5,"전류 판정 기준\nTier-1 90 %\nTier-2 93.75 %",fontsize=6.5,va="center")
+    ax.set_yticks(y); ax.set_yticklabels(names); ax.set_xlim(40,110); ax.set_ylim(len(names)-.4,-.6)
+    ax.set_xlabel("물리 한계 대비 사용률 (%)"); ax.set_title("640 V 설계 코너의 포트별 사용률(채택 제어기, 공칭 조건)")
+    ax.legend(loc="upper center",bbox_to_anchor=(.5,-.24),ncol=2,fontsize=7)
+    fig.tight_layout(); fig.savefig(FIG/"fig11_corner_r1.png"); plt.close(fig)
+
 if __name__=="__main__":
     an=json.load(open(ROOT/"validation/2026-09-25-final-report/report_analysis.json"))
     import sys
     if sys.argv[1:]==["fig9"]: fig9_controller(); raise SystemExit
+    if sys.argv[1:]==["formal"]: fig9_controller(); fig10_budget(); fig11_corner_r1(); raise SystemExit
     fig1_architecture(); fig2_stage_b(); fig3_steady(an); fig4_traces(); fig5_corner(an); fig6_delay(); fig7_capability(an); print(fig8_sals()); fig9_controller()
     print("figures:", sorted(p.name for p in FIG.glob("*.png")))
