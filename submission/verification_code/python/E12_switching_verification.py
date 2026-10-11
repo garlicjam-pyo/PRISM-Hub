@@ -16,7 +16,8 @@
   전달지연 뒤 반영. 에지는 적분 간격 안의 정확한 위치로 처리한다(5 ns 격자에 따른 듀티·위상 양자화 없음).
   채택 제어기 이득·예측 구조는 평균모델과 같고, 변조기에 교정표 기반 부분 데드타임 보상(예측 전류·리플 극값에서의
   전이별 오차를 전류별 오차표에서 읽어 비율 κ만 보상, κ는 20 A 이하 0.6 → 80 A 1.0, 기본 플랜트는 선형 출력용량 1 nF)을 둔다. DAB 링크전류는 누설 인덕턴스 −10 % 기준 앞먹임 위상에 측정 링크전류로
-  추정한 전류비 보정을 더해 정한다(정격 보호와 용량을 함께 만족). DAB 손실은 평균모델과 같은 효율 0.96(직전 주기
+  추정한 전류비 보정을 더해 정하고(정격 보호와 용량을 함께 만족), 데드타임 영향이 있는 저전류 구간(예측 40 A 미만)에서는
+  측정 전류와의 차를 지령에서 빼는 가산 보정을 둔다. DAB 손실은 평균모델과 같은 효율 0.96(직전 주기
   평균 전력 기준, 권선저항 손실 포함)이다. 센서는 기본 이상이며, sensors 파트에서 ADC·잡음·이득·오프셋 오차를 넣는다.
 
 ■ 구성
@@ -28,6 +29,8 @@
   dab_limit   DAB 링크전류 제한 방식 비교: 누설 인덕턴스 ±10 % × (공칭 L 앞먹임 / L −10 % 앞먹임 / 채택 전류비 보정)
   sensors     센서·ADC: 채널별 잡음 이득, 양자화 비트 수, 기본 집합 168건을 12비트와 요구 사양(16비트·창 측정·잡음·오차)으로 판정
   sensor_diag sensors에서 보장 범위 사례가 실패하면 원인 분리(채널 묶음별 오차, DAB·H-브리지 데드타임 제거)
+  dab_lowcurrent DAB 저전류 처리 비교: 보정 없음 / 위상 데드타임 앞먹임(모델) / 저전류 가산 보정(채택) / 둘 다
+            × 실제 DAB 데드타임 60–150 ns(보상 가정 100 ns) × 경부하 8개 사례 × 센서(이상, 이득·오프셋 오차 ±)
   comp_schedule 데드타임 보상 비율의 전류 스케줄 비교(고정 1.0·고정 0.6·급한 증가·채택)
   deadtime_robust 데드타임 보상 강건성: 불확도 10종(L_h ±10 %, 선형·비선형 출력용량·교정 오차) × 경부하 보상 비율 κ 5종 × 9개 사례
   delay       비선형 추가 지연 경계(640·920 V, Tier-1 대표 3 스텝)
@@ -44,7 +47,7 @@
   비교값은 ±1(반송파 범위) 안에 있는지 따로 확인한다.
   Tier-1: 위 항목 + 순시 경로·필터 ≤ 98 A,  Tier-2: 완료·포트·버스 384–416 V·최종 ±4 V·순시 ≤ 100 A·내부 진동
 
-■ 실행   python E12_switching_verification.py              (전체, 2코어 약 2.5시간)
+■ 실행   python E12_switching_verification.py              (전체, 2코어 약 3시간, 백그라운드 실행 시간 제한이 있으면 파트를 나눠 실행)
          python E12_switching_verification.py grid sensitivity
 ■ 결과   results/E12/*.json, results/E12/E12_*.png
 """
@@ -262,19 +265,32 @@ def part_convergence():
     prev = load_json("E12", "grid")["rows"]
     js = [(r["tier"], r["vbat"], r["p0"], r["p1"], allsets[r["set"]], 0, dict(dt=2.5e-9), dict(set=r["set"])) for r in prev]
     rows = pmap(js)
+    rows = [dict(tier=r["tier"], set=r["set"], vbat=r["vbat"], p0=r["p0"], p1=r["p1"], pass_=r["pass_"],
+                 path_inst=r["path_inst"], bridge_inst=r["bridge_inst"], droop=r["droop"], tail_ih_pp_A=r["tail_ih_pp_A"]) for r in rows]
+    return convergence_summary(prev, rows)
+
+
+def convergence_summary(prev, rows, near_A=60.):
+    """5 ns(prev)와 2.5 ns(rows) 격자 결과 비교. 전류 차는 순시 경로·필터 전류 최댓값의 차.
+    저전류 구간의 DAB 가산 보정 ε̂는 갱신 조건(위상 변화 < 2°, 예측 40 A 미만)이 이산적이라 적분간격에 따라
+    갱신 시점이 조금 달라질 수 있으므로, 판정에 쓰는 전류 차는 한계 근처(순시 ≥ near_A) 사례로 따로 집계한다."""
     d_inst = [abs(max(a["path_inst"], a["bridge_inst"]) - max(b["path_inst"], b["bridge_inst"])) for a, b in zip(prev, rows)]
     d_droop = [abs(a["droop"] - b["droop"]) for a, b in zip(prev, rows)]
+    near = [d for d, a in zip(d_inst, prev) if max(a["path_inst"], a["bridge_inst"]) >= near_A]
+    big = sorted({(a["vbat"], a["p0"], a["p1"]) for d, a in zip(d_inst, prev) if d > .1})
     changes = [(a["tier"], a["set"], a["vbat"], a["p0"], a["p1"], a["pass_"], b["pass_"]) for a, b in zip(prev, rows) if a["pass_"] != b["pass_"]]
     i = int(np.argmax(d_inst))
     out = dict(cases=len(rows), max_inst_current_diff_A=float(max(d_inst)), worst=dict(tier=prev[i]["tier"], set=prev[i]["set"],
-               vbat=prev[i]["vbat"], p0=prev[i]["p0"], p1=prev[i]["p1"]), max_droop_diff_V=float(max(d_droop)),
-               verdict_changes=changes, max_tail_ih_pp_A=max(r["tail_ih_pp_A"] for r in rows),
-               rows=[dict(tier=r["tier"], set=r["set"], vbat=r["vbat"], p0=r["p0"], p1=r["p1"], pass_=r["pass_"],
-                          path_inst=r["path_inst"], bridge_inst=r["bridge_inst"], droop=r["droop"], tail_ih_pp_A=r["tail_ih_pp_A"]) for r in rows])
-    print(f"   {len(rows)}건: 순시 전류 최댓값 차 최대 {out['max_inst_current_diff_A']:.3f} A, 강하 차 최대 {out['max_droop_diff_V']:.3f} V, "
-          f"판정 변화 {len(changes)}건")
-    verdict("적분간격 5 → 2.5 ns(격자 전체)에서 판정 변화 없음, 순시 전류 차 < 0.1 A", not changes and out["max_inst_current_diff_A"] < .1,
-            f"{out['max_inst_current_diff_A']:.3f} A")
+               vbat=prev[i]["vbat"], p0=prev[i]["p0"], p1=prev[i]["p1"], inst_A=max(prev[i]["path_inst"], prev[i]["bridge_inst"])),
+               near_limit_threshold_A=near_A, near_limit_cases=len(near), max_inst_current_diff_near_limit_A=float(max(near)),
+               cases_over_0p1A=sum(d > .1 for d in d_inst), operating_points_over_0p1A=big,
+               median_inst_current_diff_A=float(np.median(d_inst)), max_droop_diff_V=float(max(d_droop)),
+               verdict_changes=changes, max_tail_ih_pp_A=max(r["tail_ih_pp_A"] for r in rows), rows=rows)
+    print(f"   {len(rows)}건: 순시 전류 최댓값 차 최대 {out['max_inst_current_diff_A']:.3f} A(중앙값 {out['median_inst_current_diff_A']:.4f} A, "
+          f"0.1 A 초과 {out['cases_over_0p1A']}건 — 운전점 {big}), 순시 {near_A:g} A 이상 {len(near)}건의 차 최대 "
+          f"{out['max_inst_current_diff_near_limit_A']:.3f} A, 강하 차 최대 {out['max_droop_diff_V']:.3f} V, 판정 변화 {len(changes)}건")
+    verdict(f"적분간격 5 → 2.5 ns(격자 전체)에서 판정 변화 없음, 한계 근처(순시 ≥ {near_A:g} A) 전류 차 < 0.1 A",
+            not changes and out["max_inst_current_diff_near_limit_A"] < .1, f"{out['max_inst_current_diff_near_limit_A']:.3f} A")
     return out
 
 
@@ -311,7 +327,7 @@ def part_dab_limit():
     print(f"   25 kW 정상 운전에 필요한 링크전류: 632 V {need[632.]:.2f} A, 640 V {need[640.]:.2f} A")
     est = [r for r in rows if r["design"] == "측정 전류비 보정(채택)" and r["p0"] == 15000]   # 스텝 전 15 kW에서 학습된 상태
     rho_err = max(abs(r["dab_rho_end"] - .9 / r["Ldab_scale"]) for r in est)
-    print(f"   전류비 추정값(이론 0.9/k): " + ", ".join(f"{r['vbat']:.0f} V ×{r['Ldab_scale']}: {r['dab_rho_end']:.4f}" for r in est)
+    print("   전류비 추정값(이론 0.9/k): " + ", ".join(f"{r['vbat']:.0f} V ×{r['Ldab_scale']}: {r['dab_rho_end']:.4f}" for r in est)
           + f" → 최대 차 {rho_err:.4f}")
     adopted = [o for o in out if o["design"] == "측정 전류비 보정(채택)"]
     verdict("채택 방식에서 L_dab ±10 %·632·640 V 모두 통과하고 링크 정격(80 A, 8 kW) 이내",
@@ -461,6 +477,53 @@ def part_sensor_diag():
     return dict(cases=[list(k) for k in keys], rows=rows)
 
 
+DABLC_DESIGNS = {"보정 없음": dict(dab_eps_gain=0.), "위상 데드타임 앞먹임(모델, 100 ns 가정)": dict(dab_eps_gain=0., dab_deadtime_comp=100e-9),
+                 "저전류 가산 보정(채택)": {}, "앞먹임 + 가산 보정": dict(dab_deadtime_comp=100e-9)}
+DABLC_TD = {"보정 없음": (60e-9, 100e-9, 150e-9), "위상 데드타임 앞먹임(모델, 100 ns 가정)": (60e-9, 100e-9, 150e-9),
+            "저전류 가산 보정(채택)": (60e-9, 80e-9, 100e-9, 120e-9, 150e-9), "앞먹임 + 가산 보정": (60e-9, 100e-9, 150e-9)}
+DABLC_CASES = [(1, "delay+3.0us", 640, 0, 10000), (1, "delay+3.0us", 640, 20000, 10000), (1, "nominal", 640, 20000, 10000),
+               (1, "nominal", 788, 0, 10000), (1, "nominal", 788, 10000, 0), (1, "delay+3.0us", 788, 6800, -3200),
+               (1, "nominal", 640, 10000, 0), (2, "nominal", 920, 25000, 1000)]
+
+
+def part_dab_lowcurrent():
+    """DAB 저전류 구간 처리 비교. 두 브리지 전압이 같을 때(v_bus = n·v_link) 앞선 브리지 에지의 전류가 데드타임 안에
+    0을 지나면 데드타임 끝까지 0에 묶여, 위상 시간 δ < 2t_d에서 증분 이득이 2배, δ ≤ t_d에서 불감대가 된다.
+    링크전압 루프는 이 꺾임 부근에서 전압 센서 오차로 생긴 작은 전압비 차이와 겹쳐 리밋사이클을 만들 수 있다
+    (센서 요구 사양 + 오차에서 640 V·10 kW 내부 진동). 처리 방식 4종 × 실제 DAB 데드타임(보상 가정은 100 ns) ×
+    경부하 8개 사례 × 센서 3종(이상, 이득·오프셋 오차 +/−, 잡음 없음)으로 비교한다."""
+    base, _ = sets_sw()
+    errs = {"이상": None, "오차+": _err_parts(cur=-1., volt=1., link=-1.), "오차−": _err_parts(cur=1., volt=-1., link=1.)}
+    js = []
+    for dn, dsw in DABLC_DESIGNS.items():
+        for td in DABLC_TD[dn]:
+            sw = dict(dsw, td_dab=td)
+            for t, n, v, a, b in DABLC_CASES:
+                for sn, s in errs.items():
+                    meta = dict(set=n, design=dn, td_dab_ns=round(td * 1e9), sensors=sn)
+                    if s is not None:
+                        meta["_sensors"] = s.tolist()
+                    js.append((t, v, a, b, base[n], 0, sw, meta))
+    rows = pmap(js)
+    summ = {}
+    for dn in DABLC_DESIGNS:
+        for td in DABLC_TD[dn]:
+            sel = [r for r in rows if r["design"] == dn and r["td_dab_ns"] == round(td * 1e9)]
+            osc = [r for r in sel if r["tail_ih_pp_A"] > .1]
+            k = f"{dn} | t_d {round(td * 1e9)} ns"
+            summ[k] = dict(design=dn, td_dab_ns=round(td * 1e9), passed=sum(r["pass_"] for r in sel), total=len(sel),
+                           oscillating=len(osc), max_tail_ih_pp_A=max(r["tail_ih_pp_A"] for r in sel),
+                           max_inst_A=max(max(r["path_inst"], r["bridge_inst"]) for r in sel),
+                           fails=[(r["set"], r["vbat"], r["p0"], r["p1"], r["sensors"], round(r["tail_ih_pp_A"], 3), r["tail_ih_freq_hz"])
+                                  for r in sel if not r["pass_"]])
+            x = summ[k]
+            print(f"   {k:44s}: {x['passed']}/{x['total']} 통과, 진동(> 0.1 A) {x['oscillating']}건, i_h 변동 최대 {x['max_tail_ih_pp_A']:.3f} A")
+    adopted = [v for v in summ.values() if v["design"] == "저전류 가산 보정(채택)"]
+    verdict("채택(저전류 가산 보정): 실제 DAB 데드타임 60–150 ns 전부 통과", all(v["passed"] == v["total"] for v in adopted))
+    return dict(designs={k: dict(v) for k, v in DABLC_DESIGNS.items()}, td_actual_ns={k: [round(t * 1e9) for t in v] for k, v in DABLC_TD.items()},
+                cases=DABLC_CASES, summary=summ, rows=rows)
+
+
 DT_SCALES = (1., .8, .7, .6, .5)
 DT_UNCERTAINTY = {"공칭": {}, "L_h ×0.9": "Lh0.9", "L_h ×1.1": "Lh1.1",
                   "선형 C_oss 0.5 nF(표 1 nF)": dict(coss_h=.5e-9, table_cq=1e-9), "선형 C_oss 2 nF(표 1 nF)": dict(coss_h=2e-9, table_cq=1e-9),
@@ -598,7 +661,9 @@ SENS_VARIANTS = {"기준": {}, "DAB 전류비 보정 없음(L −10 % 기준 앞
                  "DAB 공칭 L 기준 앞먹임": dict(dab_estimator=False, dab_Lmin=1.), "데드타임 25 ns": dict(td_h=25e-9), "데드타임 100 ns": dict(td_h=100e-9),
                  "출력용량 0.5 nF(보상표 1 nF 기준)": dict(coss_h=.5e-9, table_cq=1e-9), "출력용량 2 nF(보상표 1 nF 기준)": dict(coss_h=2e-9, table_cq=1e-9),
                  "데드타임 보상 없음": dict(deadtime_comp="none"), "전류지령 비례 보상(±20 A)": dict(deadtime_comp="linear"),
-                 "DAB 데드타임 200 ns": dict(td_dab=200e-9), "적분간격 2.5 ns": dict(dt=2.5e-9), "적분간격 1.25 ns": dict(dt=1.25e-9)}
+                 "DAB 데드타임 200 ns": dict(td_dab=200e-9), "DAB 데드타임 60 ns": dict(td_dab=60e-9),
+                 "DAB 저전류 가산 보정 없음": dict(dab_eps_gain=0.),
+                 "적분간격 2.5 ns": dict(dt=2.5e-9), "적분간격 1.25 ns": dict(dt=1.25e-9)}
 
 
 def part_sensitivity():
@@ -781,7 +846,7 @@ def part_figures():
 
 
 PARTS = dict(model_checks=part_model_checks, ripple=part_ripple, linear=part_linear, grid=part_grid, convergence=part_convergence,
-             dab_limit=part_dab_limit, sensors=part_sensors, sensor_diag=part_sensor_diag, deadtime_robust=part_deadtime_robust, comp_schedule=part_comp_schedule, delay=part_delay, corners=part_corners, sequences=part_sequences,
+             dab_limit=part_dab_limit, sensors=part_sensors, sensor_diag=part_sensor_diag, dab_lowcurrent=part_dab_lowcurrent, deadtime_robust=part_deadtime_robust, comp_schedule=part_comp_schedule, delay=part_delay, corners=part_corners, sequences=part_sequences,
              sensitivity=part_sensitivity, figures=part_figures)
 
 if __name__ == "__main__":

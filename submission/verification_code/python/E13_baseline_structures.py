@@ -64,7 +64,7 @@ from controller_adopted import StageBController, K_ADOPTED, CP
 from stage_b_tests import (T1_STEPS, T2_STEPS, V_ALL, T1_LIMIT_A, T2_LIMIT_A, TAIL_IH_PP_A, TAIL_M_PP,
                            param_sets)
 from E4_requirements import V_CAP, N_STAGE_C, ISO21498_B420, ISO21498_B470, ISO21780_48V, COMPONENTS
-from common import save_json, load_json, verdict, workers, outdir, RESULTS
+from common import save_json, load_json, verdict, workers, outdir
 
 T0 = 1e-3                                   # 스텝 시각
 DURATION = .02                              # 시험 길이 20 ms

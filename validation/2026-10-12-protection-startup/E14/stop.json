@@ -1,0 +1,1642 @@
+{
+ "responses": {
+  "제어 정지(기준 램프 → 영벡터)": "ramp_zero",
+  "DAB 고장 중 제어 정지(램프 0.5 ms)": "nodab_ramp",
+  "전 소자 차단 + 10 µs 후 Stage A 정지": "off_astop",
+  "전 소자 차단 + 50 µs 후 바이패스": "off_bypass",
+  "영벡터 즉시(램프 없음)": "zero"
+ },
+ "voltages": [
+  640.0,
+  700.0,
+  788.0,
+  860.0,
+  920.0
+ ],
+ "summary": {
+  "제어 정지(기준 램프 → 영벡터)": {
+   "path_peak_A": 79.48836121673406,
+   "bridge_peak_A": 83.52525378048611,
+   "series_peak_V": 81.0463184673329,
+   "vlink_max_V": 100.09605361538715,
+   "vbus_range_V": [
+    318.66246927320645,
+    459.8564771897752
+   ],
+   "fails": {
+    "path_100A": [],
+    "bridge_100A": [],
+    "series_90V": [],
+    "link_110V": [],
+    "bus_le_420V": [
+     [
+      860.0,
+      5000.0
+     ],
+     [
+      860.0,
+      25000.0
+     ],
+     [
+      920.0,
+      5000.0
+     ],
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bus_le_470V": [],
+    "bus_ge_260V": []
+   }
+  },
+  "DAB 고장 중 제어 정지(램프 0.5 ms)": {
+   "path_peak_A": 180.63584643074762,
+   "bridge_peak_A": 200.6153154519452,
+   "series_peak_V": 81.45830899600814,
+   "vlink_max_V": 114.99175061793424,
+   "vbus_range_V": [
+    318.20812574627564,
+    474.07557468197047
+   ],
+   "fails": {
+    "path_100A": [
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bridge_100A": [
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "series_90V": [],
+    "link_110V": [
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bus_le_420V": [
+     [
+      860.0,
+      5000.0
+     ],
+     [
+      860.0,
+      25000.0
+     ],
+     [
+      920.0,
+      5000.0
+     ],
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bus_le_470V": [
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bus_ge_260V": []
+   }
+  },
+  "전 소자 차단 + 10 µs 후 Stage A 정지": {
+   "path_peak_A": 79.26626776250222,
+   "bridge_peak_A": 79.26662093971596,
+   "series_peak_V": 81.04626619024208,
+   "vlink_max_V": 100.36321416978855,
+   "vbus_range_V": [
+    249.9534589692296,
+    400.0362821264747
+   ],
+   "fails": {
+    "path_100A": [],
+    "bridge_100A": [],
+    "series_90V": [],
+    "link_110V": [],
+    "bus_le_420V": [],
+    "bus_le_470V": []
+   }
+  },
+  "전 소자 차단 + 50 µs 후 바이패스": {
+   "path_peak_A": 1082.59484690893,
+   "bridge_peak_A": 79.26662093971596,
+   "series_peak_V": 81.04626619024208,
+   "vlink_max_V": 100.36321416978855,
+   "vbus_range_V": [
+    263.57740212789065,
+    506.6625155582692
+   ],
+   "fails": {
+    "path_100A": [
+     [
+      640.0,
+      5000.0
+     ],
+     [
+      640.0,
+      25000.0
+     ],
+     [
+      700.0,
+      5000.0
+     ],
+     [
+      700.0,
+      25000.0
+     ],
+     [
+      788.0,
+      25000.0
+     ],
+     [
+      860.0,
+      5000.0
+     ],
+     [
+      860.0,
+      25000.0
+     ],
+     [
+      920.0,
+      5000.0
+     ],
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bridge_100A": [],
+    "series_90V": [],
+    "link_110V": [],
+    "bus_le_420V": [
+     [
+      860.0,
+      5000.0
+     ],
+     [
+      860.0,
+      25000.0
+     ],
+     [
+      920.0,
+      5000.0
+     ],
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bus_le_470V": [
+     [
+      920.0,
+      5000.0
+     ],
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bus_ge_260V": []
+   }
+  },
+  "영벡터 즉시(램프 없음)": {
+   "path_peak_A": 571.1407948773425,
+   "bridge_peak_A": 680.2395230617581,
+   "series_peak_V": 81.04626619024208,
+   "vlink_max_V": 100.31983559727097,
+   "vbus_range_V": [
+    248.1646403387935,
+    513.0322526221155
+   ],
+   "fails": {
+    "path_100A": [
+     [
+      640.0,
+      5000.0
+     ],
+     [
+      640.0,
+      25000.0
+     ],
+     [
+      700.0,
+      5000.0
+     ],
+     [
+      700.0,
+      25000.0
+     ],
+     [
+      788.0,
+      25000.0
+     ],
+     [
+      860.0,
+      5000.0
+     ],
+     [
+      860.0,
+      25000.0
+     ],
+     [
+      920.0,
+      5000.0
+     ],
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bridge_100A": [
+     [
+      640.0,
+      5000.0
+     ],
+     [
+      640.0,
+      25000.0
+     ],
+     [
+      700.0,
+      5000.0
+     ],
+     [
+      700.0,
+      25000.0
+     ],
+     [
+      788.0,
+      25000.0
+     ],
+     [
+      860.0,
+      5000.0
+     ],
+     [
+      860.0,
+      25000.0
+     ],
+     [
+      920.0,
+      5000.0
+     ],
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "series_90V": [],
+    "link_110V": [],
+    "bus_le_420V": [
+     [
+      860.0,
+      5000.0
+     ],
+     [
+      860.0,
+      25000.0
+     ],
+     [
+      920.0,
+      5000.0
+     ],
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bus_le_470V": [
+     [
+      920.0,
+      5000.0
+     ],
+     [
+      920.0,
+      25000.0
+     ]
+    ],
+    "bus_ge_260V": [
+     [
+      640.0,
+      5000.0
+     ],
+     [
+      640.0,
+      25000.0
+     ]
+    ]
+   }
+  }
+ },
+ "holdup_ms": {
+  "640V_5kW": 3.7057999999999995,
+  "640V_25kW": 0.7493999999999998,
+  "700V_5kW": 3.7056,
+  "700V_25kW": 0.7492,
+  "788V_5kW": 3.7051999999999996,
+  "788V_25kW": 0.7488,
+  "860V_5kW": 3.705,
+  "860V_25kW": 0.7485999999999998,
+  "920V_5kW": 3.705,
+  "920V_25kW": 0.7485999999999998
+ },
+ "rows": [
+  {
+   "vbus_min": 319.73437766774464,
+   "vbus_max": 399.99999601834753,
+   "vbus_end": 319.7621792409259,
+   "path_peak": 23.204371445215433,
+   "bridge_peak": 30.902037035634105,
+   "series_peak": 80.20859850303285,
+   "vlink_min": 99.94072929053971,
+   "vlink_max": 100.08340855979954,
+   "tail_ripple_V": 0.0007696704129784848,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 640.0,
+   "power": 5000.0,
+   "VA": 319.7936168937921,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 318.66246927320645,
+   "vbus_max": 400.000040067398,
+   "vbus_end": 318.80570101806865,
+   "path_peak": 79.48836121673406,
+   "bridge_peak": 79.61570994422462,
+   "series_peak": 81.0463184673329,
+   "vlink_min": 99.94887759103769,
+   "vlink_max": 100.09605361538715,
+   "tail_ripple_V": 0.011309080073601763,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 640.0,
+   "power": 25000.0,
+   "VA": 318.96540504147436,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 349.75721340122135,
+   "vbus_max": 399.9999930412139,
+   "vbus_end": 349.78259669901814,
+   "path_peak": 14.479324181790677,
+   "bridge_peak": 14.501762364837713,
+   "series_peak": 50.18982516425331,
+   "vlink_min": 99.98040572916366,
+   "vlink_max": 100.03036323853176,
+   "tail_ripple_V": 0.000673418222845612,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 700.0,
+   "power": 5000.0,
+   "VA": 349.8113268641366,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 348.77891030518356,
+   "vbus_max": 399.9999958909266,
+   "vbus_end": 348.9092023647027,
+   "path_peak": 72.61965131047823,
+   "bridge_peak": 72.73522536818793,
+   "series_peak": 50.95163446209618,
+   "vlink_min": 99.98565061417845,
+   "vlink_max": 100.0366205751206,
+   "tail_ripple_V": 0.008281148661353654,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 700.0,
+   "power": 25000.0,
+   "VA": 349.0545891380058,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 393.78439204200475,
+   "vbus_max": 399.99999772345024,
+   "vbus_end": 393.80690625461943,
+   "path_peak": 12.86027983780193,
+   "bridge_peak": 12.880179903638295,
+   "series_peak": 6.167703212077116,
+   "vlink_min": 99.99984958763633,
+   "vlink_max": 100.00051251246644,
+   "tail_ripple_V": 0.000570603349672183,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 788.0,
+   "power": 5000.0,
+   "VA": 393.8324160294742,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 392.91697379452603,
+   "vbus_max": 399.99998924731307,
+   "vbus_end": 393.0320004439609,
+   "path_peak": 64.4572244025309,
+   "bridge_peak": 64.55908464643609,
+   "series_peak": 6.8402377042202,
+   "vlink_min": 99.99882533687047,
+   "vlink_max": 100.00130609267673,
+   "tail_ripple_V": 0.005799243703961565,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 788.0,
+   "power": 25000.0,
+   "VA": 393.16064844917287,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 400.0000174465664,
+   "vbus_max": 429.8464567986226,
+   "vbus_end": 429.8230891673783,
+   "path_peak": 23.40606809724187,
+   "bridge_peak": 26.387402653443424,
+   "series_peak": 29.84600638719992,
+   "vlink_min": 99.99366115662762,
+   "vlink_max": 100.00786057677298,
+   "tail_ripple_V": 0.0005082008142380801,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 860.0,
+   "power": 5000.0,
+   "VA": 429.84645680113044,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 400.00007952296687,
+   "vbus_max": 429.23122562222574,
+   "vbus_end": 429.1135467654783,
+   "path_peak": 69.83839371473937,
+   "bridge_peak": 72.75987183555159,
+   "series_peak": 29.228806762520176,
+   "vlink_min": 99.99066605190015,
+   "vlink_max": 100.00667958718451,
+   "tail_ripple_V": 0.00460767187030342,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 860.0,
+   "power": 25000.0,
+   "VA": 429.2311835377847,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 400.0000418892655,
+   "vbus_max": 459.8564771897752,
+   "vbus_end": 459.8346372263438,
+   "path_peak": 34.18654688811559,
+   "bridge_peak": 40.146338094423946,
+   "series_peak": 59.85568216974971,
+   "vlink_min": 99.97800847976012,
+   "vlink_max": 100.03045715703948,
+   "tail_ripple_V": 0.0004662301180360373,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 920.0,
+   "power": 5000.0,
+   "VA": 459.85647695899286,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 400.0001984660105,
+   "vbus_max": 459.28151574080147,
+   "vbus_end": 459.1716585158868,
+   "path_peak": 77.61995257176184,
+   "bridge_peak": 83.52525378048611,
+   "series_peak": 59.27740390573775,
+   "vlink_min": 99.97261607498396,
+   "vlink_max": 100.02673266514975,
+   "tail_ripple_V": 0.003920499450657644,
+   "completed": true,
+   "response": "제어 정지(기준 램프 → 영벡터)",
+   "vbat": 920.0,
+   "power": 25000.0,
+   "VA": 459.2814863873662,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 319.29127614971156,
+   "vbus_max": 400.2206005827338,
+   "vbus_end": 319.76221454255426,
+   "path_peak": 48.62574001092086,
+   "bridge_peak": 64.32492518509491,
+   "series_peak": 80.24277746627874,
+   "vlink_min": 99.60747581908997,
+   "vlink_max": 105.45082788629013,
+   "tail_ripple_V": 0.0021669439213383157,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 640.0,
+   "power": 5000.0,
+   "VA": 319.7936168937921,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 318.20812574627564,
+   "vbus_max": 401.21032899528313,
+   "vbus_end": 318.8080649527085,
+   "path_peak": 82.58270142965443,
+   "bridge_peak": 83.59190218179563,
+   "series_peak": 81.45830899600814,
+   "vlink_min": 96.24173744654702,
+   "vlink_max": 99.99794999127971,
+   "tail_ripple_V": 0.012193944331784223,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 640.0,
+   "power": 25000.0,
+   "VA": 318.96540504147436,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 349.48053198741263,
+   "vbus_max": 400.1259102156133,
+   "vbus_end": 349.78265868047123,
+   "path_peak": 25.76592580432982,
+   "bridge_peak": 35.56962083001608,
+   "series_peak": 50.20957971491915,
+   "vlink_min": 99.72204637960002,
+   "vlink_max": 101.66895636745892,
+   "tail_ripple_V": 0.0013110401798144267,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 700.0,
+   "power": 5000.0,
+   "VA": 349.8113268641366,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 348.4996799754659,
+   "vbus_max": 400.69878445286014,
+   "vbus_end": 348.9109076745695,
+   "path_peak": 74.51275162341061,
+   "bridge_peak": 75.19764637113526,
+   "series_peak": 51.19174345649844,
+   "vlink_min": 95.83908960047462,
+   "vlink_max": 99.99882390969934,
+   "tail_ripple_V": 0.0061854754321757355,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 700.0,
+   "power": 25000.0,
+   "VA": 349.0545891380058,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 393.75260306959404,
+   "vbus_max": 400.01376798652655,
+   "vbus_end": 393.8070085474179,
+   "path_peak": 13.077316113930689,
+   "bridge_peak": 13.159579201275088,
+   "series_peak": 6.169924984153332,
+   "vlink_min": 99.8746008034229,
+   "vlink_max": 99.99997497230734,
+   "tail_ripple_V": 0.00022453456625726176,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 788.0,
+   "power": 5000.0,
+   "VA": 393.8324160294742,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 392.8821432200202,
+   "vbus_max": 400.08530260613213,
+   "vbus_end": 393.03323886153845,
+   "path_peak": 64.70362149517564,
+   "bridge_peak": 64.87704919203722,
+   "series_peak": 6.870255328981741,
+   "vlink_min": 99.06960698999933,
+   "vlink_max": 99.99986054920397,
+   "tail_ripple_V": 0.0016186388034498123,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 788.0,
+   "power": 25000.0,
+   "VA": 393.16064844917287,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 399.94407478544474,
+   "vbus_max": 429.97315694275613,
+   "vbus_end": 429.8232248756137,
+   "path_peak": 35.3227587905219,
+   "bridge_peak": 41.145021895846604,
+   "series_peak": 29.854867215999814,
+   "vlink_min": 100.00011026730976,
+   "vlink_max": 101.88507957142753,
+   "tail_ripple_V": 0.0005791551770357728,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 860.0,
+   "power": 5000.0,
+   "VA": 429.84645680113044,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 399.6959489500139,
+   "vbus_max": 429.28564970468676,
+   "vbus_end": 429.11461912133575,
+   "path_peak": 79.78579194015963,
+   "bridge_peak": 83.77306022341338,
+   "series_peak": 29.334626099405284,
+   "vlink_min": 100.00054204596148,
+   "vlink_max": 105.08318910944827,
+   "tail_ripple_V": 0.0014673236265139167,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 860.0,
+   "power": 25000.0,
+   "VA": 429.2311835377847,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 399.894497268311,
+   "vbus_max": 460.1517792137584,
+   "vbus_end": 459.83480073054955,
+   "path_peak": 58.35121231632203,
+   "bridge_peak": 70.03873970358731,
+   "series_peak": 59.872951057165785,
+   "vlink_min": 100.00020581337392,
+   "vlink_max": 105.83137100758893,
+   "tail_ripple_V": 0.0011987357657403663,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 920.0,
+   "power": 5000.0,
+   "VA": 459.85647695899286,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 399.41484687686926,
+   "vbus_max": 474.07557468197047,
+   "vbus_end": 459.16973296184017,
+   "path_peak": 180.63584643074762,
+   "bridge_peak": 200.6153154519452,
+   "series_peak": 59.48567073503656,
+   "vlink_min": 100.00102500134757,
+   "vlink_max": 114.99175061793424,
+   "tail_ripple_V": 0.11631038854989129,
+   "completed": true,
+   "response": "DAB 고장 중 제어 정지(램프 0.5 ms)",
+   "vbat": 920.0,
+   "power": 25000.0,
+   "VA": 459.2814863873662,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": false,
+    "bus_le_420V": false,
+    "bus_le_470V": false,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 249.99683348265856,
+   "vbus_max": 400.00397299683533,
+   "vbus_end": 249.99683348265856,
+   "path_peak": 15.80281777647556,
+   "bridge_peak": 15.802879688726685,
+   "series_peak": 80.20858929940246,
+   "vlink_min": 99.99959255554069,
+   "vlink_max": 100.06516386068628,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 640.0,
+   "power": 5000.0,
+   "VA": 319.7936168937921,
+   "holdup_to_260V_ms": 3.7057999999999995,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 249.984914115841,
+   "vbus_max": 400.0362821264747,
+   "vbus_end": 249.984914115841,
+   "path_peak": 79.26626776250222,
+   "bridge_peak": 79.26662093971596,
+   "series_peak": 81.04626619024208,
+   "vlink_min": 99.99794999127971,
+   "vlink_max": 100.36321416978855,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 640.0,
+   "power": 25000.0,
+   "VA": 318.96540504147436,
+   "holdup_to_260V_ms": 0.7493999999999998,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 249.99290793615341,
+   "vbus_max": 400.00121184398876,
+   "vbus_end": 249.99290793615341,
+   "path_peak": 14.381104524833443,
+   "bridge_peak": 14.381146352025553,
+   "series_peak": 50.189819186130975,
+   "vlink_min": 99.99976797401914,
+   "vlink_max": 100.03775562554723,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 700.0,
+   "power": 5000.0,
+   "VA": 349.8113268641366,
+   "holdup_to_260V_ms": 3.7056,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 249.9534589692296,
+   "vbus_max": 400.0135328376955,
+   "vbus_end": 249.9534589692296,
+   "path_peak": 72.09508437152755,
+   "bridge_peak": 72.09529857612372,
+   "series_peak": 50.95160396260455,
+   "vlink_min": 99.99882390969934,
+   "vlink_max": 100.22607632870557,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 700.0,
+   "power": 25000.0,
+   "VA": 349.0545891380058,
+   "holdup_to_260V_ms": 0.7492,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 249.99577069915452,
+   "vbus_max": 400.0000091700522,
+   "vbus_end": 249.99577069915452,
+   "path_peak": 12.704937075033879,
+   "bridge_peak": 12.704941061160497,
+   "series_peak": 6.167702631454009,
+   "vlink_min": 99.99997497230734,
+   "vlink_max": 100.00580962749447,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 788.0,
+   "power": 5000.0,
+   "VA": 393.8324160294742,
+   "holdup_to_260V_ms": 3.7051999999999996,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 249.96416587457384,
+   "vbus_max": 400.00029659651176,
+   "vbus_end": 249.96416587457384,
+   "path_peak": 63.65519047654129,
+   "bridge_peak": 63.65521273225055,
+   "series_peak": 6.840234463980416,
+   "vlink_min": 99.99986054920397,
+   "vlink_max": 100.06946410736022,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 788.0,
+   "power": 25000.0,
+   "VA": 393.16064844917287,
+   "holdup_to_260V_ms": 0.7488,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 249.99761814152518,
+   "vbus_max": 400.00002117531056,
+   "vbus_end": 249.99761814152518,
+   "path_peak": 11.66495799275007,
+   "bridge_peak": 11.664939248164142,
+   "series_peak": 30.844226213085182,
+   "vlink_min": 99.98642144494266,
+   "vlink_max": 100.00133374426288,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 860.0,
+   "power": 5000.0,
+   "VA": 429.84645680113044,
+   "holdup_to_260V_ms": 3.705,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 249.97335842619074,
+   "vbus_max": 400.0001030897893,
+   "vbus_end": 249.97335842619074,
+   "path_peak": 58.41777620495491,
+   "bridge_peak": 58.417684396209495,
+   "series_peak": 33.572075935526414,
+   "vlink_min": 99.97585675525856,
+   "vlink_max": 100.03449683226083,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 860.0,
+   "power": 25000.0,
+   "VA": 429.2311835377847,
+   "holdup_to_260V_ms": 0.7485999999999998,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 249.99119119180685,
+   "vbus_max": 400.00004883834924,
+   "vbus_end": 249.99119119180685,
+   "path_peak": 10.93019022783237,
+   "bridge_peak": 10.93015524147716,
+   "series_peak": 60.781918340216386,
+   "vlink_min": 99.9712212766828,
+   "vlink_max": 100.00085769459442,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 920.0,
+   "power": 5000.0,
+   "VA": 459.85647695899286,
+   "holdup_to_260V_ms": 3.705,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 249.96554486669498,
+   "vbus_max": 400.00024144599763,
+   "vbus_end": 249.96554486669498,
+   "path_peak": 54.727414780747466,
+   "bridge_peak": 54.727241505499336,
+   "series_peak": 62.63622040429018,
+   "vlink_min": 99.93625444187586,
+   "vlink_max": 100.02453109999877,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 10 µs 후 Stage A 정지",
+   "vbat": 920.0,
+   "power": 25000.0,
+   "VA": 459.2814863873662,
+   "holdup_to_260V_ms": 0.7485999999999998,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true
+   }
+  },
+  {
+   "vbus_min": 263.57740212789065,
+   "vbus_max": 400.00397299683533,
+   "vbus_end": 319.79361689379135,
+   "path_peak": 1082.59484690893,
+   "bridge_peak": 15.802879688726685,
+   "series_peak": 80.20858929940246,
+   "vlink_min": 99.99959255554069,
+   "vlink_max": 100.06516386068628,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 640.0,
+   "power": 5000.0,
+   "VA": 319.7936168937921,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 265.4146882070375,
+   "vbus_max": 400.0362821264747,
+   "vbus_end": 318.9654050414743,
+   "path_peak": 956.3080148876561,
+   "bridge_peak": 79.26662093971596,
+   "series_peak": 81.04626619024208,
+   "vlink_min": 99.99794999127971,
+   "vlink_max": 100.36321416978855,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 640.0,
+   "power": 25000.0,
+   "VA": 318.96540504147436,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 315.03666934170485,
+   "vbus_max": 400.00121184398876,
+   "vbus_end": 349.81132686413633,
+   "path_peak": 665.4769291069617,
+   "bridge_peak": 14.381146352025553,
+   "series_peak": 50.189819186130975,
+   "vlink_min": 99.99976797401914,
+   "vlink_max": 100.03775562554723,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 700.0,
+   "power": 5000.0,
+   "VA": 349.8113268641366,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 317.30530068107004,
+   "vbus_max": 400.0135328376955,
+   "vbus_end": 349.05458913800607,
+   "path_peak": 543.7335537515165,
+   "bridge_peak": 72.09529857612372,
+   "series_peak": 50.95160396260455,
+   "vlink_min": 99.99882390969934,
+   "vlink_max": 100.22607632870557,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 700.0,
+   "power": 25000.0,
+   "VA": 349.0545891380058,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 390.4162019348779,
+   "vbus_max": 400.0000091700522,
+   "vbus_end": 393.83241602947453,
+   "path_peak": 60.37521789335727,
+   "bridge_peak": 12.704941061160497,
+   "series_peak": 6.167702631454009,
+   "vlink_min": 99.99997497230734,
+   "vlink_max": 100.00580962749447,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 788.0,
+   "power": 5000.0,
+   "VA": 393.8324160294742,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 389.7182781231841,
+   "vbus_max": 400.00029659651176,
+   "vbus_end": 393.1606484491731,
+   "path_peak": 111.93151446040687,
+   "bridge_peak": 63.65521273225055,
+   "series_peak": 6.840234463980416,
+   "vlink_min": 99.99986054920397,
+   "vlink_max": 100.06946410736022,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 788.0,
+   "power": 25000.0,
+   "VA": 393.16064844917287,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 398.59877483687933,
+   "vbus_max": 452.13287712045377,
+   "vbus_end": 429.8464568011302,
+   "path_peak": 447.67380790513283,
+   "bridge_peak": 11.664939248164142,
+   "series_peak": 31.345200680562325,
+   "vlink_min": 99.98642144494266,
+   "vlink_max": 100.00133374426288,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 860.0,
+   "power": 5000.0,
+   "VA": 429.84645680113044,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 393.0111610753215,
+   "vbus_max": 455.3375817585856,
+   "vbus_end": 429.2311835377853,
+   "path_peak": 566.5088554872677,
+   "bridge_peak": 58.417684396209495,
+   "series_peak": 36.72453896083307,
+   "vlink_min": 99.97585675525856,
+   "vlink_max": 100.03449683226083,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 860.0,
+   "power": 25000.0,
+   "VA": 429.2311835377847,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 398.6320088013079,
+   "vbus_max": 503.5099385606581,
+   "vbus_end": 459.85647695899274,
+   "path_peak": 865.132652684382,
+   "bridge_peak": 10.93015524147716,
+   "series_peak": 61.26807023781838,
+   "vlink_min": 99.9712212766828,
+   "vlink_max": 100.00085769459442,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 920.0,
+   "power": 5000.0,
+   "VA": 459.85647695899286,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": false,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 393.44716768751283,
+   "vbus_max": 506.6625155582692,
+   "vbus_end": 459.28148638736604,
+   "path_peak": 977.7735517260127,
+   "bridge_peak": 54.727241505499336,
+   "series_peak": 66.29210929360984,
+   "vlink_min": 99.93625444187586,
+   "vlink_max": 100.02453109999877,
+   "tail_ripple_V": 0.0,
+   "completed": true,
+   "response": "전 소자 차단 + 50 µs 후 바이패스",
+   "vbat": 920.0,
+   "power": 25000.0,
+   "VA": 459.2814863873662,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": false,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 248.6213993212393,
+   "vbus_max": 400.00298467040744,
+   "vbus_end": 320.0142273966774,
+   "path_peak": 571.1407948773425,
+   "bridge_peak": 680.2395230617581,
+   "series_peak": 80.20858929940246,
+   "vlink_min": 99.99959255554069,
+   "vlink_max": 100.06300117418637,
+   "tail_ripple_V": 0.08692080414255088,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 640.0,
+   "power": 5000.0,
+   "VA": 319.7936168937921,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": false
+   }
+  },
+  {
+   "vbus_min": 248.1646403387935,
+   "vbus_max": 400.0589189335332,
+   "vbus_end": 320.0129727881944,
+   "path_peak": 524.4521117460658,
+   "bridge_peak": 633.5402385210307,
+   "series_peak": 81.04626619024208,
+   "vlink_min": 99.99794999127971,
+   "vlink_max": 100.31983559727097,
+   "tail_ripple_V": 0.08873736059996418,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 640.0,
+   "power": 25000.0,
+   "VA": 318.96540504147436,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": false
+   }
+  },
+  {
+   "vbus_min": 304.99271650924106,
+   "vbus_max": 400.00156066115625,
+   "vbus_end": 349.7966272841531,
+   "path_peak": 352.81247786944454,
+   "bridge_peak": 421.1127474731237,
+   "series_peak": 50.189819186130975,
+   "vlink_min": 99.99976797401914,
+   "vlink_max": 100.03588163710901,
+   "tail_ripple_V": 0.0771856343529862,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 700.0,
+   "power": 5000.0,
+   "VA": 349.8113268641366,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 301.9426263788357,
+   "vbus_max": 400.0313049439182,
+   "vbus_end": 348.9888650851232,
+   "path_peak": 416.8050154809078,
+   "bridge_peak": 458.2270804164483,
+   "series_peak": 50.95160396260455,
+   "vlink_min": 99.99882390969934,
+   "vlink_max": 100.18303296952381,
+   "tail_ripple_V": 0.3325970038817445,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 700.0,
+   "power": 25000.0,
+   "VA": 349.0545891380058,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 388.29267109512153,
+   "vbus_max": 400.00015085523034,
+   "vbus_end": 393.808578840902,
+   "path_peak": 52.60598461605138,
+   "bridge_peak": 57.45784536716824,
+   "series_peak": 6.167702631454009,
+   "vlink_min": 99.99997497230734,
+   "vlink_max": 100.00390942612533,
+   "tail_ripple_V": 0.008822463072135633,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 788.0,
+   "power": 5000.0,
+   "VA": 393.8324160294742,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 386.68370772970707,
+   "vbus_max": 400.0034062423088,
+   "vbus_end": 393.0399304283042,
+   "path_peak": 110.03140521857831,
+   "bridge_peak": 115.60167354706414,
+   "series_peak": 6.840234463980416,
+   "vlink_min": 99.99986054920397,
+   "vlink_max": 100.02203830155717,
+   "tail_ripple_V": 0.030878884405126428,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 788.0,
+   "power": 25000.0,
+   "VA": 393.16064844917287,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": true,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 399.99948184209813,
+   "vbus_max": 456.3538447519159,
+   "vbus_end": 429.8160354072144,
+   "path_peak": 229.48210533448753,
+   "bridge_peak": 270.0941743414879,
+   "series_peak": 29.846003675726674,
+   "vlink_min": 99.98271524566286,
+   "vlink_max": 100.00011026730976,
+   "tail_ripple_V": 0.04060654401877173,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 860.0,
+   "power": 5000.0,
+   "VA": 429.84645680113044,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 399.9895339153631,
+   "vbus_max": 455.52472258017684,
+   "vbus_end": 429.09285660431493,
+   "path_peak": 273.19595120036377,
+   "bridge_peak": 312.63058851133553,
+   "series_peak": 29.228793485650343,
+   "vlink_min": 99.91550460002375,
+   "vlink_max": 100.00054204596148,
+   "tail_ripple_V": 0.10272285376640866,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 860.0,
+   "power": 25000.0,
+   "VA": 429.2311835377847,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": true,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 399.99908873962414,
+   "vbus_max": 513.0322526221155,
+   "vbus_end": 459.8208825051457,
+   "path_peak": 447.8657787229505,
+   "bridge_peak": 529.352021635342,
+   "series_peak": 59.855677058879316,
+   "vlink_min": 99.96750460651185,
+   "vlink_max": 100.00020581337392,
+   "tail_ripple_V": 0.0790775155971346,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 920.0,
+   "power": 5000.0,
+   "VA": 459.85647695899286,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": false,
+    "bus_ge_260V": true
+   }
+  },
+  {
+   "vbus_min": 399.9811509589079,
+   "vbus_max": 512.6891485144089,
+   "vbus_end": 459.13565343154175,
+   "path_peak": 490.8680799386617,
+   "bridge_peak": 571.0457401121428,
+   "series_peak": 59.27737859546155,
+   "vlink_min": 99.83911368835747,
+   "vlink_max": 100.00102500134757,
+   "tail_ripple_V": 0.17969189724567514,
+   "completed": true,
+   "response": "영벡터 즉시(램프 없음)",
+   "vbat": 920.0,
+   "power": 25000.0,
+   "VA": 459.2814863873662,
+   "holdup_to_260V_ms": null,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_110V": true,
+    "bus_le_420V": false,
+    "bus_le_470V": false,
+    "bus_ge_260V": true
+   }
+  }
+ ]
+}

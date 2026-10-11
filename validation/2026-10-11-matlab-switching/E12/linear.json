@@ -207,6 +207,9 @@
   "table_smooth_A": 0.0,
   "comp_scale": 0.6,
   "comp_full_from_A": 20.0,
-  "comp_full_at_A": 80.0
+  "comp_full_at_A": 80.0,
+  "dab_deadtime_comp": 0.0,
+  "dab_eps_gain": 0.2,
+  "dab_eps_max_A": 10.0
  }
 }

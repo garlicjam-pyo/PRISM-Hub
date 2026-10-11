@@ -1,0 +1,331 @@
+{
+ "bus_V": 400.0,
+ "rated_primary_peak_A": 20.99099099099099,
+ "rated_phase_deg": 41.906105809779575,
+ "rows": [
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 10.0,
+   "vlink": 0.0,
+   "phase_deg": 5.130000000000001,
+   "primary_peak_A": 45.04504504504504,
+   "secondary_peak_A": 180.18018018018017,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 10.0,
+   "vlink": 10.0,
+   "phase_deg": 5.130000000000001,
+   "primary_peak_A": 40.79954954954955,
+   "secondary_peak_A": 163.1981981981982,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 10.0,
+   "vlink": 25.0,
+   "phase_deg": 5.130000000000001,
+   "primary_peak_A": 34.431306306306304,
+   "secondary_peak_A": 137.72522522522522,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 10.0,
+   "vlink": 50.0,
+   "phase_deg": 5.130000000000001,
+   "primary_peak_A": 23.81756756756757,
+   "secondary_peak_A": 95.27027027027027,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 10.0,
+   "vlink": 75.0,
+   "phase_deg": 5.130000000000001,
+   "primary_peak_A": 13.20382882882883,
+   "secondary_peak_A": 52.81531531531532,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 10.0,
+   "vlink": 100.0,
+   "phase_deg": 5.130000000000001,
+   "primary_peak_A": 2.59009009009009,
+   "secondary_peak_A": 10.36036036036036,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 20.0,
+   "vlink": 0.0,
+   "phase_deg": 10.62,
+   "primary_peak_A": 45.04504504504504,
+   "secondary_peak_A": 180.18018018018017,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 20.0,
+   "vlink": 10.0,
+   "phase_deg": 10.62,
+   "primary_peak_A": 41.07432432432432,
+   "secondary_peak_A": 164.2972972972973,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 20.0,
+   "vlink": 25.0,
+   "phase_deg": 10.62,
+   "primary_peak_A": 35.118243243243235,
+   "secondary_peak_A": 140.47297297297294,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 20.0,
+   "vlink": 50.0,
+   "phase_deg": 10.62,
+   "primary_peak_A": 25.19144144144144,
+   "secondary_peak_A": 100.76576576576576,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 20.0,
+   "vlink": 75.0,
+   "phase_deg": 10.575000000000001,
+   "primary_peak_A": 15.247747747747749,
+   "secondary_peak_A": 60.990990990990994,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 200.0,
+   "link_avg_A": 20.0,
+   "vlink": 100.0,
+   "phase_deg": 10.575000000000001,
+   "primary_peak_A": 5.315315315315315,
+   "secondary_peak_A": 21.26126126126126,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 10.0,
+   "vlink": 0.0,
+   "phase_deg": 10.62,
+   "primary_peak_A": 22.52252252252252,
+   "secondary_peak_A": 90.09009009009009,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 10.0,
+   "vlink": 10.0,
+   "phase_deg": 10.62,
+   "primary_peak_A": 20.53716216216216,
+   "secondary_peak_A": 82.14864864864865,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 10.0,
+   "vlink": 25.0,
+   "phase_deg": 10.62,
+   "primary_peak_A": 17.559121621621617,
+   "secondary_peak_A": 70.23648648648647,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 10.0,
+   "vlink": 50.0,
+   "phase_deg": 10.62,
+   "primary_peak_A": 12.59572072072072,
+   "secondary_peak_A": 50.38288288288288,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 10.0,
+   "vlink": 75.0,
+   "phase_deg": 10.575000000000001,
+   "primary_peak_A": 7.623873873873874,
+   "secondary_peak_A": 30.495495495495497,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 10.0,
+   "vlink": 100.0,
+   "phase_deg": 10.575000000000001,
+   "primary_peak_A": 2.6576576576576576,
+   "secondary_peak_A": 10.63063063063063,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 20.0,
+   "vlink": 0.0,
+   "phase_deg": 22.905000000000005,
+   "primary_peak_A": 22.52252252252252,
+   "secondary_peak_A": 90.09009009009009,
+   "over_rated_peak": true
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 20.0,
+   "vlink": 10.0,
+   "phase_deg": 22.905000000000005,
+   "primary_peak_A": 20.844594594594597,
+   "secondary_peak_A": 83.37837837837839,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 20.0,
+   "vlink": 25.0,
+   "phase_deg": 22.905000000000005,
+   "primary_peak_A": 18.3277027027027,
+   "secondary_peak_A": 73.3108108108108,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 20.0,
+   "vlink": 50.0,
+   "phase_deg": 22.860000000000003,
+   "primary_peak_A": 14.127252252252251,
+   "secondary_peak_A": 56.509009009009006,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 20.0,
+   "vlink": 75.0,
+   "phase_deg": 22.860000000000003,
+   "primary_peak_A": 9.929617117117118,
+   "secondary_peak_A": 39.71846846846847,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 400.0,
+   "link_avg_A": 20.0,
+   "vlink": 100.0,
+   "phase_deg": 22.860000000000003,
+   "primary_peak_A": 5.731981981981982,
+   "secondary_peak_A": 22.92792792792793,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 10.0,
+   "vlink": 0.0,
+   "phase_deg": 16.515000000000008,
+   "primary_peak_A": 15.015015015015015,
+   "secondary_peak_A": 60.06006006006006,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 10.0,
+   "vlink": 10.0,
+   "phase_deg": 16.515000000000008,
+   "primary_peak_A": 13.78978978978979,
+   "secondary_peak_A": 55.15915915915916,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 10.0,
+   "vlink": 25.0,
+   "phase_deg": 16.470000000000002,
+   "primary_peak_A": 11.950075075075073,
+   "secondary_peak_A": 47.80030030030029,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 10.0,
+   "vlink": 50.0,
+   "phase_deg": 16.470000000000002,
+   "primary_peak_A": 8.885135135135133,
+   "secondary_peak_A": 35.54054054054053,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 10.0,
+   "vlink": 75.0,
+   "phase_deg": 16.470000000000002,
+   "primary_peak_A": 5.820195195195194,
+   "secondary_peak_A": 23.280780780780777,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 10.0,
+   "vlink": 100.0,
+   "phase_deg": 16.470000000000002,
+   "primary_peak_A": 2.755255255255255,
+   "secondary_peak_A": 11.02102102102102,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 20.0,
+   "vlink": 0.0,
+   "phase_deg": 37.980000000000004,
+   "primary_peak_A": 15.015015015015015,
+   "secondary_peak_A": 60.06006006006006,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 20.0,
+   "vlink": 10.0,
+   "phase_deg": 37.980000000000004,
+   "primary_peak_A": 14.147897897897897,
+   "secondary_peak_A": 56.59159159159159,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 20.0,
+   "vlink": 25.0,
+   "phase_deg": 37.980000000000004,
+   "primary_peak_A": 12.847222222222221,
+   "secondary_peak_A": 51.388888888888886,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 20.0,
+   "vlink": 50.0,
+   "phase_deg": 37.980000000000004,
+   "primary_peak_A": 10.67942942942943,
+   "secondary_peak_A": 42.71771771771772,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 20.0,
+   "vlink": 75.0,
+   "phase_deg": 37.93500000000001,
+   "primary_peak_A": 8.506006006006007,
+   "secondary_peak_A": 34.02402402402403,
+   "over_rated_peak": false
+  },
+  {
+   "f_kHz": 600.0,
+   "link_avg_A": 20.0,
+   "vlink": 100.0,
+   "phase_deg": 37.93500000000001,
+   "primary_peak_A": 6.336336336336337,
+   "secondary_peak_A": 25.345345345345347,
+   "over_rated_peak": false
+  }
+ ]
+}

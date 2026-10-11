@@ -27,6 +27,11 @@
              앞먹임 예측 전류의 비 ρ̂를 추정해 지령을 I/ρ̂로 보정한다(실제 인덕턴스가 크면 ρ̂ < 1 → 용량 회복).
              ρ̂는 예측 전류 40 A 이상(위상 약 19° 이상, 데드타임 영향이 작은 구간)이고 주기 안 위상 변화가 2° 미만일 때만
              이득 0.05/주기로 갱신하며 0.75–1.25로 제한한다. 미학습 상태는 ρ̂ = 1(보수 쪽).
+             저전류 가산 보정(채택): 예측 전류 40 A 미만에서는 데드타임 때문에 전달 특성이 꺾인다(두 브리지 전압이 같을 때
+             δ < 2t_d에서 증분 이득 2배, δ ≤ t_d에서 불감대). 이 구간에서 측정 전류와 ρ̂·예측 전류의 차 ε̂를 이득 0.2/주기로
+             추종해 지령에서 빼고(|ε̂| ≤ 10 A), 40 A 이상에서는 ε̂를 같은 이득으로 0까지 줄인다. 측정 링크전류만 쓰므로
+             실제 데드타임을 몰라도 된다. (비교용) dab_deadtime_comp: 데드타임 모델로 위상을 역보정하는 앞먹임 방식
+             (_dab_dt_comp). 가정한 데드타임이 실제보다 길면 영전류 부근에서 과보상 계전기 동작이 생긴다(E12 dab_lowcurrent).
              (비교용) dab_estimator=False이면 공칭 L 앞먹임에 L −10 % 기준 위상 한계를 더한 이전 방식.
              에지 배치: 반송파 최댓값·최솟값(반주기 중심 c_j)을 기준으로 1차 에지 c_j − δ/2, 2차 에지 c_j + δ/2
              (δ = φ·T/2π). 두 브리지가 H-브리지 반송파에 고정되어 위상 이력에 따라 표류하지 않는다.
@@ -66,12 +71,13 @@ from numba import njit
 from model_stage_b import equilibrium
 
 PI = math.pi
-NREC = 22
+NREC = 25
 # 주기 기록(rec) 열: 0 v_bus 평균, 1 i_p 평균, 2 i_h 평균, 3 v_link 평균, 4 링크전류 평균, 5 링크전력 평균,
 #   6 i_h 최대, 7 i_h 최소, 8 |i_p| 최대, 9 v_bus 최소, 10 v_bus 최대, 11 v_link 최소, 12 v_link 최대,
 #   13 |i_L| 최대, 14 변조율 지령(제어기 출력), 15 링크전류 지령, 16 적용 DAB 위상, 17 |v_s| 최대,
 #   18 PWM 비교값(데드타임 보상 후), 19 i_L 주기 평균(직류 편류), 20 DAB 손실 전류원 전력,
-#   21 DAB 전류비 추정값 ρ̂(측정 링크전류 / 앞먹임 예측 전류)
+#   21 DAB 전류비 추정값 ρ̂(측정 링크전류 / 앞먹임 예측 전류), 22 저전류 가산 보정 ε̂ [A],
+#   23 링크전류 센서 타당성 잔차(필터) [A], 24 링크전류 센서 고장 판정(0/1)
 
 
 @njit(cache=True)
@@ -207,6 +213,21 @@ def _ipred(ph, vb, cp, lbasis):
     Ldab, fs, turns = cp[16], cp[17], cp[18]
     k = turns * max(vb, 1.) / (2 * PI * fs * Ldab * lbasis)
     return k * ph * (1 - abs(ph) / PI)
+
+
+@njit(cache=True)
+def _dab_dt_comp(dtg, tc):
+    """DAB 위상 데드타임 보상(tc: 보상에 쓰는 데드타임, 0이면 없음). 두 브리지 전압이 같을 때(v_bus = n·v_link)
+    앞선 브리지의 에지에서 전류가 데드타임 안에 0을 지나면 데드타임 끝까지 0에 묶여, 실제 전류는
+    δ ≥ 2t_d에서 S·δ/2(S = 2v_bus/L_d, 데드타임 영향 없음), t_d < δ < 2t_d에서 S·(δ − t_d), δ ≤ t_d에서 0이 된다.
+    따라서 원하는 유효 위상 시간 δ_eff(SPS 식)에 대해 δ_eff < 2t_d이면 δ = δ_eff/2 + t_d를 지령해 전달 특성을
+    선형으로 되돌린다(경계 δ_eff = 2t_d에서 연속). 보상이 없으면 이 구간의 증분 이득이 2배, δ ≤ t_d는 불감대다."""
+    if tc <= 0.:
+        return dtg
+    a = abs(dtg)
+    if a < 2. * tc:
+        a = .5 * a + tc
+    return a if dtg >= 0. else -a
 
 
 @njit(cache=True)
@@ -460,13 +481,19 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
     # ---- DAB 에지 일정: 반주기 중심 c_j = t_start + j·T/2 (짝수 j = 반송파 최댓값 = 상승 쌍, 홀수 j = 하강 쌍).
     #      쌍 j의 1차 에지 c_j − δ/2, 2차 에지 c_j + δ/2 (δ = φ·T/2π, 부호 포함).
     rho = 1.                                        # 전류비 추정값(미학습 = 1: 인덕턴스가 공차 하한이라고 가정)
+    eps = 0.                                        # 저전류 가산 보정값 ε̂ [A](측정 링크전류 − ρ̂·예측 전류)
+    # 링크전류 센서 타당성 감시(sw[22] > 0이면 사용): 측정 DAB 링크전류를 링크 전하 수지(H-브리지 소비 m·i_h + C_l·Δv_link/T)와
+    # 비교한 잔차를 1차 필터(sw[25])로 거르고, |잔차| > sw[23] + sw[24]·|기대값|이면 고장으로 판정(래치)해 ρ̂ = 1, ε̂ = 0으로
+    # 되돌리고 갱신을 멈춘다(누설 인덕턴스 −10 % 기준 앞먹임만 남아 실제 전류 ≤ 지령). 판정 전이라도 빠른 필터(sw[26]) 잔차가
+    # 문턱의 절반을 넘으면 ρ̂·ε̂ 갱신을 멈춰, 고장 센서 값이 판정 전에 추정값을 끌고 가지 못하게 한다.
+    ih_prev = x[3]; vl_prev = x[4]; r_f = 0.; r_g = 0.; mon_fault = False
     if est:
         ph_tgt = _phase_ff(uq[1], x[2], cp, lmin)    # 현재 위상 지령
     else:
         ph_tgt = _phase(uq[1], x[2], x[4], cp, lmin)
     ip_c0 = _ipred(ph_tgt, x[2], cp, lmin); ip_c1 = ip_c0; ph_c0 = ph_tgt; ph_c1 = ph_tgt   # 주기 안 두 반주기 중심의 위상·예측 전류
     il_meas = uq[1]; il_pred = ip_c0; dph_prev = 0.; vb_m = x[2]
-    d0 = ph_tgt / (2 * PI) * T
+    d0 = _dab_dt_comp(ph_tgt / (2 * PI) * T, sw[18])
     A = d0                                          # 직전 쌍까지의 전류 상태(시간 단위, 정상상태에서 δ)
     p_t = np.full(2, 1e30); s_t = np.full(2, 1e30)   # 쌍 짝/홀 슬롯의 예정 에지 시각(실행 후 비움)
     p_h = np.zeros(2); s_h = np.zeros(2)             # 쌍 짝/홀 슬롯의 실제 에지 시각
@@ -496,11 +523,30 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
             if est:
                 # DAB 전류비 추정: 직전 주기의 측정 링크전류(주기 평균, 링크 직류전류 센서)와 그 주기에 적용된 위상의
                 # 앞먹임 예측 전류를 비교한다. 위상이 데드타임 영향이 작은 큰 값이고 주기 안에서 위상이 거의 변하지 않을 때만 갱신.
-                ilm = _sense(il_meas, sens[5])
-                if abs(il_pred) >= est_min and ilm * il_pred > 0. and dph_prev < .035:
+                ilm = _sense(il_meas, sens[6] if (sens.shape[0] > 6 and t0 >= sw[21]) else sens[5])   # sens[6]: 고장 후 센서
+                plaus = True                         # 감시 사용 시: 잔차가 고장 문턱의 절반 미만일 때만 ρ̂·ε̂ 갱신
+                if sw[22] > 0. and i > 0:
+                    iexp = m_reg * .5 * (ih_prev + meas[3]) + cp[6] * (meas[4] - vl_prev) / T
+                    r_f += sw[25] * ((ilm - iexp) - r_f)            # 고장 판정용(느린 필터: 오경보 방지)
+                    r_g += sw[26] * ((ilm - iexp) - r_g)            # 갱신 차단용(빠른 필터: 판정 전 추정값 오염 방지)
+                    thr = sw[23] + sw[24] * abs(iexp)
+                    if abs(r_f) > thr:
+                        mon_fault = True
+                    plaus = abs(r_g) < .5 * thr
+                if mon_fault:
+                    rho = 1.; eps = 0.
+                elif plaus and abs(il_pred) >= est_min and ilm * il_pred > 0. and dph_prev < .035:
                     rho += est_g * (ilm / il_pred - rho)
                     rho = min(max(rho, .75), 1.25)
-                ph_new = _phase_ff(icmd / rho, meas[2], cp, lmin)
+                # 저전류 가산 보정(sw[19] = 갱신 이득, 0이면 없음): 데드타임 영향이 있는 저전류 구간(|예측| < est_min)에서
+                # 측정 전류와 ρ̂·예측 전류의 차를 1차 추종하고 지령에서 뺀다. 그 밖에서는 0으로 감쇠한다.
+                if sw[19] > 0. and not mon_fault:
+                    if plaus and abs(il_pred) < est_min and dph_prev < .035:
+                        eps += sw[19] * ((ilm - rho * il_pred) - eps)
+                    elif abs(il_pred) >= est_min:
+                        eps -= sw[19] * eps
+                    eps = min(max(eps, -sw[20]), sw[20])
+                ph_new = _phase_ff((icmd - eps) / rho, meas[2], cp, lmin)
             else:
                 ph_new = _phase(icmd, meas[2], meas[4], cp, lmin)
             if dtc == 1.:                            # 모델 기반 데드타임 보상: 예측 전류와 리플로 오차를 계산해 상쇄
@@ -516,6 +562,8 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
                 mcmd_pwm = mcmd
             qi[qt % 8] = i + lag; qm[qt % 8] = mcmd_pwm; qp[qt % 8] = ph_new; qt += 1
             rec[i // Np, 14] = mcmd; rec[i // Np, 15] = icmd; rec[i // Np, 18] = mcmd_pwm; rec[i // Np, 21] = rho
+            rec[i // Np, 22] = eps; rec[i // Np, 23] = r_f; rec[i // Np, 24] = 1. if mon_fault else 0.
+            ih_prev = meas[3]; vl_prev = meas[4]
         while qh < qt and qi[qh % 8] <= i:          # 전달지연 뒤 지령 반영(PWM 비교값 즉시, DAB 위상은 다음 반주기 중심)
             m_reg = qm[qh % 8]; ph_tgt = qp[qh % 8]; qh += 1
         # ---- H-브리지(유니폴라 PWM, 정확한 에지 위치, 데드타임 중 출력용량 충방전)
@@ -541,7 +589,7 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
             if j >= 1:
                 jm = (j - 1) % 2
                 A = -A + 2 * (s_h[jm] - p_h[jm])
-            dtg = ph_tgt / (2 * PI) * T
+            dtg = _dab_dt_comp(ph_tgt / (2 * PI) * T, sw[18])   # 유효 위상 → 적용 위상(데드타임 보상)
             D = .5 * (A + dtg)
             jj = j % 2
             p_done = p_j > j; s_done = s_j > j
@@ -633,7 +681,8 @@ SW_DEFAULT = dict(td_h=50e-9, td_dab=100e-9, R_dab=0.02, dt=5e-9, t_pre=2e-3, de
                   dab_estimator=True, dab_est_gain=0.05, dab_est_min_A=40.,
                   coss_nonlinear=False, coss_m=0.5, coss_V0=5.,
                   table_cq=None, table_nonlinear=None, table_m=None, table_V0=None, table_smooth_A=0., comp_scale=.6,
-                  comp_full_from_A=20., comp_full_at_A=80.)
+                  comp_full_from_A=20., comp_full_at_A=80., dab_deadtime_comp=0., dab_eps_gain=.2, dab_eps_max_A=10.,
+                  link_sensor_fault_t=1e30, link_monitor=False, link_monitor_A=6., link_monitor_rel=.15, link_monitor_alpha=.05, link_gate_alpha=.3)
 
 # 센서 채널 순서: i_p, v_s, v_bus, i_h, v_link, 링크전류(주기 평균). 각 행 = [이득, 오프셋, 양자화 간격, 잡음 표준편차]
 SENSOR_IDEAL = np.array([[1., 0., 0., 0.]] * 6)
@@ -724,6 +773,8 @@ def simulate_switching(vbat, P0, P1, p, cp, K, predict=True, profile=0, duration
     tv = sw["coss_V0"] if sw["table_V0"] is None else sw["table_V0"]
     etab = (deadtime_table(sw["td_h"], tq, tn, tm, tv, smooth=sw["table_smooth_A"]) if sw["deadtime_comp"] == "table"
             else np.zeros((2, 2)))
+    # (비교용) DAB 위상 데드타임 앞먹임 보상: 0이면 끔(기본), None이면 플랜트 데드타임과 같은 값, 수치를 주면 그 값으로 보상
+    dab_tc = sw["td_dab"] if sw["dab_deadtime_comp"] is None else float(sw["dab_deadtime_comp"])
     rec, zvs, alive, end_i, wave, eres = run_core(x0.astype(float), float(iL0), cst, u0.astype(float), pp, _cp_vec(cp), K,
                                       bool(predict), int(profile), float(P0), float(P1), float(step),
                                       float(sw["t_pre"]), float(duration), float(dt), int(round(delay / dt)),
@@ -731,7 +782,10 @@ def simulate_switching(vbat, P0, P1, p, cp, K, predict=True, profile=0, duration
                                                 sw["coss_comp"], sw["coss_h"], sw["comp_band_A"], sw["dab_Lmin"],
                                                 float(sw["dab_estimator"]), sw["dab_est_gain"], sw["dab_est_min_A"],
                                                 float(sw["coss_nonlinear"]), sw["coss_m"], sw["coss_V0"],
-                                                coss_c0(sw["coss_h"], sw["coss_m"], sw["coss_V0"]), TABLE_V, sw["comp_scale"], sw["comp_full_from_A"], sw["comp_full_at_A"]]), cap,
+                                                coss_c0(sw["coss_h"], sw["coss_m"], sw["coss_V0"]), TABLE_V, sw["comp_scale"], sw["comp_full_from_A"], sw["comp_full_at_A"],
+                                                dab_tc, sw["dab_eps_gain"], sw["dab_eps_max_A"], float(sw["link_sensor_fault_t"]) - 0.,
+                                                float(sw["link_monitor"]), sw["link_monitor_A"], sw["link_monitor_rel"], sw["link_monitor_alpha"],
+                                                sw["link_gate_alpha"]]), cap,
                                       np.asarray(SENSOR_IDEAL if sensors is None else sensors, float), int(seed), etab)
     if not alive:
         rec = rec[: end_i // int(round(cp.Ts / dt))]
