@@ -1,0 +1,2349 @@
+{
+ "structures": {
+  "3": {
+   "label": "③ PRISM-Hub(400 V 조정)",
+   "bus_V": [
+    400.0,
+    400.0
+   ],
+   "series_V": [
+    -60.091308107256545,
+    81.04625163621198
+   ],
+   "link_W_max": 6436.411235257348,
+   "link_W_max_at": {
+    "vbat": 640.0,
+    "power": 25000.0
+   },
+   "path_A_max": 79.261487591816,
+   "v48_fixed_gain_V": [
+    48.0,
+    48.0
+   ],
+   "v48_fixed_gain_in_iso21780": true,
+   "stage_c_input_ratio": 1.0,
+   "stage_c_regulation_pm_pct": 0.0,
+   "voltage_class_static": "B_420",
+   "all_points_feasible": true,
+   "stage_b_active_vbat": [
+    632.0,
+    920.0
+   ],
+   "bus_by_vbat": [
+    {
+     "vbat": 632.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 640.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 645.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 650.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 655.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 660.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 665.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 670.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 675.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 680.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 685.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 690.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 695.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 700.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 705.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 710.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 715.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 720.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 725.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 730.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 735.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 740.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 745.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 750.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 755.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 760.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 765.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 770.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 775.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 780.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 785.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 790.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 795.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 800.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 805.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 810.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 815.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 820.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 825.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 830.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 835.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 840.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 845.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 850.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 855.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 860.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 865.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 870.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 875.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 880.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 885.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 890.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 895.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 900.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 905.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 910.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 915.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    },
+    {
+     "vbat": 920.0,
+     "bus_min": 400.0,
+     "bus_max": 400.0
+    }
+   ]
+  },
+  "3w": {
+   "label": "③′ 창 조정(≤ 410 V)",
+   "bus_V": [
+    318.96540504147436,
+    410.0
+   ],
+   "series_V": [
+    -50.09139040195838,
+    0.0
+   ],
+   "link_W_max": 2688.5734640379474,
+   "link_W_max_at": {
+    "vbat": 920.0,
+    "power": 25000.0
+   },
+   "path_A_max": 78.37840594891257,
+   "v48_fixed_gain_V": [
+    38.27584860497692,
+    49.199999999999996
+   ],
+   "v48_fixed_gain_in_iso21780": true,
+   "stage_c_input_ratio": 1.285405857562166,
+   "stage_c_regulation_pm_pct": 12.488191391379711,
+   "voltage_class_static": "B_420",
+   "all_points_feasible": true,
+   "stage_b_active_vbat": [
+    820.0,
+    920.0
+   ],
+   "bus_by_vbat": [
+    {
+     "vbat": 632.0,
+     "bus_min": 314.9522220295081,
+     "bus_max": 316.13361438985703
+    },
+    {
+     "vbat": 640.0,
+     "bus_min": 318.96540504147436,
+     "bus_max": 320.131945594875
+    },
+    {
+     "vbat": 645.0,
+     "bus_min": 321.4734767442025,
+     "bus_max": 322.63092359383745
+    },
+    {
+     "vbat": 650.0,
+     "bus_min": 323.98142308017975,
+     "bus_max": 325.12991729691066
+    },
+    {
+     "vbat": 655.0,
+     "bus_min": 326.48924695659616,
+     "bus_max": 327.6289263450307
+    },
+    {
+     "vbat": 660.0,
+     "bus_min": 328.996951191173,
+     "bus_max": 330.12795038999303
+    },
+    {
+     "vbat": 665.0,
+     "bus_min": 331.50453851558814,
+     "bus_max": 332.6269890940451
+    },
+    {
+     "vbat": 670.0,
+     "bus_min": 334.0120115787447,
+     "bus_max": 335.1260421294973
+    },
+    {
+     "vbat": 675.0,
+     "bus_min": 336.51937294989216,
+     "bus_max": 337.62510917835107
+    },
+    {
+     "vbat": 680.0,
+     "bus_min": 339.02662512160623,
+     "bus_max": 340.12418993194353
+    },
+    {
+     "vbat": 685.0,
+     "bus_min": 341.5337705126358,
+     "bus_max": 342.6232840906073
+    },
+    {
+     "vbat": 690.0,
+     "bus_min": 344.0408114706235,
+     "bus_max": 345.12239136334546
+    },
+    {
+     "vbat": 695.0,
+     "bus_min": 346.547750274707,
+     "bus_max": 347.6215114675202
+    },
+    {
+     "vbat": 700.0,
+     "bus_min": 349.0545891380058,
+     "bus_max": 350.120644128555
+    },
+    {
+     "vbat": 705.0,
+     "bus_min": 351.56133021000096,
+     "bus_max": 352.61978907964937
+    },
+    {
+     "vbat": 710.0,
+     "bus_min": 354.06797557881214,
+     "bus_max": 355.11894606150554
+    },
+    {
+     "vbat": 715.0,
+     "bus_min": 356.574527273377,
+     "bus_max": 357.61811482206656
+    },
+    {
+     "vbat": 720.0,
+     "bus_min": 359.0809872655386,
+     "bus_max": 360.11729511626584
+    },
+    {
+     "vbat": 725.0,
+     "bus_min": 361.5873574720446,
+     "bus_max": 362.61648670578586
+    },
+    {
+     "vbat": 730.0,
+     "bus_min": 364.09363975646284,
+     "bus_max": 365.1156893588281
+    },
+    {
+     "vbat": 735.0,
+     "bus_min": 366.5998359310174,
+     "bus_max": 367.6149028498914
+    },
+    {
+     "vbat": 740.0,
+     "bus_min": 369.1059477583492,
+     "bus_max": 370.1141269595597
+    },
+    {
+     "vbat": 745.0,
+     "bus_min": 371.6119769532037,
+     "bus_max": 372.61336147429836
+    },
+    {
+     "vbat": 750.0,
+     "bus_min": 374.1179251840508,
+     "bus_max": 375.1126061862582
+    },
+    {
+     "vbat": 755.0,
+     "bus_min": 376.62379407463936,
+     "bus_max": 377.6118608930877
+    },
+    {
+     "vbat": 760.0,
+     "bus_min": 379.1295852054882,
+     "bus_max": 380.1111253977525
+    },
+    {
+     "vbat": 765.0,
+     "bus_min": 381.6353001153188,
+     "bus_max": 382.6103995083622
+    },
+    {
+     "vbat": 770.0,
+     "bus_min": 384.1409403024312,
+     "bus_max": 385.109683038003
+    },
+    {
+     "vbat": 775.0,
+     "bus_min": 386.6465072260252,
+     "bus_max": 387.6089758045781
+    },
+    {
+     "vbat": 780.0,
+     "bus_min": 389.1520023074704,
+     "bus_max": 390.1082776306531
+    },
+    {
+     "vbat": 785.0,
+     "bus_min": 391.65742693152686,
+     "bus_max": 392.60758834330795
+    },
+    {
+     "vbat": 790.0,
+     "bus_min": 394.16278244751857,
+     "bus_max": 395.1069077739946
+    },
+    {
+     "vbat": 795.0,
+     "bus_min": 396.6680701704622,
+     "bus_max": 397.60623575839907
+    },
+    {
+     "vbat": 800.0,
+     "bus_min": 399.1732913821529,
+     "bus_max": 400.1055721363101
+    },
+    {
+     "vbat": 805.0,
+     "bus_min": 401.6784473322088,
+     "bus_max": 402.6049167514913
+    },
+    {
+     "vbat": 810.0,
+     "bus_min": 404.18353923907625,
+     "bus_max": 405.10426945155916
+    },
+    {
+     "vbat": 815.0,
+     "bus_min": 406.68856829099786,
+     "bus_max": 407.60363008786476
+    },
+    {
+     "vbat": 820.0,
+     "bus_min": 409.1935356469445,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 825.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 830.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 835.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 840.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 845.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 850.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 855.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 860.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 865.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 870.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 875.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 880.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 885.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 890.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 895.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 900.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 905.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 910.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 915.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    },
+    {
+     "vbat": 920.0,
+     "bus_min": 410.0,
+     "bus_max": 410.0
+    }
+   ]
+  },
+  "4": {
+   "label": "④ 비조정(버스 = V_A)",
+   "bus_V": [
+    318.96540504147436,
+    460.0918077637707
+   ],
+   "series_V": [
+    0.0,
+    0.0
+   ],
+   "link_W_max": 0.0,
+   "link_W_max_at": {
+    "vbat": 640.0,
+    "power": -3200.0
+   },
+   "path_A_max": 78.37840594891257,
+   "v48_fixed_gain_V": [
+    38.27584860497692,
+    55.21101693165248
+   ],
+   "v48_fixed_gain_in_iso21780": false,
+   "stage_c_input_ratio": 1.4424504993071146,
+   "stage_c_regulation_pm_pct": 18.115024211652635,
+   "voltage_class_static": "B_470",
+   "all_points_feasible": true,
+   "stage_b_active_vbat": null,
+   "bus_by_vbat": [
+    {
+     "vbat": 632.0,
+     "bus_min": 314.9522220295081,
+     "bus_max": 316.13361438985703
+    },
+    {
+     "vbat": 640.0,
+     "bus_min": 318.96540504147436,
+     "bus_max": 320.131945594875
+    },
+    {
+     "vbat": 645.0,
+     "bus_min": 321.4734767442025,
+     "bus_max": 322.63092359383745
+    },
+    {
+     "vbat": 650.0,
+     "bus_min": 323.98142308017975,
+     "bus_max": 325.12991729691066
+    },
+    {
+     "vbat": 655.0,
+     "bus_min": 326.48924695659616,
+     "bus_max": 327.6289263450307
+    },
+    {
+     "vbat": 660.0,
+     "bus_min": 328.996951191173,
+     "bus_max": 330.12795038999303
+    },
+    {
+     "vbat": 665.0,
+     "bus_min": 331.50453851558814,
+     "bus_max": 332.6269890940451
+    },
+    {
+     "vbat": 670.0,
+     "bus_min": 334.0120115787447,
+     "bus_max": 335.1260421294973
+    },
+    {
+     "vbat": 675.0,
+     "bus_min": 336.51937294989216,
+     "bus_max": 337.62510917835107
+    },
+    {
+     "vbat": 680.0,
+     "bus_min": 339.02662512160623,
+     "bus_max": 340.12418993194353
+    },
+    {
+     "vbat": 685.0,
+     "bus_min": 341.5337705126358,
+     "bus_max": 342.6232840906073
+    },
+    {
+     "vbat": 690.0,
+     "bus_min": 344.0408114706235,
+     "bus_max": 345.12239136334546
+    },
+    {
+     "vbat": 695.0,
+     "bus_min": 346.547750274707,
+     "bus_max": 347.6215114675202
+    },
+    {
+     "vbat": 700.0,
+     "bus_min": 349.0545891380058,
+     "bus_max": 350.120644128555
+    },
+    {
+     "vbat": 705.0,
+     "bus_min": 351.56133021000096,
+     "bus_max": 352.61978907964937
+    },
+    {
+     "vbat": 710.0,
+     "bus_min": 354.06797557881214,
+     "bus_max": 355.11894606150554
+    },
+    {
+     "vbat": 715.0,
+     "bus_min": 356.574527273377,
+     "bus_max": 357.61811482206656
+    },
+    {
+     "vbat": 720.0,
+     "bus_min": 359.0809872655386,
+     "bus_max": 360.11729511626584
+    },
+    {
+     "vbat": 725.0,
+     "bus_min": 361.5873574720446,
+     "bus_max": 362.61648670578586
+    },
+    {
+     "vbat": 730.0,
+     "bus_min": 364.09363975646284,
+     "bus_max": 365.1156893588281
+    },
+    {
+     "vbat": 735.0,
+     "bus_min": 366.5998359310174,
+     "bus_max": 367.6149028498914
+    },
+    {
+     "vbat": 740.0,
+     "bus_min": 369.1059477583492,
+     "bus_max": 370.1141269595597
+    },
+    {
+     "vbat": 745.0,
+     "bus_min": 371.6119769532037,
+     "bus_max": 372.61336147429836
+    },
+    {
+     "vbat": 750.0,
+     "bus_min": 374.1179251840508,
+     "bus_max": 375.1126061862582
+    },
+    {
+     "vbat": 755.0,
+     "bus_min": 376.62379407463936,
+     "bus_max": 377.6118608930877
+    },
+    {
+     "vbat": 760.0,
+     "bus_min": 379.1295852054882,
+     "bus_max": 380.1111253977525
+    },
+    {
+     "vbat": 765.0,
+     "bus_min": 381.6353001153188,
+     "bus_max": 382.6103995083622
+    },
+    {
+     "vbat": 770.0,
+     "bus_min": 384.1409403024312,
+     "bus_max": 385.109683038003
+    },
+    {
+     "vbat": 775.0,
+     "bus_min": 386.6465072260252,
+     "bus_max": 387.6089758045781
+    },
+    {
+     "vbat": 780.0,
+     "bus_min": 389.1520023074704,
+     "bus_max": 390.1082776306531
+    },
+    {
+     "vbat": 785.0,
+     "bus_min": 391.65742693152686,
+     "bus_max": 392.60758834330795
+    },
+    {
+     "vbat": 790.0,
+     "bus_min": 394.16278244751857,
+     "bus_max": 395.1069077739946
+    },
+    {
+     "vbat": 795.0,
+     "bus_min": 396.6680701704622,
+     "bus_max": 397.60623575839907
+    },
+    {
+     "vbat": 800.0,
+     "bus_min": 399.1732913821529,
+     "bus_max": 400.1055721363101
+    },
+    {
+     "vbat": 805.0,
+     "bus_min": 401.6784473322088,
+     "bus_max": 402.6049167514913
+    },
+    {
+     "vbat": 810.0,
+     "bus_min": 404.18353923907625,
+     "bus_max": 405.10426945155916
+    },
+    {
+     "vbat": 815.0,
+     "bus_min": 406.68856829099786,
+     "bus_max": 407.60363008786476
+    },
+    {
+     "vbat": 820.0,
+     "bus_min": 409.1935356469445,
+     "bus_max": 410.1029985153801
+    },
+    {
+     "vbat": 825.0,
+     "bus_min": 411.69844243751277,
+     "bus_max": 412.6023745925886
+    },
+    {
+     "vbat": 830.0,
+     "bus_min": 414.2032897657897,
+     "bus_max": 415.1017581813796
+    },
+    {
+     "vbat": 835.0,
+     "bus_min": 416.7080787081858,
+     "bus_max": 417.6011491469463
+    },
+    {
+     "vbat": 840.0,
+     "bus_min": 419.2128103152386,
+     "bus_max": 420.1005473576878
+    },
+    {
+     "vbat": 845.0,
+     "bus_min": 421.7174856123862,
+     "bus_max": 422.5999526851142
+    },
+    {
+     "vbat": 850.0,
+     "bus_min": 424.22210560071426,
+     "bus_max": 425.09936500375534
+    },
+    {
+     "vbat": 855.0,
+     "bus_min": 426.72667125767555,
+     "bus_max": 427.5987841910727
+    },
+    {
+     "vbat": 860.0,
+     "bus_min": 429.2311835377847,
+     "bus_max": 430.09821012737416
+    },
+    {
+     "vbat": 865.0,
+     "bus_min": 431.7356433732883,
+     "bus_max": 432.5976426957317
+    },
+    {
+     "vbat": 870.0,
+     "bus_min": 434.2400516748116,
+     "bus_max": 435.0970817819026
+    },
+    {
+     "vbat": 875.0,
+     "bus_min": 436.74440933198264,
+     "bus_max": 437.59652727425214
+    },
+    {
+     "vbat": 880.0,
+     "bus_min": 439.24871721403525,
+     "bus_max": 440.09597906368026
+    },
+    {
+     "vbat": 885.0,
+     "bus_min": 441.752976170391,
+     "bus_max": 442.5954370435496
+    },
+    {
+     "vbat": 890.0,
+     "bus_min": 444.2571870312212,
+     "bus_max": 445.0949011096166
+    },
+    {
+     "vbat": 895.0,
+     "bus_min": 446.7613506079904,
+     "bus_max": 447.5943711599646
+    },
+    {
+     "vbat": 900.0,
+     "bus_min": 449.2654676939809,
+     "bus_max": 450.0938470949395
+    },
+    {
+     "vbat": 905.0,
+     "bus_min": 451.7695390648003,
+     "bus_max": 452.59332881708707
+    },
+    {
+     "vbat": 910.0,
+     "bus_min": 454.27356547887143,
+     "bus_max": 455.09281623109285
+    },
+    {
+     "vbat": 915.0,
+     "bus_min": 456.7775476779067,
+     "bus_max": 457.59230924372355
+    },
+    {
+     "vbat": 920.0,
+     "bus_min": 459.2814863873662,
+     "bus_max": 460.0918077637707
+    }
+   ]
+  }
+ },
+ "table": [
+  {
+   "vbat": 632.0,
+   "power": -3200.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": -10.015456806110622,
+    "series_V": 83.86779597015934,
+    "modulation": 0.8384776505654712,
+    "link_A": -8.397736692127593,
+    "link_W": -839.7736692127593,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 316.13361438985703,
+    "path_A": -10.122302261896609,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 316.13361438985703,
+    "path_A": -10.122302261896609,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 632.0,
+   "power": 0.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 6.042331035934478e-19,
+    "series_V": 84.0,
+    "modulation": 0.84,
+    "link_A": 5.075558070184961e-19,
+    "link_W": 5.075558070184961e-17,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 316.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 316.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 632.0,
+   "power": 5000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 16.01299173915821,
+    "series_V": 84.21137149095689,
+    "modulation": 0.8424339747443521,
+    "link_A": 13.489888278367527,
+    "link_W": 1348.9888278367528,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 315.79100101083077,
+    "path_A": 15.833256755243996,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 315.79100101083077,
+    "path_A": 15.833256755243996,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 632.0,
+   "power": 15000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 48.117307279833,
+    "series_V": 84.6351484560938,
+    "modulation": 0.8473138307065347,
+    "link_A": 40.770459954558724,
+    "link_W": 4077.0459954558723,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 315.3721703478731,
+    "path_A": 47.56285243385351,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 315.3721703478731,
+    "path_A": 47.56285243385351,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 632.0,
+   "power": 25000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 80.32692233220243,
+    "series_V": 85.06031537478508,
+    "modulation": 0.8522096921944948,
+    "link_A": 68.45538175565733,
+    "link_W": 6845.538175565733,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 314.9522220295081,
+    "path_A": 79.37711897666095,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 314.9522220295081,
+    "path_A": 79.37711897666095,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 640.0,
+   "power": -3200.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": -9.896568160398301,
+    "series_V": 79.86936530028274,
+    "modulation": 0.7984957216396193,
+    "link_A": -7.902367334992921,
+    "link_W": -790.2367334992921,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 320.131945594875,
+    "path_A": -9.995878399619576,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 320.131945594875,
+    "path_A": -9.995878399619576,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 640.0,
+   "power": 0.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 3.286887983968008e-19,
+    "series_V": 80.0,
+    "modulation": 0.8,
+    "link_A": 2.6295103871744067e-19,
+    "link_W": 2.6295103871744066e-17,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 320.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 320.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 640.0,
+   "power": 5000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 15.801958779273619,
+    "series_V": 80.20858585588641,
+    "modulation": 0.8024018977344496,
+    "link_A": 12.679521712410699,
+    "link_W": 1267.95217124107,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 319.7936168937921,
+    "path_A": 15.635083803628794,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 319.7936168937921,
+    "path_A": 15.635083803628794,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 640.0,
+   "power": 15000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 47.48114400443006,
+    "series_V": 80.62675110085847,
+    "modulation": 0.8072171338886733,
+    "link_A": 38.3275929770114,
+    "link_W": 3832.75929770114,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 319.3800489396336,
+    "path_A": 46.96598942169731,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 319.3800489396336,
+    "path_A": 46.96598942169731,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 640.0,
+   "power": 25000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 79.261487591816,
+    "series_V": 81.04625163621198,
+    "modulation": 0.812047746113956,
+    "link_A": 64.36411235257349,
+    "link_W": 6436.411235257348,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 318.96540504147436,
+    "path_A": 78.37840594891257,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 318.96540504147436,
+    "path_A": 78.37840594891257,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 700.0,
+   "power": -3200.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": -9.087485675224617,
+    "series_V": 49.880045189087035,
+    "modulation": 0.49861870217736587,
+    "link_A": -4.531190313435902,
+    "link_W": -453.11903134359017,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 350.120644128555,
+    "path_A": -9.139706708711083,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 350.120644128555,
+    "path_A": -9.139706708711083,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 700.0,
+   "power": 0.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 1.0745593144946675e-21,
+    "series_V": 50.0,
+    "modulation": 0.5,
+    "link_A": 5.372796572473338e-22,
+    "link_W": 5.3727965724733376e-20,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 350.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 350.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 700.0,
+   "power": 5000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 14.380668908087753,
+    "series_V": 50.18982482958676,
+    "modulation": 0.5021858616740293,
+    "link_A": 7.221768607056971,
+    "link_W": 722.1768607056971,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 349.8113268641366,
+    "path_A": 14.293419383592322,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 349.8113268641366,
+    "path_A": 14.293419383592322,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 700.0,
+   "power": 15000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 43.19869801844139,
+    "series_V": 50.57022281384343,
+    "modulation": 0.5065662020988031,
+    "link_A": 21.883000390814946,
+    "link_W": 2188.3000390814946,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 349.43336836740843,
+    "path_A": 42.92663883269554,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 349.43336836740843,
+    "path_A": 42.92663883269554,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 700.0,
+   "power": 25000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 72.09281462151134,
+    "series_V": 50.95162515300395,
+    "modulation": 0.5109581078224698,
+    "link_A": 36.83640814660352,
+    "link_W": 3683.6408146603517,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 349.0545891380058,
+    "path_A": 71.62203499956205,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 349.0545891380058,
+    "path_A": 71.62203499956205,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 788.0,
+   "power": -3200.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": -8.114446025094308,
+    "series_V": 5.892889312468755,
+    "modulation": 0.05876660420418567,
+    "link_A": -0.47685843789294485,
+    "link_W": -47.68584378929449,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 394.1071789661655,
+    "path_A": -8.119618648902417,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 394.1071789661655,
+    "path_A": -8.119618648902417,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 788.0,
+   "power": 0.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 3.40004524653984e-14,
+    "series_V": 6.000000000000001,
+    "modulation": 0.06000000000000001,
+    "link_A": 2.0400271479239045e-15,
+    "link_W": 2.0400271479239045e-13,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 394.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 394.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 788.0,
+   "power": 5000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 12.7049034430867,
+    "series_V": 6.167704725448744,
+    "modulation": 0.06193114532334918,
+    "link_A": 0.7868292214529218,
+    "link_W": 78.68292214529218,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 393.8324160294742,
+    "path_A": 12.695755342865944,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 393.8324160294742,
+    "path_A": 12.695755342865944,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 788.0,
+   "power": 15000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 38.15377460277747,
+    "series_V": 6.503629824756662,
+    "modulation": 0.06579937373962216,
+    "link_A": 2.510494474665459,
+    "link_W": 251.0494474665459,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 393.49681931268,
+    "path_A": 38.11974903939622,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 393.49681931268,
+    "path_A": 38.11974903939622,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 788.0,
+   "power": 25000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 63.65499940749587,
+    "series_V": 6.840245992178946,
+    "modulation": 0.06967555990993937,
+    "link_A": 4.435197724784134,
+    "link_W": 443.51977247841336,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 393.16064844917287,
+    "path_A": 63.587238699022436,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 393.16064844917287,
+    "path_A": 63.587238699022436,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 820.0,
+   "power": -3200.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": -7.794610430287434,
+    "series_V": -10.102888857679794,
+    "modulation": -0.10118478078540369,
+    "link_A": 0.7886959476962551,
+    "link_W": 78.86959476962551,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": -7.80252701396693,
+    "series_V": -0.10299335658436348,
+    "modulation": -0.0011859841061229734,
+    "link_A": 0.009253673026159924,
+    "link_W": 0.9253673026159923,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 410.1029985153801,
+    "path_A": -7.802917831823633,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 820.0,
+   "power": 0.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 2.3062975977209088e-14,
+    "series_V": -10.0,
+    "modulation": -0.1,
+    "link_A": -2.306297597720909e-15,
+    "link_W": -2.3062975977209093e-13,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 410.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 820.0,
+   "power": 5000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 12.212344410807809,
+    "series_V": -9.838797053777338,
+    "modulation": -0.09814372364955722,
+    "link_A": -1.1985649549675363,
+    "link_W": -119.85649549675364,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 409.8389611377679,
+    "path_A": 12.199913805459904,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 409.8389611377679,
+    "path_A": 12.199913805459904,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 820.0,
+   "power": 15000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 36.668995668042676,
+    "series_V": -9.515969257181837,
+    "modulation": -0.09442631265845751,
+    "link_A": -3.4625180498222217,
+    "link_W": -346.25180498222215,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 409.51650300159156,
+    "path_A": 36.62856048548965,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 409.51650300159156,
+    "path_A": 36.62856048548965,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 820.0,
+   "power": 25000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 61.16845001173738,
+    "series_V": -9.192576459845066,
+    "modulation": -0.09070239559821591,
+    "link_A": -5.548124951094298,
+    "link_W": -554.8124951094298,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 409.1935356469445,
+    "path_A": 61.09578432238529,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   },
+   "4": {
+    "bus_V": 409.1935356469445,
+    "path_A": 61.09578432238529,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 830.0,
+   "power": -3200.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": -7.696991218441066,
+    "series_V": -15.101600284083423,
+    "modulation": -0.15116994266520303,
+    "link_A": 1.1635537211863072,
+    "link_W": 116.35537211863071,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": -7.704710709934067,
+    "series_V": -5.10170218137113,
+    "modulation": -0.05117111602790998,
+    "link_A": 0.3942586456995168,
+    "link_W": 39.42586456995168,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 415.1017581813796,
+    "path_A": -7.70895313481605,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 830.0,
+   "power": 0.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 9.152337584722149e-14,
+    "series_V": -14.999999999999998,
+    "modulation": -0.15,
+    "link_A": -1.3728506377083224e-14,
+    "link_W": -1.3728506377083224e-12,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 5.139113797718759e-16,
+    "series_V": -5.0,
+    "modulation": -0.05,
+    "link_A": -2.5695568988593794e-17,
+    "link_W": -2.5695568988593794e-15,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 415.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 830.0,
+   "power": 5000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 12.070767626608532,
+    "series_V": -14.840665867328767,
+    "modulation": -0.14816524332075548,
+    "link_A": -1.7884682224647512,
+    "link_W": -178.8468222464751,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 12.059117653019683,
+    "series_V": -4.84081964698014,
+    "modulation": -0.048167014116741014,
+    "link_A": -0.5808516902284399,
+    "link_W": -58.085169022843985,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 414.8409028628939,
+    "path_A": 12.052813417129492,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 830.0,
+   "power": 15000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 36.24316498499673,
+    "series_V": -14.521590222198043,
+    "modulation": -0.1444910389222805,
+    "link_A": -5.236812562513796,
+    "link_W": -523.6812562513796,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 36.20812566511602,
+    "series_V": -4.5220527412204685,
+    "modulation": -0.044496364898902366,
+    "link_A": -1.6111299719003145,
+    "link_W": -161.11299719003145,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 414.52234178947936,
+    "path_A": 36.18622806974768,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 830.0,
+   "power": 25000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 60.45688772856092,
+    "series_V": -14.201969081982996,
+    "modulation": -0.14081055306525875,
+    "link_A": -8.512967797662919,
+    "link_W": -851.2967797662918,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 60.398339013783186,
+    "series_V": -4.202741925018062,
+    "modulation": -0.040819452469904954,
+    "link_A": -2.465427128634329,
+    "link_W": -246.5427128634329,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 414.2032897657897,
+    "path_A": 60.35683592502656,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 860.0,
+   "power": -3200.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": -7.418269403482299,
+    "series_V": -30.097921156125967,
+    "modulation": -0.3011275769493293,
+    "link_A": 2.2338454906279708,
+    "link_W": 223.38454906279708,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": -7.425439833698735,
+    "series_V": -20.098015805804824,
+    "modulation": -0.2011286668547222,
+    "link_A": 1.4934688145617767,
+    "link_W": 149.34688145617767,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 430.09821012737416,
+    "path_A": -7.440161164707743,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 860.0,
+   "power": 0.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 4.3489384212080556e-23,
+    "series_V": -30.0,
+    "modulation": -0.3,
+    "link_A": -1.3046815263624166e-23,
+    "link_W": -1.3046815263624167e-21,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 2.2092377725966476e-13,
+    "series_V": -19.999999999999996,
+    "modulation": -0.19999999999999996,
+    "link_A": -4.4184755451932944e-14,
+    "link_W": -4.4184755451932945e-12,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 430.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 860.0,
+   "power": 5000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 11.665078340897827,
+    "series_V": -29.84602096590015,
+    "modulation": -0.29822690809218355,
+    "link_A": -3.478840246259057,
+    "link_W": -347.8840246259057,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 11.654198253393634,
+    "series_V": -19.846164583055206,
+    "modulation": -0.19822856186548418,
+    "link_A": -2.310194959465458,
+    "link_W": -231.0194959465458,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 429.84645680113044,
+    "path_A": 11.632060520422675,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 860.0,
+   "power": 15000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 35.02308485908278,
+    "series_V": -29.537695279860106,
+    "modulation": -0.2946764911014194,
+    "link_A": -10.320479753821763,
+    "link_W": -1032.0479753821762,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 34.99036663898866,
+    "series_V": -19.53812716036535,
+    "modulation": -0.19468146427087374,
+    "link_A": -6.811975812653044,
+    "link_W": -681.1975812653044,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 429.5390407361793,
+    "path_A": 34.92115635005323,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 860.0,
+   "power": 25000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 58.41837269090586,
+    "series_V": -29.228877480480044,
+    "modulation": -0.2911204073509823,
+    "link_A": -17.006780454558015,
+    "link_W": -1700.6780454558016,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 58.36371170301974,
+    "series_V": -19.22959900552014,
+    "modulation": -0.191128715821141,
+    "link_A": -11.15498126835346,
+    "link_W": -1115.498126835346,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 429.2311835377847,
+    "path_A": 58.24367137994595,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 920.0,
+   "power": -3200.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": -6.917280852768422,
+    "series_V": -60.091308107256545,
+    "modulation": -0.6010514266896209,
+    "link_A": 4.157641525369257,
+    "link_W": 415.76415253692574,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": -6.923515299877286,
+    "series_V": -50.09139040195838,
+    "modulation": -0.5010523743255814,
+    "link_A": 3.4690437796830036,
+    "link_W": 346.90437796830037,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 460.0918077637707,
+    "path_A": -6.955133618990683,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 920.0,
+   "power": 0.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 3.53874005281294e-21,
+    "series_V": -60.0,
+    "modulation": -0.6,
+    "link_A": -2.123244031687764e-21,
+    "link_W": -2.123244031687764e-19,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 8.797283918764525e-22,
+    "series_V": -50.0,
+    "modulation": -0.5,
+    "link_A": -4.398641959382262e-22,
+    "link_W": -4.3986419593822624e-20,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 460.0,
+    "path_A": 0.0,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 920.0,
+   "power": 5000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 10.930383203797463,
+    "series_V": -59.855718941709874,
+    "modulation": -0.5983385817530228,
+    "link_A": -6.540069984177236,
+    "link_W": -654.0069984177236,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 10.9208303670479,
+    "series_V": -49.85584503915497,
+    "modulation": -0.49834003378420877,
+    "link_A": -5.442286974066263,
+    "link_W": -544.2286974066263,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 459.85647695899286,
+    "path_A": 10.87295765205862,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 920.0,
+   "power": 15000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 32.814056195910275,
+    "series_V": -59.56685445821398,
+    "modulation": -0.5950122634582216,
+    "link_A": -19.524765850373853,
+    "link_W": -1952.4765850373853,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 32.78533760930257,
+    "series_V": -49.56723354355721,
+    "modulation": -0.4950166286833861,
+    "link_A": -16.229287293603583,
+    "link_W": -1622.9287293603584,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 459.56916169207045,
+    "path_A": 32.639265752236426,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  },
+  {
+   "vbat": 920.0,
+   "power": 25000.0,
+   "3": {
+    "bus_V": 400.0,
+    "path_A": 54.7283782584883,
+    "series_V": -59.27758540698795,
+    "modulation": -0.5916812865047097,
+    "link_A": -32.38175725629874,
+    "link_W": -3238.1757256298743,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "3w": {
+    "bus_V": 410.0,
+    "path_A": 54.680413352496515,
+    "series_V": -49.278218543747045,
+    "modulation": -0.4916885771704205,
+    "link_A": -26.885734640379475,
+    "link_W": -2688.5734640379474,
+    "feasible": true,
+    "stage_b_active": true
+   },
+   "4": {
+    "bus_V": 459.2814863873662,
+    "path_A": 54.43284944195324,
+    "series_V": 0.0,
+    "modulation": 0.0,
+    "link_A": 0.0,
+    "link_W": 0.0,
+    "feasible": true,
+    "stage_b_active": false
+   }
+  }
+ ],
+ "window_mode_boundary_vbat": {
+  "-3200.0": 819.7939512195122,
+  "0.0": 820.0,
+  "25000.0": 821.609756097561
+ },
+ "v_cap": 410.0,
+ "load_min_V": 260,
+ "iso21498_V": {
+  "B_420": 420.0,
+  "B_470": 470.0
+ },
+ "iso21780_48V_V": [
+  36.0,
+  52.0
+ ],
+ "stage_c_ratio_fixed": 8.333333333333334,
+ "vbat_range_for_summary": [
+  640.0,
+  920.0
+ ]
+}
