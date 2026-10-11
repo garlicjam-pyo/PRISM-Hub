@@ -1,6 +1,6 @@
 """모든 Python 검증을 근거 번호 순서로 실행한다.
 
-  python run_all.py            전체(2코어 기준 약 2–2.5시간, 그중 E12 약 50분)
+  python run_all.py            전체(2코어 기준 약 4시간, 그중 E12 약 2.5시간)
   python run_all.py E3 E4      일부만
 
 E2-c·E11 대조는 MATLAB/Octave에서 matlab/E2_two_stage_crosscheck.m, E11_controller_crosscheck.m 을 먼저

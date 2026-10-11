@@ -189,10 +189,24 @@
   "R_dab": 0.02,
   "dt": 5e-09,
   "t_pre": 0.002,
-  "deadtime_comp": "model",
+  "deadtime_comp": "table",
   "coss_h": 1e-09,
   "coss_comp": 1e-09,
   "comp_band_A": 20.0,
-  "dab_Lmin": 0.9
+  "dab_Lmin": 0.9,
+  "dab_estimator": true,
+  "dab_est_gain": 0.05,
+  "dab_est_min_A": 40.0,
+  "coss_nonlinear": false,
+  "coss_m": 0.5,
+  "coss_V0": 5.0,
+  "table_cq": null,
+  "table_nonlinear": null,
+  "table_m": null,
+  "table_V0": null,
+  "table_smooth_A": 0.0,
+  "comp_scale": 0.6,
+  "comp_full_from_A": 20.0,
+  "comp_full_at_A": 80.0
  }
 }

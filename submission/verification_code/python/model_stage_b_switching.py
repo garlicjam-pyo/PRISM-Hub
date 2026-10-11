@@ -17,11 +17,17 @@
 
 [스위칭]
   H-브리지 : 유니폴라 PWM, 반송파 200 kHz(삼각파, 표본 시점에서 최댓값), 레그 데드타임 50 ns.
-             데드타임 동안 노드 전압은 필터전류로 출력용량(기본 1 nF/스위치)을 충방전하며 움직이고, 남은
-             전압은 데드타임 끝에서 하드 스위칭한다. 에지는 적분 간격 안의 정확한 위치로 처리한다.
+             데드타임 동안 노드 전압은 필터전류로 출력용량(기본 선형 1 nF/스위치, 선택으로 전압 의존
+             C(v) = C0·(1 + v/V0)^(−m))을 충방전하며 움직이고, 남은 전압은 데드타임 끝에서 하드 스위칭한다.
+             노드 값은 간격마다 그 시점 전류로 이어서 적분한다. 에지는 적분 간격 안의 정확한 위치로 처리한다.
   DAB      : 50 % 구형파 두 브리지, 200 kHz, 단일 위상천이(SPS). 링크전류 지령 → 위상
              φ = (π/2)(1 − √(1 − 4|I|/(π k))),  k = n·v_bus/(2π f L_d)  (|φ| ≤ π/3)
-             위상 한계는 누설 인덕턴스가 공칭보다 10 % 작아도 링크 정격(80 A, 8 kW)을 넘지 않게 정한다.
+             링크전류 제어(채택): 앞먹임 위상은 누설 인덕턴스를 공차 하한(공칭 −10 %)으로 보고 계산해 실제 전류가
+             지령을 넘지 않게 하고(정격 80 A·8 kW 보호), 링크 직류전류 측정값(주기 평균)과 그 주기에 적용된 위상의
+             앞먹임 예측 전류의 비 ρ̂를 추정해 지령을 I/ρ̂로 보정한다(실제 인덕턴스가 크면 ρ̂ < 1 → 용량 회복).
+             ρ̂는 예측 전류 40 A 이상(위상 약 19° 이상, 데드타임 영향이 작은 구간)이고 주기 안 위상 변화가 2° 미만일 때만
+             이득 0.05/주기로 갱신하며 0.75–1.25로 제한한다. 미학습 상태는 ρ̂ = 1(보수 쪽).
+             (비교용) dab_estimator=False이면 공칭 L 앞먹임에 L −10 % 기준 위상 한계를 더한 이전 방식.
              에지 배치: 반송파 최댓값·최솟값(반주기 중심 c_j)을 기준으로 1차 에지 c_j − δ/2, 2차 에지 c_j + δ/2
              (δ = φ·T/2π). 두 브리지가 H-브리지 반송파에 고정되어 위상 이력에 따라 표류하지 않는다.
              위상 갱신: 지령은 도착 후 첫 반주기 중심에서 반영한다. 쌍 j의 실제 위상차를 Δ_j = (A + δ_new)/2로
@@ -36,13 +42,21 @@
              (영전류 클램프)하며 열린 브리지는 상대 브리지 전압을 따른다(자기 직류전압으로 제한). DAB 소자
              출력용량은 넣지 않았다.
 [제어기]   controller_adopted.StageBController와 같은 법칙(상태궤환 + 적분 + 내부 전류 법칙 + 링크 PI,
-           채택 설계는 1주기 예측). 변조기에는 모델 기반 데드타임 보상을 둔다: 예측 i_h와 리플 반진폭으로
-           리플 극값에서의 전이별 전압·시간 오차(출력용량 충방전 포함)를 계산해 변조율에서 뺀다
-           (deadtime_error, 전이 중 전류 기울기는 무시). 표본 시점은 반송파 최댓값(5 µs 주기)이며 측정값은
-           순시 표본이다(필터·양자화·잡음 없음). 지령은 표본 후 전달지연(기본 5 µs) 뒤에 PWM 비교 레지스터에
-           즉시 반영되고, DAB 위상은 그 이후 첫 반주기 중심에서 반영된다.
+           채택 설계는 1주기 예측). 변조기에는 데드타임 보상을 둔다: 예측 i_h와 리플 반진폭으로 리플 극값에서의
+           전이별 전압·시간 오차를 구해 변조율에서 뺀다. 채택은 교정표 방식(deadtime_error_tab: 전류별 전이 오차표,
+           실제 장치에서는 측정한 데드타임 전압오차로 만들며 비선형 출력용량을 반영)이며, 계산한 오차의 κ만 보상한다.
+           κ는 예측 전류 20 A 이하에서 0.6, 80 A에서 1로 선형 증가한다. 경부하에서는 남은 40 %가 전류와 반대 방향의
+           전압오차(저항성)로 남아, 리플 극값 전류·출력용량의 불확도 때문에 보상이 실제 오차를 넘는 구간이 생겨도
+           지속 진동이 생기지 않게 하고(E12 deadtime_robust), 전이가 모두 하드 스위칭인 대전류에서는 오차가 정확히
+           알려져 있으므로 전부 보상해 저전압 정격 부하의 전류 여유를 지킨다. κ의 증가 기울기는 음저항으로 작용하므로
+           완만하게 둔다(20→80 A).
+           선형 출력용량 해석식(deadtime_error)은 비교용이다. 두 방식 모두 전이 중 전류 기울기는 무시한다.
+           표본 시점은 반송파 최댓값(5 µs 주기)이며 측정값은 순시 표본이다. 지령은 표본 후 전달지연(기본 5 µs) 뒤에 PWM 비교 레지스터에 즉시 반영되고, DAB 위상은
+           그 이후 첫 반주기 중심에서 반영된다.
+[센서]     기본은 이상 센서. sensors 인자(6×4: i_p, v_s, v_bus, i_h, v_link, 링크전류 × [이득, 오프셋, 양자화 간격,
+           잡음 표준편차])로 센서·ADC 오차를 넣는다. 잡음은 seed로 재현한다.
 [적분]     고정 간격 중점법 dt = 5 ns(주기당 1000단계). 스위치 상태는 간격 안의 에지·데드타임 경계로 나눈 평균.
-[한계]     DAB 소자 출력용량·스위칭 손실·기생 인덕턴스·자화 인덕턴스·Stage A 리플·센서 잡음·보호 동작 미포함.
+[한계]     DAB 소자 출력용량·스위칭 손실·기생 인덕턴스·자화 인덕턴스·Stage A 리플·센서 대역 제한·보호 동작 미포함.
 """
 import math
 
@@ -52,11 +66,12 @@ from numba import njit
 from model_stage_b import equilibrium
 
 PI = math.pi
-NREC = 21
+NREC = 22
 # 주기 기록(rec) 열: 0 v_bus 평균, 1 i_p 평균, 2 i_h 평균, 3 v_link 평균, 4 링크전류 평균, 5 링크전력 평균,
 #   6 i_h 최대, 7 i_h 최소, 8 |i_p| 최대, 9 v_bus 최소, 10 v_bus 최대, 11 v_link 최소, 12 v_link 최대,
 #   13 |i_L| 최대, 14 변조율 지령(제어기 출력), 15 링크전류 지령, 16 적용 DAB 위상, 17 |v_s| 최대,
-#   18 PWM 비교값(데드타임 보상 후), 19 i_L 주기 평균(직류 편류), 20 DAB 손실 전류원 전력
+#   18 PWM 비교값(데드타임 보상 후), 19 i_L 주기 평균(직류 편류), 20 DAB 손실 전류원 전력,
+#   21 DAB 전류비 추정값 ρ̂(측정 링크전류 / 앞먹임 예측 전류)
 
 
 @njit(cache=True)
@@ -146,6 +161,18 @@ def deadtime_error(m, i, V, td, C, L, f):
 
 
 @njit(cache=True)
+def deadtime_error_tab(m, i, V, L, f, ig, eg, Vtab):
+    """deadtime_error의 표 방식. eg(ig) = 상승 전이 한 번에 잃는 전압·시간(전류 ig, 링크전압 Vtab에서 교정한 값).
+    하강 전이는 대칭(E_fall(i) = E_rise(−i))이므로 한 주기 오차는 2·[E(−i_max) − E(i_min)]·f 이다."""
+    if m < 0.:
+        return -deadtime_error_tab(-m, -i, V, L, f, ig, eg, Vtab)
+    r = V * m * (1 - m) / (4 * L * f)
+    imin = i - r; imax = i + r
+    d = 2. * (np.interp(-imax, ig, eg) - np.interp(imin, ig, eg)) * (V / Vtab)
+    return d * f
+
+
+@njit(cache=True)
 def _phase(il, vb, vl, cp, lmin):
     """DAB 링크전류 지령 → SPS 위상(공칭 n, L_d, f, 측정 v_bus). |φ| ≤ φ_max.
     lmin < 1이면 누설 인덕턴스가 공칭의 lmin배까지 작아져도 실제 링크전류가 정격(80 A, 8 kW/v_link)을
@@ -160,6 +187,37 @@ def _phase(il, vb, vl, cp, lmin):
         ilim = min(cp[12], cp[13] / max(vl, 1.))
         ph = min(ph, PI / 2 * (1 - math.sqrt(1 - min(ilim / (PI * kmax / 4.), 1.))))
     return ph if il >= 0 else -ph
+
+
+@njit(cache=True)
+def _phase_ff(il, vb, cp, lbasis):
+    """링크전류 → SPS 위상 앞먹임(누설 인덕턴스를 공칭의 lbasis배로 가정, |φ| ≤ φ_max).
+    lbasis = 0.9이면 인덕턴스가 공차 하한이라고 보고 위상을 정하므로, 실제 인덕턴스가 그보다 크면
+    실제 전류는 지령보다 작다(정격 쪽으로 안전). 부족분은 전류비 추정(run_core)으로 보정한다."""
+    Ldab, fs, turns, phmax = cp[16], cp[17], cp[18], cp[19]
+    k = turns * max(vb, 1.) / (2 * PI * fs * Ldab * lbasis)
+    a = min(abs(il) / (PI * k / 4.), 1.)
+    ph = min(PI / 2 * (1 - math.sqrt(1 - a)), phmax)
+    return ph if il >= 0 else -ph
+
+
+@njit(cache=True)
+def _ipred(ph, vb, cp, lbasis):
+    """위상 ph에서 SPS 식이 주는 링크전류(인덕턴스 공칭의 lbasis배 가정)."""
+    Ldab, fs, turns = cp[16], cp[17], cp[18]
+    k = turns * max(vb, 1.) / (2 * PI * fs * Ldab * lbasis)
+    return k * ph * (1 - abs(ph) / PI)
+
+
+@njit(cache=True)
+def _sense(v, s):
+    """센서·ADC 모델: s = [이득, 오프셋, 양자화 간격(0이면 없음), 잡음 표준편차]."""
+    y = s[0] * v + s[1]
+    if s[3] > 0.:
+        y += s[3] * np.random.standard_normal()
+    if s[2] > 0.:
+        y = s[2] * math.floor(y / s[2] + .5)
+    return y
 
 
 @njit(cache=True)
@@ -229,9 +287,10 @@ def _ramp_int(u0, sg, a, b):
 
 @njit(cache=True)
 def _leg_step(st, a, b, t0, dt, td, sg):
-    """레그 노드 전압(정규화 0–1)의 한 간격 평균. 데드타임 동안 노드는 출력용량 충방전 기울기 sg로
+    """레그 노드 전압(정규화 0–1)의 한 간격 평균(선형 출력용량). 데드타임 동안 노드는 출력용량 충방전 기울기 sg로
     움직이고(다이오드 클램프 0–1), 데드타임이 끝나면 목표 레벨로 스위칭한다(남은 전압은 하드 스위칭).
-    st = [전이 시작 시각 te, te에서의 노드 값, 목표 레벨, 현재 노드 레벨(전이 밖)]. a, b: 목표가 1인 구간."""
+    st = [전이 시작 시각 te, 기준 노드 값, 목표 레벨, 현재 노드 값, 기준 시각]. a, b: 목표가 1인 구간.
+    기울기는 간격마다 그 시점의 전류로 정하고, 간격 시작의 노드 값에서 이어서 적분한다(간격 안 전류 일정)."""
     d0 = 1. if (b > a and a == 0.) else 0.
     d1 = 1. if (b > a and b == 1.) else 0.
     t1 = t0 + dt
@@ -239,14 +298,14 @@ def _leg_step(st, a, b, t0, dt, td, sg):
     if d0 != d1:
         edges = 1; se = a if d1 == 1. else b
     if d0 != st[2]:                             # 간격 시작에서의 레벨 변화(지령 갱신): 지금 노드 값에서 새 전이 시작
-        st[0] = t0; st[1] = st[3]; st[2] = d0
+        st[0] = t0; st[2] = d0
+    st[1] = st[3]; st[4] = t0                   # 간격 시작 노드 값을 기준으로 이번 간격의 기울기 적용
     tot = 0.
     seg_end = t0 + se * dt if edges == 1 else t1
-    # 첫 구간: [t0, seg_end]
     tot += _seg(st, t0, seg_end, td, sg)
     if edges == 1:
         # 새 목표 에지: 그 순간의 노드 값에서 전이 시작
-        st[1] = _node_at(st, seg_end, td, sg); st[0] = seg_end; st[2] = d1
+        st[1] = _node_at(st, seg_end, td, sg); st[4] = seg_end; st[0] = seg_end; st[2] = d1
         tot += _seg(st, seg_end, t1, td, sg)
     st[3] = _node_at(st, t1, td, sg)
     return tot / dt
@@ -256,7 +315,7 @@ def _leg_step(st, a, b, t0, dt, td, sg):
 def _node_at(st, t, td, sg):
     if t >= st[0] + td:
         return st[2]
-    return min(max(st[1] + sg * (t - st[0]), 0.), 1.)
+    return min(max(st[1] + sg * (t - st[4]), 0.), 1.)
 
 
 @njit(cache=True)
@@ -267,11 +326,62 @@ def _seg(st, ta, tb, td, sg):
     tot = 0.
     if ta < tend:
         e = min(tb, tend)
-        tot += _ramp_int(st[1], sg, ta - st[0], e - st[0])
+        tot += _ramp_int(st[1], sg, ta - st[4], e - st[4])
         ta = e
     if tb > ta:
         tot += st[2] * (tb - ta)
     return tot
+
+
+@njit(cache=True)
+def _cnode(u, vl, C0, V0, m):
+    """레그 노드의 등가 용량(두 스위치 출력용량의 합). C(v) = C0·(1 + v/V0)^(−m)."""
+    v1 = min(max(u, 0.), 1.) * vl
+    return C0 * ((1. + v1 / V0) ** (-m) + (1. + (vl - v1) / V0) ** (-m))
+
+
+@njit(cache=True)
+def _seg_nl(st, ta, tb, td, iout, vl, C0, V0, m):
+    """비선형 출력용량 레그 노드의 [ta, tb] 적분. st[3] = ta에서의 노드 값(정규화)을 tb 값으로 갱신한다.
+    데드타임 동안 du/dt = −i_out/(v_link·C_node(u))(다이오드 클램프 0–1)를 0.5 ns 이하 간격의 중점법으로 적분한다."""
+    tend = st[0] + td
+    u = st[3]; tot = 0.; t = ta
+    if t < tend and tb > t:
+        e = min(tb, tend)
+        nsub = max(1, int(math.ceil((e - t) / 0.5e-9)))
+        h = (e - t) / nsub
+        for _ in range(nsub):
+            k1 = -iout / (vl * _cnode(u, vl, C0, V0, m))
+            um = min(max(u + .5 * h * k1, 0.), 1.)
+            k2 = -iout / (vl * _cnode(um, vl, C0, V0, m))
+            un = min(max(u + h * k2, 0.), 1.)
+            tot += .5 * (u + un) * h
+            u = un
+        t = e
+    if tb > t:
+        u = st[2]
+        tot += u * (tb - t)
+    st[3] = u
+    return tot
+
+
+@njit(cache=True)
+def _leg_step_nl(st, a, b, t0, dt, td, iout, vl, C0, V0, m):
+    """_leg_step의 비선형 출력용량판. st = [전이 시작 시각, (미사용), 목표 레벨, 현재 노드 값, (미사용)]."""
+    d0 = 1. if (b > a and a == 0.) else 0.
+    d1 = 1. if (b > a and b == 1.) else 0.
+    t1 = t0 + dt
+    edges = 0; se = 0.
+    if d0 != d1:
+        edges = 1; se = a if d1 == 1. else b
+    if d0 != st[2]:
+        st[0] = t0; st[2] = d0
+    seg_end = t0 + se * dt if edges == 1 else t1
+    tot = _seg_nl(st, t0, seg_end, td, iout, vl, C0, V0, m)
+    if edges == 1:
+        st[0] = seg_end; st[2] = d1
+        tot += _seg_nl(st, seg_end, t1, td, iout, vl, C0, V0, m)
+    return tot / dt
 
 
 @njit(cache=True)
@@ -326,11 +436,13 @@ def _loss(p, eta):
 
 
 @njit(cache=True)
-def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, duration, dt, lag, sw, cap):
+def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, duration, dt, lag, sw, cap, sens, seed, etab):
     """스위칭 모델 적분. 반환: 주기별 기록, ZVS 집계, 완료 여부, 종료 스텝, 파형, 에너지 잔차."""
     Ts = cp[7]; Np = int(round(Ts / dt)); T = Ts; Nh = Np // 2
     td_h, td_d, dtc = sw[0], sw[1], sw[2]            # H-브리지·DAB 데드타임, 데드타임 보상(0 없음, 1 모델 기반, 2 선형)
     coss = sw[4]                                    # H-브리지 스위치 출력용량(노드 등가 2·C_oss)
+    lmin = sw[6]; est = sw[7] > 0.; est_g = sw[8]; est_min = sw[9]   # DAB 위상 기준 인덕턴스 비, 전류비 추정 사용·이득·최소 전류
+    np.random.seed(seed)
     n_tot = int(round((t_pre + duration) / dt)); nper = n_tot // Np
     t_zvs = duration - 1e-3                          # ZVS 집계 구간(마지막 1 ms)
     rec = np.zeros((nper, NREC))
@@ -342,12 +454,18 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
     x = x0.copy(); x[5] = iL0
     vbat = pp[8]; n = pp[10]; eta = pp[7]; Rd = pp[11]
     m_reg = uq[0]                                    # PWM 비교값
-    legA = np.array([-1., 1., 1., 1.]); legB = np.array([-1., 0., 0., 0.])
+    legA = np.array([-1., 1., 1., 1., -1.]); legB = np.array([-1., 0., 0., 0., -1.])
     qi = np.full(8, -1); qm = np.zeros(8); qp = np.zeros(8); qh = 0; qt = 0
     t_start = -t_pre
     # ---- DAB 에지 일정: 반주기 중심 c_j = t_start + j·T/2 (짝수 j = 반송파 최댓값 = 상승 쌍, 홀수 j = 하강 쌍).
     #      쌍 j의 1차 에지 c_j − δ/2, 2차 에지 c_j + δ/2 (δ = φ·T/2π, 부호 포함).
-    ph_tgt = _phase(uq[1], x[2], x[4], cp, sw[6])    # 현재 위상 지령
+    rho = 1.                                        # 전류비 추정값(미학습 = 1: 인덕턴스가 공차 하한이라고 가정)
+    if est:
+        ph_tgt = _phase_ff(uq[1], x[2], cp, lmin)    # 현재 위상 지령
+    else:
+        ph_tgt = _phase(uq[1], x[2], x[4], cp, lmin)
+    ip_c0 = _ipred(ph_tgt, x[2], cp, lmin); ip_c1 = ip_c0; ph_c0 = ph_tgt; ph_c1 = ph_tgt   # 주기 안 두 반주기 중심의 위상·예측 전류
+    il_meas = uq[1]; il_pred = ip_c0; dph_prev = 0.; vb_m = x[2]
     d0 = ph_tgt / (2 * PI) * T
     A = d0                                          # 직전 쌍까지의 전류 상태(시간 단위, 정상상태에서 δ)
     p_t = np.full(2, 1e30); s_t = np.full(2, 1e30)   # 쌍 짝/홀 슬롯의 예정 에지 시각(실행 후 비움)
@@ -371,16 +489,33 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
         k_in = i % Np
         if k_in == 0:                                # 표본·제어 계산(반송파 최댓값)
             meas = x.copy()
+            for c in range(5):                       # 센서·ADC(기본은 이상 센서)
+                meas[c] = _sense(x[c], sens[c])
             mcmd, icmd, iref, ihp = _controller(meas, cst, cp, K, predict, vbat)
+            vb_m = meas[2]
+            if est:
+                # DAB 전류비 추정: 직전 주기의 측정 링크전류(주기 평균, 링크 직류전류 센서)와 그 주기에 적용된 위상의
+                # 앞먹임 예측 전류를 비교한다. 위상이 데드타임 영향이 작은 큰 값이고 주기 안에서 위상이 거의 변하지 않을 때만 갱신.
+                ilm = _sense(il_meas, sens[5])
+                if abs(il_pred) >= est_min and ilm * il_pred > 0. and dph_prev < .035:
+                    rho += est_g * (ilm / il_pred - rho)
+                    rho = min(max(rho, .75), 1.25)
+                ph_new = _phase_ff(icmd / rho, meas[2], cp, lmin)
+            else:
+                ph_new = _phase(icmd, meas[2], meas[4], cp, lmin)
             if dtc == 1.:                            # 모델 기반 데드타임 보상: 예측 전류와 리플로 오차를 계산해 상쇄
                 vlm = max(meas[4], 1.)
-                mcmd_pwm = mcmd - deadtime_error(mcmd, ihp, vlm, td_h, sw[3], cp[4], 1 / T) / vlm
+                mcmd_pwm = mcmd - sw[15] * deadtime_error(mcmd, ihp, vlm, td_h, sw[3], cp[4], 1 / T) / vlm
+            elif dtc == 3.:                          # 교정표 기반 보상: 전류별 전이 오차표(비선형 출력용량 반영)
+                vlm = max(meas[4], 1.)
+                kap = sw[15] + (1. - sw[15]) * min(max((abs(ihp) - sw[16]) / max(sw[17] - sw[16], 1e-9), 0.), 1.)
+                mcmd_pwm = mcmd - kap * deadtime_error_tab(mcmd, ihp, vlm, cp[4], 1 / T, etab[0], etab[1], sw[14]) / vlm
             elif dtc == 2.:                          # (비교용) 전류지령 비례 보상: ±sw[5] A에서 포화
                 mcmd_pwm = mcmd + 2 * td_h / T * min(max(iref / sw[5], -1.), 1.)
             else:
                 mcmd_pwm = mcmd
-            qi[qt % 8] = i + lag; qm[qt % 8] = mcmd_pwm; qp[qt % 8] = _phase(icmd, meas[2], meas[4], cp, sw[6]); qt += 1
-            rec[i // Np, 14] = mcmd; rec[i // Np, 15] = icmd; rec[i // Np, 18] = mcmd_pwm
+            qi[qt % 8] = i + lag; qm[qt % 8] = mcmd_pwm; qp[qt % 8] = ph_new; qt += 1
+            rec[i // Np, 14] = mcmd; rec[i // Np, 15] = icmd; rec[i // Np, 18] = mcmd_pwm; rec[i // Np, 21] = rho
         while qh < qt and qi[qh % 8] <= i:          # 전달지연 뒤 지령 반영(PWM 비교값 즉시, DAB 위상은 다음 반주기 중심)
             m_reg = qm[qh % 8]; ph_tgt = qp[qh % 8]; qh += 1
         # ---- H-브리지(유니폴라 PWM, 정확한 에지 위치, 데드타임 중 출력용량 충방전)
@@ -390,9 +525,13 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
         aB, bB = _on_interval(-m_reg, c0, c1)
         # 노드 기울기(정규화/초): 레그 A에서 나가는 전류 i_h가 양이면 노드 A는 내려가고, 레그 B는 올라간다
         vl_ = max(x[4], 1.)
-        sgA = -ih / (2 * coss * vl_); sgB = ih / (2 * coss * vl_)
-        sA = _leg_step(legA, aA, bA, t0, dt, td_h, sgA)
-        sB = _leg_step(legB, aB, bB, t0, dt, td_h, sgB)
+        if sw[10] > 0.:                              # 비선형 출력용량(전압 의존 C_oss)
+            sA = _leg_step_nl(legA, aA, bA, t0, dt, td_h, ih, vl_, sw[13], sw[12], sw[11])
+            sB = _leg_step_nl(legB, aB, bB, t0, dt, td_h, -ih, vl_, sw[13], sw[12], sw[11])
+        else:
+            sgA = -ih / (2 * coss * vl_); sgB = ih / (2 * coss * vl_)
+            sA = _leg_step(legA, aA, bA, t0, dt, td_h, sgA)
+            sB = _leg_step(legB, aB, bB, t0, dt, td_h, sgB)
         # ---- DAB 위상 갱신(반주기 중심마다). 쌍 j의 위상차 Δ_j = (A + δ_new)/2로 두면 쌍 j가 끝난 뒤 전류가
         #      새 위상의 정상상태 값에 바로 놓인다(전압 정합 시 직류 편류 없음). 이미 지난 에지는 고정하고,
         #      아직 남은 에지만 옮긴다. 남은 에지를 과거로 옮겨야 하면(위상 부호 반전) 지금 스위칭하고 그 부족분은
@@ -421,6 +560,10 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
             cn = t_start + ((j + 1) * Nh) * dt
             p_t[1 - jj] = cn - D1 / 2; s_t[1 - jj] = cn + D1 / 2
             ph_rec = ph_tgt
+            if j % 2 == 0:
+                ph_c0 = ph_tgt; ip_c0 = _ipred(ph_tgt, vb_m, cp, lmin)
+            else:
+                ph_c1 = ph_tgt; ip_c1 = _ipred(ph_tgt, vb_m, cp, lmin)
         # ---- DAB 에지 실행
         if p_t[p_j % 2] < t1:
             te = max(p_t[p_j % 2], t0)
@@ -476,6 +619,7 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
             rec[j, 6] = mx_ih; rec[j, 7] = mn_ih; rec[j, 8] = mx_ip; rec[j, 9] = mn_vb; rec[j, 10] = mx_vb
             rec[j, 11] = mn_vl; rec[j, 12] = mx_vl; rec[j, 13] = mx_iL; rec[j, 16] = ph_rec; rec[j, 17] = mx_vs
             rec[j, 19] = acc[7] / Np; rec[j, 20] = ploss
+            il_meas = acc[4] / Np; il_pred = .5 * (ip_c0 + ip_c1); dph_prev = abs(ph_c1 - ph_c0)
             ploss = max(_loss(acc[5] / Np, eta) - Rd * acc[6] / Np, 0.)
             acc[:] = 0.; mx_ih = -1e9; mn_ih = 1e9; mx_ip = 0.; mn_vb = 1e9; mx_vb = -1e9
             mn_vl = 1e9; mx_vl = -1e9; mx_iL = 0.; mx_vs = 0.
@@ -484,8 +628,69 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
     return rec, zvs, alive, end_i, wave, eres
 
 
-SW_DEFAULT = dict(td_h=50e-9, td_dab=100e-9, R_dab=0.02, dt=5e-9, t_pre=2e-3, deadtime_comp="model",
-                  coss_h=1e-9, coss_comp=1e-9, comp_band_A=20., dab_Lmin=0.9)
+SW_DEFAULT = dict(td_h=50e-9, td_dab=100e-9, R_dab=0.02, dt=5e-9, t_pre=2e-3, deadtime_comp="table",
+                  coss_h=1e-9, coss_comp=1e-9, comp_band_A=20., dab_Lmin=0.9,
+                  dab_estimator=True, dab_est_gain=0.05, dab_est_min_A=40.,
+                  coss_nonlinear=False, coss_m=0.5, coss_V0=5.,
+                  table_cq=None, table_nonlinear=None, table_m=None, table_V0=None, table_smooth_A=0., comp_scale=.6,
+                  comp_full_from_A=20., comp_full_at_A=80.)
+
+# 센서 채널 순서: i_p, v_s, v_bus, i_h, v_link, 링크전류(주기 평균). 각 행 = [이득, 오프셋, 양자화 간격, 잡음 표준편차]
+SENSOR_IDEAL = np.array([[1., 0., 0., 0.]] * 6)
+
+
+def coss_q(V, C0, m, V0):
+    """C(v) = C0·(1 + v/V0)^(−m)의 전하 Q(V) = ∫0^V C dv."""
+    return C0 * V0 / (1 - m) * ((1 + V / V0) ** (1 - m) - 1)
+
+
+def coss_c0(cq, m, V0, V=100.):
+    """전하 등가 용량 C_Q = Q(V)/V가 cq가 되는 C0(링크 공칭 100 V 기준)."""
+    return cq * V / coss_q(V, 1., m, V0)
+
+
+TABLE_V = 100.
+
+
+_TABLE_CACHE = {}
+
+
+def deadtime_table(td, cq, nonlinear, m, V0, V=TABLE_V, n=2000, smooth=0.):
+    """교정표(아래 _deadtime_table_raw)를 만들고, smooth > 0이면 전류 ±smooth A 구간 평균으로 완만하게 한다.
+    영전류 부근 전이 오차는 전류에 대해 급하게 변하므로, 예측 전이 전류의 오차(리플 크기·L_h 공차·예측 오차)가
+    있으면 보상이 엉뚱한 전류에서 급변해 경부하 진동을 만든다. 구간 평균은 보상의 기울기를 제한한다."""
+    key = (td, cq, bool(nonlinear), m, V0, V, n, smooth)
+    if key not in _TABLE_CACHE:
+        ig, eg = _deadtime_table_raw(td, cq, nonlinear, m, V0, V, n)
+        if smooth > 0.:
+            h = .01
+            iu = np.arange(-100., 100. + h / 2, h)
+            eu = np.interp(iu, ig, eg)
+            w = int(round(smooth / h))
+            cs = np.concatenate([[0.], np.cumsum(eu)])
+            es = eu.copy()
+            es[w:-w] = (cs[2 * w + 1:] - cs[:-2 * w - 1]) / (2 * w + 1)
+            sel = np.arange(0, len(iu), 10)               # 0.1 A 간격으로 저장
+            ig, eg = iu[sel], es[sel]
+        _TABLE_CACHE[key] = np.vstack([ig, eg])
+    return _TABLE_CACHE[key]
+
+
+def _deadtime_table_raw(td, cq, nonlinear, m, V0, V=TABLE_V, n=2000):
+    """데드타임 보상 교정표: 상승 전이 한 번에 잃는 전압·시간 E(i) [V·s] (i: 노드에서 나가는 전류, 전이 중 일정).
+    노드를 0 V에서 시작해 dv/dt = −i/C_node(v)(0–V 클램프)로 데드타임 동안 적분하고 ∫(V − v)dt를 구한다.
+    실제 장치에서는 전류를 바꿔 가며 측정한 데드타임 전압오차로 같은 표를 만든다."""
+    ig = np.concatenate([-np.logspace(2, -2, 81), [0.], np.logspace(-2, 2, 81)])
+    C0 = coss_c0(cq, m, V0) if nonlinear else cq
+    mm = m if nonlinear else 0.
+    cn = lambda v: C0 * ((1 + v / V0) ** (-mm) + (1 + (V - v) / V0) ** (-mm))
+    v = np.zeros_like(ig); lost = np.zeros_like(ig); h = td / n
+    for _ in range(n):
+        vm = np.clip(v + .5 * h * (-ig / cn(v)), 0., V)
+        vn = np.clip(v + h * (-ig / cn(vm)), 0., V)
+        lost += (V - .5 * (v + vn)) * h
+        v = vn
+    return ig, lost
 
 
 def iL_center(vbus, vlink, n, f, Ld, ph):
@@ -496,23 +701,38 @@ def iL_center(vbus, vlink, n, f, Ld, ph):
 
 
 def simulate_switching(vbat, P0, P1, p, cp, K, predict=True, profile=0, duration=.02, step=1e-3,
-                       delay=None, sw=None, capture=None):
-    """스위칭 모델 1개 시험. p: 플랜트 Parameters, cp: 제어기 공칭 Parameters, delay: 총 전달지연[s](기본 p.delay)."""
+                       delay=None, sw=None, capture=None, sensors=None, seed=1):
+    """스위칭 모델 1개 시험. p: 플랜트 Parameters, cp: 제어기 공칭 Parameters, delay: 총 전달지연[s](기본 p.delay),
+    sensors: 6×4 센서 배열(SENSOR_IDEAL 형식, 기본 이상 센서), seed: 센서 잡음 난수 시드."""
     sw = dict(SW_DEFAULT, **(sw or {}))
     dt = sw["dt"]; delay = p.delay if delay is None else delay
     x0, u0 = equilibrium(vbat, P0, p)
-    ph0 = _phase(u0[1], x0[2], x0[4], _cp_vec(cp), sw["dab_Lmin"])
+    if sw["dab_estimator"]:
+        ph0 = _phase_ff(u0[1], x0[2], _cp_vec(cp), sw["dab_Lmin"])
+    else:
+        ph0 = _phase(u0[1], x0[2], x0[4], _cp_vec(cp), sw["dab_Lmin"])
     iL0 = iL_center(x0[2], x0[4], p.turns, p.fs, p.Ldab, ph0)
     pp = np.array([p.L, p.Cs, p.Cb, p.R, p.Lh, p.Rh, p.Clink, p.eta, vbat, p.Ldab, p.turns, sw["R_dab"]])
     K = np.asarray(K, float)
     q0 = -(x0[0] + K[0] * x0[0] + K[1] * x0[1] + K[2] * x0[2] + K[3] * x0[3]) / K[4]
     cst = np.array([q0, 0., u0[0], u0[1]])
     cap = np.array(capture if capture is not None else [0., 0., 1.], float)
+    # 교정표: 기본은 플랜트와 같은 출력용량 모델로 만든 표(이상적 교정). table_* 로 교정 오차를 줄 수 있다.
+    tq = sw["coss_h"] if sw["table_cq"] is None else sw["table_cq"]
+    tn = sw["coss_nonlinear"] if sw["table_nonlinear"] is None else sw["table_nonlinear"]
+    tm = sw["coss_m"] if sw["table_m"] is None else sw["table_m"]
+    tv = sw["coss_V0"] if sw["table_V0"] is None else sw["table_V0"]
+    etab = (deadtime_table(sw["td_h"], tq, tn, tm, tv, smooth=sw["table_smooth_A"]) if sw["deadtime_comp"] == "table"
+            else np.zeros((2, 2)))
     rec, zvs, alive, end_i, wave, eres = run_core(x0.astype(float), float(iL0), cst, u0.astype(float), pp, _cp_vec(cp), K,
                                       bool(predict), int(profile), float(P0), float(P1), float(step),
                                       float(sw["t_pre"]), float(duration), float(dt), int(round(delay / dt)),
-                                      np.array([sw["td_h"], sw["td_dab"], {"model": 1., "linear": 2.}.get(sw["deadtime_comp"], 0.),
-                                                sw["coss_comp"], sw["coss_h"], sw["comp_band_A"], sw["dab_Lmin"]]), cap)
+                                      np.array([sw["td_h"], sw["td_dab"], {"model": 1., "linear": 2., "table": 3.}.get(sw["deadtime_comp"], 0.),
+                                                sw["coss_comp"], sw["coss_h"], sw["comp_band_A"], sw["dab_Lmin"],
+                                                float(sw["dab_estimator"]), sw["dab_est_gain"], sw["dab_est_min_A"],
+                                                float(sw["coss_nonlinear"]), sw["coss_m"], sw["coss_V0"],
+                                                coss_c0(sw["coss_h"], sw["coss_m"], sw["coss_V0"]), TABLE_V, sw["comp_scale"], sw["comp_full_from_A"], sw["comp_full_at_A"]]), cap,
+                                      np.asarray(SENSOR_IDEAL if sensors is None else sensors, float), int(seed), etab)
     if not alive:
         rec = rec[: end_i // int(round(cp.Ts / dt))]
     t_end = (np.arange(rec.shape[0]) + 1) * cp.Ts - sw["t_pre"]     # 주기 끝 시각(스텝 기준 시간축)

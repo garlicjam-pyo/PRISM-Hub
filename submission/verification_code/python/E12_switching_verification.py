@@ -14,9 +14,10 @@
   H-브리지 유니폴라 PWM 200 kHz(데드타임 50 ns, 출력용량 1 nF/스위치), DAB SPS 200 kHz(데드타임 100 ns,
   영전류 클램프, 반송파에 고정한 대칭 에지와 직류 편류를 막는 위상 갱신), 표본 시점은 반송파 최댓값, 지령은
   전달지연 뒤 반영. 에지는 적분 간격 안의 정확한 위치로 처리한다(5 ns 격자에 따른 듀티·위상 양자화 없음).
-  채택 제어기 이득·예측 구조는 평균모델과 같고, 변조기에 모델 기반 데드타임 보상(예측 전류·리플 극값에서의
-  전이별 오차, 출력용량 1 nF 가정)을 두고, DAB 위상 한계는 누설 인덕턴스 −10 %에서도 링크 정격을 지키도록
-  정한다. DAB 손실은 평균모델과 같은 효율 0.96(직전 주기 평균 전력 기준, 권선저항 손실 포함)이다.
+  채택 제어기 이득·예측 구조는 평균모델과 같고, 변조기에 교정표 기반 부분 데드타임 보상(예측 전류·리플 극값에서의
+  전이별 오차를 전류별 오차표에서 읽어 비율 κ만 보상, κ는 20 A 이하 0.6 → 80 A 1.0, 기본 플랜트는 선형 출력용량 1 nF)을 둔다. DAB 링크전류는 누설 인덕턴스 −10 % 기준 앞먹임 위상에 측정 링크전류로
+  추정한 전류비 보정을 더해 정한다(정격 보호와 용량을 함께 만족). DAB 손실은 평균모델과 같은 효율 0.96(직전 주기
+  평균 전력 기준, 권선저항 손실 포함)이다. 센서는 기본 이상이며, sensors 파트에서 ADC·잡음·이득·오프셋 오차를 넣는다.
 
 ■ 구성
   model_checks 모델 검산: 에너지 보존 잔차, SPS 전달식·평균모델 정상점과의 일치, 과도 중 변압기 직류 편류
@@ -24,7 +25,11 @@
   linear      평균모델 선형화: 변조율 이득 오차(±10–30 %)의 영향(이득 오차가 있는 고정점에서 선형화)
   grid        Tier-1·Tier-2 격자(평균모델 E5와 같은 스텝·전압, 공차 17종 — DAB 시정수 대신 누설 인덕턴스 ±10 %)
   convergence 격자 전체를 적분간격 2.5 ns로 다시 계산해 판정·전류 최댓값의 수렴 확인
-  dab_limit   DAB 위상 한계의 근거: 누설 인덕턴스 ±10 % × 위상 한계 기준(공칭 L / L −10 %)
+  dab_limit   DAB 링크전류 제한 방식 비교: 누설 인덕턴스 ±10 % × (공칭 L 앞먹임 / L −10 % 앞먹임 / 채택 전류비 보정)
+  sensors     센서·ADC: 채널별 잡음 이득, 양자화 비트 수, 기본 집합 168건을 12비트와 요구 사양(16비트·창 측정·잡음·오차)으로 판정
+  sensor_diag sensors에서 보장 범위 사례가 실패하면 원인 분리(채널 묶음별 오차, DAB·H-브리지 데드타임 제거)
+  comp_schedule 데드타임 보상 비율의 전류 스케줄 비교(고정 1.0·고정 0.6·급한 증가·채택)
+  deadtime_robust 데드타임 보상 강건성: 불확도 10종(L_h ±10 %, 선형·비선형 출력용량·교정 오차) × 경부하 보상 비율 κ 5종 × 9개 사례
   delay       비선형 추가 지연 경계(640·920 V, Tier-1 대표 3 스텝)
   corners     복합 ±10 % 공차 128개 코너(640 V): Tier-1(+3.0 µs), Tier-2
   sequences   부하 계약 최악 시퀀스 48건
@@ -39,7 +44,7 @@
   비교값은 ±1(반송파 범위) 안에 있는지 따로 확인한다.
   Tier-1: 위 항목 + 순시 경로·필터 ≤ 98 A,  Tier-2: 완료·포트·버스 384–416 V·최종 ±4 V·순시 ≤ 100 A·내부 진동
 
-■ 실행   python E12_switching_verification.py              (전체, 2코어 약 50분)
+■ 실행   python E12_switching_verification.py              (전체, 2코어 약 2.5시간)
          python E12_switching_verification.py grid sensitivity
 ■ 결과   results/E12/*.json, results/E12/E12_*.png
 """
@@ -94,7 +99,8 @@ def judge_sw(tier, r, p):
                vlink_min=vl_min, vlink_max=vl_max, droop=float(400 - vb[post].min()), vbus_max_post=float(vb[post].max()),
                vbus_min_post=float(vb[post].min()), recovery_s=rec_s, tail_ripple_V=ripple, tail_ih_pp_A=ih_pp,
                tail_m_pp=m_pp, modulation_peak=float(np.abs(m[pos]).max()), dab_envelope_excess_A=env,
-               modulation_pwm_peak=m_pwm, dc_bias_A=float(np.abs(R[pos, 19]).max()),
+               modulation_pwm_peak=m_pwm, dc_bias_A=float(np.abs(R[pos, 19]).max()), dab_rho_end=float(R[-1, 21]),
+               vbus_end=float(vb[-1]),
                tail_ih_freq_hz=tail_freq(t, ih) if ih_pp > .05 else None,
                completed=r["completed"], ports_violated=[k for k, v in viol.items() if v],
                zvs_primary=float(r["zvs"][0] / max(r["zvs"][1], 1)), zvs_secondary=float(r["zvs"][2] / max(r["zvs"][3], 1)))
@@ -120,7 +126,9 @@ def tail_freq(t, ih, win=5e-3):
 
 def run_case(args):
     tier, vbat, a, b, p, profile, sw, meta = args
-    r = simulate_switching(float(vbat), float(a), float(b), p, CP, K_ADOPTED, predict=True, profile=profile, sw=sw)
+    meta = dict(meta); sens = meta.pop("_sensors", None); seed = meta.pop("_seed", 1)
+    r = simulate_switching(float(vbat), float(a), float(b), p, CP, K_ADOPTED, predict=True, profile=profile, sw=sw,
+                           sensors=None if sens is None else np.array(sens), seed=seed)
     row = dict(tier=tier, vbat=vbat, p0=a, p1=b, profile=profile, **meta)
     row.update(judge_sw(tier, r, p))
     return row
@@ -270,49 +278,264 @@ def part_convergence():
     return out
 
 
+DAB_DESIGNS = {"앞먹임·공칭 L 기준": dict(dab_estimator=False, dab_Lmin=1.),
+               "앞먹임·L −10 % 기준": dict(dab_estimator=False, dab_Lmin=.9),
+               "측정 전류비 보정(채택)": {}}
+
+
 def part_dab_limit():
-    """DAB 위상 한계 기준의 근거. 위상 앞먹임으로만 링크전류를 제한하므로 실제 누설 인덕턴스가 공칭보다 작으면
-    같은 위상에서 더 큰 전류가 흐른다. 공칭 L 기준 한계와 L −10 % 기준 한계(채택)를 비교한다."""
+    """DAB 링크전류 제한 방식의 비교. 위상 앞먹임만으로 전류를 정하면 실제 누설 인덕턴스가 공칭과 다를 때
+    같은 위상에서 흐르는 전류가 달라진다. (1) 공칭 L 기준 앞먹임, (2) L −10 % 기준 앞먹임, (3) 채택: L −10 % 기준
+    앞먹임 + 측정 링크전류로 추정한 전류비 ρ̂로 지령을 보정(미학습 시 ρ̂ = 1)을 L_dab ±10 %, 632·640 V에서 비교한다."""
+    from model_stage_b import equilibrium
     js = []
     for v in (632., 640.):
         for k in (.9, 1., 1.1):
-            for lmin in (1., .9):
+            for name, sw in DAB_DESIGNS.items():
                 p = replace(NOMINAL, Ldab=NOMINAL.Ldab * k)
                 for t, a, b in [(2, 1000, 25000), (1, 15000, 25000)]:
-                    js.append((t, v, a, b, p, 0, dict(dab_Lmin=lmin), dict(Ldab_scale=k, dab_Lmin=lmin)))
+                    js.append((t, v, a, b, p, 0, sw, dict(Ldab_scale=k, design=name)))
     rows = pmap(js)
     out = []
-    for k in (.9, 1., 1.1):
-        for lmin in (1., .9):
-            sel = [r for r in rows if r["Ldab_scale"] == k and r["dab_Lmin"] == lmin]
-            o = dict(Ldab_scale=k, dab_Lmin=lmin, link_avg_max_A=max(r["link_avg"] for r in sel),
-                     link_power_avg_max_W=max(r["link_power_avg"] for r in sel), passed=sum(r["pass_"] for r in sel), total=len(sel),
-                     max_inst_A=max(max(r["path_inst"], r["bridge_inst"]) for r in sel),
-                     rating_violations=sorted({v for r in sel for v in r["ports_violated"]}))
-            out.append(o)
-            print(f"   L_dab ×{k}, 위상 한계 기준 L ×{lmin}: 링크전류 최대 {o['link_avg_max_A']:.2f} A, 링크전력 최대 {o['link_power_avg_max_W']:.0f} W, "
-                  f"{o['passed']}/{o['total']} 통과, 순시 최대 {o['max_inst_A']:.2f} A" + (f", 위반 {o['rating_violations']}" if o["rating_violations"] else ""))
-    adopted = [o for o in out if o["dab_Lmin"] == .9]
-    verdict("채택 위상 한계(L −10 % 기준)에서 L_dab ±10 % 모두 링크 정격(80 A, 8 kW) 이내",
-            all(o["link_avg_max_A"] <= 80 and o["link_power_avg_max_W"] <= 8000 for o in adopted))
-    # 용량 쪽: 위상 앞먹임 한계는 실제 L이 크면 낼 수 있는 링크전류를 줄인다. 25 kW 정상 운전에 필요한 링크전류와 비교
-    from model_stage_b import equilibrium
-    cap = []
-    for v in (632., 640.):
-        need = float(equilibrium(v, 25000., NOMINAL)[0][5])
+    for name in DAB_DESIGNS:
         for k in (.9, 1., 1.1):
-            for lmin in (1., .9):
-                sel = [r for r in rows if r["vbat"] == v and r["Ldab_scale"] == k and r["dab_Lmin"] == lmin]
-                c = min(NOMINAL.link_max, NOMINAL.power_max / NOMINAL.vlink) * lmin / k   # 한계 위상에서 실제로 흐르는 링크전류(근사)
-                cap.append(dict(vbat=v, Ldab_scale=k, dab_Lmin=lmin, need_A=need, capacity_A=c,
-                                passed=all(r["pass_"] for r in sel), vlink_min=min(r["vlink_min"] for r in sel)))
-    for x in cap:
-        if x["Ldab_scale"] == 1.1:
-            print(f"   {x['vbat']:.0f} V 25 kW 필요 링크전류 {x['need_A']:.2f} A, L_dab ×1.1·기준 L ×{x['dab_Lmin']}의 링크전류 상한(근사) "
-                  f"{x['capacity_A']:.2f} A → {'통과' if x['passed'] else '실패'}(링크전압 최저 {x['vlink_min']:.1f} V)")
-    bad = [(x["vbat"], x["Ldab_scale"]) for x in cap if x["dab_Lmin"] == .9 and not x["passed"]]
-    verdict("채택 위상 한계에서 L_dab +10 %일 때도 632·640 V 25 kW 운전 유지(용량)", not bad, f"실패 {bad}" if bad else "")
-    return dict(summary=out, capacity=cap, rows=rows)
+            sel = [r for r in rows if r["Ldab_scale"] == k and r["design"] == name]
+            o = dict(design=name, Ldab_scale=k, link_avg_max_A=max(r["link_avg"] for r in sel),
+                     link_power_avg_max_W=max(r["link_power_avg"] for r in sel), passed=sum(r["pass_"] for r in sel), total=len(sel),
+                     max_inst_A=max(max(r["path_inst"], r["bridge_inst"]) for r in sel), vlink_min=min(r["vlink_min"] for r in sel),
+                     rho_end=[round(r["dab_rho_end"], 4) for r in sel], rating_violations=sorted({v for r in sel for v in r["ports_violated"]}))
+            out.append(o)
+            print(f"   {name:16s} L_dab ×{k}: 링크전류 최대 {o['link_avg_max_A']:.2f} A, 링크전력 최대 {o['link_power_avg_max_W']:.0f} W, "
+                  f"링크전압 최저 {o['vlink_min']:.1f} V, {o['passed']}/{o['total']} 통과" + (f", 위반 {o['rating_violations']}" if o["rating_violations"] else ""))
+    need = {v: float(equilibrium(v, 25000., NOMINAL)[0][5]) for v in (632., 640.)}
+    print(f"   25 kW 정상 운전에 필요한 링크전류: 632 V {need[632.]:.2f} A, 640 V {need[640.]:.2f} A")
+    est = [r for r in rows if r["design"] == "측정 전류비 보정(채택)" and r["p0"] == 15000]   # 스텝 전 15 kW에서 학습된 상태
+    rho_err = max(abs(r["dab_rho_end"] - .9 / r["Ldab_scale"]) for r in est)
+    print(f"   전류비 추정값(이론 0.9/k): " + ", ".join(f"{r['vbat']:.0f} V ×{r['Ldab_scale']}: {r['dab_rho_end']:.4f}" for r in est)
+          + f" → 최대 차 {rho_err:.4f}")
+    adopted = [o for o in out if o["design"] == "측정 전류비 보정(채택)"]
+    verdict("채택 방식에서 L_dab ±10 %·632·640 V 모두 통과하고 링크 정격(80 A, 8 kW) 이내",
+            all(o["passed"] == o["total"] and o["link_avg_max_A"] <= 80 and o["link_power_avg_max_W"] <= 8000 for o in adopted))
+    verdict("앞먹임만으로는 L ±10 %를 함께 만족하지 못함(공칭 L 기준은 정격 초과, L −10 % 기준은 용량 부족)",
+            any(o["rating_violations"] for o in out if o["design"] == "앞먹임·공칭 L 기준")
+            and any(o["passed"] < o["total"] for o in out if o["design"] == "앞먹임·L −10 % 기준"))
+    return dict(summary=out, need_link_A=need, rho_max_err=rho_err, rows=rows)
+
+
+# ------------------------------------------------------------------ 센서·ADC
+# 채널: i_p, v_s, v_bus, i_h, v_link, 링크전류(주기 평균). 측정 범위(ADC 전 범위)와 요구 사양 후보.
+SENS_NAMES = ["i_p", "v_s", "v_bus", "i_h", "v_link", "i_link"]
+SENS_RANGE_FULL = np.array([300., 300., 600., 300., 150., 300.])  # 전 범위 측정: ±150 A, ±150 V, 0–600 V, ±150 A, 0–150 V, ±150 A
+SENS_RANGE = np.array([300., 200., 100., 300., 150., 300.])      # 요구 사양: v_s ±100 V, v_bus 350–450 V 창(차동), 나머지 같음
+SENS_NOISE_REQ = np.array([.02, .005, .005, .02, .005, .02])     # 요구 사양: 표본 잡음 표준편차 [A 또는 V]
+SENS_GAIN_ERR = np.array([.01, .005, .0025, .01, .005, .01])     # 이득 오차
+SENS_OFFSET_ERR = np.array([.2, .1, .2, .2, .05, .2])            # 오프셋 [A 또는 V]
+CUR_LOW_V_HIGH = np.array([-1., 1., 1., -1., 1., -1.])           # 전류는 낮게, 전압은 높게 읽는 조합
+
+
+def sensor_set(bits=None, noise=None, sign=None, ranges=None):
+    s = np.zeros((6, 4)); s[:, 0] = 1.
+    if bits:
+        s[:, 2] = (SENS_RANGE if ranges is None else ranges) / 2 ** bits
+    if noise is not None:
+        s[:, 3] = noise
+    if sign is not None:
+        s[:, 0] += sign * SENS_GAIN_ERR; s[:, 1] = sign * SENS_OFFSET_ERR
+    return s
+
+
+def _noise_job(a):
+    v, P, name, s, seed = a
+    r = simulate_switching(v, P, P, NOMINAL, CP, K_ADOPTED, duration=.006, sensors=s, seed=seed)
+    R = r["rec"]; tl = R[-200:]
+    return dict(vbat=v, power=P, case=name, ih_std=float(np.std(R[-400:, 2])), ih_pp=float(np.ptp(tl[:, 2])),
+                vbus_pp=float(np.ptp(tl[:, 0])), m_pp=float(np.ptp(tl[:, 14])), vbus_mean_err=float(R[-400:, 0].mean() - 400))
+
+
+def part_sensors():
+    """센서·ADC가 판정에 주는 영향과 요구 사양. 판정 기준은 그대로(전압·전류는 실제 값으로 판정)이며,
+    (1) 채널별 잡음 이득(잡음 표준편차 0.1 A 또는 0.1 V를 한 채널에만 넣은 정상상태), (2) 전 범위 측정의 양자화 비트 수,
+    (3) 시험 격자의 기본 집합(공칭·+3.0 µs, 168건)을 12비트 전 범위 측정과 요구 사양(16비트, 버스전압 350–450 V 창·직렬전압
+    ±100 V 측정, 전압 5 mV·전류 20 mA 잡음, 이득·오프셋 오차)으로 판정한다. 이득·오프셋 오차 조합은 보장 범위(640 V 이상)로도 따로 집계한다."""
+    pts = [(640., 25000.), (700., 25000.), (920., 25000.), (788., 5000.)]
+    js = []
+    for v, P in pts:
+        for c in range(5):
+            s = sensor_set(); s[c, 3] = .1
+            js.append((v, P, f"잡음 {SENS_NAMES[c]} 0.1", s, 11 + c))
+        for bits in (12, 14, 16):
+            js.append((v, P, f"양자화 {bits}비트", sensor_set(bits=bits, ranges=SENS_RANGE_FULL), 1))
+    with Pool(workers()) as pool:
+        nrows = pool.map(_noise_job, js, chunksize=2)
+    gains = {}
+    for c in range(5):
+        sel = [x for x in nrows if x["case"] == f"잡음 {SENS_NAMES[c]} 0.1"]
+        gains[SENS_NAMES[c]] = dict(ih_pp_per_unit=max(x["ih_pp"] for x in sel) / .1, vbus_pp_per_unit=max(x["vbus_pp"] for x in sel) / .1,
+                                    m_pp_per_unit=max(x["m_pp"] for x in sel) / .1)
+        g = gains[SENS_NAMES[c]]
+        print(f"   잡음 이득 {SENS_NAMES[c]:6s}: i_h 주기 평균 변동 {g['ih_pp_per_unit']:.1f} A pp/단위, 버스 {g['vbus_pp_per_unit']:.2f} V pp/단위, "
+              f"변조율 {g['m_pp_per_unit']:.4f}/단위 (단위 = 1 A 또는 1 V 표준편차, 4개 운전점 최대)")
+    quant = {}
+    for bits in (12, 14, 16):
+        sel = [x for x in nrows if x["case"] == f"양자화 {bits}비트"]
+        quant[bits] = dict(ih_pp=max(x["ih_pp"] for x in sel), vbus_pp=max(x["vbus_pp"] for x in sel), m_pp=max(x["m_pp"] for x in sel))
+        print(f"   양자화 {bits}비트(전 범위 측정, 잡음 없음): i_h 변동 {quant[bits]['ih_pp']:.3f} A pp, 버스 {quant[bits]['vbus_pp']:.3f} V pp, 변조율 {quant[bits]['m_pp']:.4f}")
+    # 시험 격자 기본 집합
+    base, _ = sets_sw()
+    cases = [(t, v, a, b, n, p) for v in st.V_ALL for n, p in base.items()
+             for t, steps in ((1, st.T1_STEPS), (2, st.T2_STEPS)) for a, b in steps]
+    variants = {"12비트 양자화(전 범위)": sensor_set(bits=12, ranges=SENS_RANGE_FULL),
+                "요구 사양(16비트·잡음)": sensor_set(bits=16, noise=SENS_NOISE_REQ),
+                "요구 사양 + 오차(전류 낮게·전압 높게)": sensor_set(bits=16, noise=SENS_NOISE_REQ, sign=CUR_LOW_V_HIGH),
+                "요구 사양 + 오차(전류 높게·전압 낮게)": sensor_set(bits=16, noise=SENS_NOISE_REQ, sign=-CUR_LOW_V_HIGH)}
+    js = [(t, v, a, b, p, 0, None, dict(set=n, variant=name, _sensors=s.tolist(), _seed=1000 + i))
+          for name, s in variants.items() for i, (t, v, a, b, n, p) in enumerate(cases)]
+    rows = pmap(js)
+    summ = {}
+    for name in variants:
+        sel = [r for r in rows if r["variant"] == name]
+        fails = [r for r in sel if not r["pass_"]]
+        reasons = {}
+        for r in fails:
+            for k, bad in [("tail_ripple>0.1V", r["tail_ripple_V"] > .1), ("internal_osc", r["tail_ih_pp_A"] > st.TAIL_IH_PP_A or r["tail_m_pp"] > st.TAIL_M_PP),
+                           ("current", max(r["path_inst"], r["bridge_inst"]) > (T1_INST_A if r["tier"] == 1 else T2_INST_A)),
+                           ("ports", bool(r["ports_violated"])), ("final_or_recovery", abs(r["vbus_end"] - 400) > 4 or (r["tier"] == 1 and (r["recovery_s"] is None or r["recovery_s"] > 1e-3)))]:
+                if bad:
+                    reasons[k] = reasons.get(k, 0) + 1
+        g640 = [r for r in sel if r["vbat"] >= 640]
+        summ[name] = dict(total=len(sel), passed=len(sel) - len(fails), fail_reasons=reasons,
+                          total_640plus=len(g640), passed_640plus=sum(r["pass_"] for r in g640),
+                          fails=[(r["tier"], r["set"], r["vbat"], r["p0"], r["p1"], round(r["tail_ih_pp_A"], 3), round(r["tail_m_pp"], 4),
+                                  round(r["vbus_end"], 2)) for r in fails],
+                          max_inst_A=max(max(r["path_inst"], r["bridge_inst"]) for r in sel),
+                          max_tail_ripple_V=max(r["tail_ripple_V"] for r in sel), max_tail_ih_pp_A=max(r["tail_ih_pp_A"] for r in sel),
+                          max_tail_m_pp=max(r["tail_m_pp"] for r in sel), vbus_end_range=(min(r["vbus_end"] for r in sel), max(r["vbus_end"] for r in sel)),
+                          max_droop_V=max(r["droop"] for r in sel), max_link_avg_A=max(r["link_avg"] for r in sel))
+        x = summ[name]
+        print(f"   {name:24s}: {x['passed']}/{x['total']} 통과, 순시 최대 {x['max_inst_A']:.2f} A, 마지막 1 ms 리플 최대 {x['max_tail_ripple_V']:.3f} V, "
+              f"i_h 변동 최대 {x['max_tail_ih_pp_A']:.3f} A, 변조율 변동 최대 {x['max_tail_m_pp']:.4f}, 최종 버스 {x['vbus_end_range'][0]:.2f}–{x['vbus_end_range'][1]:.2f} V"
+              + (f", 실패 사유 {reasons}" if fails else ""))
+    noise_only = summ["요구 사양(16비트·잡음)"]
+    verdict("요구 사양 센서(16비트, 전압 5 mV·전류 20 mA 잡음)에서 기본 집합 168건 전부 통과",
+            noise_only["passed"] == noise_only["total"])
+    err = [summ[n] for n in variants if n.startswith("요구 사양 +")]
+    verdict("이득·오프셋 오차를 더해도 보장 범위(640–920 V) 144건 전부 통과",
+            all(x["passed_640plus"] == x["total_640plus"] for x in err))
+    return dict(noise_gain=gains, quantization=quant, requirement=dict(bits=16, range=SENS_RANGE.tolist(), noise=SENS_NOISE_REQ.tolist(),
+                gain_err=SENS_GAIN_ERR.tolist(), offset_err=SENS_OFFSET_ERR.tolist(), channels=SENS_NAMES),
+                summary=summ, noise_rows=nrows, rows=[{k: v for k, v in r.items()} for r in rows])
+
+
+def _err_parts(cur=None, volt=None, link=None):
+    """채널 묶음별 이득·오프셋 오차(잡음·양자화 없음)."""
+    s = sensor_set()
+    for chans, sg in (((0, 3), cur), ((1, 2, 4), volt), ((5,), link)):
+        if sg is not None:
+            for c in chans:
+                s[c, 0] += sg * SENS_GAIN_ERR[c]; s[c, 1] = sg * SENS_OFFSET_ERR[c]
+    return s
+
+
+def part_sensor_diag():
+    """sensors 파트에서 보장 범위(640 V 이상) 사례가 실패한 경우의 원인 분리. 잡음을 빼고 오차를 채널 묶음별로
+    나누어 넣고, DAB 데드타임 또는 H-브리지 데드타임을 없앤 경우와 비교한다."""
+    prev = load_json("E12", "sensors")
+    bad = [r for r in prev["rows"] if r["variant"].startswith("요구 사양 +") and r["vbat"] >= 640 and not r["pass_"]]
+    keys = sorted({(r["tier"], r["set"], r["vbat"], r["p0"], r["p1"], r["variant"]) for r in bad})
+    if not keys:
+        print("   보장 범위 실패 사례 없음"); return dict(cases=[])
+    base, _ = sets_sw()
+    js = []
+    for t, n, v, a, b, var in keys:
+        sg = CUR_LOW_V_HIGH if "전류 낮게" in var else -CUR_LOW_V_HIGH
+        full = _err_parts(cur=sg[0], volt=sg[1], link=sg[5])
+        for tag, s, sw in [("오차 전체(잡음 없음)", full, None), ("전류 센서 오차만", _err_parts(cur=sg[0]), None),
+                           ("전압 센서 오차만", _err_parts(volt=sg[1]), None), ("링크전류 센서 오차만", _err_parts(link=sg[5]), None),
+                           ("오차 전체 + DAB 데드타임 0", full, dict(td_dab=0.)),
+                           ("오차 전체 + H-브리지 데드타임 0·보상 없음", full, dict(td_h=0., deadtime_comp="none"))]:
+            js.append((t, v, a, b, base[n], 0, sw, dict(set=n, variant=var, diag=tag, _sensors=s.tolist(), _seed=1)))
+    rows = pmap(js)
+    for r in rows:
+        print(f"   {r['vbat']:.0f} V {r['p0']/1e3:g}→{r['p1']/1e3:g} kW({r['set']}) {r['diag']:24s}: i_h 변동 {r['tail_ih_pp_A']:.3f} A"
+              + (f" ({r['tail_ih_freq_hz']/1e3:.2f} kHz)" if r["tail_ih_freq_hz"] else "") + f", {'통과' if r['pass_'] else '실패'}")
+    return dict(cases=[list(k) for k in keys], rows=rows)
+
+
+DT_SCALES = (1., .8, .7, .6, .5)
+DT_UNCERTAINTY = {"공칭": {}, "L_h ×0.9": "Lh0.9", "L_h ×1.1": "Lh1.1",
+                  "선형 C_oss 0.5 nF(표 1 nF)": dict(coss_h=.5e-9, table_cq=1e-9), "선형 C_oss 2 nF(표 1 nF)": dict(coss_h=2e-9, table_cq=1e-9),
+                  "비선형 C_Q 1 nF, 실제 곡선 표": dict(coss_nonlinear=True), "비선형 C_Q 1 nF, 표 ×0.8": dict(coss_nonlinear=True, table_cq=.8e-9),
+                  "비선형 C_Q 1 nF, 선형 모양 표": dict(coss_nonlinear=True, table_nonlinear=False),
+                  "비선형 C_Q 0.5 nF, 실제 곡선 표": dict(coss_nonlinear=True, coss_h=.5e-9), "비선형 C_Q 2 nF, 실제 곡선 표": dict(coss_nonlinear=True, coss_h=2e-9)}
+DT_CASES = [(2, 632., 25000., 1000.), (2, 640., 25000., 1000.), (2, 660., 25000., 1000.), (2, 920., 25000., 1000.),
+            (2, 640., 25000., 5000.), (2, 920., 25000., 5000.), (1, 640., 25000., 15000.),
+            (2, 632., 1000., 25000.), (2, 640., 1000., 25000.)]
+
+
+def part_deadtime_robust():
+    """데드타임 보상의 강건성과 경부하 보상 비율 κ 선정. 교정표(전류별 전이 오차) × κ(i)를 보상한다
+    (κ(i): 예측 전류 20 A 이하에서 κ, 80 A에서 1로 선형 증가).
+    경부하(25→1 kW 뒤 1 kW, 리플 극값 전류가 0 부근)에서는 보상이 실제 오차보다 큰 전류 구간이 생기면 데드타임의
+    수동적(저항성) 성질이 뒤집혀 지속 진동이 생길 수 있다. 불확도 10종(필터 L_h ±10 %, 선형·비선형 출력용량과 교정 오차)
+    × κ 5종 × 9개 사례(경부하 4, 중부하 3, 정격 2)로 진동과 판정을 확인한다. 비선형 출력용량은 C(v) = C0·(1 + v/5 V)^(−0.5)."""
+    js = []
+    for k in DT_SCALES:
+        for uname, u in DT_UNCERTAINTY.items():
+            p = NOMINAL; sw = dict(comp_scale=k)
+            if u == "Lh0.9":
+                p = replace(NOMINAL, Lh=NOMINAL.Lh * .9)
+            elif u == "Lh1.1":
+                p = replace(NOMINAL, Lh=NOMINAL.Lh * 1.1)
+            else:
+                sw.update(u)
+            for t, v, a, b in DT_CASES:
+                js.append((t, v, a, b, p, 0, sw, dict(scale=k, uncertainty=uname)))
+    rows = pmap(js)
+    summ = {}
+    for k in DT_SCALES:
+        sel = [r for r in rows if r["scale"] == k]
+        osc = [r for r in sel if r["tail_ih_pp_A"] > .1]
+        full = [r for r in sel if r["p0"] == 1000. and r["p1"] == 25000.]
+        summ[str(k)] = dict(scale=k, total=len(sel), passed=sum(r["pass_"] for r in sel), oscillating=len(osc),
+                            max_tail_ih_pp_A=max(r["tail_ih_pp_A"] for r in sel),
+                            fails=[(r["uncertainty"], r["vbat"], r["p0"], r["p1"], round(r["tail_ih_pp_A"], 2), r["tail_ih_freq_hz"]) for r in sel if not r["pass_"]],
+                            full_load_max_inst_A=max(max(r["path_inst"], r["bridge_inst"]) for r in full),
+                            full_load_max_droop_V=max(r["droop"] for r in full))
+        x = summ[str(k)]
+        print(f"   κ = {k}: {x['passed']}/{x['total']} 통과, 진동(> 0.1 A pp) {x['oscillating']}건, 최대 {x['max_tail_ih_pp_A']:.2f} A pp, "
+              f"정격 사례 순시 최대 {x['full_load_max_inst_A']:.2f} A·강하 최대 {x['full_load_max_droop_V']:.2f} V"
+              + (f", 실패 {x['fails'][:6]}" if x["fails"] else ""))
+    clean = [k for k in DT_SCALES if summ[str(k)]["passed"] == summ[str(k)]["total"] and summ[str(k)]["oscillating"] == 0]
+    print(f"   전 불확도에서 진동 없이 통과한 κ: {clean}")
+    verdict(f"채택 κ = {SW_DEFAULT['comp_scale']}에서 불확도 10종 × 9개 사례 전부 통과, 지속 진동 없음",
+            str(SW_DEFAULT["comp_scale"]) in summ and summ[str(SW_DEFAULT["comp_scale"])]["passed"] == summ[str(SW_DEFAULT["comp_scale"])]["total"]
+            and summ[str(SW_DEFAULT["comp_scale"])]["oscillating"] == 0)
+    return dict(summary=summ, clean_scales=clean, rows=rows)
+
+
+COMP_SCHEDULES = {"고정 κ = 1.0": dict(comp_scale=1.), "고정 κ = 0.6": dict(comp_full_from_A=1e9, comp_full_at_A=2e9),
+                  "0.6 → 1.0, 15→25 A": dict(comp_full_from_A=15., comp_full_at_A=25.), "0.6 → 1.0, 20→80 A(채택)": {}}
+
+
+def part_comp_schedule():
+    """데드타임 보상 비율의 전류 스케줄 비교. 경부하 진동(L_h +10 %, 25→1 kW), 중부하(25→5 kW), 데드타임 100 ns의
+    640 V 정격 부하(전류 여유), 632 V 정격 부하에서 네 가지 스케줄을 비교한다."""
+    N = NOMINAL
+    cases = [("경부하 L_h ×1.1", 2, 640., 25000., 1000., replace(N, Lh=N.Lh * 1.1), {}),
+             ("중부하 25→5 kW", 2, 640., 25000., 5000., N, {}),
+             ("중부하 25→5 kW, L_h ×1.1", 2, 640., 25000., 5000., replace(N, Lh=N.Lh * 1.1), {}),
+             ("데드타임 100 ns, Tier-2", 2, 640., 1000., 25000., N, dict(td_h=100e-9)),
+             ("데드타임 100 ns, Tier-1 +3 µs", 1, 640., 15000., 25000., replace(N, delay=N.delay + 3e-6), dict(td_h=100e-9)),
+             ("632 V Tier-2 +3 µs", 2, 632., 1000., 25000., replace(N, delay=N.delay + 3e-6), {})]
+    js = [(t, v, a, b, p, 0, dict(sw, **sch), dict(schedule=name, case=cname))
+          for name, sch in COMP_SCHEDULES.items() for cname, t, v, a, b, p, sw in cases]
+    rows = pmap(js)
+    for name in COMP_SCHEDULES:
+        sel = [r for r in rows if r["schedule"] == name]
+        print(f"   {name:20s}: " + ", ".join(f"{r['case']} {'통과' if r['pass_'] else '실패'}(진동 {r['tail_ih_pp_A']:.2f} A, 강하 {r['droop']:.1f} V)" for r in sel))
+    adopted = [r for r in rows if r["schedule"] == "0.6 → 1.0, 20→80 A(채택)"]
+    verdict("채택 스케줄은 6개 비교 사례 전부 통과", all(r["pass_"] for r in adopted))
+    return dict(rows=rows)
 
 
 def part_delay():
@@ -371,8 +594,9 @@ def part_sequences():
 
 SENS_CASES = [(2, 640, 1000, 25000, 0.), (1, 640, 15000, 25000, 3e-6), (2, 700, 1000, 25000, 0.), (2, 920, 1000, 25000, 0.),
               (2, 640, 25000, 1000, 0.), (2, 920, 25000, 1000, 0.), (1, 800, 5000, -5000, 0.), (1, 788, 0, 10000, 0.)]
-SENS_VARIANTS = {"기준": {}, "DAB 위상 한계 공칭 L 기준": dict(dab_Lmin=1.), "데드타임 25 ns": dict(td_h=25e-9), "데드타임 100 ns": dict(td_h=100e-9),
-                 "출력용량 0.5 nF(보상 모델 1 nF)": dict(coss_h=.5e-9), "출력용량 2 nF(보상 모델 1 nF)": dict(coss_h=2e-9),
+SENS_VARIANTS = {"기준": {}, "DAB 전류비 보정 없음(L −10 % 기준 앞먹임)": dict(dab_estimator=False),
+                 "DAB 공칭 L 기준 앞먹임": dict(dab_estimator=False, dab_Lmin=1.), "데드타임 25 ns": dict(td_h=25e-9), "데드타임 100 ns": dict(td_h=100e-9),
+                 "출력용량 0.5 nF(보상표 1 nF 기준)": dict(coss_h=.5e-9, table_cq=1e-9), "출력용량 2 nF(보상표 1 nF 기준)": dict(coss_h=2e-9, table_cq=1e-9),
                  "데드타임 보상 없음": dict(deadtime_comp="none"), "전류지령 비례 보상(±20 A)": dict(deadtime_comp="linear"),
                  "DAB 데드타임 200 ns": dict(td_dab=200e-9), "적분간격 2.5 ns": dict(dt=2.5e-9), "적분간격 1.25 ns": dict(dt=1.25e-9)}
 
@@ -557,7 +781,7 @@ def part_figures():
 
 
 PARTS = dict(model_checks=part_model_checks, ripple=part_ripple, linear=part_linear, grid=part_grid, convergence=part_convergence,
-             dab_limit=part_dab_limit, delay=part_delay, corners=part_corners, sequences=part_sequences,
+             dab_limit=part_dab_limit, sensors=part_sensors, sensor_diag=part_sensor_diag, deadtime_robust=part_deadtime_robust, comp_schedule=part_comp_schedule, delay=part_delay, corners=part_corners, sequences=part_sequences,
              sensitivity=part_sensitivity, figures=part_figures)
 
 if __name__ == "__main__":
