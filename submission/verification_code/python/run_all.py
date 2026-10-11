@@ -1,10 +1,10 @@
 """모든 Python 검증을 근거 번호 순서로 실행한다.
 
-  python run_all.py            전체(2코어 기준 약 1–1.5시간)
+  python run_all.py            전체(2코어 기준 약 2–2.5시간, 그중 E12 약 50분)
   python run_all.py E3 E4      일부만
 
-E2-c(Python·MATLAB 대조)는 MATLAB/Octave에서 matlab/E2_two_stage_crosscheck.m 을 먼저 실행해야 하므로
-MATLAB 결과 파일이 있을 때만 실행한다.
+E2-c·E11 대조는 MATLAB/Octave에서 matlab/E2_two_stage_crosscheck.m, E11_controller_crosscheck.m 을 먼저
+실행해야 하므로 MATLAB 결과 파일이 있을 때만 실행한다.
 """
 import subprocess
 import sys
@@ -21,6 +21,8 @@ STEPS = [
     ("E8", ["E8_load_admission.py"]),
     ("E9", ["E9_design_alternatives.py"]),
     ("E10", ["E10_stage_c_cllc.py"]),
+    ("E11", ["E11_controller_crosscheck.py"]),   # 사례 내보내기(MATLAB 실행 후 compare)
+    ("E12", ["E12_switching_verification.py"]),
 ]
 
 if __name__ == "__main__":
@@ -35,4 +37,7 @@ if __name__ == "__main__":
         if eid == "E2" and (RESULTS / "E2" / "reference_matrix_matlab.json").exists():
             print("\n==== E2c_compare_matlab.py ====", flush=True)
             subprocess.run([sys.executable, "E2c_compare_matlab.py"], check=True)
+        if eid == "E11" and (RESULTS / "E11" / "matlab_gain.json").exists():
+            print("\n==== E11_controller_crosscheck.py compare ====", flush=True)
+            subprocess.run([sys.executable, "E11_controller_crosscheck.py", "compare"], check=True)
     print(f"\n전체 {time.time() - t0:.0f} s")

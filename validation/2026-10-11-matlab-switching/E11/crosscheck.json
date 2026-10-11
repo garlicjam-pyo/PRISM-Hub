@@ -1,0 +1,99 @@
+{
+ "gain": {
+  "K_matlab": [
+   -1.5813581399278234,
+   1.1112552840791494,
+   1.5397578710101725,
+   0.641926651404037,
+   -12686.999816633557
+  ],
+  "K_python": [
+   -1.5813581402097892,
+   1.1112552918606937,
+   1.539757867322121,
+   0.6419266519985994,
+   -12686.999839382896
+  ],
+  "rel_err": 7.002481207341701e-09,
+  "rel_err_reference": 2.3979130223798386e-09
+ },
+ "grid_adopted": {
+  "cases": 552,
+  "passed_python": 551,
+  "passed_matlab": 551,
+  "key_mismatch": [],
+  "verdict_mismatch": [],
+  "failed_item_mismatch": [],
+  "failed_items_python": 1,
+  "max_metric_diff_converged": 8.089152424289389e-09,
+  "max_metric_diff_diverging": 0.0
+ },
+ "grid_reference": {
+  "cases": 552,
+  "passed_python": 448,
+  "passed_matlab": 448,
+  "key_mismatch": [],
+  "verdict_mismatch": [],
+  "failed_item_mismatch": [],
+  "failed_items_python": 424,
+  "max_metric_diff_converged": 9.904210934455649e-10,
+  "max_metric_diff_diverging": 0.040698157229345874
+ },
+ "delay_adopted": {
+  "cases": 60,
+  "passed_python": 36,
+  "passed_matlab": 36,
+  "key_mismatch": [],
+  "verdict_mismatch": [],
+  "failed_item_mismatch": [],
+  "failed_items_python": 28,
+  "max_metric_diff_converged": 9.214218721353973e-09,
+  "max_metric_diff_diverging": 0.01982997638836082
+ },
+ "delay_reference": {
+  "cases": 48,
+  "passed_python": 24,
+  "passed_matlab": 24,
+  "key_mismatch": [],
+  "verdict_mismatch": [],
+  "failed_item_mismatch": [],
+  "failed_items_python": 66,
+  "max_metric_diff_converged": 6.030518306943122e-10,
+  "max_metric_diff_diverging": 2.405155923440476e-05
+ },
+ "corners_adopted": {
+  "cases": 256,
+  "passed_python": 230,
+  "passed_matlab": 230,
+  "key_mismatch": [],
+  "verdict_mismatch": [],
+  "failed_item_mismatch": [],
+  "failed_items_python": 26,
+  "max_metric_diff_converged": 6.635389786706571e-10,
+  "max_metric_diff_diverging": 0.0
+ },
+ "corners_lh5_adopted": {
+  "cases": 26,
+  "passed_python": 18,
+  "passed_matlab": 18,
+  "key_mismatch": [],
+  "verdict_mismatch": [],
+  "failed_item_mismatch": [],
+  "failed_items_python": 8,
+  "max_metric_diff_converged": 5.347083549261188e-10,
+  "max_metric_diff_diverging": 0.0
+ },
+ "sequences_adopted": {
+  "cases": 48,
+  "passed_python": 48,
+  "passed_matlab": 48,
+  "key_mismatch": [],
+  "verdict_mismatch": [],
+  "failed_item_mismatch": [],
+  "failed_items_python": 0,
+  "max_metric_diff_converged": 2.956141997856321e-09,
+  "max_metric_diff_diverging": 0.0
+ },
+ "tool": "GNU Octave/MATLAB 8.4.0",
+ "all_agree": true
+}
