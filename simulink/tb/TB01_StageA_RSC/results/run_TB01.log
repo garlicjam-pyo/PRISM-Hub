@@ -1,5 +1,5 @@
-[prism_run] run_TB01 start 2026-10-12 14:51:43
-simulation done: 6.2 s wall, 68027 steps
+[prism_run] run_TB01 start 2026-10-12 16:13:28
+simulation done: 6.1 s wall, 68027 steps
 TB01 Stage A single-phase RSC (fixed timing 0.98 f_r0) vs verification model (Python E1 nominal)
 metric                             Simulink    reference       diff   result
 ZCS ratio |i_off|/I_pk             0.028436     0.026603  +0.001832     PASS
@@ -15,4 +15,4 @@ note: ZCS reference is the current at the turn-off instant; E1 sampled 20 ns ear
 ZCS design criterion (<= 5%): PASS (2.84%)
 VERDICT (agreement with verification model): PASS
 results written to C:\Users\hj000\Documents\MATLAB\PRISM_Hub_Simulink\tb\TB01_StageA_RSC\results
-[prism_run] run_TB01 finished (12.7 s)
+[prism_run] run_TB01 finished (10.7 s)

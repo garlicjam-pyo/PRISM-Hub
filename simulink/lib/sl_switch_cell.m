@@ -67,18 +67,24 @@ if ~isempty(c.Coss)
     mk.addParameter('Type', 'edit', 'Name', 'Coss', 'Prompt', '출력용량 C_oss [F]', 'Value', c.Coss);
 end
 mk.IconUnits = 'normalized';
-% 아이콘: 스위치 + 바디 다이오드(애노드 S → 캐소드 D). 셀을 좌우로 뒤집어 놓을 때(orient 'left')는
-% 아이콘이 회전하지 않으므로 x 좌표를 거울상으로 그려 다이오드 방향이 회로와 맞게 한다.
-if strcmp(c.orient, 'left'), X = @(x) 1 - x; else, X = @(x) x; end
-xs = @(v) ['[' sprintf('%.2f ', X(v)) ']'];
-mk.Display = sprintf([ ...
-    'plot(%s,[0.50 0.50],%s,[0.50 0.74],%s,[0.50 0.50]);\n' ...                 % 스위치
-    'plot(%s,[0.50 0.20 0.20],%s,[0.20 0.20 0.50]);\n' ...                     % 다이오드 연결선
-    'plot(%s,[0.20 0.10 0.30 0.20],%s,[0.10 0.30]);\n' ...                     % 다이오드
-    'text(0.5,0.80,''%s'',''horizontalAlignment'',''center'',''texmode'',''off'');\n' ...
-    'port_label(''LConn'',1,''D'');\nport_label(''RConn'',1,''S'');'], ...
-    xs([0.05 0.35]), xs([0.35 0.65]), xs([0.65 0.95]), xs([0.20 0.20 0.42]), xs([0.58 0.80 0.80]), ...
-    xs([0.42 0.58 0.58 0.42]), xs([0.42 0.42]), c.label);
+% 아이콘: 스위치 + 바디 다이오드(애노드 S → 캐소드 D). 아이콘은 블록 방향을 따라 회전하지 않으므로,
+% 기준 그림(D 왼쪽, S 오른쪽)의 좌표 (x: D→S, y: 수직)를 블록 방향에 맞게 변환해 그린다.
+switch c.orient
+    case 'left',  TX = @(x, y) 1 - x; TY = @(x, y) y;        % D 오른쪽, S 왼쪽
+    case 'down',  TX = @(x, y) y;     TY = @(x, y) 1 - x;    % D 위, S 아래
+    case 'up',    TX = @(x, y) y;     TY = @(x, y) x;        % D 아래, S 위
+    otherwise,    TX = @(x, y) x;     TY = @(x, y) y;        % D 왼쪽, S 오른쪽
+end
+v2s = @(v) ['[' sprintf('%.2f ', v) ']'];
+seg = @(x, y) sprintf('%s,%s', v2s(TX(x, y)), v2s(TY(x, y)));
+cmd = sprintf('plot(%s,%s,%s);\nplot(%s,%s);\nplot(%s,%s);\n', ...
+    seg([0.05 0.35], [0.50 0.50]), seg([0.35 0.65], [0.50 0.74]), seg([0.65 0.95], [0.50 0.50]), ...   % 스위치
+    seg([0.20 0.20 0.42], [0.50 0.20 0.20]), seg([0.58 0.80 0.80], [0.20 0.20 0.50]), ...              % 다이오드 연결선
+    seg([0.42 0.58 0.58 0.42], [0.20 0.10 0.30 0.20]), seg([0.42 0.42], [0.10 0.30]));                 % 다이오드
+if any(strcmp(c.orient, {'right', 'left'}))      % 가로 셀만 아이콘 안에 이름 표시(세로 셀은 블록 이름으로 충분)
+    cmd = [cmd sprintf('text(0.5,0.80,''%s'',''horizontalAlignment'',''center'',''texmode'',''off'');\n', c.label)];
+end
+mk.Display = [cmd 'port_label(''LConn'',1,''D'');' newline 'port_label(''RConn'',1,''S'');'];
 set_param(h, 'Orientation', c.orient, 'BackgroundColor', 'lightBlue', ...
     'AttributesFormatString', ['gate: ' c.tag]);   % 블록 이름 아래에 게이트 태그 표시
 end

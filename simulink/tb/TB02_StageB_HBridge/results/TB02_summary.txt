@@ -1,0 +1,23 @@
+TB02 Stage B H-bridge dead-time voltage error: Simscape circuit vs controller calibration table
+case      m  i_avg[A]  dV_circ[V]   dV_tab[V]    err[V] result
+   1  +0.50    -55.76     +2.0078     +1.9354   +0.0724   PASS
+   2  +0.50    -16.11     +1.9144     +1.8211   +0.0934   PASS
+   3  +0.50     -5.03     +1.4750     +1.3402   +0.1348   PASS
+   4  +0.50     -2.61     +0.6894     +0.6384   +0.0510   PASS
+   5  +0.50     -1.37     +0.3118     +0.2953   +0.0165   PASS
+   6  +0.50     -0.00     -0.0000     +0.0000   -0.0000   PASS
+   7  +0.50     +1.37     -0.3118     -0.2953   -0.0165   PASS
+   8  +0.50     +2.61     -0.6894     -0.6384   -0.0510   PASS
+   9  +0.50     +5.03     -1.4750     -1.3402   -0.1348   PASS
+  10  +0.50    +16.11     -1.9147     -1.8210   -0.0937   PASS
+  11  +0.50    +55.76     -2.0101     -1.9354   -0.0747   PASS
+  12  +0.20    -16.13     +1.9042     +1.8011   +0.1031   PASS
+  13  +0.20    +16.13     -1.9018     -1.8011   -0.1006   PASS
+  14  -0.50    -16.11     +1.9147     +1.8210   +0.0937   PASS
+  15  -0.50    +16.11     -1.9144     -1.8211   -0.0934   PASS
+passed 15/15, max |err| = 0.1348 V (full-scale dead-time error 2*V*td*f = 2.00 V)
+step-size check (dV_circuit at 5 ns vs 2.5 ns, table):
+  case  3  i=  -5.07 A  5 ns  +1.4750 V   2.5 ns  +1.4570 V   table  +1.3501 V
+  case  9  i=  +5.07 A  5 ns  -1.4750 V   2.5 ns  -1.4570 V   table  -1.3501 V
+  case 11  i= +55.80 A  5 ns  -2.0101 V   2.5 ns  -1.9876 V   table  -1.9354 V
+VERDICT: PASS

@@ -37,8 +37,8 @@ prism_run('run_TB01')     % 시뮬레이션·판정: tb/TB01_StageA_RSC/results/
 | TB | 내용 | 기준 | 상태 |
 | --- | --- | --- | --- |
 | [TB01](tb/TB01_StageA_RSC/README.md) | Stage A 1위상 RSC, 고정 타이밍 0.98 f_r0 | E1 공칭 사례(Python) | **통과**(2026-10-12): 전 지표 0.2 % 이내, 턴오프 전류 2.84 %(기준 2.66 %) |
-| TB02 | Stage B H-브리지 + LC(개루프), 데드타임 전압오차 | 데드타임 교정표 | 계획 |
-| TB03 | Stage B DAB(개루프), 위상 계단·직류 편류 | SPS 식 | 계획 |
+| [TB02](tb/TB02_StageB_HBridge/README.md) | Stage B H-브리지 + L_h(개루프), 데드타임 전압오차 | 제어기 데드타임 교정표 | **통과**(2026-10-12): 15사례 최대 차이 0.135 V(전체 오차 2 V) |
+| [TB03](tb/TB03_StageB_DAB/README.md) | Stage B DAB(개루프), 위상 계단·변압기 직류 편류·데드타임 영역 | E12 DAB 부분(Python) | **통과**(2026-10-12): SPS 영역 0.39 A 이내, 반전 편류 −6.52 A(기준 −7.07 A). 데드타임 영역·편류 감쇠는 C_oss에 민감(정보) |
 | TB04 | Stage B 폐루프(이상 V_A + 채택 제어기) | E12 스위칭 ODE | 계획 |
 | TB05 | Stage C CLLC 3 kW(개루프) | E10 | 계획 |
 | TB06 | 통합 모델(A + B + C + 부하) | — | 계획 |
