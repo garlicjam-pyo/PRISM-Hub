@@ -39,7 +39,7 @@ S.n_turnoff = numel(offIdx);
 % ---- 검증 모델 기준값과 비교 ------------------------------------------------------------------
 ref = jsondecode(fileread(fullfile(here, 'ref', 'TB01_ref_python.json')));
 rows = { ...
-  'zcs',    'ZCS ratio |i_off|/I_pk',    'abs', 0.01;
+  'zcs',    'ZCS ratio |i_off|/I_pk',    'abs', 0.005;
   'Ipk',    'peak resonant current [A]', 'rel', 0.03;
   'Irms',   'rms resonant current [A]',  'rel', 0.03;
   'Iavg',   'mean output current [A]',   'rel', 0.01;
@@ -48,9 +48,8 @@ rows = { ...
   'vC_mean','C_fly mean voltage [V]',    'abs', 0.5;
   'ripple', 'output ripple p-p [V] (info)', 'info', NaN};
 fid = fopen(fullfile(resDir, 'TB01_summary.txt'), 'w');
-pr = @(varargin) cellfun(@(f) fprintf(f, varargin{:}), {1, fid});
-pr('TB01 Stage A single-phase RSC (fixed timing 0.98 f_r0) vs verification model (Python E1 nominal)\n');
-pr('%-30s %12s %12s %10s %8s\n', 'metric', 'Simulink', 'reference', 'diff', 'result');
+out2(fid, 'TB01 Stage A single-phase RSC (fixed timing 0.98 f_r0) vs verification model (Python E1 nominal)\n');
+out2(fid, '%-30s %12s %12s %10s %8s\n', 'metric', 'Simulink', 'reference', 'diff', 'result');
 allPass = true;
 for k = 1:size(rows, 1)
     key = rows{k, 1}; a = S.(key); b = ref.(key);
@@ -61,14 +60,15 @@ for k = 1:size(rows, 1)
     end
     if strcmp(rows{k, 3}, 'info'), res = 'info'; elseif ok, res = 'PASS'; else, res = 'FAIL'; end
     allPass = allPass && ok;
-    pr('%-30s %12.5g %12.5g %10s %8s\n', rows{k, 2}, a, b, ds, res);
+    out2(fid, '%-30s %12.5g %12.5g %10s %8s\n', rows{k, 2}, a, b, ds, res);
     S.compare.(key) = struct('simulink', a, 'reference', b, 'diff', d, 'result', res);
 end
 S.verdict = ternary(allPass, 'PASS', 'FAIL');
 S.zcs_criterion_5pct = ternary(S.zcs <= 0.05, 'PASS', 'FAIL');
-pr('turn-off events evaluated: %d\n', S.n_turnoff);
-pr('ZCS design criterion (<= 5%%): %s (%.2f%%)\n', S.zcs_criterion_5pct, 100*S.zcs);
-pr('VERDICT (agreement with verification model): %s\n', S.verdict);
+out2(fid, 'turn-off events evaluated: %d\n', S.n_turnoff);
+out2(fid, 'note: ZCS reference is the current at the turn-off instant; E1 sampled 20 ns earlier (%.2f%%)\n', 100*ref.zcs_E1_convention);
+out2(fid, 'ZCS design criterion (<= 5%%): %s (%.2f%%)\n', S.zcs_criterion_5pct, 100*S.zcs);
+out2(fid, 'VERDICT (agreement with verification model): %s\n', S.verdict);
 fclose(fid);
 S.model = mdl; S.date = char(datetime('now')); S.matlab = version;
 fid = fopen(fullfile(resDir, 'TB01_summary.json'), 'w'); fprintf(fid, '%s', jsonencode(S, 'PrettyPrint', true)); fclose(fid);
@@ -99,6 +99,11 @@ close(f);
 % ---- 회로도 그림 ----------------------------------------------------------------------------
 sl_export_png({mdl, [mdl '/StageA_Phase1'], [mdl '/StageA_Phase1/S1_VIN_A'], [mdl '/Gate_StageA']}, resDir);
 fprintf('results written to %s\n', resDir);
+end
+
+function out2(fid, varargin)
+% 명령창(로그)과 결과 파일에 같은 내용을 쓴다.
+fprintf(varargin{:}); fprintf(fid, varargin{:});
 end
 
 function s = ternary(c, a, b)

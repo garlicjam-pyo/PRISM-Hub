@@ -1,0 +1,18 @@
+[prism_run] run_TB01 start 2026-10-12 14:51:43
+simulation done: 6.2 s wall, 68027 steps
+TB01 Stage A single-phase RSC (fixed timing 0.98 f_r0) vs verification model (Python E1 nominal)
+metric                             Simulink    reference       diff   result
+ZCS ratio |i_off|/I_pk             0.028436     0.026603  +0.001832     PASS
+peak resonant current [A]            75.309       75.333     -0.03%     PASS
+rms resonant current [A]             52.637       52.639     -0.00%     PASS
+mean output current [A]              46.877        46.86     +0.04%     PASS
+mean output voltage [V]              393.01       393.03   -0.01562     PASS
+C_fly ripple p-p [V]                 20.422       20.461     -0.19%     PASS
+C_fly mean voltage [V]                  394          394   +0.00152     PASS
+output ripple p-p [V] (info)       0.090086     0.090118 -3.211e-05     info
+turn-off events evaluated: 20
+note: ZCS reference is the current at the turn-off instant; E1 sampled 20 ns earlier (4.38%)
+ZCS design criterion (<= 5%): PASS (2.84%)
+VERDICT (agreement with verification model): PASS
+results written to C:\Users\hj000\Documents\MATLAB\PRISM_Hub_Simulink\tb\TB01_StageA_RSC\results
+[prism_run] run_TB01 finished (12.7 s)

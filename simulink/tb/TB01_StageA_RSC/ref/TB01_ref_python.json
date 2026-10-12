@@ -4,7 +4,7 @@
  "T": 6.802691844051933e-06,
  "fr0": 150000.644841427,
  "R_total": 0.016,
- "zcs": 0.04375399089632556,
+ "zcs": 0.026603349719744766,
  "Ipk": 75.3329086303711,
  "Iavg": 46.86027908325195,
  "Vbus": 393.0303649902344,
@@ -12,5 +12,7 @@
  "Irms": 52.63901812991271,
  "vC_pp": 20.461151123046875,
  "vC_mean": 393.9970110001826,
- "Ploss_model": 59.64950129638174
+ "Ploss_model": 59.64950129638174,
+ "zcs_E1_convention": 0.04375399089632556,
+ "note_zcs": "zcs = |i| at the actual turn-off instant (end of the last on-step) / I_pk. E1 reported |i| at the start of the last 20 ns on-step (zcs_E1_convention = 4.38 %), which samples the current 20 ns before turn-off and overstates it by about I_pk*w*20ns. With the same model at dt = 5 ns the at-instant value is unchanged (2.66 %)."
 }

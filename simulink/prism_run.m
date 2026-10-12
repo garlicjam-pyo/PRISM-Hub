@@ -12,6 +12,14 @@ function prism_run(fname, varargin)
 root = fileparts(mfilename('fullpath'));
 addpath(root, fullfile(root, 'ctrl'), fullfile(root, 'lib'), fullfile(root, 'tools'));
 addpath(genpath(fullfile(root, 'tb')));
+% 밖에서 고친 파일을 확실히 다시 읽도록 패키지 함수를 메모리에서 지운다(자기 자신은 제외).
+rehash path;
+pk = [dir(fullfile(root, '*.m')); dir(fullfile(root, 'lib', '*.m')); dir(fullfile(root, 'ctrl', '*.m')); ...
+      dir(fullfile(root, 'tools', '*.m')); dir(fullfile(root, 'tb', '**', '*.m'))];
+for k = 1:numel(pk)
+    nm = erase(pk(k).name, '.m');
+    if ~any(strcmp(nm, {'prism_run', 'prism_watch'})), clear(nm); end
+end
 logdir = fullfile(root, 'logs');
 if ~exist(logdir, 'dir'), mkdir(logdir); end
 logf  = fullfile(logdir, [fname '.log']);

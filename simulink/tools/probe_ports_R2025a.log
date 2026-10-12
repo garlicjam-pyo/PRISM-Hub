@@ -1,0 +1,36 @@
+[prism_run] probe_ports start 2026-10-12 14:24:21
+== fl_lib/Electrical/Electrical Elements/Switch
+  1 name=n label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  2 name=p label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  3 name=vT label=PS type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+== fl_lib/Electrical/Electrical Elements/Diode
+  1 name=n label=- type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  2 name=p label=+ type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+== fl_lib/Electrical/Electrical Elements/Capacitor
+  1 name=n label=- type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  2 name=p label=+ type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+== fl_lib/Electrical/Electrical Elements/Ideal Transformer
+  1 name=n1 label=1- type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  2 name=n2 label=2- type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  3 name=p1 label=1+ type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  4 name=p2 label=2+ type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+== fl_lib/Electrical/Electrical Sources/DC Voltage Source
+  1 name=n label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  2 name=p label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+== fl_lib/Electrical/Electrical Sources/Controlled Current Source
+  1 name=head label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  2 name=iT label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  3 name=tail label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+== fl_lib/Electrical/Electrical Sources/Controlled Voltage Source
+  1 name=n label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  2 name=p label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  3 name=vT label= type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+== fl_lib/Electrical/Electrical Sensors/Current Sensor
+  1 name=I label=I type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  2 name=n label=- type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  3 name=p label=+ type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+== fl_lib/Electrical/Electrical Sensors/Voltage Sensor
+  1 name=V label=V type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  2 name=n label=- type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+  3 name=p label=+ type=simscape.connection.ConnectionType class=simscape.connection.ConnectionType
+[prism_run] probe_ports finished (12.2 s)
