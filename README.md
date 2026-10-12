@@ -4,6 +4,8 @@
 
 최종 갱신: **2026-10-12**. **Stage B 보호·기동 1차 검증([docs/18](docs/18_StageB_보호_기동_1차검증.md))**, **기준 구조 ③′·④ 평균모델과 1차 비교([docs/17](docs/17_기준구조_평균모델_1차비교.md))**, 채택 제어기 MATLAB 독립 구현 교차검증과 Stage B 스위칭 모델 검증([docs/16](docs/16_MATLAB교차검증_스위칭모델_검증.md)), 요구사항·부하 등급·수락 기준 확정([docs/14](docs/14_요구사항_부하등급_수락기준.md)), 제어기 재설계 R1([docs/15](docs/15_제어기_재설계_R1.md)), 중간보고서 최종본. **Stage B는 평균모델(Python·MATLAB 이중 구현)과 스위칭 ODE 모델에서 H2 기준을 충족했다. 센서 요구 사양(이득·오프셋 오차 포함)에서도 전부 통과했고, 보호·기동 요구(P1–P6)를 도출했다. 기준 구조 ③′·④는 같은 가정의 평균모델로 구성했고, H5의 손실·정격 비교, 보호 상태기계의 스위칭 모델 결합, 소자 수준 회로, 충전 통합(H3)은 후속 과제다.**
 
+- **[아키텍처 설계·검증 종합 보고서](docs/20_종합보고서_아키텍처_설계검증.md)** — 처음부터 현재까지의 설계·검증 흐름과 Simulink 테스트벤치 계획을 한 문서로 정리
+- [Simulink 스위칭 모델 작업 인계](docs/19_Simulink_스위칭모델_작업인계.md)
 - [Stage B 보호·기동 1차 검증](docs/18_StageB_보호_기동_1차검증.md) — 근거: [validation/2026-10-12-protection-startup](validation/2026-10-12-protection-startup/README.md)
 - [기준 구조 ③′·④ 평균모델과 1차 비교](docs/17_기준구조_평균모델_1차비교.md) — 근거: [validation/2026-10-12-baseline-structures](validation/2026-10-12-baseline-structures/README.md)
 - [채택 제어기 MATLAB 교차검증·Stage B 스위칭 모델 검증](docs/16_MATLAB교차검증_스위칭모델_검증.md) — 근거: [validation/2026-10-11-matlab-switching](validation/2026-10-11-matlab-switching/README.md), 코드: [submission/verification_code](submission/verification_code/README.md)
