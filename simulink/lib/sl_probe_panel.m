@@ -3,6 +3,7 @@ function sl_probe_panel(sys, x0, y0, scopes, logs)
 %
 %   scopes : {'Scope 이름', {'태그1','태그2',...}; ...}   한 Scope에 여러 신호를 위아래 칸으로 표시
 %   logs   : {'태그', '작업공간 변수 이름'; ...}          후처리용 저장(배열, 간격마다 1점)
+%            세 번째 열을 주면 솎음 간격(예: 'TB.Np' → 제어주기마다 1점)
 %
 %   Scope는 시각 확인용이고, 판정은 To Workspace 데이터로 run 스크립트가 계산한다.
 
@@ -33,11 +34,13 @@ for k = 1:size(scopes, 1)
 end
 for k = 1:size(logs, 1)
     tg = logs{k, 1}; var = logs{k, 2};
+    dec = '1';
+    if size(logs, 2) >= 3 && ~isempty(logs{k, 3}), dec = logs{k, 3}; end
     add_block('simulink/Signal Routing/From', sprintf('%s/log_from_%s', sys, var), ...
         'Position', [x0, y, x0 + 110, y + 20], 'GotoTag', tg);
     add_block('simulink/Sinks/To Workspace', sprintf('%s/log_%s', sys, var), ...
         'Position', [x0 + 170, y, x0 + 260, y + 20], 'VariableName', var, 'SaveFormat', 'Array', ...
-        'MaxDataPoints', 'inf', 'Decimation', '1', 'SampleTime', '-1');
+        'MaxDataPoints', 'inf', 'Decimation', dec, 'SampleTime', '-1');
     add_line(sys, sprintf('log_from_%s/1', var), sprintf('log_%s/1', var));
     y = y + 35;
 end

@@ -26,9 +26,9 @@ function [u, dg] = prism_stageB_controller(y, prm, init, tab)
 %   u  = [PWM 비교값(데드타임 보상 후); DAB 유효 위상 지령 rad]
 %   dg = [m 지령(보상 전); 링크전류 지령; 브리지 전류지령; ρ̂; ε̂; 예측 링크전류]
 
-persistent q qlink mprev rho epsA started
+persistent q qlink mprev rho epsA vbprev started
 if isempty(started)
-    q = init(1); qlink = init(2); mprev = init(3); rho = 1; epsA = 0; started = 1;
+    q = init(1); qlink = init(2); mprev = init(3); rho = 1; epsA = 0; vbprev = y(3); started = 1;
 end
 
 L = prm(1); Cs = prm(2); R = prm(4); Lh = prm(5); Rh = prm(6); Clink = prm(7); Ts = prm(8);
@@ -74,7 +74,10 @@ icmd = min(lim, max(-lim, rawlink));
 qlink = qlink + Ts*(vlink - vl) + 0.1*(icmd - rawlink)/(Clink*w*w);
 mprev = mcmd;
 % ---- (5) DAB 전류비·저전류 보정 → 위상 ----------------------------------------------
-il_pred = 0.5*(ipred(ph_c0, vb, turns, fs, Ldab, lmin) + ipred(ph_c1, vb, turns, fs, Ldab, lmin));
+% 직전 주기 두 반주기 중심에 적용된 위상의 예측 전류. 그 위상을 적용할 때 쓰인 버스전압은 직전 표본값이다
+% (검증 모델: 반주기 중심에서 그때의 측정 버스전압으로 예측 전류를 계산).
+il_pred = 0.5*(ipred(ph_c0, vbprev, turns, fs, Ldab, lmin) + ipred(ph_c1, vbprev, turns, fs, Ldab, lmin));
+vbprev = vb;
 dph = abs(ph_c1 - ph_c0);
 if abs(il_pred) >= est_min && il_meas*il_pred > 0 && dph < 0.035
     rho = rho + est_g*(il_meas/il_pred - rho);
