@@ -24,7 +24,7 @@ sl_note(mdl, sprintf(['검증 목적: H-브리지·DAB 스위칭 회로에 채�
 fl = 'fl_lib/Electrical/';
 sl_add(mdl, [fl 'Electrical Sources/DC Voltage Source'], 'V_A', [70 230 110 290], 'Orientation', 'down', 'v0', 'TB.VA');
 sl_add(mdl, [fl 'Electrical Elements/Electrical Reference'], 'GND', [70 440 110 470]);
-sl_solver(mdl, 'Solver', [10 360 50 390], 'GND', 'V');
+sl_solver(mdl, 'Solver', [10 360 50 390], 'GND', 'V', 3);   % 고정 비용(모드 반복 3회): 스위치 셀 12개에서 약 10배 빠름
 sl_add(mdl, [fl 'Electrical Elements/Resistor'], 'R_path', [150 160 200 180], 'R', 'TB.Rpath');
 sl_add(mdl, [fl 'Electrical Elements/Inductor'], 'L_path', [230 160 280 180], 'l', 'TB.Lpath', 'r', '0', ...
     'i_L_specify', 'on', 'i_L', 'TB.ip0', 'i_L_priority', 'High');
@@ -57,14 +57,14 @@ sl_pc(mdl, 'iloss_PS', 'output', 'I_dabloss', 'iT');
 sl_meas(mdl, 'I_path', 'I', 'ip',   [310 440]);
 sl_meas(mdl, 'V_bus',  'V', 'vbus', [840 440]);
 sl_note(mdl, sprintf('Stage A 등가\n(이상 V_bat/2 + 13.2 mΩ + 1.5 µH)'), [40 300 260 330]);
-sl_note(mdl, sprintf('400 V 보조버스\nC_b 400 µF, 정전력 부하, DAB 손실 등가'), [760 320 1080 350]);
+sl_note(mdl, sprintf('400 V 보조버스\nC_b 400 µF, 정전력 부하, DAB 손실 등가'), [760 500 1100 530]);
 
 % ---- 부하·손실 계산, 제어부 ------------------------------------------------------------------
 build_bus_loads(mdl, [880 60 990 110], [1000 60 1110 110], 'TB');
 sl_line(mdl, 'Load_CPL/1', 'iload_PS/1');
 sl_line(mdl, 'DAB_Loss_Model/1', 'iloss_PS/1');
 build_stageB_control(mdl, [150 560 330 640], [420 560 600 640], 'TB');
-sl_note(mdl, sprintf('제어부: Controller_StageB(5 µs 표본·계산·5 µs 지연) → Gate_StageB(게이트 태그 gB_*, gD_*)'), [150 650 800 670]);
+sl_note(mdl, sprintf('제어부: Controller_StageB(5 µs 표본·계산·5 µs 지연) → Gate_StageB(게이트 태그 gB_*, gD_*)'), [150 675 800 695]);
 
 % ---- 계측부 ---------------------------------------------------------------------------------
 ms = [mdl '/Measurements'];
@@ -76,11 +76,12 @@ sl_probe_panel(ms, 30, 30, ...
      'Scope_Controller', {'ctrl_dg', 'uc'}}, ...
     {'t', 't', ''; 'vbus', 'vbus', ''; 'ip', 'ip', ''; 'ih', 'ih', ''; 'vs', 'vs', ''; 'vlink', 'vlink', ''; ...
      'ilink', 'ilink', ''; 'iL', 'iL', ''; 'ctrl_dg', 'dg', 'TB.Np'; 'uc', 'uc', 'TB.Np'; 'gate_aux', 'aux', 'TB.Np'});
-sl_note(mdl, sprintf('계측: Scope 4개(버스, 전류, 링크, 제어기 내부)\n+ To Workspace(판정용, 제어 신호는 5 µs마다)'), [1160 390 1460 420]);
+sl_note(mdl, sprintf('계측: Scope 4개(버스, 전류, 링크, 제어기 내부)\n+ To Workspace(판정용, 제어 신호는 5 µs마다)'), [1160 415 1460 445]);
 
 sl_note(mdl, sprintf(['파라미터(TB04_init.m → prism_hub_params.m, 검증 모델과 같은 설계값)\n' ...
     'C_s 100 µF, L_h 5 µH·2 mΩ, C_link 2 mF, C_b 400 µF, DAB 4:1·200 kHz·11.1 µH·0.02 Ω, 데드타임 50/100 ns, C_oss 1 nF/100 pF\n' ...
-    '해석기: Simulink 고정 간격 이산 5 ns, Simscape 지역 해석기 후진 오일러 5 ns, 제어주기 5 µs, 전달지연 5 µs']), [30 700 900 760], 'box');
+    '해석기: Simulink 고정 간격 이산 5 ns, Simscape 지역 해석기 후진 오일러 5 ns(고정 비용, 모드 반복 3회), 제어주기 5 µs, 전달지연 5 µs\n' ...
+    '시작 표본 보호: Simscape 첫 출력 표본(t = 0)은 초기화 중의 값이므로 제어기·게이트·부하·손실 모델은 t < 1.5 dt 동안 평형점 값을 쓴다']), [30 720 1000 800], 'box');
 
 save_system(mdl, fullfile(here, [mdl '.slx']));
 fprintf('saved %s\n', fullfile(here, [mdl '.slx']));

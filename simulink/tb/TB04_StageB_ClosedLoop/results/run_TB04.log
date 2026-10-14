@@ -1,0 +1,59 @@
+[prism_run] run_TB04 start 2026-10-13 22:27:32
+TB04 Stage B closed loop, case A_640V_15to25kW (V_bat 640 V, 15 -> 25 kW at 1.0 ms), dt 5.00 ns, wall 62 s
+(1) Tier-1 on the Simscape circuit:
+    v_bus period mean 397.70-400.26 V, last-1ms ripple 0.289 V, max |i_p| 87.14 A, i_h 88.02/36.99 A, link 67.52 A / 6751 W, v_link 99.96-100.05 V, max |v_s| 81.2 V
+    vbus_window      PASS
+    ripple_last1ms   FAIL
+    path_current     PASS
+    link_current     PASS
+    link_voltage     PASS
+    series_voltage   PASS
+(2) agreement with the verification model (E12 switching ODE):
+    metric                                            Simscape       model      diff  result
+    pre-step mean v_bus [V]                              400.1         400    +0.108    PASS
+    pre-step mean i_p [A]                                48.04       47.42    +0.622    PASS
+    pre-step mean i_h [A]                                48.12       47.42    +0.701    PASS
+    pre-step mean v_link [V]                               100         100  -0.00389    PASS
+    pre-step mean link current [A]                       38.75       38.03    +0.722    PASS
+    min v_bus after step [V]                             397.7       397.7   -0.0287    PASS
+    max |i_p| after step [A]                             87.14       86.75    +0.391    PASS
+    max i_h after step [A]                               88.02       87.88    +0.136    PASS
+    rms diff of period-mean v_bus after step [V]       0.08467           0   +0.0847    PASS
+    final mean v_bus [V]                                   400         400 -0.000263    PASS
+    final mean i_p [A]                                   79.26       79.26  -0.00314    PASS
+    final mean v_link [V]                                  100         100 +0.000777    PASS
+    final mean link current [A]                          64.45       64.19    +0.258    PASS
+    rho_hat at 1.0 ms (info)                            0.8925      0.8977  -0.00516    info
+    eps_hat at 4.0 ms [A] (info)                     -1.96e-75  -1.996e-75 +3.58e-77    info
+VERDICT A_640V_15to25kW: FAIL
+case A_640V_15to25kW done
+TB04 Stage B closed loop, case B_788V_0to10kW (V_bat 788 V, 0 -> 10 kW at 1.0 ms), dt 5.00 ns, wall 60 s
+(1) Tier-1 on the Simscape circuit:
+    v_bus period mean 397.81-400.19 V, last-1ms ripple 0.148 V, max |i_p| 31.49 A, i_h 33.94/-1.74 A, link 2.77 A / 277 W, v_link 99.91-100.01 V, max |v_s| 6.5 V
+    vbus_window      PASS
+    ripple_last1ms   FAIL
+    path_current     PASS
+    link_current     PASS
+    link_voltage     PASS
+    series_voltage   PASS
+(2) agreement with the verification model (E12 switching ODE):
+    metric                                            Simscape       model      diff  result
+    pre-step mean v_bus [V]                              399.9         400   -0.0737    PASS
+    pre-step mean i_p [A]                             0.008443    -0.00223   +0.0107    PASS
+    pre-step mean i_h [A]                              0.01404   -0.002074   +0.0161    PASS
+    pre-step mean v_link [V]                               100         100  -0.00276 info(ok)
+    pre-step mean link current [A]                      0.1023     -0.0113    +0.114 info(ok)
+    min v_bus after step [V]                             397.8       397.8   -0.0309    PASS
+    max |i_p| after step [A]                             31.49       31.15    +0.339    PASS
+    max i_h after step [A]                               33.94       33.62    +0.319    PASS
+    rms diff of period-mean v_bus after step [V]       0.05671           0   +0.0567    PASS
+    final mean v_bus [V]                                   400         400   -0.0277    PASS
+    final mean i_p [A]                                   25.64       25.42     +0.22    PASS
+    final mean v_link [V]                                  100         100  +0.00123 info(ok)
+    final mean link current [A]                           1.77       1.622    +0.149 info(ok)
+    rho_hat at 1.0 ms (info)                                 1           1        +0    info
+    eps_hat at 4.0 ms [A] (info)                           -10         -10        +0    info
+VERDICT B_788V_0to10kW: FAIL
+case B_788V_0to10kW done
+TB04 overall: FAIL
+[prism_run] run_TB04 finished (134.2 s)

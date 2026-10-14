@@ -1,7 +1,9 @@
 """TB05 기준값 생성: 검증 모델 E10(Stage C 대칭 CLLC 스위칭 ODE)과 같은 계산을 하고 파형도 저장한다.
 
 E10_stage_c_cllc.simulate와 같은 식·같은 적분(RK4, 한 주기 400단계, 1차 환산 6상태, 이상 동기정류, 데드타임 동안 v_p = 0)이다.
-사례: 공진점(f_s = f_r = 250 kHz) 3 kW(400주기)·1.5 kW·0.3 kW(300주기), 입력 400 V, 출력 초기 48 V.
+사례: 공진점(f_s = f_r = 250 kHz) 3 kW·1.5 kW·0.3 kW, 입력 400 V, 출력 초기 48 V, 2000주기(8 ms) 계산 후
+      마지막 100주기(0.4 ms)로 정상상태 지표를 낸다. E10의 400·300주기 실행은 경부하에서 아직 과도 상태다
+      (출력 시정수 C_o·R_L = 0.36/1.8/3.6 ms, 공진 커패시터 직류분의 느린 감쇠) — 1000·2000·3000주기 비교로 확인.
 결과: TB05_ref_python.json(사례별 지표), TB05_ref_python_wave_3kW.csv(3 kW 마지막 3주기 파형)
 실행: python make_ref_TB05.py
 """
@@ -12,7 +14,7 @@ n = 25 / 3; fr = 250e3; Lr1 = 11.0e-6; Cr1 = 36.8e-9; Lm = 66e-6; Lr2p = Lr1; Cr
 Co = 470e-6; Coss = 100e-12; td = 50e-9
 
 
-def simulate(Po=3000., fs=250e3, Vin=400., ncyc=400, Nstep=400, Vo0=48.):
+def simulate(Po=3000., fs=250e3, Vin=400., ncyc=2000, Nstep=400, Vo0=48., neval=100):
     RL = 48. ** 2 / Po
     T = 1 / fs; dt = T / Nstep; N = ncyc * Nstep
     log = np.zeros((N, 6)); vpl = np.zeros(N); ndead = int(round(td / dt)); half = Nstep // 2
@@ -31,19 +33,19 @@ def simulate(Po=3000., fs=250e3, Vin=400., ncyc=400, Nstep=400, Vo0=48.):
         vp = (Vin if m >= ndead else 0.0) if m < half else (-Vin if (m - half) >= ndead else 0.0)
         k1 = f(x, vp); k2 = f(x + .5 * dt * k1, vp); k3 = f(x + .5 * dt * k2, vp); k4 = f(x + dt * k3, vp)
         x = x + dt / 6 * (k1 + 2 * k2 + 2 * k3 + k4); log[k] = x; vpl[k] = vp
-    t = (np.arange(N) + 1) * dt; msk = t > (ncyc - 10) * T + 1e-12
+    t = (np.arange(N) + 1) * dt; msk = t > (ncyc - neval) * T + 1e-12
     L = log[msk]; ir1 = L[:, 0]; im = L[:, 2]; ir2 = L[:, 3]; Vo = L[:, 5]
     idx = [i for i in range(len(ir1)) if (i % Nstep) == half - 1 or (i % Nstep) == Nstep - 1]
     i_sw = np.abs(ir1[idx]).mean()
     r = dict(Po=Po, Vo=float(Vo.mean()), gain=float(Vo.mean() * n / Vin), Ipri_rms=float(np.sqrt(np.mean(ir1 ** 2))),
              Isec_rms=float(np.sqrt(np.mean(ir2 ** 2)) * n), Im_pk=float(np.abs(im).max()), i_sw=float(i_sw),
-             zvs_margin=float(i_sw * td / (2 * Coss * Vin)), Vo_ripple=float(Vo.max() - Vo.min()))
+             zvs_margin=float(i_sw * td / (2 * Coss * Vin)), Vo_ripple=float(Vo.max() - Vo.min()), ncyc=ncyc, neval=neval)
     return r, t, log, vpl
 
 
-out = {"source": "make_ref_TB05.py (E10_stage_c_cllc.simulate와 같은 계산)", "cases": []}
-for Po, nc in [(3000., 400), (1500., 300), (300., 300)]:
-    r, t, log, vpl = simulate(Po=Po, ncyc=nc)
+out = {"source": "make_ref_TB05.py (E10_stage_c_cllc.simulate와 같은 식, 2000주기 정상상태)", "cases": []}
+for Po in [3000., 1500., 300.]:
+    r, t, log, vpl = simulate(Po=Po)
     out["cases"].append(r)
     print(r)
     if Po == 3000.:

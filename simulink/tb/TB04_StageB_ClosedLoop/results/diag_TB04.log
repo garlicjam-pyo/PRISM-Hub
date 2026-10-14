@@ -1,0 +1,4 @@
+[prism_run] diag_TB04 start 2026-10-13 21:49:16
+diag saved (2.2 s wall, 10001 samples), vbus end 399.756 V, ip end 41.87 A, ih end 41.92 A, vs end 80.26 V
+PS converter input handling: iload provide, iloss provide
+[prism_run] diag_TB04 finished (2.6 s)

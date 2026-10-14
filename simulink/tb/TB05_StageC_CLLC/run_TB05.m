@@ -3,13 +3,13 @@ function run_TB05()
 %
 %   기준: ref/TB05_ref_python.json(사례별 지표), ref/TB05_ref_python_wave_3kW.csv(3 kW 마지막 3주기 파형)
 %         (ref/make_ref_TB05.py — E10_stage_c_cllc.simulate와 같은 식·적분)
-%   판정(사례마다 마지막 10주기)
+%   판정(사례마다 2000주기 계산 후 마지막 100주기 = 정상상태, 기준값도 같은 창)
 %     (a) 출력전압: 검증 모델 ±0.3 V,  이득 V_o·n/V_in = 1 ± 3 %(고정이득 설계 요구)
 %     (b) 1차 공진전류 RMS, 2차 전류 RMS: 검증 모델 ±3 %
 %     (c) 자화 전류 첨두: 검증 모델 ±5 %,  스위칭(꺼짐) 순간 1차 전류: 검증 모델 ±10 %
-%     (d) ZVS: 1차 스위치가 켜지기 직전 V_ds ≤ 5 % V_in (레그 1의 상·하측, 마지막 10주기의 모든 켜짐)
+%     (d) ZVS: 1차 스위치가 켜지기 직전 V_ds ≤ 5 % V_in (레그 1의 상·하측, 평가 창의 모든 켜짐)
 %     (e) 3 kW 파형: 1차 공진전류의 정규화 RMS 차(검증 모델 파형 대비) ≤ 10 %
-%   정보: 효율(입력·출력 전력), 출력 리플, 레그 전이 시간, 적분 간격 2.5 ns 결과(3 kW)
+%   정보: 효율(입력·출력 전력), 출력 리플, 레그 전이 시간, 적분 간격 5 ns 결과(3 kW, 통합 모델 간격)
 %   결과: results/TB05_summary.txt·json, TB05_waveforms_3kW.png, TB05_zvs_transition.png, TB05_output_voltage.png, 회로도 그림
 
 here = fileparts(mfilename('fullpath'));
@@ -23,7 +23,7 @@ load_system(fullfile(here, [mdl '.slx']));
 
 PoList = [ref.cases.Po];
 nc = numel(PoList);
-M = cell(nc, 1); Rk = cell(nc, 1);
+M = cell(nc, 1); Rk = cell(nc, 1); Rv = cell(nc, 1);
 for c = 1:nc
     assignin('base', 'TB05_Po', PoList(c));
     run(fullfile(here, 'TB05_init.m'));
@@ -32,7 +32,9 @@ for c = 1:nc
     fprintf('P_o %4.0f W: simulation done, %.1f s wall, %d steps\n', PoList(c), R.wall, numel(R.t));
     M{c} = metrics(R, TB);
     M{c}.wall_s = R.wall;
-    Rk{c} = R;
+    Rk{c} = keep_tail(R, TB.t_end - 5*TB.T);                 % 그림용: 마지막 5주기만 전 해상도로 보관(메모리 절약)
+    dd = 1:200:numel(R.t); Rv{c} = [R.t(dd) R.vo(dd)];   % 출력전압 전 구간(1 µs 간격)
+    clear R
 end
 
 % ---- 판정 -----------------------------------------------------------------------------------------
@@ -64,14 +66,15 @@ wave = struct('ir1', nr(w.ir1, wref(:, 2)), 'im', nr(w.im, wref(:, 4)), 'ir2', n
 okW = wave.ir1 <= 0.10;
 pass = pass && okW;
 
-% 정보: 적분 간격 2.5 ns(3 kW)
-ov = struct('Po', 3000, 'dt', 2.5e-9);
+% 정보: 적분 간격 5 ns(3 kW) — 통합 모델(TB06)의 간격. 후진 오일러 수치 감쇠의 영향을 기록한다
+ov = struct('Po', 3000, 'dt', 5e-9);
 assignin('base', 'TB_override', ov);
 assignin('base', 'TB05_Po', 3000);
 run(fullfile(here, 'TB05_init.m'));
 Rd = simulate(mdl);
 md = metrics(Rd, evalin('base', 'TB'));
-fprintf('dt 2.5 ns: Vo %.3f V, Ipri %.3f A, Im_pk %.3f A, vds_on %.2f V (%.1f s wall)\n', md.Vo, md.Ipri_rms, md.Im_pk, md.vds_on_max, Rd.wall);
+fprintf('dt 5 ns: Vo %.3f V, Ipri %.3f A, Im_pk %.3f A, vds_on %.2f V, P_in - P_out %.1f W (%.1f s wall)\n', md.Vo, md.Ipri_rms, md.Im_pk, md.vds_on_max, md.Pin - md.Pout, Rd.wall);
+clear Rd
 evalin('base', 'clear TB_override');
 assignin('base', 'TB05_Po', 3000);
 run(fullfile(here, 'TB05_init.m'));
@@ -80,7 +83,7 @@ TB = evalin('base', 'TB');
 % ---- 요약 ------------------------------------------------------------------------------------------
 fid = fopen(fullfile(resDir, 'TB05_summary.txt'), 'w');
 out2(fid, 'TB05 Stage C symmetric CLLC open loop (400 V -> 48 V, 250 kHz at resonance): Simscape circuit vs verification model (E10)\n');
-out2(fid, 'evaluation window: last %d switching periods of each run\n', TB.neval);
+out2(fid, 'evaluation window: last %d of %d switching periods (steady state; reference uses the same window)\n', TB.neval, TB.ncyc);
 out2(fid, '%6s | %8s %8s | %6s | %8s %8s | %8s %8s | %7s %7s | %6s %6s | %7s | %6s | %7s | %s\n', 'Po[W]', 'Vo_sim', 'Vo_py', 'gain', ...
     'Ipri_sim', 'Ipri_py', 'Isec_sim', 'Isec_py', 'Im_sim', 'Im_py', 'isw_s', 'isw_p', 'Vds_on', 'eff', 'ripple', 'result');
 for c = 1:nc
@@ -94,13 +97,14 @@ for c = 1:nc
     out2(fid, 'P_o %4.0f W: leg-1 transition (turn-off -> 90 %% swing) %.1f ns of t_d %.0f ns, P_in %.1f W, P_out %.1f W\n', ...
         PoList(c), 1e9*M{c}.t_tr, 1e9*TB.C.td, M{c}.Pin, M{c}.Pout);
 end
-out2(fid, 'step-size check (3 kW, 2.5 ns): Vo %.3f V (5 ns %.3f), Ipri %.3f A (%.3f), Im_pk %.3f A (%.3f), V_ds_on %.2f V (%.2f)\n', ...
-    md.Vo, M{c3}.Vo, md.Ipri_rms, M{c3}.Ipri_rms, md.Im_pk, M{c3}.Im_pk, md.vds_on_max, M{c3}.vds_on_max);
+out2(fid, 'integration step %.2f ns (backward Euler). Info, 3 kW at 5 ns (TB06 step): Vo %.3f V (%.3f), Ipri %.3f A (%.3f), Isec %.2f A (%.2f), Im_pk %.3f A (%.3f), P_in - P_out %.1f W (%.1f)\n', ...
+    1e9*TB.dt, md.Vo, M{c3}.Vo, md.Ipri_rms, M{c3}.Ipri_rms, md.Isec_rms, M{c3}.Isec_rms, md.Im_pk, M{c3}.Im_pk, md.Pin - md.Pout, M{c3}.Pin - M{c3}.Pout);
+out2(fid, '  (P_in - P_out includes the numerical damping of backward Euler in the resonant tank; switch and rectifier conduction loss is about 2 W at 3 kW)\n');
 out2(fid, 'VERDICT: %s\n', ternary(pass, 'PASS', 'FAIL'));
 fclose(fid);
 S = struct('cases', {M}, 'ref', ref.cases, 'table_cols', {{'Po', 'Vo_sim', 'Vo_py', 'gain', 'Ipri_sim', 'Ipri_py', 'Isec_sim', ...
     'Isec_py', 'Im_sim', 'Im_py', 'isw_sim', 'isw_py', 'Vds_on_max', 'eff', 'Vo_ripple', 'pass'}}, 'table', rows, ...
-    'wave_nrmse_3kW', wave, 'dt_check_2p5ns', md, 'verdict', ternary(pass, 'PASS', 'FAIL'), ...
+    'wave_nrmse_3kW', wave, 'info_5ns_3kW', md, 'dt_ns', 1e9*TB.dt, 'verdict', ternary(pass, 'PASS', 'FAIL'), ...
     'model', mdl, 'date', char(datetime('now')), 'matlab', version);
 fid = fopen(fullfile(resDir, 'TB05_summary.json'), 'w'); fprintf(fid, '%s', jsonencode(S, 'PrettyPrint', true)); fclose(fid);
 
@@ -152,15 +156,14 @@ exportgraphics(f, fullfile(resDir, 'TB05_zvs_transition.png'), 'Resolution', 150
 % ---- 그림 3: 출력전압(전 구간) ----------------------------------------------------------------------
 f = figure('Visible', 'off', 'Position', [100 100 900 420]); hold on; grid on;
 for c = 1:nc
-    R = Rk{c}; dd = 1:40:numel(R.t);
-    plot(1e3*R.t(dd), R.vo(dd), 'LineWidth', 1.1);
+    plot(1e3*Rv{c}(:, 1), Rv{c}(:, 2), 'LineWidth', 1.1);
 end
 for c = 1:nc
     yline(ref.cases(c).Vo, ':');
 end
 xlabel('t [ms]'); ylabel('V_o [V]');
 legend([arrayfun(@(p) sprintf('Simscape %.1f kW', p/1e3), PoList, 'UniformOutput', false), {'model final (E10)'}], 'Location', 'southeast');
-title('TB05 output voltage from 48 V initial state (resonant tank starts at zero)');
+title(sprintf('TB05 output voltage from 48 V initial state (resonant tank starts at zero), %d periods', TB.ncyc));
 exportgraphics(f, fullfile(resDir, 'TB05_output_voltage.png'), 'Resolution', 150); close(f);
 
 sl_export_png({mdl, [mdl '/StageC_CLLC'], [mdl '/StageC_CLLC/Rectifier'], [mdl '/Gate_StageC']}, resDir);
@@ -174,6 +177,16 @@ tic; out = sim(mdl); R.wall = toc;
 nm = {'t', 'vo', 'io', 'iin', 'ir1', 'im', 'ir2', 'vcr1', 'vleg1', 'gq1', 'gq2'};
 for k = 1:numel(nm)
     R.(nm{k}) = double(out.(nm{k})(:));
+    if k >= 2 && k <= 9, R.(nm{k})(1) = R.(nm{k})(2); end   % Simscape 첫 출력 표본(t = 0)은 초기화 중의 값
+end
+end
+
+function Rt = keep_tail(R, t0)
+% t ≥ t0 구간만 남긴 사본(그림용)
+k = R.t >= t0;
+fn = fieldnames(R);
+for j = 1:numel(fn)
+    if numel(R.(fn{j})) == numel(R.t), Rt.(fn{j}) = R.(fn{j})(k); else, Rt.(fn{j}) = R.(fn{j}); end
 end
 end
 

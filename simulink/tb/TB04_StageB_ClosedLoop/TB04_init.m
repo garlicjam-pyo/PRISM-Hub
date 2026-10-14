@@ -16,7 +16,12 @@ else
     caseName = 'A_640V_15to25kW';
 end
 R0 = jsondecode(fileread(fullfile(tbDir, 'ref', ['TB04_' caseName '_init.json'])));
-P = prism_hub_params(struct('vbat', R0.vbat, 'P0', R0.P0, 'P1', R0.P1, 't_step', R0.t_step, 't_end', R0.t_end));
+cs = struct('vbat', R0.vbat, 'P0', R0.P0, 'P1', R0.P1, 't_step', R0.t_step, 't_end', R0.t_end);
+if evalin('base', 'exist(''TB04_opts'', ''var'')')      % 분해능 점검: 적분 간격(= 게이트 시간 분해능) 바꾸기
+    ov = evalin('base', 'TB04_opts'); fn = fieldnames(ov);
+    for kov = 1:numel(fn), cs.(fn{kov}) = ov.(fn{kov}); end   % 루프 변수 이름을 호출 함수와 겹치지 않게 둔다
+end
+P = prism_hub_params(cs);
 
 TB = struct();
 TB.name  = 'TB04_StageB_ClosedLoop';
@@ -34,6 +39,11 @@ TB.B.Goff   = 1e-8;
 TB.B.Rd     = P.B.Ron;               % 바디 다이오드 도통 저항
 TB.B.Goffd  = 1e-8;
 TB.B.Coss_d = 100e-12;               % DAB 소자 출력용량(TB03과 같은 값)
+if evalin('base', 'exist(''TB04_opts'', ''var'')')      % 민감도 점검: 소자 출력용량 바꾸기
+    ov = evalin('base', 'TB04_opts');
+    if isfield(ov, 'Coss_d'), TB.B.Coss_d = ov.Coss_d; end
+    if isfield(ov, 'Coss_h'), TB.B.Coss_h = ov.Coss_h; end
+end
 
 x0 = R0.x0;                          % [i_p v_s v_bus i_h v_link i_L(평균모델)]
 TB.ip0 = x0(1); TB.vs0 = x0(2); TB.vb0 = x0(3); TB.ih0 = x0(4); TB.vl0 = x0(5);
@@ -53,6 +63,12 @@ TB.gate_prm  = P.gateB_prm;
 TB.gate_init = [m0 R0.ph0 il0];
 TB.loss_prm  = [TB.dt TB.Np R0.eta TB.B.Rdab];
 TB.ploss0    = R0.ploss0;
+
+% 시작 표본 보호(lib/sl_startup_guard.m): Simscape 첫 출력 표본(t = 0)은 초기화 중의 값이므로
+% t < 1.5·dt 동안 제어기·게이트 생성기·부하·손실 모델에 평형점 값을 넣는다
+TB.guard_t    = 1.5*TB.dt;
+TB.meas0      = [TB.ip0 TB.vs0 TB.vb0 TB.ih0 TB.vl0];   % 제어기 측정 입력 [i_p v_s v_bus i_h v_link]
+TB.loss_meas0 = [TB.vl0 il0 0 TB.vb0];                   % 손실 모델 입력 [v_link i_link i_L v_bus]
 
 assignin('base', 'P', P);
 assignin('base', 'TB', TB);

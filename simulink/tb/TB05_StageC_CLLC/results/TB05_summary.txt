@@ -1,0 +1,14 @@
+TB05 Stage C symmetric CLLC open loop (400 V -> 48 V, 250 kHz at resonance): Simscape circuit vs verification model (E10)
+evaluation window: last 100 of 2000 switching periods (steady state; reference uses the same window)
+ Po[W] |   Vo_sim    Vo_py |   gain | Ipri_sim  Ipri_py | Isec_sim  Isec_py |  Im_sim   Im_py |  isw_s  isw_p |  Vds_on |    eff |  ripple | result
+  3000 |   47.833   47.978 | 0.9965 |    9.165    9.251 |    69.33    69.59 |   5.956   5.900 |   6.06   6.60 |   -0.08 | 0.9939 |   0.056 | PASS
+  1500 |   47.921   47.994 | 0.9984 |    5.679    5.707 |    34.88    34.94 |   5.959   5.923 |   6.01   6.20 |   -0.08 | 0.9935 |   0.029 | PASS
+   300 |   48.005   48.028 | 1.0001 |    3.894    3.862 |     7.65     7.53 |   5.950   5.899 |   5.94   5.89 |   -0.08 | 0.9769 |   0.008 | PASS
+limits: Vo +-0.3 V vs model, gain 1 +-3 %, Ipri/Isec rms +-3 %, Im peak +-5 %, i_sw +-10 %, V_ds before turn-on <= 20 V
+(e) 3 kW waveform, normalised rms difference vs model: i_r1 5.06 % (limit 10 %): PASS;  i_m 3.83 %, i_r2 5.40 % (info)
+P_o 3000 W: leg-1 transition (turn-off -> 90 % swing) 10.0 ns of t_d 50 ns, P_in 2997.3 W, P_out 2979.2 W
+P_o 1500 W: leg-1 transition (turn-off -> 90 % swing) 10.0 ns of t_d 50 ns, P_in 1504.9 W, P_out 1495.1 W
+P_o  300 W: leg-1 transition (turn-off -> 90 % swing) 10.0 ns of t_d 50 ns, P_in 307.1 W, P_out 300.1 W
+integration step 2.50 ns (backward Euler). Info, 3 kW at 5 ns (TB06 step): Vo 47.683 V (47.833), Ipri 9.136 A (9.165), Isec 69.12 A (69.33), Im_pk 5.943 A (5.956), P_in - P_out 34.0 W (18.2)
+  (P_in - P_out includes the numerical damping of backward Euler in the resonant tank; switch and rectifier conduction loss is about 2 W at 3 kW)
+VERDICT: PASS

@@ -1,0 +1,5 @@
+case A_640V_15to25kW, dt 2.5 ns
+Coss_d[pF]      ripple[V]    min vbus[V] final il diff[A]    verdict
+20                 0.1368        397.668            0.283       FAIL
+100                0.1111        397.663            0.507       FAIL
+500                0.0731        397.671            0.339       PASS

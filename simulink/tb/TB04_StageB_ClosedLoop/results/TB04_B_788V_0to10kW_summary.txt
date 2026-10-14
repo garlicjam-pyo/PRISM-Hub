@@ -1,0 +1,27 @@
+TB04 Stage B closed loop, case B_788V_0to10kW (V_bat 788 V, 0 -> 10 kW at 1.0 ms), dt 5.00 ns, wall 60 s
+(1) Tier-1 on the Simscape circuit:
+    v_bus period mean 397.81-400.19 V, last-1ms ripple 0.148 V, max |i_p| 31.49 A, i_h 33.94/-1.74 A, link 2.77 A / 277 W, v_link 99.91-100.01 V, max |v_s| 6.5 V
+    vbus_window      PASS
+    ripple_last1ms   FAIL
+    path_current     PASS
+    link_current     PASS
+    link_voltage     PASS
+    series_voltage   PASS
+(2) agreement with the verification model (E12 switching ODE):
+    metric                                            Simscape       model      diff  result
+    pre-step mean v_bus [V]                              399.9         400   -0.0737    PASS
+    pre-step mean i_p [A]                             0.008443    -0.00223   +0.0107    PASS
+    pre-step mean i_h [A]                              0.01404   -0.002074   +0.0161    PASS
+    pre-step mean v_link [V]                               100         100  -0.00276 info(ok)
+    pre-step mean link current [A]                      0.1023     -0.0113    +0.114 info(ok)
+    min v_bus after step [V]                             397.8       397.8   -0.0309    PASS
+    max |i_p| after step [A]                             31.49       31.15    +0.339    PASS
+    max i_h after step [A]                               33.94       33.62    +0.319    PASS
+    rms diff of period-mean v_bus after step [V]       0.05671           0   +0.0567    PASS
+    final mean v_bus [V]                                   400         400   -0.0277    PASS
+    final mean i_p [A]                                   25.64       25.42     +0.22    PASS
+    final mean v_link [V]                                  100         100  +0.00123 info(ok)
+    final mean link current [A]                           1.77       1.622    +0.149 info(ok)
+    rho_hat at 1.0 ms (info)                                 1           1        +0    info
+    eps_hat at 4.0 ms [A] (info)                           -10         -10        +0    info
+VERDICT B_788V_0to10kW: FAIL

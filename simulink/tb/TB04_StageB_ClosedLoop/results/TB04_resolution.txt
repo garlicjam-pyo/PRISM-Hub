@@ -1,0 +1,6 @@
+case                 dt[ns]      ripple[V]    min vbus[V] final ip diff[A]    verdict
+A_640V_15to25kW        5.00         0.2887        397.684           -0.003       FAIL
+A_640V_15to25kW        2.50         0.1111        397.663            0.255       FAIL
+A_640V_15to25kW        1.25         0.1245        397.666           -0.004       FAIL
+B_788V_0to10kW         5.00         0.1476        397.804            0.220       FAIL
+B_788V_0to10kW         2.50         0.0185        397.793            0.036       PASS

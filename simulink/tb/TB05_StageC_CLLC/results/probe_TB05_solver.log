@@ -1,0 +1,7 @@
+[prism_run] probe_TB05_solver start 2026-10-13 22:10:29
+NE_BACKWARD_EULER_ADVANCER   dt  5.00 ns: Vo 47.683 V, Ipri 9.135 A, Isec 69.11 A, Im_pk 5.943 A, Pin 2994.2 W, Pout 2960.5 W, ripple 0.057 V (11.7 s)
+NE_BACKWARD_EULER_ADVANCER   dt  2.50 ns: Vo 47.830 V, Ipri 9.155 A, Isec 69.24 A, Im_pk 5.956 A, Pin 2993.5 W, Pout 2978.8 W, ripple 0.063 V (20.1 s)
+NE_BACKWARD_EULER_ADVANCER   dt  1.25 ns: Vo 47.896 V, Ipri 9.148 A, Isec 69.14 A, Im_pk 5.962 A, Pin 2986.2 W, Pout 2987.1 W, ripple 0.077 V (259.9 s)
+NE_TRAPEZOIDAL_ADVANCER      dt  5.00 ns: Vo 47.940 V, Ipri 9.071 A, Isec 68.58 A, Im_pk 5.960 A, Pin -3280.8 W, Pout 2992.5 W, ripple 0.123 V (238.1 s)
+NE_TRAPEZOIDAL_ADVANCER      dt  2.50 ns: Vo 47.940 V, Ipri 9.085 A, Isec 68.58 A, Im_pk 5.965 A, Pin -8610.2 W, Pout 2992.5 W, ripple 0.124 V (476.6 s)
+[prism_run] probe_TB05_solver finished (1007.9 s)
