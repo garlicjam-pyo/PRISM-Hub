@@ -1,0 +1,27 @@
+TB04B Stage B closed loop, case A_640V_15to25kW (V_bat 640 V, 15 -> 25 kW at 1.0 ms), dt 1.25 ns, wall 193 s
+(1) Tier-1 on the Simscape circuit:
+    v_bus period mean 397.67-400.04 V, last-1ms ripple 0.095 V, max |i_p| 86.89 A, i_h 87.76/37.21 A, link 67.15 A / 6714 W, v_link 99.95-100.05 V, max |v_s| 81.1 V
+    vbus_window      PASS
+    ripple_last1ms   PASS
+    path_current     PASS
+    link_current     PASS
+    link_voltage     PASS
+    series_voltage   PASS
+(2) agreement with the verification model (E12 switching ODE):
+    metric                                            Simscape       model      diff  result
+    pre-step mean v_bus [V]                                400         400  -0.00584    PASS
+    pre-step mean i_p [A]                                47.29       47.42    -0.137    PASS
+    pre-step mean i_h [A]                                47.26       47.42    -0.167    PASS
+    pre-step mean v_link [V]                               100         100  +0.00214    PASS
+    pre-step mean link current [A]                       38.05       38.03   +0.0141    PASS
+    min v_bus after step [V]                             397.7       397.7   -0.0549    PASS
+    max |i_p| after step [A]                             86.89       86.75    +0.138    PASS
+    max i_h after step [A]                               87.76       87.88    -0.122    PASS
+    rms diff of period-mean v_bus after step [V]       0.04284           0   +0.0428    PASS
+    final mean v_bus [V]                                   400         400  +0.00764    PASS
+    final mean i_p [A]                                   79.42       79.26    +0.159    PASS
+    final mean v_link [V]                                  100         100 -0.000805    PASS
+    final mean link current [A]                          64.56       64.19     +0.37    PASS
+    rho_hat at 1.0 ms (info)                            0.8757      0.8977    -0.022    info
+    eps_hat at 4.0 ms [A] (info)                    -1.208e-75  -1.996e-75 +7.88e-76    info
+VERDICT A_640V_15to25kW: PASS

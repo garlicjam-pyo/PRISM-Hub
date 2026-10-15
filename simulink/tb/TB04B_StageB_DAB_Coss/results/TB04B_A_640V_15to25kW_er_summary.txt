@@ -1,0 +1,27 @@
+TB04B Stage B closed loop, case A_640V_15to25kW (V_bat 640 V, 15 -> 25 kW at 1.0 ms), dt 2.50 ns, wall 119 s
+(1) Tier-1 on the Simscape circuit:
+    v_bus period mean 397.68-400.08 V, last-1ms ripple 0.146 V, max |i_p| 86.85 A, i_h 87.79/37.29 A, link 67.37 A / 6736 W, v_link 99.96-100.04 V, max |v_s| 81.1 V
+    vbus_window      PASS
+    ripple_last1ms   FAIL
+    path_current     PASS
+    link_current     PASS
+    link_voltage     PASS
+    series_voltage   PASS
+(2) agreement with the verification model (E12 switching ODE):
+    metric                                            Simscape       model      diff  result
+    pre-step mean v_bus [V]                                400         400   +0.0111    PASS
+    pre-step mean i_p [A]                                47.79       47.42    +0.371    PASS
+    pre-step mean i_h [A]                                47.83       47.42    +0.411    PASS
+    pre-step mean v_link [V]                               100         100  +0.00126    PASS
+    pre-step mean link current [A]                       38.54       38.03    +0.507    PASS
+    min v_bus after step [V]                             397.7       397.7   -0.0487    PASS
+    max |i_p| after step [A]                             86.85       86.75   +0.0977    PASS
+    max i_h after step [A]                               87.79       87.88    -0.092    PASS
+    rms diff of period-mean v_bus after step [V]       0.05011           0   +0.0501    PASS
+    final mean v_bus [V]                                   400         400    -0.019    PASS
+    final mean i_p [A]                                   79.53       79.26    +0.268    PASS
+    final mean v_link [V]                                  100         100 +0.000686    PASS
+    final mean link current [A]                           64.7       64.19    +0.508    PASS
+    rho_hat at 1.0 ms (info)                            0.8855      0.8977   -0.0122    info
+    eps_hat at 4.0 ms [A] (info)                    -1.741e-75  -1.996e-75 +2.55e-76    info
+VERDICT A_640V_15to25kW: FAIL

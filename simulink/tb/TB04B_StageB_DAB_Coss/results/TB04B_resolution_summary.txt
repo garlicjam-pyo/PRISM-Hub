@@ -1,0 +1,8 @@
+TB04B Stage B closed loop with candidate-device DAB output capacitance (C_o(tr)): 25 kW steady-state ripple question from TB04
+run              case             dt[ns]   Cp[pF]   Cs[pF] ripple[V]   Tier1   agree   bias_pp  bias_rms  link_pp   ip_pp     corr f[kHz] verdict
+device_A_1.25ns  A_640V_15to25kW   1.250      335     1371    0.0954    PASS    PASS     0.006     0.001    0.966   0.921    -0.82   0.40 PASS (info)
+device_B_1.25ns  B_788V_0to10kW    1.250      335     1371    0.1188    FAIL    PASS     0.087     0.023    0.783   0.765    -0.26   1.60 FAIL (info)
+device_A_0.625ns A_640V_15to25kW   0.625      335     1371    0.0689    PASS    PASS     0.004     0.001    0.583   0.640    -0.81   3.20 PASS (info)
+columns: ripple = last-1ms max-min of 5 us period-mean v_bus (Tier-1 limit 0.1 V); bias = period mean of DAB primary current i_L
+         (transformer DC bias) in the last 1 ms, pp and rms; link_pp / ip_pp = pp of period-mean link / path current;
+         corr = correlation of bias with link-current period mean (last 1 ms); f = dominant frequency of v_bus ripple (1.5-4 ms)

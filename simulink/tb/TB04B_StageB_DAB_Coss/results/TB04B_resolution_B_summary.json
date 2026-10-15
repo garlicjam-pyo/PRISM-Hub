@@ -1,0 +1,24 @@
+{
+  "runs": {
+    "name": "device_B_0.625ns",
+    "case": "B_788V_0to10kW",
+    "dt_ns": 0.625,
+    "coss_p_pF": 335,
+    "coss_s_pF": 1371,
+    "judged": false,
+    "verdict": "PASS",
+    "tier1_pass": true,
+    "agreement_pass": true,
+    "ripple_V": 0.030545127661639526,
+    "bias_pp_A": 0.044084769912553806,
+    "bias_rms_A": 0.010664653905735053,
+    "link_pp_A": 0.38261389744761276,
+    "ip_pp_A": 0.23828622112493392,
+    "corr_bias_link": -0.27254871834117606,
+    "f_ripple_kHz": 1.2,
+    "wall_s": 440.8262637
+  },
+  "verdict": "FAIL",
+  "date": "2026-10-15 09:54:40",
+  "matlab": "25.1.0.2973910 (R2025a) Update 1"
+}

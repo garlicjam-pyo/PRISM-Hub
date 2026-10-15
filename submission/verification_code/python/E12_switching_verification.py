@@ -38,6 +38,8 @@
   sequences   부하 계약 최악 시퀀스 48건
   sensitivity 대표 8개 사례 × 데드타임·출력용량(보상 모델 불일치)·보상 방식·DAB 데드타임·적분간격 변형
   figures     그림(640 V Tier-2 과도, 700 V 정상상태 파형)
+  gate_resolution 게이트 시간 분해능: PWM·DAB 에지를 시간 격자에 반올림(소자 회로 모델의 격자 효과)했을 때의 리밋 사이클 리플,
+            TB04 두 사례의 격자 스윕과 기본 집합 168건(요구 사양 센서) × 격자 5종 판정 (2026-10-15 추가)
 
 ■ 판정 (주기 평균 = 5 µs 제어주기 평균)
   전압 품질 6항목은 주기 평균 버스전압으로, 포트 한계는 순시값(경로·필터 100 A, 직렬 90 V, 링크전압
@@ -845,9 +847,78 @@ def part_figures():
     print("   → 그림: results/E12/E12_transient_640V.png, E12_steady_700V.png")
 
 
+def _gq_job(a):
+    """게이트 양자화 대표 사례(TB04와 같은 4 ms 사례, 평형점 시작)."""
+    name, v, P0, P1, qh, qd = a
+    r = simulate_switching(v, P0, P1, NOMINAL, CP, K_ADOPTED, predict=True, profile=0, duration=4e-3, step=1e-3,
+                           sw=dict(t_pre=0., gate_quantum=qh, dab_quantum=qd))
+    R, t = r["rec"], r["t"]; tail = t > t[-1] - 1e-3
+    return dict(case=name, gate_quantum_ns=qh * 1e9, dab_quantum_ns=qd * 1e9, completed=r["completed"],
+                tail_ripple_V=float(np.ptp(R[tail, 0])), tail_ip_pp_A=float(np.ptp(R[tail, 1])),
+                tail_link_pp_A=float(np.ptp(R[tail, 4])), vbus_min_post=float(R[t > 1e-3, 9].min()))
+
+
+def part_gate_resolution():
+    """게이트 시간 분해능(디지털 PWM·DAB 위상 양자화)과 리밋 사이클.
+    소자 회로 모델(Simulink TB04)은 게이트 에지를 적분 간격 격자에 맞추므로 듀티·위상이 양자화된다. 그 모델에서 25 kW 정상상태
+    버스 리플이 0.1–0.3 V로 기준(0.1 V)을 넘었고, 이 검증 모델(에지를 간격 안 정확한 위치로 처리)에서는 0이었다.
+    (1) TB04와 같은 두 사례(640 V 15 → 25 kW, 788 V 0 → 10 kW, 4 ms)에서 H-브리지 PWM 에지·DAB 에지를 시간 격자 q에 반올림하고
+        q를 바꿔 마지막 1 ms 리플을 본다(5·2.5 ns에서는 H-브리지만·DAB만 양자화한 경우도 따로).
+    (2) 시험 격자의 기본 집합(공칭·+3.0 µs, 168건)을 요구 사양 센서(16비트·잡음)와 함께 q = 5·2.5·1.25·0.625·0.15625 ns로 판정한다.
+    디지털 PWM의 듀티 분해능이 유한하면 적분 동작이 있는 루프는 양자화 준위 사이를 오가는 리밋 사이클을 낼 수 있다
+    (A. V. Peterchev, S. R. Sanders, IEEE TPEL 18(1), 2003)."""
+    cases = {"A_640V_15to25kW": (640., 15000., 25000.), "B_788V_0to10kW": (788., 0., 10000.)}
+    js = []
+    for name, (v, a, b) in cases.items():
+        for q in (0., 5e-9, 2.5e-9, 1.25e-9, .625e-9, .3125e-9, .15625e-9, .078125e-9):
+            js.append((name, v, a, b, q, q))
+        for q in (5e-9, 2.5e-9):
+            js.append((name, v, a, b, q, 0.)); js.append((name, v, a, b, 0., q))
+    with Pool(workers()) as pool:
+        rep = pool.map(_gq_job, js, chunksize=1)
+    for r in rep:
+        print(f"   {r['case']:16s} q_H {r['gate_quantum_ns']:7.4f} ns, q_DAB {r['dab_quantum_ns']:7.4f} ns: 리플 {r['tail_ripple_V']:.4f} V, "
+              f"경로전류 변동 {r['tail_ip_pp_A']:.3f} A, 링크전류 변동 {r['tail_link_pp_A']:.3f} A")
+    base, _ = sets_sw()
+    cases_b = [(t, v, a, b, n, p) for v in st.V_ALL for n, p in base.items()
+               for t, steps in ((1, st.T1_STEPS), (2, st.T2_STEPS)) for a, b in steps]
+    sens = sensor_set(bits=16, noise=SENS_NOISE_REQ)
+    qs = (5e-9, 2.5e-9, 1.25e-9, .625e-9, .15625e-9)
+    jb = [(t, v, a, b, p, 0, dict(gate_quantum=q, dab_quantum=q), dict(set=n, q_ns=q * 1e9, _sensors=sens.tolist(), _seed=1000 + i))
+          for q in qs for i, (t, v, a, b, n, p) in enumerate(cases_b)]
+    rows = pmap(jb)
+    summ = {}
+    for q in qs:
+        sel = [r for r in rows if abs(r["q_ns"] - q * 1e9) < 1e-9]
+        fails = [r for r in sel if not r["pass_"]]
+        rip_fail = [r for r in fails if r["tail_ripple_V"] > .1]
+        summ[f"{q * 1e9:g}ns"] = dict(total=len(sel), passed=len(sel) - len(fails), fail_ripple=len(rip_fail),
+                                      max_tail_ripple_V=max(r["tail_ripple_V"] for r in sel),
+                                      max_tail_ih_pp_A=max(r["tail_ih_pp_A"] for r in sel),
+                                      max_tail_m_pp=max(r["tail_m_pp"] for r in sel),
+                                      max_inst_A=max(max(r["path_inst"], r["bridge_inst"]) for r in sel),
+                                      fails=[(r["tier"], r["set"], r["vbat"], r["p0"], r["p1"], round(r["tail_ripple_V"], 3),
+                                              round(r["tail_ih_pp_A"], 3), round(r["tail_m_pp"], 4)) for r in fails])
+        x = summ[f"{q * 1e9:g}ns"]
+        print(f"   기본 집합(요구 사양 센서) q = {q * 1e9:g} ns: {x['passed']}/{x['total']} 통과(리플 초과 {x['fail_ripple']}건), "
+              f"마지막 1 ms 리플 최대 {x['max_tail_ripple_V']:.3f} V, i_h 변동 최대 {x['max_tail_ih_pp_A']:.3f} A, "
+              f"변조율 변동 최대 {x['max_tail_m_pp']:.4f}, 순시 최대 {x['max_inst_A']:.2f} A")
+    ok = {q: summ[f"{q * 1e9:g}ns"]["passed"] == summ[f"{q * 1e9:g}ns"]["total"] for q in qs}
+    req = None                                       # 그 값과 더 고운 격자가 모두 전부 통과하는 가장 거친 격자
+    for q in sorted(qs, reverse=True):
+        if all(ok[q2] for q2 in qs if q2 <= q):
+            req = q * 1e9; break
+    print(f"   → 기본 집합 전부 통과하는 가장 거친 게이트 격자: {req} ns")
+    ok = {f"{q * 1e9:g}ns": v for q, v in ok.items()}
+    verdict("게이트 시간 분해능 ≤ 0.625 ns에서 기본 집합 168건 전부 통과(요구 사양 센서)", ok.get("0.625ns", False))
+    verdict("게이트 시간 분해능 0.15625 ns(고분해능 PWM 수준)에서 기본 집합 168건 전부 통과", ok.get("0.15625ns", False))
+    return dict(representative=rep, basic_set=summ, coarsest_all_pass_ns=req, sensors="16비트·잡음(요구 사양)",
+                rows=[{k: v for k, v in r.items()} for r in rows])
+
+
 PARTS = dict(model_checks=part_model_checks, ripple=part_ripple, linear=part_linear, grid=part_grid, convergence=part_convergence,
              dab_limit=part_dab_limit, sensors=part_sensors, sensor_diag=part_sensor_diag, dab_lowcurrent=part_dab_lowcurrent, deadtime_robust=part_deadtime_robust, comp_schedule=part_comp_schedule, delay=part_delay, corners=part_corners, sequences=part_sequences,
-             sensitivity=part_sensitivity, figures=part_figures)
+             sensitivity=part_sensitivity, figures=part_figures, gate_resolution=part_gate_resolution)
 
 if __name__ == "__main__":
     todo = sys.argv[1:] or list(PARTS)

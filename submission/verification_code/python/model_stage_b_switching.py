@@ -61,6 +61,8 @@
 [센서]     기본은 이상 센서. sensors 인자(6×4: i_p, v_s, v_bus, i_h, v_link, 링크전류 × [이득, 오프셋, 양자화 간격,
            잡음 표준편차])로 센서·ADC 오차를 넣는다. 잡음은 seed로 재현한다.
 [적분]     고정 간격 중점법 dt = 5 ns(주기당 1000단계). 스위치 상태는 간격 안의 에지·데드타임 경계로 나눈 평균.
+[양자화]   (선택, 기본 없음) gate_quantum·dab_quantum > 0이면 H-브리지 PWM 에지·DAB 에지를 그 시간 격자에 반올림한다
+           (디지털 PWM·위상 분해능. 소자 회로 모델의 적분 간격 격자와 같은 효과를 적분 간격과 따로 줄 수 있다).
 [한계]     DAB 소자 출력용량·스위칭 손실·기생 인덕턴스·자화 인덕턴스·Stage A 리플·센서 대역 제한·보호 동작 미포함.
 """
 import math
@@ -463,6 +465,7 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
     td_h, td_d, dtc = sw[0], sw[1], sw[2]            # H-브리지·DAB 데드타임, 데드타임 보상(0 없음, 1 모델 기반, 2 선형)
     coss = sw[4]                                    # H-브리지 스위치 출력용량(노드 등가 2·C_oss)
     lmin = sw[6]; est = sw[7] > 0.; est_g = sw[8]; est_min = sw[9]   # DAB 위상 기준 인덕턴스 비, 전류비 추정 사용·이득·최소 전류
+    qe = sw[27]; qd = sw[28]                         # 게이트 시간 양자화 간격(H-브리지 PWM, DAB 에지). 0 = 없음(간격 안 정확한 에지)
     np.random.seed(seed)
     n_tot = int(round((t_pre + duration) / dt)); nper = n_tot // Np
     t_zvs = duration - 1e-3                          # ZVS 집계 구간(마지막 1 ms)
@@ -571,6 +574,10 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
         c0 = _carrier(i, Np); c1 = _carrier(i + 1, Np)
         aA, bA = _on_interval(m_reg, c0, c1)
         aB, bB = _on_interval(-m_reg, c0, c1)
+        if qe > 0.:                                  # 게이트 시간 양자화(선택): PWM 에지를 qe 격자(dt의 정수분의 1)에 반올림
+            nq = np.floor(dt / qe + .5)
+            aA = np.floor(aA * nq + .5) / nq; bA = np.floor(bA * nq + .5) / nq
+            aB = np.floor(aB * nq + .5) / nq; bB = np.floor(bB * nq + .5) / nq
         # 노드 기울기(정규화/초): 레그 A에서 나가는 전류 i_h가 양이면 노드 A는 내려가고, 레그 B는 올라간다
         vl_ = max(x[4], 1.)
         if sw[10] > 0.:                              # 비선형 출력용량(전압 의존 C_oss)
@@ -613,15 +620,21 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
             else:
                 ph_c1 = ph_tgt; ip_c1 = _ipred(ph_tgt, vb_m, cp, lmin)
         # ---- DAB 에지 실행
-        if p_t[p_j % 2] < t1:
-            te = max(p_t[p_j % 2], t0)
+        ptq = p_t[p_j % 2]
+        if qd > 0. and ptq < 1e29:                   # DAB 에지 시간 양자화(선택): 가장 가까운 qd 격자 시각
+            ptq = np.floor(ptq / qd + .5) * qd
+        if ptq < t1:
+            te = max(ptq, t0)
             p_before = p_state; p_state = 1. if p_j % 2 == 0 else -1.; p_te = te; p_h[p_j % 2] = te; p_t[p_j % 2] = 1e30; p_j += 1
             if te >= t_zvs:
                 zvs[1] += 1
                 if (p_state == -1 and x[5] > 0) or (p_state == 1 and x[5] < 0):
                     zvs[0] += 1
-        if s_t[s_j % 2] < t1:
-            te = max(s_t[s_j % 2], t0)
+        stq = s_t[s_j % 2]
+        if qd > 0. and stq < 1e29:
+            stq = np.floor(stq / qd + .5) * qd
+        if stq < t1:
+            te = max(stq, t0)
             s_before = s_state; s_state = 1. if s_j % 2 == 0 else -1.; s_te = te; s_h[s_j % 2] = te; s_t[s_j % 2] = 1e30; s_j += 1
             if te >= t_zvs:
                 zvs[3] += 1
@@ -682,7 +695,8 @@ SW_DEFAULT = dict(td_h=50e-9, td_dab=100e-9, R_dab=0.02, dt=5e-9, t_pre=2e-3, de
                   coss_nonlinear=False, coss_m=0.5, coss_V0=5.,
                   table_cq=None, table_nonlinear=None, table_m=None, table_V0=None, table_smooth_A=0., comp_scale=.6,
                   comp_full_from_A=20., comp_full_at_A=80., dab_deadtime_comp=0., dab_eps_gain=.2, dab_eps_max_A=10.,
-                  link_sensor_fault_t=1e30, link_monitor=False, link_monitor_A=6., link_monitor_rel=.15, link_monitor_alpha=.05, link_gate_alpha=.3)
+                  link_sensor_fault_t=1e30, link_monitor=False, link_monitor_A=6., link_monitor_rel=.15, link_monitor_alpha=.05, link_gate_alpha=.3,
+                  gate_quantum=0., dab_quantum=0.)
 
 # 센서 채널 순서: i_p, v_s, v_bus, i_h, v_link, 링크전류(주기 평균). 각 행 = [이득, 오프셋, 양자화 간격, 잡음 표준편차]
 SENSOR_IDEAL = np.array([[1., 0., 0., 0.]] * 6)
@@ -785,7 +799,7 @@ def simulate_switching(vbat, P0, P1, p, cp, K, predict=True, profile=0, duration
                                                 coss_c0(sw["coss_h"], sw["coss_m"], sw["coss_V0"]), TABLE_V, sw["comp_scale"], sw["comp_full_from_A"], sw["comp_full_at_A"],
                                                 dab_tc, sw["dab_eps_gain"], sw["dab_eps_max_A"], float(sw["link_sensor_fault_t"]) - 0.,
                                                 float(sw["link_monitor"]), sw["link_monitor_A"], sw["link_monitor_rel"], sw["link_monitor_alpha"],
-                                                sw["link_gate_alpha"]]), cap,
+                                                sw["link_gate_alpha"], sw["gate_quantum"], sw["dab_quantum"]]), cap,
                                       np.asarray(SENSOR_IDEAL if sensors is None else sensors, float), int(seed), etab)
     if not alive:
         rec = rec[: end_i // int(round(cp.Ts / dt))]

@@ -1,0 +1,37 @@
+[prism_run] run_TB04B_resolution_B start 2026-10-15 09:47:14
+TB04B Stage B closed loop, case B_788V_0to10kW (V_bat 788 V, 0 -> 10 kW at 1.0 ms), dt 0.62 ns, wall 441 s
+(1) Tier-1 on the Simscape circuit:
+    v_bus period mean 397.79-400.05 V, last-1ms ripple 0.031 V, max |i_p| 32.32 A, i_h 34.89/-1.41 A, link 2.95 A / 295 W, v_link 99.99-100.01 V, max |v_s| 6.4 V
+    vbus_window      PASS
+    ripple_last1ms   PASS
+    path_current     PASS
+    link_current     PASS
+    link_voltage     PASS
+    series_voltage   PASS
+(2) agreement with the verification model (E12 switching ODE):
+    metric                                            Simscape       model      diff  result
+    pre-step mean v_bus [V]                                400         400  -0.00496    PASS
+    pre-step mean i_p [A]                               0.1536    -0.00223    +0.156    PASS
+    pre-step mean i_h [A]                                0.156   -0.002074    +0.158    PASS
+    pre-step mean v_link [V]                               100         100  -0.00371 info(ok)
+    pre-step mean link current [A]                     0.05062     -0.0113   +0.0619 info(ok)
+    min v_bus after step [V]                             397.8       397.8   -0.0442    PASS
+    max |i_p| after step [A]                             32.32       31.15     +1.17    PASS
+    max i_h after step [A]                               34.89       33.62     +1.27    PASS
+    rms diff of period-mean v_bus after step [V]       0.02088           0   +0.0209    PASS
+    final mean v_bus [V]                                   400         400  +0.00476    PASS
+    final mean i_p [A]                                   25.57       25.42    +0.143    PASS
+    final mean v_link [V]                                  100         100 -8.03e-05 info(ok)
+    final mean link current [A]                          1.676       1.622   +0.0545 info(ok)
+    rho_hat at 1.0 ms (info)                                 1           1        +0    info
+    eps_hat at 4.0 ms [A] (info)                        0.7684         -10     +10.8    info
+VERDICT B_788V_0to10kW: PASS
+case B_788V_0to10kW_device_0.625ns done
+device_B_0.625ns done (441 s)
+TB04B Stage B closed loop with candidate-device DAB output capacitance (C_o(tr)): 25 kW steady-state ripple question from TB04
+run              case             dt[ns]   Cp[pF]   Cs[pF] ripple[V]   Tier1   agree   bias_pp  bias_rms  link_pp   ip_pp     corr f[kHz] verdict
+device_B_0.625ns B_788V_0to10kW    0.625      335     1371    0.0305    PASS    PASS     0.044     0.011    0.383   0.238    -0.27   1.20 PASS (info)
+columns: ripple = last-1ms max-min of 5 us period-mean v_bus (Tier-1 limit 0.1 V); bias = period mean of DAB primary current i_L
+         (transformer DC bias) in the last 1 ms, pp and rms; link_pp / ip_pp = pp of period-mean link / path current;
+         corr = correlation of bias with link-current period mean (last 1 ms); f = dominant frequency of v_bus ripple (1.5-4 ms)
+[prism_run] run_TB04B_resolution_B finished (446.6 s)
