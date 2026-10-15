@@ -1,0 +1,10 @@
+*.pdf
+*.jpg
+raw.docx
+it*.docx
+draft.docx
+final.docx
+pages*.json
+report.json
+__pycache__/
+labels.json

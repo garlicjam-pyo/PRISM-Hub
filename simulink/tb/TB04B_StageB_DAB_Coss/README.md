@@ -104,7 +104,7 @@ prism_run('plot_TB04B_resolution')  % 리플 대 게이트 격자 그림(회로 
 
 참고 자료
 
-- GaN Systems (Infineon), *GS66516T Bottom-side cooled 650 V E-mode GaN transistor*, datasheet Rev. 210727 — C_o(tr) 335 pF, C_o(er) 207 pF (V_DS 0–400 V).
+- GaN Systems (Infineon), *GS66516T Top-side cooled 650 V E-mode GaN transistor*, datasheet Rev. 210727 — C_o(tr) 335 pF, C_o(er) 207 pF (V_DS 0–400 V).
 - EPC, *EPC2305 – Enhancement Mode Power Transistor*, datasheet — C_OSS(TR) 1371 pF, C_OSS(ER) 1053 pF (V_DS 0–75 V).
 - A. V. Peterchev and S. R. Sanders, "Quantization resolution and limit cycling in digitally controlled PWM converters," *IEEE Trans. Power Electron.*, vol. 18, no. 1, pp. 301–308, 2003, doi:10.1109/TPEL.2002.807092.
 - Texas Instruments, *Functional Safety Information, TMS320F280015x* (SFFS222), §6.4.5.9 HRPWM — MEP 단계 "of the order of 150 ps".
