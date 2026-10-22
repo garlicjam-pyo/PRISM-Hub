@@ -72,15 +72,28 @@ class RampController(StageBController):
         return super().step(x)
 
 
-def deriv(x, u, mode, vbat, power, p):
+def diode_state(x, mode):
+    """'off'·'bypass'·'offastop'에서 H-브리지 다이오드 상태(me, blocked). deriv와 같은 규칙."""
+    ip, vs, vb, ih, vl, idab = x
+    vsx = 0. if mode == "bypass" else vs
+    if ih == 0. and abs(vsx) <= vl:
+        return 0., True
+    return (-np.sign(ih) if ih != 0. else np.sign(vsx)), False
+
+
+def deriv(x, u, mode, vbat, power, p, diode=None):
     """모드별 미분. mode: 'ctrl'·'zero'(u 사용), 'off'(H-브리지 전 소자 차단), 'bypass'(직렬 포트 단락),
-    'astop'(Stage A 정지 + 직렬 포트 영벡터)."""
+    'astop'(Stage A 정지 + 직렬 포트 영벡터).
+    diode: (me, blocked)를 주면 다이오드 상태를 그 값으로 고정한다(E19의 run_modes(diode_fix=True)가 적분 한 걸음 동안
+    시작 시점의 다이오드 상태를 유지하는 데 쓴다)."""
     ip, vs, vb, ih, vl, idab = x
     if mode in ("ctrl", "zero"):
         return rhs(x, u, vbat, power, p)
     if mode in ("off", "bypass", "offastop"):
         vsx = 0. if mode == "bypass" else vs
-        if ih == 0. and abs(vsx) <= vl:                       # 다이오드 차단: 필터전류 0 유지(브리지 출력은 떠 있음)
+        if diode is not None:
+            me, blocked = diode
+        elif ih == 0. and abs(vsx) <= vl:                     # 다이오드 차단: 필터전류 0 유지(브리지 출력은 떠 있음)
             me = 0.; blocked = True
         else:
             me = -np.sign(ih) if ih != 0. else np.sign(vsx); blocked = False
@@ -107,7 +120,7 @@ def deriv(x, u, mode, vbat, power, p):
     raise ValueError(mode)
 
 
-def run_modes(vbat, power, schedule, x0, ctrl=None, p=NOMINAL, dt=2e-7, duration=.01, keep=False):
+def run_modes(vbat, power, schedule, x0, ctrl=None, p=NOMINAL, dt=2e-7, duration=.01, keep=False, diode_fix=False):
     """schedule(t) → 모드 이름. 'ctrl' 모드에서만 제어기가 지령을 낸다(지연 버퍼 포함). 다른 모드에서는 지령 무시.
     'off'·'bypass'에서 H-브리지 필터전류가 0을 지나면 0에 고정(다이오드 차단), 'astop'에서 경로전류 ≥ 0."""
     sample = int(round(CP.Ts / dt)); lag = int(round(p.delay / dt))
@@ -143,8 +156,12 @@ def run_modes(vbat, power, schedule, x0, ctrl=None, p=NOMINAL, dt=2e-7, duration
         P = power if load_on else 0.
         md = "ctrl" if mode == "ctrl_nodab" else mode
         ih0 = x[3]
-        d1 = deriv(x, applied, md, vbat, P, p)
-        x = x + dt * deriv(x + .5 * dt * d1, applied, md, vbat, P, p)
+        # diode_fix: 다이오드 상태를 걸음 시작 시점 값으로 고정한다. 고정하지 않으면(기본, E14 결과 재현) 필터전류가
+        # 한 걸음 변화량(dt·v_link/L_h ≈ 4.4 A)보다 작을 때 중점 평가에서 부호가 뒤집혀 0으로 가지 못하고 진동하며,
+        # 그 평균전류가 링크를 계속 충전한다(E19에서 발견, 링크전압을 크게 보는 쪽의 수치 오차).
+        dz = diode_state(x, md) if (diode_fix and md in ("off", "bypass", "offastop")) else None
+        d1 = deriv(x, applied, md, vbat, P, p, dz)
+        x = x + dt * deriv(x + .5 * dt * d1, applied, md, vbat, P, p, dz)
         if mode in ("off", "bypass", "offastop") and (ih0 == 0. or ih0 * x[3] < 0.):
             if not (mode in ("off", "offastop") and abs(x[1]) > x[4]):   # 직렬전압이 링크전압을 넘으면 다이오드가 다시 도통
                 x[3] = 0.

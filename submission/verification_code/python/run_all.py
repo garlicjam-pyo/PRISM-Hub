@@ -27,6 +27,8 @@ STEPS = [
     ("E14", ["E14_protection_startup.py"]),
     ("E15", ["E15_baseline_loss_rating.py"]),
     ("E16", ["E16_charging_integration.py"]),
+    ("E18", ["E18_industry_value_map.py"]),      # E15 결과(stage_a_grid, comparison)를 읽는다
+    ("E19", ["E19_r2_window_module.py"]),
 ]
 
 if __name__ == "__main__":

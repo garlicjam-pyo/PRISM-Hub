@@ -1,0 +1,458 @@
+{
+ "W460_240s": {
+  "DAB 고장 → 기준 램프 0.5 ms → 영벡터 → 바이패스": {
+   "passed": 1,
+   "total": 2,
+   "path_peak_A": 125.06413637680653,
+   "bridge_peak_A": 131.02040487131993,
+   "series_peak_V": 43.87688516071599,
+   "vlink_max_V": 107.28159151579914,
+   "series_at_bypass_V": 3.482127206309734,
+   "bus_after_V": 503.8690135779312,
+   "above_class_after": true,
+   "fails": [
+    [
+     25000.0,
+     [
+      "path_100A",
+      "bridge_100A"
+     ]
+    ]
+   ]
+  },
+  "DAB 고장 → 기준 램프 1 ms → 영벡터 → 바이패스": {
+   "passed": 2,
+   "total": 2,
+   "path_peak_A": 69.79376838709673,
+   "bridge_peak_A": 74.01058246406106,
+   "series_peak_V": 43.88164206646186,
+   "vlink_max_V": 109.71223263676389,
+   "series_at_bypass_V": 0.6269505839779549,
+   "bus_after_V": 503.8690135581471,
+   "above_class_after": true,
+   "fails": []
+  },
+  "H-브리지 전 소자 차단 → 50 µs 후 바이패스": {
+   "passed": 0,
+   "total": 2,
+   "path_peak_A": 740.5439648131697,
+   "bridge_peak_A": 49.8693610534243,
+   "series_peak_V": 49.74964972932338,
+   "vlink_max_V": 100.01254254667215,
+   "series_at_bypass_V": 45.75539014690784,
+   "bus_after_V": 503.8690135756781,
+   "above_class_after": true,
+   "fails": [
+    [
+     5000.0,
+     [
+      "path_100A"
+     ]
+    ],
+    [
+     25000.0,
+     [
+      "path_100A"
+     ]
+    ]
+   ]
+  }
+ },
+ "W410_spec": {
+  "DAB 고장 → 기준 램프 0.5 ms → 영벡터 → 바이패스": {
+   "passed": 1,
+   "total": 2,
+   "path_peak_A": 220.17766666078592,
+   "bridge_peak_A": 238.0555488797361,
+   "series_peak_V": 49.869234796201624,
+   "vlink_max_V": 109.64967720281378,
+   "series_at_bypass_V": 10.447868780965084,
+   "bus_after_V": 459.85647696064217,
+   "above_class_after": true,
+   "fails": [
+    [
+     25000.0,
+     [
+      "path_100A",
+      "bridge_100A"
+     ]
+    ]
+   ]
+  },
+  "DAB 고장 → 기준 램프 1 ms → 영벡터 → 바이패스": {
+   "passed": 2,
+   "total": 2,
+   "path_peak_A": 78.17279446460704,
+   "bridge_peak_A": 82.93317099314072,
+   "series_peak_V": 49.8766954289638,
+   "vlink_max_V": 112.22080122917177,
+   "series_at_bypass_V": 0.7138490791498826,
+   "bus_after_V": 459.8564769376567,
+   "above_class_after": true,
+   "fails": []
+  },
+  "H-브리지 전 소자 차단 → 50 µs 후 바이패스": {
+   "passed": 0,
+   "total": 2,
+   "path_peak_A": 838.1623417208497,
+   "bridge_peak_A": 54.70844647919917,
+   "series_peak_V": 56.31370044441673,
+   "vlink_max_V": 100.01399352106752,
+   "series_at_bypass_V": 52.07543126386754,
+   "bus_after_V": 459.8564769580264,
+   "above_class_after": true,
+   "fails": [
+    [
+     5000.0,
+     [
+      "path_100A"
+     ]
+    ],
+    [
+     25000.0,
+     [
+      "path_100A"
+     ]
+    ]
+   ]
+  }
+ },
+ "rows": [
+  {
+   "vbus_min": 459.9404769387056,
+   "vbus_max": 507.7047753809437,
+   "vbus_end": 503.8690135779312,
+   "path_peak": 45.52197805339365,
+   "bridge_peak": 53.197178918990346,
+   "series_peak": 43.87688516071599,
+   "vlink_min": 99.99819567633725,
+   "vlink_max": 103.29673357730601,
+   "tail_ripple_V": 5.627804284813465e-07,
+   "completed": true,
+   "case": "W460_240s",
+   "fault": "DAB 고장 → 기준 램프 0.5 ms → 영벡터 → 바이패스",
+   "vbat": 1008.0,
+   "power": 5000.0,
+   "VA": 503.86901357650174,
+   "series_at_bypass_V": 1.2678881415822154,
+   "bus_after_V": 503.8690135779312,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": true
+  },
+  {
+   "vbus_min": 459.6682705205985,
+   "vbus_max": 511.7151218188283,
+   "vbus_end": 503.3443852592146,
+   "path_peak": 125.06413637680653,
+   "bridge_peak": 131.02040487131993,
+   "series_peak": 43.44834879522788,
+   "vlink_min": 99.99106896806882,
+   "vlink_max": 107.28159151579914,
+   "tail_ripple_V": 1.9123992842651205e-06,
+   "completed": true,
+   "case": "W460_240s",
+   "fault": "DAB 고장 → 기준 램프 0.5 ms → 영벡터 → 바이패스",
+   "vbat": 1008.0,
+   "power": 25000.0,
+   "VA": 503.3443852565639,
+   "series_at_bypass_V": 3.482127206309734,
+   "bus_after_V": 503.3443852592146,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": false
+  },
+  {
+   "vbus_min": 459.9368184426016,
+   "vbus_max": 505.7916152157898,
+   "vbus_end": 503.8690135581471,
+   "path_peak": 27.864811591060615,
+   "bridge_peak": 32.23557925471053,
+   "series_peak": 43.88164206646186,
+   "vlink_min": 99.99819567633725,
+   "vlink_max": 103.8965868482601,
+   "tail_ripple_V": 2.4867121055649477e-06,
+   "completed": true,
+   "case": "W460_240s",
+   "fault": "DAB 고장 → 기준 램프 1 ms → 영벡터 → 바이패스",
+   "vbat": 1008.0,
+   "power": 5000.0,
+   "VA": 503.86901357650174,
+   "series_at_bypass_V": 0.6269505839779549,
+   "bus_after_V": 503.8690135581471,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": true
+  },
+  {
+   "vbus_min": 459.65906312605114,
+   "vbus_max": 505.11881508768386,
+   "vbus_end": 503.34438523206984,
+   "path_peak": 69.79376838709673,
+   "bridge_peak": 74.01058246406106,
+   "series_peak": 43.479564095585935,
+   "vlink_min": 99.99106896806882,
+   "vlink_max": 109.71223263676389,
+   "tail_ripple_V": 3.0113858429103857e-06,
+   "completed": true,
+   "case": "W460_240s",
+   "fault": "DAB 고장 → 기준 램프 1 ms → 영벡터 → 바이패스",
+   "vbat": 1008.0,
+   "power": 25000.0,
+   "VA": 503.3443852565639,
+   "series_at_bypass_V": 0.49955482762701225,
+   "bus_after_V": 503.34438523206984,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": true
+  },
+  {
+   "vbus_min": 458.7832712086397,
+   "vbus_max": 536.0023322502021,
+   "vbus_end": 503.8690135756781,
+   "path_peak": 638.8414386245522,
+   "bridge_peak": 9.962349272207613,
+   "series_peak": 45.15126410570724,
+   "vlink_min": 99.97861405145602,
+   "vlink_max": 99.99890690354842,
+   "tail_ripple_V": 2.2707138214173028e-07,
+   "completed": true,
+   "case": "W460_240s",
+   "fault": "H-브리지 전 소자 차단 → 50 µs 후 바이패스",
+   "vbat": 1008.0,
+   "power": 5000.0,
+   "VA": 503.86901357650174,
+   "series_at_bypass_V": 44.34458545029464,
+   "bus_after_V": 503.8690135756781,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": false
+  },
+  {
+   "vbus_min": 454.0206958915707,
+   "vbus_max": 538.7692534561361,
+   "vbus_end": 503.34438525463986,
+   "path_peak": 740.5439648131697,
+   "bridge_peak": 49.8693610534243,
+   "series_peak": 49.74964972932338,
+   "vlink_min": 99.93855210652798,
+   "vlink_max": 100.01254254667215,
+   "tail_ripple_V": 3.862579660562915e-07,
+   "completed": true,
+   "case": "W460_240s",
+   "fault": "H-브리지 전 소자 차단 → 50 µs 후 바이패스",
+   "vbat": 1008.0,
+   "power": 25000.0,
+   "VA": 503.3443852565639,
+   "series_at_bypass_V": 45.75539014690784,
+   "bus_after_V": 503.34438525463986,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": false
+  },
+  {
+   "vbus_min": 409.91506950806223,
+   "vbus_max": 464.2164938976184,
+   "vbus_end": 459.85647696064217,
+   "path_peak": 51.317042018040375,
+   "bridge_peak": 60.13686479999219,
+   "series_peak": 49.869234796201624,
+   "vlink_min": 99.99775464590016,
+   "vlink_max": 104.21648660183169,
+   "tail_ripple_V": 6.5126789650094e-07,
+   "completed": true,
+   "case": "W410_spec",
+   "fault": "DAB 고장 → 기준 램프 0.5 ms → 영벡터 → 바이패스",
+   "vbat": 920.0,
+   "power": 5000.0,
+   "VA": 459.85647695899286,
+   "series_at_bypass_V": 1.4415518395845515,
+   "bus_after_V": 459.85647696064217,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": true
+  },
+  {
+   "vbus_min": 409.5302380199358,
+   "vbus_max": 477.92650806352816,
+   "vbus_end": 459.2814863849394,
+   "path_peak": 220.17766666078592,
+   "bridge_peak": 238.0555488797361,
+   "series_peak": 49.44127053013502,
+   "vlink_min": 99.98887678130119,
+   "vlink_max": 109.64967720281378,
+   "tail_ripple_V": 5.378024866331543e-06,
+   "completed": true,
+   "case": "W410_spec",
+   "fault": "DAB 고장 → 기준 램프 0.5 ms → 영벡터 → 바이패스",
+   "vbat": 920.0,
+   "power": 25000.0,
+   "VA": 459.2814863873662,
+   "series_at_bypass_V": 10.447868780965084,
+   "bus_after_V": 459.2814863849394,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": false,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": false
+  },
+  {
+   "vbus_min": 409.91024015976205,
+   "vbus_max": 462.0432431132874,
+   "vbus_end": 459.8564769376567,
+   "path_peak": 31.389403871595373,
+   "bridge_peak": 36.350176027196056,
+   "series_peak": 49.8766954289638,
+   "vlink_min": 99.99775464590016,
+   "vlink_max": 104.96884949207535,
+   "tail_ripple_V": 2.8754014351761725e-06,
+   "completed": true,
+   "case": "W410_spec",
+   "fault": "DAB 고장 → 기준 램프 1 ms → 영벡터 → 바이패스",
+   "vbat": 920.0,
+   "power": 5000.0,
+   "VA": 459.85647695899286,
+   "series_at_bypass_V": 0.7138490791498826,
+   "bus_after_V": 459.8564769376567,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": true
+  },
+  {
+   "vbus_min": 409.5188149175772,
+   "vbus_max": 461.3089026298465,
+   "vbus_end": 459.2814863561119,
+   "path_peak": 78.17279446460704,
+   "bridge_peak": 82.93317099314072,
+   "series_peak": 49.48303457163082,
+   "vlink_min": 99.98887678130119,
+   "vlink_max": 112.22080122917177,
+   "tail_ripple_V": 3.7408555613183125e-06,
+   "completed": true,
+   "case": "W410_spec",
+   "fault": "DAB 고장 → 기준 램프 1 ms → 영벡터 → 바이패스",
+   "vbat": 920.0,
+   "power": 25000.0,
+   "VA": 459.2814863873662,
+   "series_at_bypass_V": 0.5752443647825828,
+   "bus_after_V": 459.2814863561119,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": true,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": true
+  },
+  {
+   "vbus_min": 408.6460929432363,
+   "vbus_max": 496.3693691830027,
+   "vbus_end": 459.8564769580264,
+   "path_peak": 725.3901980817777,
+   "bridge_peak": 10.926454935625664,
+   "series_peak": 51.2650839320288,
+   "vlink_min": 99.97358061071844,
+   "vlink_max": 99.99855052032215,
+   "tail_ripple_V": 2.636764406815928e-07,
+   "completed": true,
+   "case": "W410_spec",
+   "fault": "H-브리지 전 소자 차단 → 50 µs 후 바이패스",
+   "vbat": 920.0,
+   "power": 5000.0,
+   "VA": 459.85647695899286,
+   "series_at_bypass_V": 50.401054877482174,
+   "bus_after_V": 459.8564769580264,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": false
+  },
+  {
+   "vbus_min": 403.39440371315686,
+   "vbus_max": 499.50068562930267,
+   "vbus_end": 459.2814863848087,
+   "path_peak": 838.1623417208497,
+   "bridge_peak": 54.70844647919917,
+   "series_peak": 56.31370044441673,
+   "vlink_min": 99.92883397619204,
+   "vlink_max": 100.01399352106752,
+   "tail_ripple_V": 4.890354716735601e-07,
+   "completed": true,
+   "case": "W410_spec",
+   "fault": "H-브리지 전 소자 차단 → 50 µs 후 바이패스",
+   "vbat": 920.0,
+   "power": 25000.0,
+   "VA": 459.2814863873662,
+   "series_at_bypass_V": 52.07543126386754,
+   "bus_after_V": 459.2814863848087,
+   "above_class_after": true,
+   "checks": {
+    "path_100A": false,
+    "bridge_100A": true,
+    "series_90V": true,
+    "link_120V": true,
+    "bus_ge_260": true
+   },
+   "pass_": false
+  }
+ ]
+}
