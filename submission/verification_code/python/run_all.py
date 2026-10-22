@@ -26,6 +26,7 @@ STEPS = [
     ("E13", ["E13_baseline_structures.py"]),
     ("E14", ["E14_protection_startup.py"]),
     ("E15", ["E15_baseline_loss_rating.py"]),
+    ("E16", ["E16_charging_integration.py"]),
 ]
 
 if __name__ == "__main__":

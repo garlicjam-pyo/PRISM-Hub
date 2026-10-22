@@ -1,0 +1,70 @@
+{
+ "rows": [
+  {
+   "V": 632.0,
+   "vref": 400.0,
+   "controller": "unchanged",
+   "path_peak": 93.96250813805386,
+   "bridge_peak": 86.49518236116079,
+   "vbus_min": 394.74950872746075,
+   "vbus_max": 400.0126554117354,
+   "vbus_end": 399.9999999999998,
+   "ports_ok": true,
+   "pass_current": false,
+   "pass_band": true
+  },
+  {
+   "V": 632.0,
+   "vref": 400.0,
+   "controller": "mode_aware",
+   "path_peak": 95.23466776996518,
+   "bridge_peak": 86.46405161790648,
+   "vbus_min": 394.7325828601018,
+   "vbus_max": 400.0004011020242,
+   "vbus_end": 400.00000000000057,
+   "ports_ok": true,
+   "pass_current": false,
+   "pass_band": true
+  },
+  {
+   "V": 640.0,
+   "vref": 400.0,
+   "controller": "unchanged",
+   "path_peak": 93.61644471967088,
+   "bridge_peak": 86.46903409826399,
+   "vbus_min": 394.7738793627409,
+   "vbus_max": 400.01399024076875,
+   "vbus_end": 399.9999999999992,
+   "ports_ok": true,
+   "pass_current": true,
+   "pass_band": true
+  },
+  {
+   "V": 640.0,
+   "vref": 400.0,
+   "controller": "mode_aware",
+   "path_peak": 94.93498138787345,
+   "bridge_peak": 86.44687850698969,
+   "vbus_min": 394.82280692249486,
+   "vbus_max": 400.0008033933328,
+   "vbus_end": 399.99999999999943,
+   "ports_ok": true,
+   "pass_current": false,
+   "pass_band": true
+  },
+  {
+   "V": 632.0,
+   "vref": 390.0,
+   "controller": "unchanged",
+   "path_peak": 94.3959281099323,
+   "bridge_peak": 86.67080185949676,
+   "vbus_min": 384.6600448421837,
+   "vbus_max": 390.0128982816367,
+   "vbus_end": 389.9999999999993,
+   "ports_ok": true,
+   "pass_current": false,
+   "pass_band": true
+  }
+ ],
+ "note": "Tier-2 1->25 kW, delay +3.0 us, charging 4 modules; limit 93.75 A"
+}

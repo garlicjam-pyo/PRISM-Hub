@@ -1,0 +1,43 @@
+{
+  "runs": [
+    {
+      "case": "A_640V_chg_15to25kW",
+      "dt_ns": 5,
+      "judged": true,
+      "verdict": "PASS",
+      "tier1": true,
+      "equiv": true,
+      "stageA": true,
+      "stageC": true,
+      "ripple_V": 0.23747805504541475,
+      "wall_s": 197.843826
+    },
+    {
+      "case": "B_920V_chgstop_25kW",
+      "dt_ns": 5,
+      "judged": true,
+      "verdict": "FAIL",
+      "tier1": true,
+      "equiv": false,
+      "stageA": true,
+      "stageC": true,
+      "ripple_V": 0.055668406365725787,
+      "wall_s": 179.8788874
+    },
+    {
+      "case": "C_788V_chgon_5kW",
+      "dt_ns": 5,
+      "judged": true,
+      "verdict": "FAIL",
+      "tier1": true,
+      "equiv": false,
+      "stageA": true,
+      "stageC": true,
+      "ripple_V": 0.13259624696900119,
+      "wall_s": 182.3001346
+    }
+  ],
+  "verdict": "FAIL",
+  "date": "2026-10-22 12:13:52",
+  "matlab": "25.1.0.2973910 (R2025a) Update 1"
+}

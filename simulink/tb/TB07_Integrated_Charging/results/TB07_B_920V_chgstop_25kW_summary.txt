@@ -1,0 +1,62 @@
+TB07 integrated model (charging), case B_920V_chgstop_25kW (V_bat 920 V, bus total 25.0 -> 25.0 kW, charger 326.1 -> 0.0 A at 2.0 ms in 10 us), dt 5.00 ns, wall 180 s
+(1) Tier-2 limits on the circuit (t > 1.0 ms):
+    v_bus period mean 399.42-401.70 V, max |i_p| 67.69 A, i_h 75.23/38.90 A, link 41.29 A / 4129 W, v_link 99.99-100.01 V, max |v_s| 60.7 V
+    vbus_window      PASS
+    path_current     PASS
+    link_current     PASS
+    link_voltage     PASS
+    series_voltage   PASS
+    last-1ms ripple 0.056 V (information only at the 5.00 ns gate grid; limit 0.1 V met at 0.625 ns in TB04B)
+(2) agreement with the Stage B verification model (E16 switching: E12 engine, source V_bat/2 + R_A*i_ch, R = R_A + 3 mOhm, Stage C as CPL):
+    metric                                            Simscape       model      diff  result
+    pre-step mean v_bus [V]                                400         400   +0.0211    PASS
+    pre-step mean i_p [A]                                54.66       54.59   +0.0698    PASS
+    pre-step mean i_h [A]                                54.65       54.59   +0.0671    PASS
+    pre-step mean v_link [V]                               100         100 +0.000336 info(ok)
+    pre-step mean link current [A]                      -32.96      -33.05   +0.0974 info(ok)
+    min v_bus after step [V]                             399.4       399.5    -0.122    PASS
+    max v_bus after step [V]                             401.7       401.5    +0.212    PASS
+    max |i_p| after step [A]                             67.69       64.36     +3.33    FAIL
+    max i_h after step [A]                               75.23       71.89     +3.34    PASS
+    rms diff of period-mean v_bus after step [V]        0.1002           0      +0.1    PASS
+    final mean v_bus [V]                                   400         400  -0.00757    PASS
+    final mean i_p [A]                                   54.79       54.68    +0.109    PASS
+    final mean v_link [V]                                  100         100 +0.000106 info(ok)
+    final mean link current [A]                         -32.55      -32.66    +0.106 info(ok)
+    rho_hat before step (info)                          0.9521      0.9255   +0.0266    info
+    eps_hat at end [A] (info)                          -0.2622      0.4341    -0.696    info
+(3) Stage A (verification model E1, zero-crossing tracking, 8 phases, same mean output current i_p - i_ch):
+    metric                                            Simscape          E1      diff  result
+    pre phase 1 ZCS ratio (or i_off <= 2 A: 0.46 A)    0.008389    0.008618 -0.000229    PASS
+    pre phase 2 ZCS ratio (or i_off <= 2 A: 0.48 A)    0.008663    0.008472 +0.000191    PASS
+    pre phase 3 ZCS ratio (or i_off <= 2 A: 0.49 A)    0.008792     0.00883 -3.86e-05    PASS
+    pre phase 4 ZCS ratio (or i_off <= 2 A: 0.48 A)    0.008783    0.009188 -0.000406    PASS
+    pre phase 5 ZCS ratio (or i_off <= 2 A: 0.48 A)    0.008678     0.00923 -0.000552    PASS
+    pre phase 6 ZCS ratio (or i_off <= 2 A: 0.47 A)    0.008491    0.008627 -0.000136    PASS
+    pre phase 7 ZCS ratio (or i_off <= 2 A: 0.45 A)    0.008254    0.008109 +0.000145    PASS
+    pre phase 8 ZCS ratio (or i_off <= 2 A: 0.45 A)    0.008097     0.00894 -0.000843    PASS
+    pre peak current, phases 1-8 max [A] (info)           55.2       54.15     +1.05    info
+    pre mean V_A [V]                                     460.7       460.6     +0.11    PASS
+    pre phase current sharing max|I_k-I|/|I|          0.000751           0 +0.000751    PASS
+    pre KCL residual i_Aout-(i_p-i_ch) [A] (info)   -0.0006517           0 -0.000652    info
+    pre Stage A output current [A] (info)               -271.4      -271.5   +0.0697    info
+    pre V_A ripple p-p [V] (info)                     0.008127     0.03519   -0.0271    info
+    final phase 1 ZCS ratio (or i_off <= 2 A: 0.31 A)     0.02844     0.04428   -0.0158    PASS
+    final phase 2 ZCS ratio (or i_off <= 2 A: 0.30 A)     0.02698     0.04465   -0.0177    PASS
+    final phase 3 ZCS ratio (or i_off <= 2 A: 0.31 A)     0.02785     0.04401   -0.0162    PASS
+    final phase 4 ZCS ratio (or i_off <= 2 A: 0.31 A)     0.02819     0.03866   -0.0105    PASS
+    final phase 5 ZCS ratio (or i_off <= 2 A: 0.31 A)     0.02806     0.03658  -0.00851    PASS
+    final phase 6 ZCS ratio (or i_off <= 2 A: 0.31 A)     0.02806     0.03555  -0.00748    PASS
+    final phase 7 ZCS ratio (or i_off <= 2 A: 0.31 A)     0.02813     0.03673   -0.0086    PASS
+    final phase 8 ZCS ratio (or i_off <= 2 A: 0.31 A)     0.02849     0.03945    -0.011    PASS
+    final peak current, phases 1-8 max [A] (info)        11.11       11.61    -0.506    info
+    final mean V_A [V]                                   459.9       459.8    +0.019    PASS
+    final phase current sharing max|I_k-I|/|I|        0.006095           0  +0.00609    PASS
+    final KCL residual i_Aout-(i_p-i_ch) [A] (info)   -0.002097           0   -0.0021    info
+    final Stage A output current [A] (info)              54.79       54.68    +0.107    info
+    final V_A ripple p-p [V] (info)                    0.01232     0.03909   -0.0268    info
+    turn-off current <= 5 % of peak or <= 2 A, V_A mean +-0.3 V vs E1, phase sharing <= 5 %
+(4) Stage C: v_48 47.553-48.038 V after 1.0 ms (limit 47.04-48.96 V), final mean 47.682 V (TB05 at 5.0 ns: 47.683 V, tol 0.15 V),
+    max deviation of period-mean v_48 after the step 0.327 V (info), Stage C input power 3002 W before / 2994 W at end (CPL estimate used 2994 W): PASS
+(5) charger current 326.1 -> 0.0 A, path current before/end 54.66 / 54.79 A (charging current does not pass the series port)
+VERDICT B_920V_chgstop_25kW: FAIL (Tier-2 PASS, E16 agreement FAIL, Stage A PASS, Stage C PASS)

@@ -13,15 +13,18 @@ gs = [sys '/Gate_StageA'];
 add_block('built-in/Subsystem', gs, 'Position', pos, 'BackgroundColor', 'yellow');
 sl_add(gs, 'simulink/Sources/Digital Clock', 'Clock', [30 20 80 50], 'SampleTime', [T '.dt']);
 np = numel(phases);
-% 위상 전류 측정 → 8×1 벡터(정지 위상 0)
-sl_add(gs, 'simulink/Signal Routing/Mux', 'iC_mux', [190 70 195 70+40*(np+1)], 'Inputs', num2str(np + 1));
+% 위상 전류 측정 → 8×1 벡터(정지 위상 0). 8위상 모두 동작하면 정지 위상 상수를 두지 않는다.
+nin = np + (np < 8);
+sl_add(gs, 'simulink/Signal Routing/Mux', 'iC_mux', [190 70 195 70+40*nin], 'Inputs', num2str(nin));
 for j = 1:np
     tg = sprintf('iA_P%d', phases(j));
     sl_add(gs, 'simulink/Signal Routing/From', ['from_' tg], [30 70+40*(j-1) 120 90+40*(j-1)], 'GotoTag', tg);
     sl_line(gs, sprintf('from_%s/1', tg), sprintf('iC_mux/%d', j));
 end
-sl_add(gs, 'simulink/Sources/Constant', 'idle_phases', [30 70+40*np 120 90+40*np], 'Value', sprintf('zeros(%d,1)', 8 - np));
-sl_line(gs, 'idle_phases/1', sprintf('iC_mux/%d', np + 1));
+if np < 8
+    sl_add(gs, 'simulink/Sources/Constant', 'idle_phases', [30 70+40*np 120 90+40*np], 'Value', sprintf('zeros(%d,1)', 8 - np));
+    sl_line(gs, 'idle_phases/1', sprintf('iC_mux/%d', np + 1));
+end
 sl_add(gs, 'simulink/Discrete/Unit Delay', 'iC_z1', [230 95 260 125], 'SampleTime', [T '.dt']);
 sl_line(gs, 'iC_mux/1', 'iC_z1/1');
 sl_startup_guard(gs, 'Startup_guard', [290 90 320 160], 'zeros(8,1)', T, [190 250 280 270]);

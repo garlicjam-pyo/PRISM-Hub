@@ -476,7 +476,10 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
     wave = np.zeros((ncap, 9))
     zvs = np.zeros(4)
     x = x0.copy(); x[5] = iL0
+    pp = pp.copy()                                   # 경로 전원이 시간에 따라 바뀌면 pp[8]을 갱신하므로 사본을 쓴다
     vbat = pp[8]; n = pp[10]; eta = pp[7]; Rd = pp[11]
+    vbat_c = sw[29] if sw[29] > 0. else vbat         # 제어기가 쓰는 V_bat 측정값(E16 충전: 실제 배터리 전압)
+    src_t0 = sw[30]; src_t1 = sw[31]; vb_src0 = vbat; vb_src1 = sw[32]   # 플랜트 경로 전원 2·v_src를 t0 → t1에 선형 변경
     m_reg = uq[0]                                    # PWM 비교값
     legA = np.array([-1., 1., 1., 1., -1.]); legB = np.array([-1., 0., 0., 0., -1.])
     qi = np.full(8, -1); qm = np.zeros(8); qp = np.zeros(8); qh = 0; qt = 0
@@ -521,7 +524,7 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
             meas = x.copy()
             for c in range(5):                       # 센서·ADC(기본은 이상 센서)
                 meas[c] = _sense(x[c], sens[c])
-            mcmd, icmd, iref, ihp = _controller(meas, cst, cp, K, predict, vbat)
+            mcmd, icmd, iref, ihp = _controller(meas, cst, cp, K, predict, vbat_c)
             vb_m = meas[2]
             if est:
                 # DAB 전류비 추정: 직전 주기의 측정 링크전류(주기 평균, 링크 직류전류 센서)와 그 주기에 적용된 위상의
@@ -645,6 +648,12 @@ def run_core(x0, iL0, cst, uq, pp, cp, K, predict, prof, P0, P1, step, t_pre, du
                           max(x[2], 1.), n * max(x[4], 1.))
         # ---- 적분(중점법)
         P = _power(t0, prof, P0, P1, step)
+        if src_t0 < 1e29:                            # (E16) 충전전류 변화에 따른 경로 전원 변화
+            if t0 >= src_t1:
+                vbat = vb_src1
+            elif t0 > src_t0:
+                vbat = vb_src0 + (vb_src1 - vb_src0) * (t0 - src_t0) / max(src_t1 - src_t0, 1e-12)
+            pp[8] = vbat
         d1 = _deriv(x, sA, sB, s1, s2, P, pp, ploss)
         # 에너지 보존 검산: Σ(저장소자 · 상태 · 미분) = 입력 − 부하 − 저항손실 − DAB 손실항
         stored = (pp[0] * x[0] * d1[0] + pp[1] * x[1] * d1[1] + pp[2] * x[2] * d1[2] + pp[4] * x[3] * d1[3]
@@ -696,7 +705,10 @@ SW_DEFAULT = dict(td_h=50e-9, td_dab=100e-9, R_dab=0.02, dt=5e-9, t_pre=2e-3, de
                   table_cq=None, table_nonlinear=None, table_m=None, table_V0=None, table_smooth_A=0., comp_scale=.6,
                   comp_full_from_A=20., comp_full_at_A=80., dab_deadtime_comp=0., dab_eps_gain=.2, dab_eps_max_A=10.,
                   link_sensor_fault_t=1e30, link_monitor=False, link_monitor_A=6., link_monitor_rel=.15, link_monitor_alpha=.05, link_gate_alpha=.3,
-                  gate_quantum=0., dab_quantum=0.)
+                  gate_quantum=0., dab_quantum=0.,
+                  ctrl_vbat=0., src_t0=1e30, src_t1=1e30, src_vbat1=0.)
+# ctrl_vbat: 제어기에 주는 V_bat(0이면 플랜트와 같음). src_*: 플랜트 경로 전원(2·v_src)을 src_t0 → src_t1(스텝 기준 시각)
+# 사이에 vbat에서 src_vbat1로 선형 변경(E16 충전 통합: v_src = V_bat/2 + R_A·i_ch)
 
 # 센서 채널 순서: i_p, v_s, v_bus, i_h, v_link, 링크전류(주기 평균). 각 행 = [이득, 오프셋, 양자화 간격, 잡음 표준편차]
 SENSOR_IDEAL = np.array([[1., 0., 0., 0.]] * 6)
@@ -799,7 +811,8 @@ def simulate_switching(vbat, P0, P1, p, cp, K, predict=True, profile=0, duration
                                                 coss_c0(sw["coss_h"], sw["coss_m"], sw["coss_V0"]), TABLE_V, sw["comp_scale"], sw["comp_full_from_A"], sw["comp_full_at_A"],
                                                 dab_tc, sw["dab_eps_gain"], sw["dab_eps_max_A"], float(sw["link_sensor_fault_t"]) - 0.,
                                                 float(sw["link_monitor"]), sw["link_monitor_A"], sw["link_monitor_rel"], sw["link_monitor_alpha"],
-                                                sw["link_gate_alpha"], sw["gate_quantum"], sw["dab_quantum"]]), cap,
+                                                sw["link_gate_alpha"], sw["gate_quantum"], sw["dab_quantum"],
+                                                sw["ctrl_vbat"], sw["src_t0"], sw["src_t1"], sw["src_vbat1"]]), cap,
                                       np.asarray(SENSOR_IDEAL if sensors is None else sensors, float), int(seed), etab)
     if not alive:
         rec = rec[: end_i // int(round(cp.Ts / dt))]

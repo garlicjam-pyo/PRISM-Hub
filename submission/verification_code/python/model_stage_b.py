@@ -31,7 +31,7 @@
 검증 수준의 한계
   PWM 리플, 데드타임, 기생성분, 보호 동작은 포함하지 않는다(평균모델).
 """
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, replace
 import numpy as np
 from scipy.optimize import brentq
 from scipy.signal import place_poles
@@ -155,7 +155,7 @@ def design(vbat, power, p=Parameters()):
 
 def simulate(vbat=788., power0=5000., power1=25000., p=Parameters(),
              dt=2e-7, duration=.006, step=.001, K=None, keep_trace=False,
-             control_p=None, power_fn=None, controller=None):
+             control_p=None, power_fn=None, controller=None, source_fn=None):
     """폐루프 시간영역 시뮬레이션(모든 동특성 시험의 공통 엔진).
 
     - 평형점에서 시작해 t = step(1 ms)에 부하를 power0 → power1로 바꾼다(power_fn을 주면 임의 프로파일).
@@ -165,6 +165,9 @@ def simulate(vbat=788., power0=5000., power1=25000., p=Parameters(),
     - 적분: 명시적 중점법, 간격 dt. 매 스텝 에너지 보존 잔차를 기록한다.
     - 판정용으로 포트별 한계 위반(violations)을 계산한다. 제어기는 지령만 제한하고 실제 상태는
       제한하지 않으므로, 과부하·지연에 의한 정격 위반이 그대로 드러난다.
+    - source_fn(t) -> (v_src, R)를 주면 경로 전원(기본 V_bat/2, 경로저항 p.R)을 시간에 따라 바꾼다(E16 충전 통합:
+      충전기 전류 주입 v_src = V_bat/2 + R_A·i_ch, 모듈 기동·셰딩에 따른 R 변화). 제어기에 주는 V_bat은 그대로다.
+      주지 않으면 이전과 같은 계산이다.
     """
     cp=p if control_p is None else control_p
     if not (dt>0 and 0<=step<duration):
@@ -172,10 +175,14 @@ def simulate(vbat=788., power0=5000., power1=25000., p=Parameters(),
     sample=int(round(cp.Ts/dt)); lag=int(round(p.delay/dt))
     if sample<1 or abs(sample*dt-cp.Ts)>1e-12 or abs(lag*dt-p.delay)>1e-12:
         raise ValueError('dt must divide sample period and transport delay')
-    if not steady_feasible(vbat,power0,p):
+    if source_fn is None:
+        vb_src,p_src=vbat,p
+    else:                                          # 시작 시점의 경로 전원으로 평형점을 잡는다
+        v0,R0=source_fn(0.); vb_src,p_src=2*v0,(p if R0==p.R else replace(p,R=R0))
+    if not steady_feasible(vb_src,power0,p_src):
         raise ValueError('Initial steady state exceeds candidate operating envelope')
     K=design(vbat,power0,p) if K is None else np.asarray(K)
-    x,u=equilibrium(vbat,power0,p); q=-(x[0]+K[:4]@x[:4])/K[4]; qlink=0.   # 적분기 초기값: 평형점에서 지령 = i_p
+    x,u=equilibrium(vb_src,power0,p_src); q=-(x[0]+K[:4]@x[:4])/K[4]; qlink=0.   # 적분기 초기값: 평형점에서 지령 = i_p
     if controller is not None: controller.reset(x,u)
     buffer=np.tile(u,(lag+1,1)); tick=0          # 전달지연 버퍼(lag 스텝 전의 지령이 적용됨)
     n=int(round(duration/dt)); log=np.empty((n,6)); controls=np.empty((n,2))
@@ -197,10 +204,14 @@ def simulate(vbat=788., power0=5000., power1=25000., p=Parameters(),
             qlink+=cp.Ts*(cp.vlink-x[4])+.1*(ilink-rawlink)/(cp.Clink*wlink*wlink)
             u=np.array([m,ilink])
         buffer[tick]=u; applied=buffer[(tick+1)%len(buffer)].copy(); tick=(tick+1)%len(buffer)
-        d1=rhs(x,applied,vbat,power,p)
-        residual=max(residual,abs(energy_residual(x,d1,vbat,power,p)))
+        if source_fn is not None:                  # 시간에 따라 바뀌는 경로 전원(플랜트에만 적용)
+            vs_t,R_t=source_fn(t)
+            vb_src=2*vs_t
+            if R_t!=p_src.R: p_src=replace(p,R=R_t)
+        d1=rhs(x,applied,vb_src,power,p_src)
+        residual=max(residual,abs(energy_residual(x,d1,vb_src,power,p_src)))
         mid=x+dt*.5*d1
-        x=x+dt*rhs(mid,applied,vbat,power,p)      # 명시적 중점법
+        x=x+dt*rhs(mid,applied,vb_src,power,p_src)      # 명시적 중점법
         log[k]=x; controls[k]=applied
         if not np.isfinite(x).all() or x[2]<50 or x[4]<10:   # 발산(붕괴) 시 조기 종료
             stop=k; log=log[:k+1]; controls=controls[:k+1]; break

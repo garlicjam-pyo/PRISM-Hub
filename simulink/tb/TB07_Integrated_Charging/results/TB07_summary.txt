@@ -1,0 +1,7 @@
+TB07 integrated circuit model (charging mode): Stage A 4 modules (8 phases, zero-crossing tracking) + 400 V charger + Stage B + Stage C 3 kW + CPL
+case                   dt[ns]    Tier     E16  StageA  StageC  ripple[V] wall[s] verdict
+A_640V_chg_15to25kW      5.00    PASS    PASS    PASS    PASS      0.237     198 PASS
+B_920V_chgstop_25kW      5.00    PASS    FAIL    PASS    PASS      0.056     180 FAIL
+C_788V_chgon_5kW         5.00    PASS    FAIL    PASS    PASS      0.133     182 FAIL
+ripple = last-1 ms max-min of the 5 us period-mean bus voltage: information only at the 5 ns gate grid (TB04B)
+TB07 VERDICT (cases A, B, C at 5 ns): FAIL

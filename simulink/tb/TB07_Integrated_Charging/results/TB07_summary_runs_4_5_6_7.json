@@ -1,0 +1,55 @@
+{
+  "runs": [
+    {
+      "case": "C2_788V_chgon_5kW_100us",
+      "dt_ns": 5,
+      "judged": false,
+      "verdict": "PASS",
+      "tier1": true,
+      "equiv": true,
+      "stageA": true,
+      "stageC": true,
+      "ripple_V": 0.14467175512970698,
+      "wall_s": 197.1981608
+    },
+    {
+      "case": "C3_788V_chgon_5kW_1ms",
+      "dt_ns": 5,
+      "judged": false,
+      "verdict": "PASS",
+      "tier1": true,
+      "equiv": true,
+      "stageA": true,
+      "stageC": true,
+      "ripple_V": 0.1503032663013073,
+      "wall_s": 199.4749951
+    },
+    {
+      "case": "D_640V_chgon_25kW",
+      "dt_ns": 5,
+      "judged": false,
+      "verdict": "FAIL",
+      "tier1": true,
+      "equiv": false,
+      "stageA": true,
+      "stageC": true,
+      "ripple_V": 0.19565294917651954,
+      "wall_s": 205.0701139
+    },
+    {
+      "case": "E_640V_chgstop_25kW",
+      "dt_ns": 5,
+      "judged": false,
+      "verdict": "PASS",
+      "tier1": true,
+      "equiv": true,
+      "stageA": true,
+      "stageC": true,
+      "ripple_V": 0.2016842136415562,
+      "wall_s": 203.4504559
+    }
+  ],
+  "verdict": "FAIL",
+  "date": "2026-10-22 12:30:41",
+  "matlab": "25.1.0.2973910 (R2025a) Update 1"
+}
