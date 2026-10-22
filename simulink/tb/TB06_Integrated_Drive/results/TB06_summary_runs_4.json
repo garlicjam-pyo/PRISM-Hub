@@ -1,0 +1,17 @@
+{
+  "runs": {
+    "case": "A_640V_15to25kW",
+    "dt_ns": 2.5,
+    "judged": false,
+    "verdict": "PASS",
+    "tier1": true,
+    "equiv": true,
+    "stageA": true,
+    "stageC": true,
+    "ripple_V": 0.078812875174151031,
+    "wall_s": 153.8276307
+  },
+  "verdict": "FAIL",
+  "date": "2026-10-22 11:11:29",
+  "matlab": "25.1.0.2973910 (R2025a) Update 1"
+}

@@ -1,0 +1,7 @@
+TB06 integrated circuit model (drive mode): Stage A module 1 (2 phases, zero-crossing tracking) + Stage B + Stage C 3 kW + CPL
+case               dt[ns]   Tier1     E12  StageA  StageC  ripple[V] wall[s] verdict
+A_640V_15to25kW      5.00    PASS    PASS    PASS    PASS      0.179      75 PASS
+B_788V_5to15kW       5.00    PASS    PASS    PASS    PASS      0.060      76 PASS
+C_920V_25to15kW      5.00    PASS    PASS    PASS    PASS      0.157      74 PASS
+ripple = last-1 ms max-min of the 5 us period-mean bus voltage: information only at the 5 ns gate grid (TB04B)
+TB06 VERDICT (cases A, B, C at 5 ns): PASS

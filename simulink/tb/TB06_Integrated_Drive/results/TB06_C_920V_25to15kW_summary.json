@@ -1,0 +1,294 @@
+{
+  "case": "C_920V_25to15kW",
+  "dt_ns": 5,
+  "verdict": "PASS",
+  "tier1": {
+    "vbus_window": true,
+    "path_current": true,
+    "link_current": true,
+    "link_voltage": true,
+    "series_voltage": true
+  },
+  "tier1_pass": true,
+  "equiv_pass": true,
+  "stageA_pass": true,
+  "stageC_pass": true,
+  "ripple_last1ms_V": 0.15651253559389033,
+  "stageA": {
+    "pre": {
+      "zcs": [
+        0.0092911946678946,
+        0.0089141104450748687
+      ],
+      "Ipk": [
+        44.921127472556726,
+        44.680399932053795
+      ],
+      "io": [
+        27.373863200136384,
+        27.238389982705751
+      ],
+      "noff": [
+        58,
+        58
+      ]
+    },
+    "final": {
+      "zcs": [
+        0.00080685906588220046,
+        0.00058254290984299263
+      ],
+      "Ipk": [
+        27.223020317792251,
+        27.132707733724768
+      ],
+      "io": [
+        16.472528337432927,
+        16.409917239573524
+      ],
+      "noff": [
+        58,
+        58
+      ]
+    }
+  },
+  "stageC": {
+    "vo_min": 47.459259092480721,
+    "vo_max": 48.058328054243582,
+    "vo_final": 47.685805682117717,
+    "pin_pre": 3001.1728093569582,
+    "pin_final": 2994.6066555289863,
+    "vo_step_dev": 0.34091573697385513
+  },
+  "wall_s": 74.1064683,
+  "date": "2026-10-22 11:08:34",
+  "matlab": "25.1.0.2973910 (R2025a) Update 1",
+  "compare": [
+    {
+      "metric": "pre-step mean v_bus [V]",
+      "simscape": 400.06074916755614,
+      "model": 399.99870160975649,
+      "tol": 0.2,
+      "judged": true
+    },
+    {
+      "metric": "pre-step mean i_p [A]",
+      "simscape": 54.612418795709637,
+      "model": 54.729093724390246,
+      "tol": 1,
+      "judged": true
+    },
+    {
+      "metric": "pre-step mean i_h [A]",
+      "simscape": 54.5493956176691,
+      "model": 54.7290944195122,
+      "tol": 1,
+      "judged": true
+    },
+    {
+      "metric": "pre-step mean v_link [V]",
+      "simscape": 100.00013645562882,
+      "model": 99.9989488731707,
+      "tol": 0.5,
+      "judged": false
+    },
+    {
+      "metric": "pre-step mean link current [A]",
+      "simscape": -32.158284879542407,
+      "model": -32.454534092682927,
+      "tol": 2.4736360227804877,
+      "judged": false
+    },
+    {
+      "metric": "min v_bus after step [V]",
+      "simscape": 398.95476317814314,
+      "model": 399.333368,
+      "tol": 1,
+      "judged": true
+    },
+    {
+      "metric": "max v_bus after step [V]",
+      "simscape": 401.85049939038834,
+      "model": 401.84553,
+      "tol": 1,
+      "judged": true
+    },
+    {
+      "metric": "max |i_p| after step [A]",
+      "simscape": 54.323365123876904,
+      "model": 54.7286756,
+      "tol": 3,
+      "judged": true
+    },
+    {
+      "metric": "max i_h after step [A]",
+      "simscape": 60.30200539246988,
+      "model": 60.7555387,
+      "tol": 3.037776935,
+      "judged": true
+    },
+    {
+      "metric": "rms diff of period-mean v_bus after step [V]",
+      "simscape": 0.075647493866980289,
+      "model": 0,
+      "tol": 0.3,
+      "judged": true
+    },
+    {
+      "metric": "final mean v_bus [V]",
+      "simscape": 400.01737097742307,
+      "model": 399.99955199999971,
+      "tol": 0.2,
+      "judged": true
+    },
+    {
+      "metric": "final mean i_p [A]",
+      "simscape": 32.868867254049839,
+      "model": 32.814830599999993,
+      "tol": 1,
+      "judged": true
+    },
+    {
+      "metric": "final mean v_link [V]",
+      "simscape": 99.9998521041289,
+      "model": 99.9998180625001,
+      "tol": 0.5,
+      "judged": false
+    },
+    {
+      "metric": "final mean link current [A]",
+      "simscape": -19.457283969623152,
+      "model": -19.5647244675,
+      "tol": 2.086941734025,
+      "judged": false
+    },
+    {
+      "metric": "rho_hat before step (info)",
+      "simscape": 1,
+      "model": 1,
+      "tol": null,
+      "judged": false
+    },
+    {
+      "metric": "eps_hat at end [A] (info)",
+      "simscape": -0.71373201815455567,
+      "model": 6.21392401,
+      "tol": null,
+      "judged": false
+    }
+  ],
+  "stageA_compare": [
+    {
+      "metric": "pre phase 1 ZCS ratio",
+      "simscape": 0.0092911946678946,
+      "E1": 0.011175077182982447,
+      "tol": 0.05,
+      "type": "limit"
+    },
+    {
+      "metric": "pre phase 1 peak current [A] (info)",
+      "simscape": 44.921127472556726,
+      "E1": 43.336261749267578,
+      "tol": null,
+      "type": "info"
+    },
+    {
+      "metric": "pre phase 2 ZCS ratio",
+      "simscape": 0.0089141104450748687,
+      "E1": 0.011139172154082045,
+      "tol": 0.05,
+      "type": "limit"
+    },
+    {
+      "metric": "pre phase 2 peak current [A] (info)",
+      "simscape": 44.680399932053795,
+      "E1": 43.162647247314453,
+      "tol": null,
+      "type": "info"
+    },
+    {
+      "metric": "pre mean V_A [V]",
+      "simscape": 459.42103156420234,
+      "E1": 459.52139282226562,
+      "tol": 0.3,
+      "type": "abs"
+    },
+    {
+      "metric": "pre phase current sharing |I1-I2|/I",
+      "simscape": 0.0049612755209739352,
+      "E1": 0,
+      "tol": 0.05,
+      "type": "limit"
+    },
+    {
+      "metric": "pre Stage A output current [A] (info)",
+      "simscape": 54.612253215380726,
+      "E1": 54.729093721653058,
+      "tol": null,
+      "type": "info"
+    },
+    {
+      "metric": "pre V_A ripple p-p [V] (info)",
+      "simscape": 0.031780652292979994,
+      "E1": 0.015899658203125,
+      "tol": null,
+      "type": "info"
+    },
+    {
+      "metric": "final phase 1 ZCS ratio",
+      "simscape": 0.00080685906588220046,
+      "E1": 0.017884805483826628,
+      "tol": 0.05,
+      "type": "limit"
+    },
+    {
+      "metric": "final phase 1 peak current [A] (info)",
+      "simscape": 27.223020317792251,
+      "E1": 27.877038955688477,
+      "tol": null,
+      "type": "info"
+    },
+    {
+      "metric": "final phase 2 ZCS ratio",
+      "simscape": 0.00058254290984299263,
+      "E1": 0.017052920274181628,
+      "tol": 0.05,
+      "type": "limit"
+    },
+    {
+      "metric": "final phase 2 peak current [A] (info)",
+      "simscape": 27.132707733724768,
+      "E1": 27.880043029785156,
+      "tol": null,
+      "type": "info"
+    },
+    {
+      "metric": "final mean V_A [V]",
+      "simscape": 459.65238282979755,
+      "E1": 459.72390747070312,
+      "tol": 0.3,
+      "type": "abs"
+    },
+    {
+      "metric": "final phase current sharing |I1-I2|/I",
+      "simscape": 0.0038081776924271432,
+      "E1": 0,
+      "tol": 0.05,
+      "type": "limit"
+    },
+    {
+      "metric": "final Stage A output current [A] (info)",
+      "simscape": 32.882445596520583,
+      "E1": 32.814830602279692,
+      "tol": null,
+      "type": "info"
+    },
+    {
+      "metric": "final V_A ripple p-p [V] (info)",
+      "simscape": 0.027114798805712326,
+      "E1": 0.089813232421875,
+      "tol": null,
+      "type": "info"
+    }
+  ]
+}

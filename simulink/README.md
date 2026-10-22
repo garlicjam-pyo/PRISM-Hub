@@ -10,7 +10,7 @@ Stage A·B·C를 소자 수준 스위칭 회로로 구성하고, 검증 단계�
 | `prism_hub_params.m` | 설계 파라미터·초기조건(검증 코드 E1–E14와 같은 설계값) |
 | `prism_run.m` | 작업 실행기: 함수를 실행하고 `logs/<함수>.log`, `.done`에 결과를 남긴다 |
 | `prism_watch.m` | 작업 대기열 감시기: `queue/*.job`(함수 이름 한 줄)을 차례로 실행. 패키지 함수만 허용 |
-| `ctrl/` | MATLAB Function 블록에 들어가는 제어·게이트 코드(Stage A 게이트, Stage B 제어기·게이트) |
+| `ctrl/` | MATLAB Function 블록에 들어가는 제어·게이트 코드(Stage A 게이트: 고정 타이밍·영교차 추종, Stage B 제어기·게이트, Stage C 게이트, DAB 손실 등가) |
 | `lib/` | 모델 생성 도우미(스위치 셀, Stage A 위상, 결선, 주석, 계측부) |
 | `tools/` | 설치 조사 스크립트(블록 포트·파라미터 이름) |
 | `tb/TBxx_*/` | 테스트벤치: `TBxx_init.m`(조건), `build_TBxx.m`(모델 생성), `run_TBxx.m`(실행·판정), `ref/`(기준값), `results/`(결과), `TBxx_*.slx` |
@@ -43,4 +43,4 @@ prism_run('run_TB01')     % 시뮬레이션·판정: tb/TB01_StageA_RSC/results/
 | [TB04](tb/TB04_StageB_ClosedLoop/README.md) | Stage B 폐루프(이상 V_A + 채택 제어기), 640 V 15→25 kW · 788 V 0→10 kW | E12 스위칭 ODE(같은 사례 재계산) | **일치 통과**(2026-10-13): 최저 버스 0.03 V·최대 경로전류 0.4 A 차이. 정상상태 리플은 게이트 에지 양자화의 리밋 사이클 → TB04B에서 결론 |
 | [TB04B](tb/TB04B_StageB_DAB_Coss/README.md) | TB04 + DAB 소자 출력용량을 후보 소자 값(1차 335 pF·2차 1371 pF)으로 | 같음 + E12 에지 양자화 계산 | **통과**(2026-10-15, 게이트 격자 0.625 ns): 리플 0.069·0.031 V. 2.5 ns에서는 0.207·0.102 V(리밋 사이클, 직류 편류 아님) → 설계 요구 **게이트 시간 분해능 ≤ 0.625 ns** |
 | [TB05](tb/TB05_StageC_CLLC/README.md) | Stage C 대칭 CLLC(개루프), 3 · 1.5 · 0.3 kW, ZVS | E10과 같은 식, 2000주기 정상상태 | **통과**(2026-10-13): 이득 0.9965–1.0001, 전류 1.6 % 이내, 레그 전이 10 ns(데드타임 50 ns)·V_ds −0.08 V. 2.5 ns 판정(후진 오일러 수치 감쇠: 5 ns에서 3 kW 34 W 등가 손실) |
-| TB06 | 통합 모델(A + B + C + 부하) | — | 계획 |
+| [TB06](tb/TB06_Integrated_Drive/README.md) | 통합 모델(주행 모드): Stage A 모듈 1(2위상, 영교차 추종) + Stage B + Stage C 3 kW + 정전력 부하, 640 V 15→25 kW·788 V 5→15 kW·920 V 25→15 kW | E12(Stage A 등가 전원, Stage C 정전력 부하), E1(2위상 영교차 추종), TB05 | **통과**(2026-10-22, 5 ns): E12 대비 최저 버스 ≤ 0.38 V·최대 경로전류 ≤ 1.2 A, Stage A ZCS 0.06–2.9 %·V_A ±0.1 V, 48 V 47.24–48.06 V. 리플(정보) 0.06–0.18 V |

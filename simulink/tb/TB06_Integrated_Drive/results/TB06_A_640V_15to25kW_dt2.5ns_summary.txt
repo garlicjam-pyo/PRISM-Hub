@@ -1,0 +1,49 @@
+TB06 integrated model, case A_640V_15to25kW (V_bat 640 V, bus total 15.0 -> 25.0 kW at 2.0 ms, CPL 12.01 -> 22.01 kW + Stage C), dt 2.50 ns, wall 154 s
+(1) Tier-1 on the circuit (t > 1.0 ms):
+    v_bus period mean 397.70-400.04 V, max |i_p| 87.13 A, i_h 87.70/43.26 A, link 67.38 A / 6737 W, v_link 99.98-100.01 V, max |v_s| 81.1 V
+    vbus_window      PASS
+    path_current     PASS
+    link_current     PASS
+    link_voltage     PASS
+    series_voltage   PASS
+    last-1ms ripple 0.079 V (information only at the 2.50 ns gate grid; limit 0.1 V met at 0.625 ns in TB04B)
+(2) agreement with the Stage B verification model (E12, Stage A as V_bat/2 + 13.2 mOhm, Stage C as CPL):
+    metric                                            Simscape       model      diff  result
+    pre-step mean v_bus [V]                                400         400  +0.00857    PASS
+    pre-step mean i_p [A]                                47.47       47.48   -0.0115    PASS
+    pre-step mean i_h [A]                                47.46       47.48   -0.0245    PASS
+    pre-step mean v_link [V]                               100         100  -0.00238    PASS
+    pre-step mean link current [A]                       38.37       38.24    +0.127    PASS
+    min v_bus after step [V]                             397.7       397.7   -0.0273    PASS
+    max v_bus after step [V]                             400.1         400   +0.0512    PASS
+    max |i_p| after step [A]                             87.13       86.76     +0.37    PASS
+    max i_h after step [A]                                87.7       87.88    -0.182    PASS
+    rms diff of period-mean v_bus after step [V]       0.05099           0    +0.051    PASS
+    final mean v_bus [V]                                   400         400 +0.000991    PASS
+    final mean i_p [A]                                   79.31       79.26   +0.0471    PASS
+    final mean v_link [V]                                  100         100 -0.000548    PASS
+    final mean link current [A]                          64.52       64.19    +0.328    PASS
+    rho_hat before step (info)                          0.8754      0.8977   -0.0223    info
+    eps_hat at end [A] (info)                       -1.053e-95  -8.283e-95 +7.23e-95    info
+(3) Stage A (verification model E1, zero-crossing tracking, 2 phases, same mean output current):
+    metric                                            Simscape          E1      diff  result
+    pre phase 1 ZCS ratio                             0.005251     0.01325    -0.008    PASS
+    pre phase 1 peak current [A] (info)                  38.76       37.61     +1.16    info
+    pre phase 2 ZCS ratio                             0.005021     0.01322   -0.0082    PASS
+    pre phase 2 peak current [A] (info)                  38.62       37.43     +1.19    info
+    pre mean V_A [V]                                     319.5       319.6   -0.0667    PASS
+    pre phase current sharing |I1-I2|/I               0.004819           0  +0.00482    PASS
+    pre Stage A output current [A] (info)                47.46       47.48   -0.0236    info
+    pre V_A ripple p-p [V] (info)                      0.01914     0.01465  +0.00449    info
+    final phase 1 ZCS ratio                            0.01148    0.008659  +0.00283    PASS
+    final phase 1 peak current [A] (info)                 64.8       62.74     +2.07    info
+    final phase 2 ZCS ratio                             0.0115    0.008585  +0.00292    PASS
+    final phase 2 peak current [A] (info)                64.81       62.64     +2.17    info
+    final mean V_A [V]                                   319.2       319.3   -0.0823    PASS
+    final phase current sharing |I1-I2|/I            0.0003167           0 +0.000317    PASS
+    final Stage A output current [A] (info)              79.29       79.26   +0.0338    info
+    final V_A ripple p-p [V] (info)                    0.02777     0.01913  +0.00863    info
+    ZCS limit 5 % (design criterion), V_A mean +-0.3 V vs E1, phase sharing <= 5 %
+(4) Stage C: v_48 47.373-47.905 V after 1.0 ms (limit 47.04-48.96 V), final mean 47.832 V (TB05 at 2.5 ns: 47.833 V, tol 0.15 V),
+    max deviation of period-mean v_48 after the step 0.437 V (info), Stage C input power 3004 W before / 2997 W at end (CPL estimate used 2994 W): PASS
+VERDICT A_640V_15to25kW_dt2.5ns: PASS (Tier-1 PASS, E12 agreement PASS, Stage A PASS, Stage C PASS)

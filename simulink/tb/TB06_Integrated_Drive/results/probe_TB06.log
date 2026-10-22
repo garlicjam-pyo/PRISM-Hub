@@ -1,0 +1,12 @@
+[prism_run] probe_TB06 start 2026-10-22 10:45:39
+TB06 probe: case A, 0.5 ms, dt 5.00 ns, wall 15.6 s (31 s per ms), 100001 samples
+t=   5.0 us: v_bus 400.03 V, V_A 319.25 V, i_p 47.10 A, v_link 100.00 V, v_48 47.420 V, Stage C in 1384 W, iC pk 13.9/5.4 A, segments 3/1
+t=  20.0 us: v_bus 400.01 V, V_A 318.95 V, i_p 40.14 A, v_link 99.98 V, v_48 46.924 V, Stage C in 3091 W, iC pk 54.0/49.8 A, segments 2/4
+t=  50.0 us: v_bus 399.72 V, V_A 319.65 V, i_p 47.64 A, v_link 99.97 V, v_48 47.461 V, Stage C in 4023 W, iC pk 27.8/27.8 A, segments 4/2
+t= 100.0 us: v_bus 399.44 V, V_A 319.56 V, i_p 45.94 A, v_link 99.95 V, v_48 48.043 V, Stage C in 2751 W, iC pk 34.9/34.5 A, segments 2/3
+t= 200.0 us: v_bus 399.14 V, V_A 319.46 V, i_p 49.28 A, v_link 99.96 V, v_48 47.923 V, Stage C in 3350 W, iC pk 39.7/39.6 A, segments 2/2
+t= 300.0 us: v_bus 399.78 V, V_A 319.46 V, i_p 51.10 A, v_link 100.01 V, v_48 47.724 V, Stage C in 3527 W, iC pk 41.7/41.5 A, segments 2/3
+t= 400.0 us: v_bus 400.09 V, V_A 319.50 V, i_p 47.60 A, v_link 100.04 V, v_48 47.609 V, Stage C in 3389 W, iC pk 38.5/38.4 A, segments 2/2
+t= 500.0 us: v_bus 399.94 V, V_A 319.51 V, i_p 46.23 A, v_link 100.05 V, v_48 47.598 V, Stage C in 3241 W, iC pk 37.5/37.3 A, segments 2/2
+last 0.2 ms: v_bus 399.79-400.11 V, V_A mean 319.494 V, i_p mean 48.05 A, v_48 mean 47.707 V, Stage C input 2978 W, phase segments 116/116
+[prism_run] probe_TB06 finished (15.9 s)
