@@ -1,0 +1,19 @@
+TB08 case C_910V_disable_25kW: disable: ramp to V_A, zero vector, bypass, V_bat 910 V, 25 kW, dt 2.500 ns, wall 145 s
+(1) circuit limits on the Simscape model:
+    link_band                PASS
+    bus_window               PASS
+    path_current             PASS
+    filter_current           PASS
+    series_voltage           PASS
+    series_at_bypass_2V      PASS
+(2) comparison with E19 mode averaged model (diode state held per step):
+    metric                                            Simscape   reference      diff    result
+    min period-mean v_bus [V]                           454.01      454.06   -0.0501  info(ok)
+    max period-mean v_bus [V]                           460.02      460.01   +0.0151  info(ok)
+    max period-mean i_p [A]                             57.271      57.842    -0.571  info(ok)
+    max period-mean v_link [V]                          100.02      100.04   -0.0159  info(ok)
+    final mean v_bus [V]                                454.18      454.27   -0.0972  info(ok)
+    rms diff of period-mean v_bus [V]                  0.11189           0    +0.112  info(ok)
+    period-mean v_s just before bypass [V]            -0.22243    -0.17238     -0.05  info(ok)
+    bypass current peak 20us A (info)                   125.37         NaN       NaN      info
+    bus after bypass V (info)                           454.18         NaN       NaN      info

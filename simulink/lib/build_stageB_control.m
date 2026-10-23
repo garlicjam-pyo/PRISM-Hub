@@ -57,16 +57,17 @@ sl_add(cs, 'simulink/Sources/Constant', 'ctrl_tab',  [350 260 440 280], 'Value',
 sl_add(cs, 'simulink/Sources/Constant', 'smp',       [350 307 440 327], 'Value', [T '.smp']);
 if r2
     % 모드 시퀀서: 시각표에 따른 버스 기준전압 램프·제어기 재초기화·운전 모드(태그 r2_seq → 게이트 재정의)
-    sl_add(cs, 'simulink/Sources/Digital Clock', 'Clock_seq', [30 440 80 470], 'SampleTime', [T '.dt']);
-    sl_add(cs, 'simulink/Sources/Constant', 'seq_prm', [30 490 130 510], 'Value', [T '.seq_prm']);
-    sl_mfunc(cs, 'R2_Sequence', [160 430 270 520], 'prism_r2_sequence.m');
+    set_param([cs '/aux_unused'], 'ShowName', 'off');              % 종단 블록 이름은 숨긴다(아래 모드 시퀀서와 겹침 방지)
+    sl_add(cs, 'simulink/Sources/Digital Clock', 'Clock_seq', [30 480 80 510], 'SampleTime', [T '.dt']);
+    sl_add(cs, 'simulink/Sources/Constant', 'seq_prm', [30 530 130 550], 'Value', [T '.seq_prm']);
+    sl_mfunc(cs, 'R2_Sequence', [160 470 270 560], 'prism_r2_sequence.m');
     sl_line(cs, 'Clock_seq/1', 'R2_Sequence/1');
     sl_line(cs, 'seq_prm/1', 'R2_Sequence/2');
-    sl_add(cs, 'simulink/Signal Routing/Goto', 'r2_seq', [300 540 380 560], 'GotoTag', 'r2_seq', 'TagVisibility', 'global');
+    sl_add(cs, 'simulink/Signal Routing/Goto', 'r2_seq', [320 585 400 605], 'GotoTag', 'r2_seq', 'TagVisibility', 'global');
     sl_line(cs, 'R2_Sequence/1', 'r2_seq/1');
-    sl_add(cs, 'simulink/Signal Routing/Demux', 'seq_split', [300 430 305 520], 'Outputs', '3');
+    sl_add(cs, 'simulink/Signal Routing/Demux', 'seq_split', [300 470 305 560], 'Outputs', '3');
     sl_line(cs, 'R2_Sequence/1', 'seq_split/1');
-    sl_add(cs, 'simulink/Sinks/Terminator', 'mode_unused', [320 495 340 515]);
+    sl_add(cs, 'simulink/Sinks/Terminator', 'mode_unused', [330 535 350 555], 'ShowName', 'off');
     sl_line(cs, 'seq_split/1', 'y_mux/6');
     sl_line(cs, 'seq_split/2', 'y_mux/7');
     sl_line(cs, 'seq_split/3', 'mode_unused/1');
@@ -104,7 +105,7 @@ sl_line(cs, 'Adopted_Controller/2', 'ctrl_dg/1');
 sl_note(cs, sprintf(['채택 제어기(5 µs마다, 반송파 최댓값 표본): 1주기 예측 → 상태궤환 + 버스전압 적분(전류지령 ±84 A) → 내부 전류 법칙(m ±0.95)\n' ...
     '→ 링크전압 PI(1 kHz) + 앞먹임 → DAB 위상(L −10 %% 기준 + ρ̂·ε̂ 보정) → H-브리지 데드타임 보상(κ 0.6 → 1.0).\n' ...
     '코드: ctrl/prism_ctrl_sampler.m + ctrl/prism_stageB_controller.m(블록 안에 복사). 계산 결과는 5 µs 뒤 게이트에 적용된다.']), ...
-    [30 450 + 150*r2 900 510 + 150*r2], 'box');   % R2에서는 모드 시퀀서 아래로 내린다
+    [30 450 + 190*r2 900 510 + 190*r2], 'box');   % R2에서는 모드 시퀀서 아래로 내린다
 
 % ======================= 게이트 생성기 =====================================================
 gs = [sys '/Gate_StageB'];
@@ -131,8 +132,8 @@ gt = {'gB_AH', 'gB_AL', 'gB_BH', 'gB_BL', 'gD_P1', 'gD_P2', 'gD_P3', 'gD_P4', 'g
 if r2   % 게이트 재정의(모드: DAB 정지·영벡터·바이패스) → 13개 태그(바이패스 게이트 gByp 포함)
     sl_add(gs, 'simulink/Signal Routing/From', 'seq_from', [260 310 340 330], 'GotoTag', 'r2_seq');
     sl_add(gs, 'simulink/Signal Routing/Demux', 'seq_split', [360 300 365 360], 'Outputs', '3');
-    sl_add(gs, 'simulink/Sinks/Terminator', 'seq_unused1', [390 290 410 310]);
-    sl_add(gs, 'simulink/Sinks/Terminator', 'seq_unused2', [390 315 410 335]);
+    sl_add(gs, 'simulink/Sinks/Terminator', 'seq_unused1', [390 290 410 310], 'ShowName', 'off');
+    sl_add(gs, 'simulink/Sinks/Terminator', 'seq_unused2', [390 315 410 335], 'ShowName', 'off');
     sl_line(gs, 'seq_from/1', 'seq_split/1');
     sl_line(gs, 'seq_split/1', 'seq_unused1/1');
     sl_line(gs, 'seq_split/2', 'seq_unused2/1');

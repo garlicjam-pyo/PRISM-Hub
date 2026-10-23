@@ -1,0 +1,20 @@
+TB08 case E_930V_enable_25kW: enable: bypass + zero vector, bypass opens, control with ramp to V_W, V_bat 930 V, 25 kW, dt 2.500 ns, wall 97 s
+(1) circuit limits on the Simscape model:
+    link_band                PASS
+    bus_upper                PASS
+    final_voltage            PASS
+    path_current             PASS
+    filter_current           PASS
+    series_voltage           PASS
+(2) comparison with E19 mode averaged model (diode state held per step):
+    metric                                            Simscape   reference      diff    result
+    min period-mean v_bus [V]                           459.94         460   -0.0581  info(ok)
+    max period-mean v_bus [V]                           465.42      464.18     +1.23  info(ok)
+    max period-mean i_p [A]                             65.923      53.878       +12 info(over)
+    max period-mean v_link [V]                          100.02         100   +0.0212  info(ok)
+    final mean v_bus [V]                                460.02         460   +0.0151  info(ok)
+    rms diff of period-mean v_bus [V]                  0.33451           0    +0.335  info(ok)
+    vs excursion at open V (info)                       3.0196         NaN       NaN      info
+    ih range at open A (info)                           71.247         NaN       NaN      info
+    bus before ctrl V (info)                            463.32         NaN       NaN      info
+    settle after ramp ms (info)                              0         NaN       NaN      info

@@ -1,0 +1,86 @@
+{
+  "case": "C_910V_disable_25kW",
+  "kind": "averaged",
+  "limits": {
+    "link_band": true,
+    "bus_window": true,
+    "path_current": true,
+    "filter_current": true,
+    "series_voltage": true,
+    "series_at_bypass_2V": true
+  },
+  "limits_pass": true,
+  "agreement_pass": true,
+  "agreement_text": "info",
+  "verdict": "PASS",
+  "ripple_last1ms_V": null,
+  "wall_s": 110.2799915,
+  "dt_ns": 2.5,
+  "date": "2026-10-23 12:56:28",
+  "matlab": "25.1.0.2973910 (R2025a) Update 1",
+  "compare": [
+    {
+      "metric": "min period-mean v_bus [V]",
+      "simscape": 454.01330433818072,
+      "reference": 454.0634336,
+      "tol": 2,
+      "judged": false
+    },
+    {
+      "metric": "max period-mean v_bus [V]",
+      "simscape": 460.02082291356277,
+      "reference": 460.00571419999994,
+      "tol": 2,
+      "judged": false
+    },
+    {
+      "metric": "max period-mean i_p [A]",
+      "simscape": 57.201978741560353,
+      "reference": 57.84243218,
+      "tol": 3,
+      "judged": false
+    },
+    {
+      "metric": "max period-mean v_link [V]",
+      "simscape": 100.02281420182091,
+      "reference": 100.03872,
+      "tol": 1,
+      "judged": false
+    },
+    {
+      "metric": "final mean v_bus [V]",
+      "simscape": 454.09159950470621,
+      "reference": 454.27362309000011,
+      "tol": 1,
+      "judged": false
+    },
+    {
+      "metric": "rms diff of period-mean v_bus [V]",
+      "simscape": 0.13969979196064777,
+      "reference": 0,
+      "tol": 1,
+      "judged": false
+    },
+    {
+      "metric": "period-mean v_s just before bypass [V]",
+      "simscape": -0.22242820103944463,
+      "reference": -0.1723833828,
+      "tol": 1,
+      "judged": false
+    },
+    {
+      "metric": "bypass current peak 20us A (info)",
+      "simscape": 67.012531796821548,
+      "reference": null,
+      "tol": null,
+      "judged": false
+    },
+    {
+      "metric": "bus after bypass V (info)",
+      "simscape": 454.09159950470621,
+      "reference": null,
+      "tol": null,
+      "judged": false
+    }
+  ]
+}

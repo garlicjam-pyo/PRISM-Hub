@@ -1,0 +1,93 @@
+{
+  "case": "E_930V_enable_25kW",
+  "kind": "averaged",
+  "limits": {
+    "link_band": true,
+    "bus_upper": true,
+    "final_voltage": true,
+    "path_current": true,
+    "filter_current": true,
+    "series_voltage": true
+  },
+  "limits_pass": true,
+  "agreement_pass": true,
+  "agreement_text": "info",
+  "verdict": "PASS",
+  "ripple_last1ms_V": null,
+  "wall_s": 97.4670444,
+  "dt_ns": 2.5,
+  "date": "2026-10-23 12:59:52",
+  "matlab": "25.1.0.2973910 (R2025a) Update 1",
+  "compare": [
+    {
+      "metric": "min period-mean v_bus [V]",
+      "simscape": 459.94189367811515,
+      "reference": 460,
+      "tol": 2,
+      "judged": false
+    },
+    {
+      "metric": "max period-mean v_bus [V]",
+      "simscape": 465.415224892332,
+      "reference": 464.1813548,
+      "tol": 2,
+      "judged": false
+    },
+    {
+      "metric": "max period-mean i_p [A]",
+      "simscape": 65.923415703081361,
+      "reference": 53.877708,
+      "tol": 3,
+      "judged": false
+    },
+    {
+      "metric": "max period-mean v_link [V]",
+      "simscape": 100.02185210807954,
+      "reference": 100.00062299999999,
+      "tol": 1,
+      "judged": false
+    },
+    {
+      "metric": "final mean v_bus [V]",
+      "simscape": 460.015092780223,
+      "reference": 460,
+      "tol": 1,
+      "judged": false
+    },
+    {
+      "metric": "rms diff of period-mean v_bus [V]",
+      "simscape": 0.33451210540085741,
+      "reference": 0,
+      "tol": 1,
+      "judged": false
+    },
+    {
+      "metric": "vs excursion at open V (info)",
+      "simscape": 3.0196389563401174,
+      "reference": null,
+      "tol": null,
+      "judged": false
+    },
+    {
+      "metric": "ih range at open A (info)",
+      "simscape": 71.246699538794374,
+      "reference": null,
+      "tol": null,
+      "judged": false
+    },
+    {
+      "metric": "bus before ctrl V (info)",
+      "simscape": 463.31951152137719,
+      "reference": null,
+      "tol": null,
+      "judged": false
+    },
+    {
+      "metric": "settle after ramp ms (info)",
+      "simscape": 0,
+      "reference": null,
+      "tol": null,
+      "judged": false
+    }
+  ]
+}

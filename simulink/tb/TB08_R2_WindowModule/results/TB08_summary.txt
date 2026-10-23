@@ -1,0 +1,8 @@
+TB08 R2 window-regulation Stage B module (R2-W460: V_W 460 V, DAB 4.6:1 4 kW, bypass 3.3 mOhm)
+run        case                     kind       limits   agreement  verdict
+A          A_1008V_1to25kW          switching  PASS     PASS       PASS
+B          B_930V_15to25kW          switching  PASS     PASS       PASS
+C          C_910V_disable_25kW      averaged   PASS     info       PASS
+D          D_1008V_dabfault_25kW    averaged   PASS     info       PASS
+E          E_930V_enable_25kW       averaged   PASS     info       PASS
+TB08 overall (judged runs): PASS

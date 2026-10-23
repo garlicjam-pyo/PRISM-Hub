@@ -1,0 +1,18 @@
+TB08 case D_1008V_dabfault_25kW: DAB fault: 1 ms ramp to V_A, zero vector, bypass, V_bat 1008 V, 25 kW, dt 2.500 ns, wall 100 s
+(1) circuit limits on the Simscape model:
+    link_max_120V            PASS
+    bus_min_260V             PASS
+    path_current             PASS
+    filter_current           PASS
+    series_voltage           PASS
+(2) comparison with E19 mode averaged model (diode state held per step):
+    metric                                            Simscape   reference      diff    result
+    min period-mean v_bus [V]                           459.38      459.66    -0.276  info(ok)
+    max period-mean v_bus [V]                           505.08      505.12   -0.0409  info(ok)
+    max period-mean i_p [A]                             69.741      69.794   -0.0527  info(ok)
+    max period-mean v_link [V]                          109.76      109.72   +0.0425  info(ok)
+    final mean v_bus [V]                                503.18      503.34    -0.164  info(ok)
+    rms diff of period-mean v_bus [V]                   0.1722           0    +0.172  info(ok)
+    period-mean v_s just before bypass [V]             0.58987     0.51463   +0.0752  info(ok)
+    bypass current peak 20us A (info)                   173.36         NaN       NaN      info
+    bus after bypass V (info)                           503.18         NaN       NaN      info

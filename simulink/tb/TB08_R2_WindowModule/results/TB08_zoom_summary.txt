@@ -1,0 +1,6 @@
+TB08 bypass transitions, instantaneous (Simscape, dt 2.5 ns, ideal bypass loop: no stray inductance, C_s ESR 1 uOhm, bypass 3.3 mOhm)
+C_910V_disable_25kW bypass closing at 3.20 ms: v_s before -0.223 V (i_p 55.3 A, i_h 55.2 A), i_byp peak 67.0 A at +0.00 us, settled 56.1 A,
+    |i_byp - settled| > 20 A for 1.90 us, C_s discharge 3.7 uC (C_s*dv 3.8 uC), C_s energy 2.5 uJ, per device 34 A = 0.10 x EPC2305 pulse rating (329 A)
+D_1008V_dabfault_25kW bypass closing at 2.40 ms: v_s before 0.577 V (i_p 37.6 A, i_h 37.2 A), i_byp peak -173.4 A at +0.00 us, settled 32.2 A,
+    |i_byp - settled| > 20 A for 1.13 us, C_s discharge -67.6 uC (C_s*dv -67.8 uC), C_s energy 16.6 uJ, per device 87 A = 0.26 x EPC2305 pulse rating (329 A)
+E_930V_enable_25kW bypass opening at 0.50 ms (zero vector until control at 0.70 ms): i_p 28.6-73.4 A, i_h 32.4-71.2 A, v_s -3.02..1.01 V, v_bus max 465.11 V, ringing 19.6 kHz

@@ -1,0 +1,28 @@
+TB08 case A_1008V_1to25kW: Tier-2 window regulation, V_bat 1008 V, 1 -> 25 kW at 1.0 ms, dt 2.500 ns, wall 132 s
+(1) circuit limits on the Simscape model:
+    bus_band_after_step      PASS
+    final_voltage            PASS
+    path_filter_current      PASS
+    link_current             PASS
+    link_power_rating        PASS
+    link_voltage             PASS
+    series_voltage           PASS
+    class_upper              PASS
+    last-1ms ripple of period-mean v_bus 0.187 V (info; 0.1 V criterion applies at the 0.625 ns gate grid, TB04B)
+(2) comparison with E12 switching ODE (same case recomputed with the R2-W460 design values):
+    metric                                            Simscape   reference      diff    result
+    pre-step mean v_bus [V]                                460      460.02   -0.0123      PASS
+    pre-step mean i_p [A]                               2.0974      1.9034    +0.194      PASS
+    pre-step mean i_h [A]                               2.0898      1.8891    +0.201      PASS
+    pre-step mean v_link [V]                               100      100.01   -0.0135      PASS
+    pre-step mean link current [A]                    -0.84703     -1.0144    +0.167      PASS
+    min v_bus after step [V]                            455.95      456.02   -0.0714      PASS
+    max |i_p| after step [A]                            69.663      67.819     +1.84      PASS
+    max i_h after step [A]                              79.678      77.601     +2.08      PASS
+    rms diff of period-mean v_bus after step [V]      0.061011           0    +0.061      PASS
+    final mean v_bus [V]                                460.02         460   +0.0167      PASS
+    final mean i_p [A]                                  50.011       49.85    +0.161      PASS
+    final mean v_link [V]                                  100         100 +0.000175      PASS
+    final mean link current [A]                        -21.551     -21.601   +0.0497      PASS
+    max |link power| (period mean) [W]                  3217.8      3324.4      -107      info
+    rho_hat at 1.0 ms (info)                                 1           1        +0      info

@@ -35,7 +35,7 @@ from E14_protection_startup import run_modes, run_modes_cont, va_est, zero_vecto
 VW, PR = 460., 4000.
 p, cp = E19.plant("W460_240s", PR)            # 플랜트·제어기 파라미터(기준전압·권선비·누설 L·DAB 정격만 400 V 설계와 다름)
 K = np.asarray(K_ADOPTED, float)
-R_BYP = 3.3e-3                                # 바이패스 스위치(150 V GaN 역직렬 2개) 도통저항
+R_BYP = 3.3e-3                                # 바이패스 스위치(150 V GaN 2병렬 × 역직렬, E15와 같음) 도통저항
 R_HZ = p.Rh + 2 * 1e-4                        # H-브리지 영벡터 경로: L_h 저항 + 하측 스위치 2개(회로 R_on 0.1 mΩ)
 REC_COLS = ["vbus", "ip", "ih", "vlink", "ilink", "plink", "ih_max", "ih_min", "ip_absmax", "vbus_min", "vbus_max",
             "vlink_min", "vlink_max", "iL_absmax", "m_cmd", "ilink_cmd", "phase", "vs_absmax", "m_pwm", "iL_mean",

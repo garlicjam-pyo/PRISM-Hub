@@ -1,0 +1,28 @@
+TB08 case A_1008V_1to25kW_0.625ns: Tier-2 window regulation, V_bat 1008 V, 1 -> 25 kW at 1.0 ms, dt 0.625 ns, wall 473 s
+(1) circuit limits on the Simscape model:
+    bus_band_after_step      PASS
+    final_voltage            PASS
+    path_filter_current      PASS
+    link_current             PASS
+    link_power_rating        PASS
+    link_voltage             PASS
+    series_voltage           PASS
+    class_upper              PASS
+    last-1ms ripple of period-mean v_bus 0.050 V (info; 0.1 V criterion applies at the 0.625 ns gate grid, TB04B)
+(2) comparison with E12 switching ODE (same case recomputed with the R2-W460 design values):
+    metric                                            Simscape   reference      diff    result
+    pre-step mean v_bus [V]                             460.02      460.02   +0.0029      PASS
+    pre-step mean i_p [A]                               2.1094      1.9034    +0.206      PASS
+    pre-step mean i_h [A]                               2.1101      1.8891    +0.221      PASS
+    pre-step mean v_link [V]                               100      100.01   -0.0134      PASS
+    pre-step mean link current [A]                    -0.98415     -1.0144   +0.0302      PASS
+    min v_bus after step [V]                            455.99      456.02   -0.0311      PASS
+    max |i_p| after step [A]                            69.622      67.819      +1.8      PASS
+    max i_h after step [A]                              79.517      77.601     +1.92      PASS
+    rms diff of period-mean v_bus after step [V]       0.03148           0   +0.0315      PASS
+    final mean v_bus [V]                                   460         460  +0.00504      PASS
+    final mean i_p [A]                                  49.864       49.85   +0.0139      PASS
+    final mean v_link [V]                                  100         100 +0.000312      PASS
+    final mean link current [A]                         -21.51     -21.601   +0.0907      PASS
+    max |link power| (period mean) [W]                  3188.4      3324.4      -136      info
+    rho_hat at 1.0 ms (info)                                 1           1        +0      info

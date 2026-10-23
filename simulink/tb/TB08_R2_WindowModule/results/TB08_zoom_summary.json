@@ -1,0 +1,53 @@
+{
+  "C": {
+    "case": "C_910V_disable_25kW",
+    "wall_s": 82.0302843,
+    "t_event_ms": 3.2,
+    "vs_before_V": -0.22288225582921206,
+    "ip_before_A": 55.255804041847796,
+    "ih_before_A": 55.234695456830018,
+    "ibyp_peak_A": 67.012531796821548,
+    "t_peak_us": 0,
+    "ibyp_settled_A": 56.105770561597666,
+    "excess_over_20A_us": 1.9000000000000001,
+    "excess_charge_uC": -78.751836989778624,
+    "Cs_discharge_charge_uC": 3.7033933499220759,
+    "Cs_dv_charge_uC": 3.7871070354023066,
+    "Cs_energy_uJ": 2.4838249981759168,
+    "per_device_peak_A": 33.506265898410774,
+    "per_device_vs_pulse_rating": 0.10184275349061025
+  },
+  "D": {
+    "case": "D_1008V_dabfault_25kW",
+    "wall_s": 61.4895155,
+    "t_event_ms": 2.4000000000000004,
+    "vs_before_V": 0.57661103776033118,
+    "ip_before_A": 37.591589164023681,
+    "ih_before_A": 37.196355499499219,
+    "ibyp_peak_A": -173.3615625276278,
+    "t_peak_us": 0,
+    "ibyp_settled_A": 32.233876473515771,
+    "excess_over_20A_us": 1.1325,
+    "excess_charge_uC": -79.787915653895837,
+    "Cs_discharge_charge_uC": -67.575143838589838,
+    "Cs_dv_charge_uC": -67.792329581125685,
+    "Cs_energy_uJ": 16.6240144433523,
+    "per_device_peak_A": 86.6807812638139,
+    "per_device_vs_pulse_rating": 0.2634674202547535
+  },
+  "E": {
+    "case": "E_930V_enable_25kW",
+    "wall_s": 21.4576999,
+    "t_event_ms": 0.5,
+    "ip_max_A": 73.3873913262428,
+    "ip_min_A": 28.60232260691588,
+    "ih_max_A": 71.246699538794374,
+    "ih_min_A": 32.398534129522716,
+    "vs_range_V": [
+      -3.0196389563401174,
+      1.0105381376752607
+    ],
+    "vbus_max_V": 465.111388140782,
+    "ring_freq_kHz": 19.621308741293031
+  }
+}

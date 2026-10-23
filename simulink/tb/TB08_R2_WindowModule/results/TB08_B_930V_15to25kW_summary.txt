@@ -1,0 +1,27 @@
+TB08 case B_930V_15to25kW: Tier-1 window regulation, V_bat 930 V, 15 -> 25 kW at 1.0 ms, dt 2.500 ns, wall 97 s
+(1) circuit limits on the Simscape model:
+    bus_window               PASS
+    path_filter_current      PASS
+    link_current             PASS
+    link_power_rating        PASS
+    link_voltage             PASS
+    series_voltage           PASS
+    class_upper              PASS
+    last-1ms ripple of period-mean v_bus 0.145 V (info; 0.1 V criterion applies at the 0.625 ns gate grid, TB04B)
+(2) comparison with E12 switching ODE (same case recomputed with the R2-W460 design values):
+    metric                                            Simscape   reference      diff    result
+    pre-step mean v_bus [V]                                460         460   -0.0021      PASS
+    pre-step mean i_p [A]                               32.521      32.298    +0.223      PASS
+    pre-step mean i_h [A]                               32.516        32.3    +0.216      PASS
+    pre-step mean v_link [V]                            99.998      100.01  -0.00724  info(ok)
+    pre-step mean link current [A]                     -1.3027     -1.5352    +0.233  info(ok)
+    min v_bus after step [V]                            458.31      458.28   +0.0208      PASS
+    max |i_p| after step [A]                            64.471      64.457   +0.0141      PASS
+    max i_h after step [A]                               67.55      67.474    +0.076      PASS
+    rms diff of period-mean v_bus after step [V]      0.031369           0   +0.0314      PASS
+    final mean v_bus [V]                                   460         460  -0.00396      PASS
+    final mean i_p [A]                                  54.134      53.878    +0.256      PASS
+    final mean v_link [V]                               99.999         100 -0.000536  info(ok)
+    final mean link current [A]                        -2.3005     -2.2562   -0.0442  info(ok)
+    max |link power| (period mean) [W]                  1384.3      400.78      +984      info
+    rho_hat at 1.0 ms (info)                                 1           1        +0      info

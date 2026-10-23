@@ -1,0 +1,552 @@
+[
+  {
+    "case": "A_1008V_1to25kW",
+    "kind": "switching",
+    "limits": {
+      "bus_band_after_step": true,
+      "final_voltage": true,
+      "path_filter_current": true,
+      "link_current": true,
+      "link_power_rating": true,
+      "link_voltage": true,
+      "series_voltage": true,
+      "class_upper": true
+    },
+    "limits_pass": true,
+    "agreement_pass": true,
+    "agreement_text": "PASS",
+    "verdict": "PASS",
+    "ripple_last1ms_V": 0.18693821266424493,
+    "wall_s": 131.6199843,
+    "dt_ns": 2.5,
+    "date": "2026-10-23 12:21:46",
+    "matlab": "25.1.0.2973910 (R2025a) Update 1",
+    "compare": [
+      {
+        "metric": "pre-step mean v_bus [V]",
+        "simscape": 460.00273707766883,
+        "reference": 460.01507342499997,
+        "tol": 0.2,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean i_p [A]",
+        "simscape": 2.0973804874008013,
+        "reference": 1.9033672615000004,
+        "tol": 1,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean i_h [A]",
+        "simscape": 2.08984982054754,
+        "reference": 1.8891363035000002,
+        "tol": 1,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean v_link [V]",
+        "simscape": 100.00000326049174,
+        "reference": 100.01349807500002,
+        "tol": 0.5,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean link current [A]",
+        "simscape": -0.84702892440697453,
+        "reference": -1.0143763828000005,
+        "tol": 1.530431291484,
+        "judged": true
+      },
+      {
+        "metric": "min v_bus after step [V]",
+        "simscape": 455.94756882383348,
+        "reference": 456.018956,
+        "tol": 0.5,
+        "judged": true
+      },
+      {
+        "metric": "max |i_p| after step [A]",
+        "simscape": 69.662961017921816,
+        "reference": 67.8189367,
+        "tol": 2.0345681009999996,
+        "judged": true
+      },
+      {
+        "metric": "max i_h after step [A]",
+        "simscape": 79.678148494751227,
+        "reference": 77.6010481,
+        "tol": 2.328031443,
+        "judged": true
+      },
+      {
+        "metric": "rms diff of period-mean v_bus after step [V]",
+        "simscape": 0.061010977737167731,
+        "reference": 0,
+        "tol": 0.2,
+        "judged": true
+      },
+      {
+        "metric": "final mean v_bus [V]",
+        "simscape": 460.01619740684379,
+        "reference": 459.99951999999996,
+        "tol": 0.2,
+        "judged": true
+      },
+      {
+        "metric": "final mean i_p [A]",
+        "simscape": 50.011318380996137,
+        "reference": 49.850153080487807,
+        "tol": 1,
+        "judged": true
+      },
+      {
+        "metric": "final mean v_link [V]",
+        "simscape": 99.999684085486635,
+        "reference": 99.999509363414646,
+        "tol": 0.5,
+        "judged": true
+      },
+      {
+        "metric": "final mean link current [A]",
+        "simscape": -21.551391504634754,
+        "reference": -21.601050692682922,
+        "tol": 2.1480315207804876,
+        "judged": true
+      },
+      {
+        "metric": "max |link power| (period mean) [W]",
+        "simscape": 3217.8338321884034,
+        "reference": 3324.39073,
+        "tol": null,
+        "judged": false
+      },
+      {
+        "metric": "rho_hat at 1.0 ms (info)",
+        "simscape": 1,
+        "reference": 1,
+        "tol": null,
+        "judged": false
+      }
+    ],
+    "run": "A",
+    "judged": true
+  },
+  {
+    "case": "B_930V_15to25kW",
+    "kind": "switching",
+    "limits": {
+      "bus_window": true,
+      "path_filter_current": true,
+      "link_current": true,
+      "link_power_rating": true,
+      "link_voltage": true,
+      "series_voltage": true,
+      "class_upper": true
+    },
+    "limits_pass": true,
+    "agreement_pass": true,
+    "agreement_text": "PASS",
+    "verdict": "PASS",
+    "ripple_last1ms_V": 0.1446475984839708,
+    "wall_s": 128.3813175,
+    "dt_ns": 2.5,
+    "date": "2026-10-23 12:24:06",
+    "matlab": "25.1.0.2973910 (R2025a) Update 1",
+    "compare": [
+      {
+        "metric": "pre-step mean v_bus [V]",
+        "simscape": 459.99567741650736,
+        "reference": 459.99777592499993,
+        "tol": 0.2,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean i_p [A]",
+        "simscape": 32.521011869509181,
+        "reference": 32.297676527499995,
+        "tol": 1,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean i_h [A]",
+        "simscape": 32.515883265599257,
+        "reference": 32.299796715,
+        "tol": 1,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean v_link [V]",
+        "simscape": 99.998474841453458,
+        "reference": 100.005715825,
+        "tol": 0.5,
+        "judged": false
+      },
+      {
+        "metric": "pre-step mean link current [A]",
+        "simscape": -1.3026598806333964,
+        "reference": -1.535227928,
+        "tol": 1.54605683784,
+        "judged": false
+      },
+      {
+        "metric": "min v_bus after step [V]",
+        "simscape": 458.30548240350851,
+        "reference": 458.284675,
+        "tol": 0.5,
+        "judged": true
+      },
+      {
+        "metric": "max |i_p| after step [A]",
+        "simscape": 64.471413605095776,
+        "reference": 64.4573193,
+        "tol": 2,
+        "judged": true
+      },
+      {
+        "metric": "max i_h after step [A]",
+        "simscape": 67.54979274986097,
+        "reference": 67.4737677,
+        "tol": 2.024213031,
+        "judged": true
+      },
+      {
+        "metric": "rms diff of period-mean v_bus after step [V]",
+        "simscape": 0.031369456225724589,
+        "reference": 0,
+        "tol": 0.2,
+        "judged": true
+      },
+      {
+        "metric": "final mean v_bus [V]",
+        "simscape": 459.99603335058657,
+        "reference": 459.99999499999984,
+        "tol": 0.2,
+        "judged": true
+      },
+      {
+        "metric": "final mean i_p [A]",
+        "simscape": 54.1340524873333,
+        "reference": 53.877760099999996,
+        "tol": 1,
+        "judged": true
+      },
+      {
+        "metric": "final mean v_link [V]",
+        "simscape": 99.999430114884134,
+        "reference": 99.999965999999958,
+        "tol": 0.5,
+        "judged": false
+      },
+      {
+        "metric": "final mean link current [A]",
+        "simscape": -2.3004735085754393,
+        "reference": -2.25623414390244,
+        "tol": 1.5676870243170731,
+        "judged": false
+      },
+      {
+        "metric": "max |link power| (period mean) [W]",
+        "simscape": 1384.3256723512968,
+        "reference": 400.781713,
+        "tol": null,
+        "judged": false
+      },
+      {
+        "metric": "rho_hat at 1.0 ms (info)",
+        "simscape": 1,
+        "reference": 1,
+        "tol": null,
+        "judged": false
+      }
+    ],
+    "run": "B",
+    "judged": true
+  },
+  {
+    "case": "C_910V_disable_25kW",
+    "kind": "averaged",
+    "limits": {
+      "link_band": true,
+      "bus_window": true,
+      "path_current": true,
+      "filter_current": true,
+      "series_voltage": true,
+      "series_at_bypass_2V": true
+    },
+    "limits_pass": true,
+    "agreement_pass": true,
+    "agreement_text": "info",
+    "verdict": "PASS",
+    "ripple_last1ms_V": null,
+    "wall_s": 144.613876,
+    "dt_ns": 2.5,
+    "date": "2026-10-23 12:26:35",
+    "matlab": "25.1.0.2973910 (R2025a) Update 1",
+    "compare": [
+      {
+        "metric": "min period-mean v_bus [V]",
+        "simscape": 454.01330433829077,
+        "reference": 454.0634336,
+        "tol": 2,
+        "judged": false
+      },
+      {
+        "metric": "max period-mean v_bus [V]",
+        "simscape": 460.02082291322353,
+        "reference": 460.00571419999994,
+        "tol": 2,
+        "judged": false
+      },
+      {
+        "metric": "max period-mean i_p [A]",
+        "simscape": 57.271190413132508,
+        "reference": 57.84243218,
+        "tol": 3,
+        "judged": false
+      },
+      {
+        "metric": "max period-mean v_link [V]",
+        "simscape": 100.02280024367157,
+        "reference": 100.03872,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "final mean v_bus [V]",
+        "simscape": 454.17646590288143,
+        "reference": 454.27362309000011,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "rms diff of period-mean v_bus [V]",
+        "simscape": 0.11188597071392047,
+        "reference": 0,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "period-mean v_s just before bypass [V]",
+        "simscape": -0.22242820099766458,
+        "reference": -0.1723833828,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "bypass current peak 20us A (info)",
+        "simscape": 125.37005854775825,
+        "reference": null,
+        "tol": null,
+        "judged": false
+      },
+      {
+        "metric": "bus after bypass V (info)",
+        "simscape": 454.17646590288143,
+        "reference": null,
+        "tol": null,
+        "judged": false
+      }
+    ],
+    "info": {
+      "bypass_current_peak_20us_A": 125.37005854775825,
+      "bus_after_bypass_V": 454.17646590288143
+    },
+    "run": "C",
+    "judged": true
+  },
+  {
+    "case": "D_1008V_dabfault_25kW",
+    "kind": "averaged",
+    "limits": {
+      "link_max_120V": true,
+      "bus_min_260V": true,
+      "path_current": true,
+      "filter_current": true,
+      "series_voltage": true
+    },
+    "limits_pass": true,
+    "agreement_pass": true,
+    "agreement_text": "info",
+    "verdict": "PASS",
+    "ripple_last1ms_V": null,
+    "wall_s": 125.7978705,
+    "dt_ns": 2.5,
+    "date": "2026-10-23 12:28:44",
+    "matlab": "25.1.0.2973910 (R2025a) Update 1",
+    "compare": [
+      {
+        "metric": "min period-mean v_bus [V]",
+        "simscape": 459.38216048859613,
+        "reference": 459.6583234,
+        "tol": 2,
+        "judged": false
+      },
+      {
+        "metric": "max period-mean v_bus [V]",
+        "simscape": 505.07684124673153,
+        "reference": 505.1177826,
+        "tol": 2,
+        "judged": false
+      },
+      {
+        "metric": "max period-mean i_p [A]",
+        "simscape": 69.740906899112574,
+        "reference": 69.793575199999992,
+        "tol": 3,
+        "judged": false
+      },
+      {
+        "metric": "max period-mean v_link [V]",
+        "simscape": 109.76294567621687,
+        "reference": 109.72048199999999,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "final mean v_bus [V]",
+        "simscape": 503.25666645949036,
+        "reference": 503.34426125853668,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "rms diff of period-mean v_bus [V]",
+        "simscape": 0.14687075890353821,
+        "reference": 0,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "period-mean v_s just before bypass [V]",
+        "simscape": 0.58986839100589161,
+        "reference": 0.51463019260000009,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "bypass current peak 20us A (info)",
+        "simscape": 325.17784918586284,
+        "reference": null,
+        "tol": null,
+        "judged": false
+      },
+      {
+        "metric": "bus after bypass V (info)",
+        "simscape": 503.25666645949036,
+        "reference": null,
+        "tol": null,
+        "judged": false
+      }
+    ],
+    "info": {
+      "bypass_current_peak_20us_A": 325.17784918586284,
+      "bus_after_bypass_V": 503.25666645949036
+    },
+    "run": "D",
+    "judged": true
+  },
+  {
+    "case": "E_930V_enable_25kW",
+    "kind": "averaged",
+    "limits": {
+      "link_band": true,
+      "bus_upper": true,
+      "final_voltage": true,
+      "path_current": true,
+      "filter_current": true,
+      "series_voltage": true
+    },
+    "limits_pass": true,
+    "agreement_pass": true,
+    "agreement_text": "info",
+    "verdict": "PASS",
+    "ripple_last1ms_V": null,
+    "wall_s": 127.1551337,
+    "dt_ns": 2.5,
+    "date": "2026-10-23 12:30:55",
+    "matlab": "25.1.0.2973910 (R2025a) Update 1",
+    "compare": [
+      {
+        "metric": "min period-mean v_bus [V]",
+        "simscape": 459.9365065746278,
+        "reference": 460,
+        "tol": 2,
+        "judged": false
+      },
+      {
+        "metric": "max period-mean v_bus [V]",
+        "simscape": 465.56390525894767,
+        "reference": 464.1813548,
+        "tol": 2,
+        "judged": false
+      },
+      {
+        "metric": "max period-mean i_p [A]",
+        "simscape": 67.519897076740492,
+        "reference": 53.877708,
+        "tol": 3,
+        "judged": false
+      },
+      {
+        "metric": "max period-mean v_link [V]",
+        "simscape": 100.02232524515253,
+        "reference": 100.00062299999999,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "final mean v_bus [V]",
+        "simscape": 460.02249841400783,
+        "reference": 460,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "rms diff of period-mean v_bus [V]",
+        "simscape": 0.36287573188331107,
+        "reference": 0,
+        "tol": 1,
+        "judged": false
+      },
+      {
+        "metric": "vs excursion at open V (info)",
+        "simscape": 3.384040953356664,
+        "reference": null,
+        "tol": null,
+        "judged": false
+      },
+      {
+        "metric": "ih range at open A (info)",
+        "simscape": 73.386135839737136,
+        "reference": null,
+        "tol": null,
+        "judged": false
+      },
+      {
+        "metric": "bus before ctrl V (info)",
+        "simscape": 463.19854946246551,
+        "reference": null,
+        "tol": null,
+        "judged": false
+      },
+      {
+        "metric": "settle after ramp ms (info)",
+        "simscape": 0,
+        "reference": null,
+        "tol": null,
+        "judged": false
+      }
+    ],
+    "info": {
+      "vs_excursion_at_open_V": 3.384040953356664,
+      "ih_range_at_open_A": [
+        29.709601953596209,
+        73.386135839737136
+      ],
+      "bus_before_ctrl_V": 463.19854946246551,
+      "settle_after_ramp_ms": 0
+    },
+    "run": "E",
+    "judged": true
+  }
+]

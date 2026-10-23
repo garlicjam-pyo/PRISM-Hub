@@ -4,7 +4,7 @@ function build_TB08()
 %   R2 창 조정 Stage B 모듈(R2-W460: 1000 V급 240s 팩, B_470 부품)의 회로 확인.
 %   구성
 %     V_A(이상 전압원 V_bat/2) ── R_path ── L_path ── 경로전류 센서 ──┬── StageB_Regulator(SER → BUS) ──┬── 버스
-%                                                                     └── 바이패스(150 V GaN 역직렬 2개) ─┘
+%                                                                     └── 바이패스(150 V GaN 2병렬 × 역직렬) ─┘
 %     버스: C_b ∥ 정전력 부하(Load_CPL) ∥ DAB 손실 등가(DAB_Loss_Model) ∥ 버스전압 센서
 %     Controller_StageB(채택 제어기 + 모드 시퀀서 R2_Sequence) → 5 µs 전달지연
 %     → Gate_StageB(H-브리지 PWM, DAB 위상) → R2 게이트 재정의(DAB 정지·영벡터·바이패스) → 스위치 셀
@@ -42,8 +42,8 @@ sl_add(mdl, [fl 'Electrical Sources/Controlled Current Source'], 'I_dabloss', [1
 sl_add(mdl, 'nesl_utility/Simulink-PS Converter', 'iload_PS', [940 200 970 220]);
 sl_add(mdl, 'nesl_utility/Simulink-PS Converter', 'iloss_PS', [1030 200 1060 220]);
 
-% ---- 바이패스 스위치: 직렬 포트(SER–BUS)를 단락. 역직렬 2개로 두 방향 전압을 모두 막는다 ----------------------
-cb = struct('tag', 'gByp', 'Ron', 'TB.Rbyp_cell', 'Goff', 'TB.B.Goff', 'Vf', 'TB.B.Vf', 'Rd', 'TB.B.Rd', ...
+% ---- 바이패스 스위치: 직렬 포트(SER–BUS)를 단락. 역직렬 셀 2개로 두 방향 전압을 모두 막는다(셀 = 소자 2병렬) -----
+cb = struct('tag', 'gByp', 'Ron', 'TB.Rbyp_cell', 'Goff', 'TB.B.Goff', 'Vf', 'TB.Vf_byp', 'Rd', 'TB.Rd_byp', ...
     'Goffd', 'TB.B.Goffd', 'Coss', '');
 sl_add(mdl, [fl 'Electrical Sensors/Current Sensor'], 'I_byp', [430 60 480 100]);
 sl_switch_cell(mdl, 'S_BYP_1', [520 55 600 105], setfield(setfield(cb, 'label', 'BYP1'), 'orient', 'right')); %#ok<SFLD>
@@ -71,9 +71,9 @@ sl_pc(mdl, 'iload_PS', 'output', 'I_load', 'iT');
 sl_pc(mdl, 'iloss_PS', 'output', 'I_dabloss', 'iT');
 sl_meas(mdl, 'I_path', 'I', 'ip',   [310 440]);
 sl_meas(mdl, 'V_bus',  'V', 'vbus', [840 440]);
-sl_meas(mdl, 'I_byp',  'I', 'ibyp', [440 112]);
+sl_meas(mdl, 'I_byp',  'I', 'ibyp', [180 70]);     % 바이패스 셀 아래 게이트 표시와 겹치지 않게 왼쪽 위에 둔다
 sl_note(mdl, sprintf('Stage A 등가\n(이상 V_bat/2 + 13.2 mΩ + 1.5 µH)'), [40 300 260 330]);
-sl_note(mdl, sprintf('바이패스: 150 V GaN 역직렬 2개(합계 3.3 mΩ), 게이트 태그 gByp.\n모드 3·4에서 켜져 직렬 포트를 단락한다'), [740 60 1100 100]);
+sl_note(mdl, sprintf('바이패스: 150 V GaN 2병렬 × 역직렬(합계 3.3 mΩ, 역방향 도통 1.4 V), 게이트 태그 gByp.\n모드 3·4에서 켜져 직렬 포트를 단락한다'), [740 60 1120 100]);
 sl_note(mdl, sprintf('보조버스(창 기준 460 V, 상한 B_470)\nC_b 400 µF, 정전력 부하, DAB 손실 등가'), [760 500 1100 530]);
 
 % ---- 부하·손실 계산, 제어부 ------------------------------------------------------------------

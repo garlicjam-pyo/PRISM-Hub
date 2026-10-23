@@ -1,0 +1,134 @@
+[
+  {
+    "case": "A_1008V_1to25kW",
+    "kind": "switching",
+    "limits": {
+      "bus_band_after_step": true,
+      "final_voltage": true,
+      "path_filter_current": true,
+      "link_current": true,
+      "link_power_rating": true,
+      "link_voltage": true,
+      "series_voltage": true,
+      "class_upper": true
+    },
+    "limits_pass": true,
+    "agreement_pass": true,
+    "agreement_text": "PASS",
+    "verdict": "PASS",
+    "ripple_last1ms_V": 0.050187683926026239,
+    "wall_s": 472.7733388,
+    "dt_ns": 0.625,
+    "date": "2026-10-23 13:10:59",
+    "matlab": "25.1.0.2973910 (R2025a) Update 1",
+    "compare": [
+      {
+        "metric": "pre-step mean v_bus [V]",
+        "simscape": 460.01797270122586,
+        "reference": 460.01507342499997,
+        "tol": 0.2,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean i_p [A]",
+        "simscape": 2.109365706042964,
+        "reference": 1.9033672615000004,
+        "tol": 1,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean i_h [A]",
+        "simscape": 2.1101363784661396,
+        "reference": 1.8891363035000002,
+        "tol": 1,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean v_link [V]",
+        "simscape": 100.0001389392056,
+        "reference": 100.01349807500002,
+        "tol": 0.5,
+        "judged": true
+      },
+      {
+        "metric": "pre-step mean link current [A]",
+        "simscape": -0.98414537229300358,
+        "reference": -1.0143763828000005,
+        "tol": 1.530431291484,
+        "judged": true
+      },
+      {
+        "metric": "min v_bus after step [V]",
+        "simscape": 455.98787442463134,
+        "reference": 456.018956,
+        "tol": 0.5,
+        "judged": true
+      },
+      {
+        "metric": "max |i_p| after step [A]",
+        "simscape": 69.621852215453217,
+        "reference": 67.8189367,
+        "tol": 2.0345681009999996,
+        "judged": true
+      },
+      {
+        "metric": "max i_h after step [A]",
+        "simscape": 79.516915149939791,
+        "reference": 77.6010481,
+        "tol": 2.328031443,
+        "judged": true
+      },
+      {
+        "metric": "rms diff of period-mean v_bus after step [V]",
+        "simscape": 0.031480466024898054,
+        "reference": 0,
+        "tol": 0.2,
+        "judged": true
+      },
+      {
+        "metric": "final mean v_bus [V]",
+        "simscape": 460.00455782005309,
+        "reference": 459.99951999999996,
+        "tol": 0.2,
+        "judged": true
+      },
+      {
+        "metric": "final mean i_p [A]",
+        "simscape": 49.864010511057444,
+        "reference": 49.850153080487807,
+        "tol": 1,
+        "judged": true
+      },
+      {
+        "metric": "final mean v_link [V]",
+        "simscape": 99.999821452634734,
+        "reference": 99.999509363414646,
+        "tol": 0.5,
+        "judged": true
+      },
+      {
+        "metric": "final mean link current [A]",
+        "simscape": -21.510357382306065,
+        "reference": -21.601050692682922,
+        "tol": 2.1480315207804876,
+        "judged": true
+      },
+      {
+        "metric": "max |link power| (period mean) [W]",
+        "simscape": 3188.3800883857325,
+        "reference": 3324.39073,
+        "tol": null,
+        "judged": false
+      },
+      {
+        "metric": "rho_hat at 1.0 ms (info)",
+        "simscape": 1,
+        "reference": 1,
+        "tol": null,
+        "judged": false
+      }
+    ],
+    "run": "A_0.625ns",
+    "judged": false
+  }
+]
