@@ -175,4 +175,4 @@ prism_run('run_TB08_zoom')   % 바이패스 전환 순시 분석(약 3분)
 prism_run('run_TB08_fine')   % 실행 6: 사례 A, 게이트 격자 0.625 ns(정보)
 ```
 
-기준값은 `ref/make_ref_TB08.py <검증 코드 python 폴더>`로 다시 만든다.
+기준값은 `ref/make_ref_TB08.py <검증 코드 python 폴더>`로 다시 만든다. 보고서 그림(docs/fig/tb08_bypass_transitions.png)은 `report_fig_TB08.py`가 결과 파일에서 만든다.
