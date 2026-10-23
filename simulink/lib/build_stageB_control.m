@@ -20,9 +20,14 @@ function build_stageB_control(sys, posCtrl, posGate, T, opt)
 %     태그 r2_seq로 내보내고, V_ref·재초기화는 제어기 입력 y(10)·y(11)로 넣는다(ctrl/prism_ctrl_sampler_r2.m).
 %     Gate_StageB에는 게이트 재정의(ctrl/prism_r2_gate.m)를 넣어 모드에 따라 DAB 정지·영벡터·바이패스를 만들고,
 %     바이패스 게이트를 태그 gByp로 내보낸다. opt를 주지 않으면 이전과 같은 모델을 만든다.
+%   opt.r2b = true (선택, TB09 R2 보호 상태기계)
+%     시퀀서 대신 R2_Supervisor(ctrl/prism_r2_sup_sampler.m + prism_r2_supervisor.m, 상수 T.sup_prm)를 넣고, 지령 12개를
+%     태그 r2_sup로 내보낸다. 제어기는 ctrl/prism_ctrl_sampler_r2b.m. Gate_StageB에는 보호 게이트 재정의
+%     (ctrl/prism_r2_gate_b.m, 상수 T.prot_prm)를 넣어 게이트 14개(gByp, gBrk 포함)와 고장 신호 r2_flags를 낸다.
 
 if nargin < 5, opt = struct(); end
-r2 = isfield(opt, 'r2') && opt.r2;
+r2b = isfield(opt, 'r2b') && opt.r2b;          % (TB09) 측정 기반 보호 상태기계(시퀀서 대신)
+r2 = (isfield(opt, 'r2') && opt.r2) || r2b;
 % ======================= 제어기 ==========================================================
 cs = [sys '/Controller_StageB'];
 add_block('built-in/Subsystem', cs, 'Position', posCtrl, 'BackgroundColor', 'orange');
@@ -41,7 +46,9 @@ sl_add(cs, 'simulink/Sources/Constant', 'V_bat', [30 300 120 320], 'Value', [T '
 sl_add(cs, 'simulink/Signal Routing/From', 'aux_from', [30 340 120 360], 'GotoTag', 'gate_aux');
 sl_add(cs, 'simulink/Signal Routing/Demux', 'aux_split', [150 330 155 410], 'Outputs', '[1 1 1 3]');
 sl_add(cs, 'simulink/Sinks/Terminator', 'aux_unused', [190 400 210 420]);
-if r2   % [측정 5 | V_bat | 링크전류 평균 | φ_c0 | φ_c1 | V_ref | 재초기화]
+if r2b  % [측정 5 | V_bat | 링크전류 평균 | φ_c0 | φ_c1 | V_ref | 재초기화 | 브리지 모드 | 조향 m | DAB 모드 | 보조 지령]
+    sl_add(cs, 'simulink/Signal Routing/Mux', 'y_mux', [330 60 335 300], 'Inputs', '11');
+elseif r2   % [측정 5 | V_bat | 링크전류 평균 | φ_c0 | φ_c1 | V_ref | 재초기화]
     sl_add(cs, 'simulink/Signal Routing/Mux', 'y_mux', [330 60 335 240], 'Inputs', '7');
 else    % [측정 5 | V_bat | 링크전류 평균 | φ_c0 | φ_c1]
     sl_add(cs, 'simulink/Signal Routing/Mux', 'y_mux', [330 60 335 200], 'Inputs', '5');
@@ -55,7 +62,38 @@ sl_add(cs, 'simulink/Sources/Constant', 'ctrl_prm',  [350 167 440 187], 'Value',
 sl_add(cs, 'simulink/Sources/Constant', 'ctrl_init', [350 213 440 233], 'Value', [T '.ctrl_init']);
 sl_add(cs, 'simulink/Sources/Constant', 'ctrl_tab',  [350 260 440 280], 'Value', [T '.ctrl_tab']);
 sl_add(cs, 'simulink/Sources/Constant', 'smp',       [350 307 440 327], 'Value', [T '.smp']);
-if r2
+if r2b
+    % 보호 상태기계: 측정값·고장 신호로 운전 상태를 정하고 지령 12개를 낸다(태그 r2_sup → 게이트 재정의·부하·바이패스)
+    set_param([cs '/aux_unused'], 'ShowName', 'off');
+    sl_add(cs, 'simulink/Sources/Digital Clock', 'Clock_sup', [30 480 80 510], 'SampleTime', [T '.dt']);
+    sl_add(cs, 'simulink/Signal Routing/From', 'flags_from', [30 525 110 545], 'GotoTag', 'r2_flags');
+    sl_add(cs, 'simulink/Sources/Constant', 'sup_prm', [30 560 130 580], 'Value', [T '.sup_prm']);
+    sl_add(cs, 'simulink/Sources/Constant', 'sup_smp', [30 595 130 615], 'Value', [T '.smp']);
+    sl_mfunc(cs, 'R2_Supervisor', [170 470 290 625], {'prism_r2_sup_sampler.m', 'prism_r2_supervisor.m'});
+    sl_line(cs, 'Clock_sup/1', 'R2_Supervisor/1');
+    sl_add(cs, 'simulink/Discrete/Unit Delay', 'sup_meas_z1', [120 440 150 465], 'SampleTime', [T '.dt'], ...
+        'InitialCondition', [T '.meas0''']);                          % 회로 ↔ 상태기계 대수 루프 방지(한 간격 지연)
+    sl_add(cs, 'simulink/Signal Routing/Goto', 'meas_g', [255 108 305 124], 'GotoTag', 'meas_g', 'ShowName', 'off', ...
+        'Orientation', 'left');                                     % 기동 보호 위(입력이 오른쪽을 향하게)
+    sl_add(cs, 'simulink/Signal Routing/From', 'meas_g_from', [30 442 100 462], 'GotoTag', 'meas_g', 'ShowName', 'off');
+    sl_line(cs, 'Startup_guard/1', 'meas_g/1');                     % 측정값(기동 보호 뒤)을 지역 태그로 넘겨 긴 배선을 피한다
+    sl_line(cs, 'meas_g_from/1', 'sup_meas_z1/1');
+    sl_line(cs, 'sup_meas_z1/1', 'R2_Supervisor/2');
+    sl_line(cs, 'flags_from/1', 'R2_Supervisor/3');
+    sl_line(cs, 'sup_prm/1', 'R2_Supervisor/4');
+    sl_line(cs, 'sup_smp/1', 'R2_Supervisor/5');
+    sl_add(cs, 'simulink/Signal Routing/Goto', 'r2_sup', [330 640 410 660], 'GotoTag', 'r2_sup', 'TagVisibility', 'global');
+    sl_line(cs, 'R2_Supervisor/1', 'r2_sup/1');
+    sl_add(cs, 'simulink/Signal Routing/Demux', 'sup_split', [320 470 325 625], 'Outputs', '[1 1 1 1 1 1 6]');
+    sl_line(cs, 'R2_Supervisor/1', 'sup_split/1');
+    sl_add(cs, 'simulink/Sinks/Terminator', 'sup_rest', [345 605 365 625], 'ShowName', 'off');
+    for k = 1:6, sl_line(cs, sprintf('sup_split/%d', k), sprintf('y_mux/%d', 5 + k)); end
+    sl_line(cs, 'sup_split/7', 'sup_rest/1');
+    sl_mfunc(cs, 'Adopted_Controller', [460 60 640 340], {'prism_ctrl_sampler_r2b.m', 'prism_stageB_controller.m'});
+    sl_note(cs, sprintf(['R2 보호 상태기계(TB09): R2_Supervisor가 5 µs마다 측정값·고장 신호(r2_flags)로 상태를 정한다(ctrl/prism_r2_supervisor.m,\n' ...
+        '검증 코드 E17과 같은 논리). 지령: V_ref, 재초기화, 브리지 모드, 조향 변조율, DAB 모드, 보조 링크전류 지령(→ 제어기),\n' ...
+        '바이패스 소프트 저항·주 스위치, 제동 저항, 400 V 부하 분리, 상태 번호, 검출 원인(→ 태그 r2_sup)']), [460 380 1150 440], 'box');
+elseif r2
     % 모드 시퀀서: 시각표에 따른 버스 기준전압 램프·제어기 재초기화·운전 모드(태그 r2_seq → 게이트 재정의)
     set_param([cs '/aux_unused'], 'ShowName', 'off');              % 종단 블록 이름은 숨긴다(아래 모드 시퀀서와 겹침 방지)
     sl_add(cs, 'simulink/Sources/Digital Clock', 'Clock_seq', [30 480 80 510], 'SampleTime', [T '.dt']);
@@ -105,7 +143,7 @@ sl_line(cs, 'Adopted_Controller/2', 'ctrl_dg/1');
 sl_note(cs, sprintf(['채택 제어기(5 µs마다, 반송파 최댓값 표본): 1주기 예측 → 상태궤환 + 버스전압 적분(전류지령 ±84 A) → 내부 전류 법칙(m ±0.95)\n' ...
     '→ 링크전압 PI(1 kHz) + 앞먹임 → DAB 위상(L −10 %% 기준 + ρ̂·ε̂ 보정) → H-브리지 데드타임 보상(κ 0.6 → 1.0).\n' ...
     '코드: ctrl/prism_ctrl_sampler.m + ctrl/prism_stageB_controller.m(블록 안에 복사). 계산 결과는 5 µs 뒤 게이트에 적용된다.']), ...
-    [30 450 + 190*r2 900 510 + 190*r2], 'box');   % R2에서는 모드 시퀀서 아래로 내린다
+    [30 450 + 190*r2 + 80*r2b 900 510 + 190*r2 + 80*r2b], 'box');   % R2에서는 모드 시퀀서 아래로 내린다
 
 % ======================= 게이트 생성기 =====================================================
 gs = [sys '/Gate_StageB'];
@@ -129,7 +167,36 @@ sl_line(gs, 'Startup_guard/1', 'StageB_Gate/3');
 sl_line(gs, 'gate_prm/1', 'StageB_Gate/4');
 sl_line(gs, 'gate_init/1', 'StageB_Gate/5');
 gt = {'gB_AH', 'gB_AL', 'gB_BH', 'gB_BL', 'gD_P1', 'gD_P2', 'gD_P3', 'gD_P4', 'gD_S1', 'gD_S2', 'gD_S3', 'gD_S4'};
-if r2   % 게이트 재정의(모드: DAB 정지·영벡터·바이패스) → 13개 태그(바이패스 게이트 gByp 포함)
+if r2b  % 보호 게이트 재정의(하드웨어 비교기, 고장 주입, 모드) → 14개 태그(바이패스 gByp, 제동 저항 gBrk 포함)
+    sl_add(gs, 'simulink/Signal Routing/From', 'sup_from', [260 310 340 330], 'GotoTag', 'r2_sup');
+    sl_add(gs, 'simulink/Signal Routing/Selector', 'sup_sel', [360 310 380 330], 'IndexParamArray', {'[3 5 8 9 11]'}, ...
+        'InputPortWidth', '12');
+    sl_line(gs, 'sup_from/1', 'sup_sel/1');
+    mt = {'ip', 'ih', 'vlink', 'vs', 'vbus'};
+    for k = 1:5
+        sl_add(gs, 'simulink/Signal Routing/From', ['cmp_' mt{k}], [260 350+25*(k-1) 330 366+25*(k-1)], 'GotoTag', mt{k}, 'ShowName', 'off');
+    end
+    sl_add(gs, 'simulink/Signal Routing/Mux', 'cmp_mux', [350 350 355 470], 'Inputs', '5');
+    for k = 1:5, sl_line(gs, sprintf('cmp_%s/1', mt{k}), sprintf('cmp_mux/%d', k)); end
+    sl_add(gs, 'simulink/Discrete/Unit Delay', 'cmp_z1', [375 395 405 425], 'SampleTime', [T '.dt'], ...
+        'InitialCondition', sprintf('[%s.ip0 %s.ih0 %s.vl0 %s.vs0 %s.vb0]''', T, T, T, T, T));   % 대수 루프 방지(한 간격 = 비교기 지연에 포함)
+    sl_line(gs, 'cmp_mux/1', 'cmp_z1/1');
+    sl_add(gs, 'simulink/Sources/Constant', 'prot_prm', [260 495 360 515], 'Value', [T '.prot_prm']);   % cmp_mux 이름표 아래
+    sl_mfunc(gs, 'R2_Gate_Protect', [440 60 540 500], 'prism_r2_gate_b.m');
+    sl_line(gs, 'Clock/1', 'R2_Gate_Protect/1');
+    sl_line(gs, 'StageB_Gate/1', 'R2_Gate_Protect/2');
+    sl_line(gs, 'sup_sel/1', 'R2_Gate_Protect/3');
+    sl_line(gs, 'cmp_z1/1', 'R2_Gate_Protect/4');
+    sl_line(gs, 'prot_prm/1', 'R2_Gate_Protect/5');
+    sl_add(gs, 'simulink/Signal Routing/Demux', 'Demux', [580 50 590 440], 'Outputs', '14');
+    sl_line(gs, 'R2_Gate_Protect/1', 'Demux/1');
+    sl_add(gs, 'simulink/Discrete/Unit Delay', 'flags_z1', [580 470 610 500], 'SampleTime', [T '.dt']);
+    sl_add(gs, 'simulink/Signal Routing/Goto', 'r2_flags', [640 475 720 495], 'GotoTag', 'r2_flags', 'TagVisibility', 'global');
+    sl_line(gs, 'R2_Gate_Protect/2', 'flags_z1/1');
+    sl_line(gs, 'flags_z1/1', 'r2_flags/1');
+    gt{13} = 'gByp'; gt{14} = 'gBrk';
+    x0 = 640;
+elseif r2   % 게이트 재정의(모드: DAB 정지·영벡터·바이패스) → 13개 태그(바이패스 게이트 gByp 포함)
     sl_add(gs, 'simulink/Signal Routing/From', 'seq_from', [260 310 340 330], 'GotoTag', 'r2_seq');
     sl_add(gs, 'simulink/Signal Routing/Demux', 'seq_split', [360 300 365 360], 'Outputs', '3');
     sl_add(gs, 'simulink/Sinks/Terminator', 'seq_unused1', [390 290 410 310], 'ShowName', 'off');
@@ -154,13 +221,18 @@ for s = 1:numel(gt)
         'ShowName', 'off');   % 태그 이름이 블록 안에 보이므로 블록 이름은 숨긴다(겹침 방지)
     sl_line(gs, sprintf('Demux/%d', s), [gt{s} '/1']);
 end
-sl_add(gs, 'simulink/Signal Routing/Goto', 'gate_aux', [460 420 560 440], 'GotoTag', 'gate_aux', 'TagVisibility', 'global');
+sl_add(gs, 'simulink/Signal Routing/Goto', 'gate_aux', [460 420 + 100*r2b 560 440 + 100*r2b], 'GotoTag', 'gate_aux', 'TagVisibility', 'global');
 sl_line(gs, 'StageB_Gate/2', 'gate_aux/1');
 sl_note(gs, sprintf(['H-브리지: 유니폴라 PWM 200 kHz(반송파는 표본 시점에서 최댓값), 데드타임 50 ns.\n' ...
     'DAB: 반송파 반주기 중심에 대칭인 1·2차 에지(δ = φT/2π), 전이 반주기 평균 위상 갱신(직류 편류 방지), 데드타임 100 ns.\n' ...
     '링크전류 주기 평균을 표본 직전에 확정해 제어기의 ρ̂·ε̂ 추정에 넘긴다(aux). 코드: ctrl/prism_gate_stageB.m(블록 안에 복사)']), ...
-    [30 460 800 520], 'box');
-if r2
+    [30 460 + 100*r2b 800 520 + 100*r2b], 'box');
+if r2b
+    sl_note(gs, sprintf(['R2 보호 게이트 재정의(ctrl/prism_r2_gate_b.m, 적분 간격마다): 하드웨어 비교기(|i_p|·|i_h| > 110 A, v_link > 115 V,\n' ...
+        '|v_s| > 100 V, 정상 조정 중 v_bus > 부품 상한, 1.2 µs 지속 → H-브리지 차단 래치), 고장 주입(H-브리지 개방·DAB 정지),\n' ...
+        '브리지 모드(제어·영벡터·차단·조향), DAB 정지, 바이패스 주 스위치 gByp, 제동 저항 gBrk. 신호 r2_flags는 한 간격 지연해 상태기계로']), ...
+        [30 640 800 690], 'box');
+elseif r2
     sl_note(gs, sprintf(['R2 게이트 재정의(ctrl/prism_r2_gate.m): 모드 1 DAB 게이트 끔, 2 영벡터(A·B 하측 켬)·DAB 끔, 3 바이패스 켬·전 소자 끔,\n' ...
         '4 바이패스 + 영벡터. 게이트 구동기 수준의 재정의라 제어기 전달지연(5 µs)을 거치지 않는다. 바이패스 게이트 태그 gByp']), ...
         [30 540 800 580], 'box');

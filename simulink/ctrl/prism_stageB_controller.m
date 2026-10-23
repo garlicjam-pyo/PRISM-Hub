@@ -1,4 +1,4 @@
-function [u, dg] = prism_stageB_controller(y, prm, init, tab, rst)
+function [u, dg] = prism_stageB_controller(y, prm, init, tab, rst, aux)
 %#codegen
 %PRISM_STAGEB_CONTROLLER  Stage B 채택 제어기 1회 계산(제어주기 5 µs, 반송파 최댓값에서 표본).
 %
@@ -26,6 +26,9 @@ function [u, dg] = prism_stageB_controller(y, prm, init, tab, rst)
 %          링크 적분기·직전 변조율·ρ̂·ε̂를 처음 값(0, 0, 1, 0)으로 둔다(검증 코드 StageBController.reset과 같은 계산).
 %          영벡터·바이패스로 제어 출력이 쓰이지 않는 동안 매 표본 다시 맞춰, 제어를 시작할 때 충격이 없게 한다.
 %          네 입력으로 부르면(TB04–TB07) 이 기능은 없고 계산은 이전과 같다.
+%   aux  = (선택, R2 보호 상태기계 TB09) [보조 지령 사용(1/0); 보조 링크전류 지령 A]. 1이면 링크전압 PI 대신 보조 지령을
+%          DAB 링크전류 지령으로 쓴다(H-브리지 차단 강등에서 상태기계의 보조 루프가 링크전압으로 버스를 붙잡을 때).
+%          위상 계산(전류비·저전류 보정 포함)은 같다. 다섯 입력 이하로 부르면 이전과 같다.
 %  출력
 %   u  = [PWM 비교값(데드타임 보상 후); DAB 유효 위상 지령 rad]
 %   dg = [m 지령(보상 전); 링크전류 지령; 브리지 전류지령; ρ̂; ε̂; 예측 링크전류]
@@ -82,6 +85,11 @@ sps = max(vb, 0)*turns*phmax*(1 - phmax/pi)/(2*pi*fs*Ldab);
 lim = min(min(link_max, sps), power_max/max(vl, 1e-9));
 icmd = min(lim, max(-lim, rawlink));
 qlink = qlink + Ts*(vlink - vl) + 0.1*(icmd - rawlink)/(Clink*w*w);
+if nargin >= 6                                   % (R2 보호, TB09) 보조 링크전류 지령
+    if aux(1) > 0.5
+        icmd = aux(2); qlink = 0;
+    end
+end
 mprev = mcmd;
 % ---- (5) DAB 전류비·저전류 보정 → 위상 ----------------------------------------------
 % 직전 주기 두 반주기 중심에 적용된 위상의 예측 전류. 그 위상을 적용할 때 쓰인 버스전압은 직전 표본값이다

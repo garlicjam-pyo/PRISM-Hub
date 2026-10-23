@@ -1,0 +1,84 @@
+{
+ "case": "W460_240s",
+ "V": 930.0,
+ "P": 25000.0,
+ "event": "enable",
+ "policy": "-",
+ "prep": "steer",
+ "t_prep_ms": 0.5,
+ "close": "-",
+ "start_share": false,
+ "tag": null,
+ "damper": true,
+ "vd": 2.0,
+ "t_soft_us": 1000.0,
+ "t_shed_ms": 20.0,
+ "wait_ms": 0.0,
+ "events": [
+  [
+   "PREP",
+   0.5
+  ],
+  [
+   "OPEN_WAIT",
+   1.0
+  ],
+  [
+   "WINDOW",
+   1.005
+  ]
+ ],
+ "det_src": null,
+ "det_ms": null,
+ "final_state": "WINDOW",
+ "path_peak": 56.951380985178005,
+ "bridge_peak": 67.29728308799015,
+ "series_peak": 4.390638465764211,
+ "vlink_max": 100.01370737911923,
+ "vlink_min": 99.94286738243856,
+ "vbus_min": 459.88572210473683,
+ "vbus_max": 464.3089182131548,
+ "vbus_max_loaded": 464.3089182131548,
+ "vbus_end": 459.9998240638351,
+ "byp_peak": 53.866400473439626,
+ "t_over_ms": null,
+ "shed_needed": false,
+ "gate_timeout": false,
+ "fault_path_peak": null,
+ "fault_bridge_peak": null,
+ "fault_bus_min": null,
+ "brk_energy_J": 0.0,
+ "brk_peak_kW": 0.0,
+ "dab_sec_peak": 2.69112046033844,
+ "dab_prim_peak": 0.5850261870300957,
+ "dab_peak_ms": 0.545,
+ "dab_peak_state": "WINDOW",
+ "dab_rated_sec_peak": 45.82809454192978,
+ "dab_peak_ratio": 0.05872206748365321,
+ "soft_entry": null,
+ "soft_timeout": false,
+ "soft_energy_J": 0.0,
+ "soft_ms": null,
+ "open_ip_range": [
+  53.84780483170511,
+  53.84795501911072
+ ],
+ "open_vs_range": [
+  1.3065354775961479e-06,
+  1.9528910129693666e-05
+ ],
+ "open_vbus_max": 464.28926502777404,
+ "open_ring_kHz": null,
+ "open_path_peak_0p5ms": 53.952140643503796,
+ "settle_after_ramp_ms": 0.0,
+ "checks": {
+  "current_90A": true,
+  "series_90V": true,
+  "link_band": true,
+  "class_upper": true,
+  "bypass_current": true,
+  "settle_10ms": true,
+  "final": true
+ },
+ "pass_": true
+}

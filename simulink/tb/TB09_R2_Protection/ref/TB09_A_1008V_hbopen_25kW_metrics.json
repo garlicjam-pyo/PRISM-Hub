@@ -1,0 +1,95 @@
+{
+ "case": "W460_240s",
+ "V": 1008.0,
+ "P": 25000.0,
+ "event": "hb_open",
+ "policy": "clamp_brk",
+ "prep": "-",
+ "t_prep_ms": 0.5,
+ "close": "-",
+ "start_share": false,
+ "tag": null,
+ "damper": true,
+ "vd": 2.0,
+ "t_soft_us": 1000.0,
+ "t_shed_ms": 3.0,
+ "wait_ms": 0.2,
+ "events": [
+  [
+   "shed_cmd",
+   0.505
+  ],
+  [
+   "HB_HOLD",
+   0.505
+  ],
+  [
+   "shed_done",
+   3.505
+  ],
+  [
+   "HB_COLLAPSE",
+   3.51
+  ],
+  [
+   "SOFT_BYP",
+   8.135
+  ],
+  [
+   "DEGRADED",
+   9.14
+  ]
+ ],
+ "det_src": "gate_driver_fault",
+ "det_ms": 0.005,
+ "final_state": "DEGRADED",
+ "path_peak": 74.84717304381061,
+ "bridge_peak": 75.61909034999945,
+ "series_peak": 74.75700863849598,
+ "vlink_max": 100.01093332180875,
+ "vlink_min": 0.04794644503681393,
+ "vbus_min": 428.38848571758024,
+ "vbus_max": 503.84441557230474,
+ "vbus_max_loaded": 459.99794202053636,
+ "vbus_end": 503.8362563254117,
+ "byp_peak": 33.9038884699502,
+ "t_over_ms": null,
+ "shed_needed": true,
+ "gate_timeout": false,
+ "fault_path_peak": 74.84717304381061,
+ "fault_bridge_peak": 75.61909034999945,
+ "fault_bus_min": 428.38848571758024,
+ "brk_energy_J": 1.4533280455634319,
+ "brk_peak_kW": 1.3075341544148231,
+ "dab_sec_peak": 197.2598037909688,
+ "dab_prim_peak": 42.882566041514956,
+ "dab_peak_ms": 8.635,
+ "dab_peak_state": "SOFT_BYP",
+ "dab_rated_sec_peak": 45.82809454192978,
+ "dab_peak_ratio": 4.304342254738273,
+ "soft_entry": {
+  "why": "vl",
+  "ms": 7.635,
+  "vl": 0.4954990138819353,
+  "vs": -4.496863586482342,
+  "ip": 12.300253098701093
+ },
+ "soft_timeout": false,
+ "soft_energy_J": 0.025987250502912833,
+ "soft_ms": 1.005,
+ "close_ms": 7.635,
+ "vs_at_close": -4.496863586482342,
+ "byp_pulse_A": 33.9038884699502,
+ "byp_pulse_mJ": 25.992643678570488,
+ "path_close_peak": 32.12797679822556,
+ "checks": {
+  "current_100A": true,
+  "series_120V": true,
+  "link_120V": true,
+  "bypass_current": true,
+  "bus_ge_260": true,
+  "degraded_reached": true,
+  "class_upper_while_400V_loads": true
+ },
+ "pass_": true
+}

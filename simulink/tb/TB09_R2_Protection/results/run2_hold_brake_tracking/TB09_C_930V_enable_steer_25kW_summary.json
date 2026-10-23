@@ -1,0 +1,133 @@
+{
+  "case": "C_930V_enable_steer_25kW",
+  "event": "enable",
+  "limits": {
+    "current_90A": true,
+    "series_90V": true,
+    "link_band": true,
+    "class_upper": true,
+    "bypass_current": true,
+    "final_voltage": true
+  },
+  "verdict": "PASS",
+  "failed": [],
+  "transitions": [
+    {
+      "state": "PREP",
+      "ms": 0.5
+    },
+    {
+      "state": "OPEN_WAIT",
+      "ms": 1
+    },
+    {
+      "state": "WINDOW",
+      "ms": 1.0050000000000001
+    }
+  ],
+  "final_state": "WINDOW",
+  "clamp_err_V": null,
+  "dab": {
+    "sec_peak_A": 8.5922814317315783,
+    "prim_peak_A": 1.8678872677677345,
+    "ms": 3.5350000000000006,
+    "state": "WINDOW"
+  },
+  "soft": {
+    "entry_ms": null,
+    "vl_V": null,
+    "vs_V": null,
+    "ms": null,
+    "energy_J": null,
+    "path_peak_A": null
+  },
+  "peaks": {
+    "ip_A": 59.051295083673558,
+    "ih_A": 62.216874566871567,
+    "vs_V": 4.3467232370540581,
+    "vlink_max_V": 100.02560138845605,
+    "vlink_min_V": 99.930605431535241,
+    "ibyp_A": 53.8664087454393,
+    "bus_min_V": 459.92987039703434,
+    "bus_max_V": 464.29367147544104,
+    "bus_max_loaded_V": 464.29367147544104,
+    "brake_J": 7.9990281065643316E-7
+  },
+  "wall_s": 115.5143303,
+  "dt_ns": 2.5,
+  "date": "2026-10-24 01:39:33",
+  "compare": [
+    {
+      "metric": "min period-mean v_bus after event [V]",
+      "simscape": 459.93087507055191,
+      "e17": 459.8857342,
+      "tol": 3
+    },
+    {
+      "metric": "max period-mean v_bus after event [V]",
+      "simscape": 464.29367147544104,
+      "e17": 464.3088992,
+      "tol": 3
+    },
+    {
+      "metric": "max period-mean i_p [A]",
+      "simscape": 59.049388210832561,
+      "e17": 56.949154839999991,
+      "tol": 5
+    },
+    {
+      "metric": "max period-mean i_h [A]",
+      "simscape": 60.70048615514127,
+      "e17": 67.10669894,
+      "tol": 5
+    },
+    {
+      "metric": "max period-mean v_link [V]",
+      "simscape": 100.02364540547789,
+      "e17": 100.01370560000001,
+      "tol": 2
+    },
+    {
+      "metric": "min period-mean v_link [V]",
+      "simscape": 99.930895302894967,
+      "e17": 99.94335662,
+      "tol": 2
+    },
+    {
+      "metric": "final mean v_bus [V]",
+      "simscape": 460.04988110923483,
+      "e17": 460.00053365365858,
+      "tol": 1
+    },
+    {
+      "metric": "brake energy [J]",
+      "simscape": 7.9990281065643316E-7,
+      "e17": 0,
+      "tol": null
+    },
+    {
+      "metric": "DAB link-side peak (circuit n|i_L|, E17 SPS) [A]",
+      "simscape": 8.5922814317315783,
+      "e17": 2.69112046033844,
+      "tol": null
+    },
+    {
+      "metric": "transition PREP [ms]",
+      "simscape": 0.5,
+      "e17": 0.5,
+      "tol": 0.05
+    },
+    {
+      "metric": "transition OPEN_WAIT [ms]",
+      "simscape": 1,
+      "e17": 1,
+      "tol": 0.05
+    },
+    {
+      "metric": "transition WINDOW [ms]",
+      "simscape": 1.0050000000000001,
+      "e17": 1.005,
+      "tol": 0.05
+    }
+  ]
+}

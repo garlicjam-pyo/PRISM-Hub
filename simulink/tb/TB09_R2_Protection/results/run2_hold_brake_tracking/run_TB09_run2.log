@@ -1,0 +1,134 @@
+[prism_run] run_TB09 start 2026-10-24 01:24:35
+TB09 case A_1008V_hbopen_25kW (V_bat 1008 V, 25 kW, event hb_open), dt 2.50 ns, wall 315 s
+(1) circuit limits:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    instantaneous: |i_p| 89.1 A, |i_h| 90.4 A, |v_s| 68.5 V, v_link 3.3-100.0 V, |i_byp| 38.8 A; bus(5 us) 434.7-503.8 V (loaded max 460.1 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = -0.014 V
+    DAB stress (info): link-side peak n|i_L| 192.1 A (primary 41.8 A) at 6.530 ms in HB_COLLAPSE; rated-point link-side peak (E17 SPS) 45.8 A
+    soft bypass (info): entry 7.890 ms (v_link 3.52 V, v_s -7.52 V), duration 1.175 ms, device energy 0.0760 J, path instantaneous peak 37.0 A
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]             434.76      435.79     -1.03        ok
+    max period-mean v_bus after event [V]             503.85      503.84  +0.00481        ok
+    max period-mean i_p [A]                           89.058      93.568     -4.51        ok
+    max period-mean i_h [A]                           90.421        95.2     -4.78        ok
+    max period-mean v_link [V]                        100.01         100  +0.00994        ok
+    min period-mean v_link [V]                        3.3002    0.048485     +3.25      over
+    final mean v_bus [V]                              503.84      503.84 +1.59e-07        ok
+    brake energy [J]                                  5.0653      4.3411    +0.724      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      192.09      197.26     -5.17      info
+    soft-bypass device energy [J]                    0.07604    0.026007     +0.05      info
+    transition HB_HOLD [ms]                            0.505       0.505        +0        ok
+    transition HB_COLLAPSE [ms]                        3.505        3.51    -0.005        ok
+    transition SOFT_BYP [ms]                            7.89        6.88     +1.01      over
+    transition DEGRADED [ms]                           9.065       7.885     +1.18      over
+    transition shed_done [ms]                          3.505       3.505 +4.44e-16        ok
+    final state: DEGRADED
+VERDICT A_1008V_hbopen_25kW: PASS
+A done (315 s): PASS
+TB09 case B_930V_hbopen_25kW (V_bat 930 V, 25 kW, event hb_open), dt 2.50 ns, wall 459 s
+(1) circuit limits:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    instantaneous: |i_p| 92.9 A, |i_h| 89.6 A, |v_s| 67.2 V, v_link 3.6-100.1 V, |i_byp| 91.7 A; bus(5 us) 396.9-464.1 V (loaded max 464.1 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = -0.050 V
+    DAB stress (info): link-side peak n|i_L| 178.1 A (primary 38.7 A) at 11.975 ms in SOFT_BYP; rated-point link-side peak (E17 SPS) 45.8 A
+    soft bypass (info): entry 10.505 ms (v_link 22.03 V, v_s -26.10 V), duration 2.340 ms, device energy 1.2246 J, path instantaneous peak 92.9 A
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]             396.93      398.49     -1.56        ok
+    max period-mean v_bus after event [V]             464.13      464.13  +0.00195        ok
+    max period-mean i_p [A]                           92.715      89.974     +2.74        ok
+    max period-mean i_h [A]                           89.612      91.676     -2.06        ok
+    max period-mean v_link [V]                        100.05      100.03   +0.0237        ok
+    min period-mean v_link [V]                         3.633    0.048135     +3.58      over
+    final mean v_bus [V]                              464.11      464.11 +2.39e-07        ok
+    brake energy [J]                                  8.3393      6.8452     +1.49      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      178.08      181.68      -3.6      info
+    soft-bypass device energy [J]                     1.2246    0.063165     +1.16      info
+    transition HB_COLLAPSE [ms]                        0.505       0.505        +0        ok
+    transition SOFT_BYP [ms]                          10.505       10.51    -0.005        ok
+    transition DEGRADED [ms]                          12.845      11.515     +1.33      over
+    final state: DEGRADED
+VERDICT B_930V_hbopen_25kW: PASS
+B done (459 s): PASS
+TB09 case C_930V_enable_steer_25kW (V_bat 930 V, 25 kW, event enable), dt 2.50 ns, wall 116 s
+(1) circuit limits:
+    current_90A                    PASS
+    series_90V                     PASS
+    link_band                      PASS
+    class_upper                    PASS
+    bypass_current                 PASS
+    final_voltage                  PASS
+    instantaneous: |i_p| 59.1 A, |i_h| 62.2 A, |v_s| 4.3 V, v_link 99.9-100.0 V, |i_byp| 53.9 A; bus(5 us) 459.9-464.3 V (loaded max 464.3 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = NaN V
+    DAB stress (info): link-side peak n|i_L| 8.6 A (primary 1.9 A) at 3.535 ms in WINDOW; rated-point link-side peak (E17 SPS) 45.8 A
+    soft bypass (info): entry NaN ms (v_link NaN V, v_s NaN V), duration NaN ms, device energy NaN J, path instantaneous peak NaN A
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]             459.93      459.89   +0.0451        ok
+    max period-mean v_bus after event [V]             464.29      464.31   -0.0152        ok
+    max period-mean i_p [A]                           59.049      56.949      +2.1        ok
+    max period-mean i_h [A]                             60.7      67.107     -6.41      over
+    max period-mean v_link [V]                        100.02      100.01  +0.00994        ok
+    min period-mean v_link [V]                        99.931      99.943   -0.0125        ok
+    final mean v_bus [V]                              460.05         460   +0.0493        ok
+    brake energy [J]                               7.999e-07           0    +8e-07      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      8.5923      2.6911      +5.9      info
+    transition PREP [ms]                                 0.5         0.5        +0        ok
+    transition OPEN_WAIT [ms]                              1           1        +0        ok
+    transition WINDOW [ms]                             1.005       1.005 +2.22e-16        ok
+    final state: WINDOW
+VERDICT C_930V_enable_steer_25kW: PASS
+C done (116 s): PASS
+TB09 case D_1008V_dabfault_25kW (V_bat 1008 V, 25 kW, event dab), dt 2.50 ns, wall 203 s
+(1) circuit limits:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    instantaneous: |i_p| 82.3 A, |i_h| 89.5 A, |v_s| 43.4 V, v_link 100.0-110.0 V, |i_byp| 286.9 A; bus(5 us) 459.4-503.9 V (loaded max 460.1 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = NaN V
+    DAB stress (info): link-side peak n|i_L| 27.7 A (primary 6.0 A) at 0.010 ms in WINDOW; rated-point link-side peak (E17 SPS) 45.8 A
+    soft bypass (info): entry NaN ms (v_link NaN V, v_s NaN V), duration NaN ms, device energy NaN J, path instantaneous peak NaN A
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]             459.91      459.82   +0.0964        ok
+    max period-mean v_bus after event [V]             503.88      504.93     -1.05        ok
+    max period-mean i_p [A]                            82.25      81.961    +0.289        ok
+    max period-mean i_h [A]                           83.594      83.868    -0.274        ok
+    max period-mean v_link [V]                        110.01      110.04   -0.0304        ok
+    min period-mean v_link [V]                        100.03      99.994   +0.0368        ok
+    final mean v_bus [V]                              503.84      503.84 +3.22e-07        ok
+    brake energy [J]                                  9.7357      9.8146   -0.0789      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      27.681      24.174     +3.51      info
+    transition DAB_HOLD [ms]                           1.265       1.275     -0.01        ok
+    transition DAB_RAMP [ms]                           4.265        4.28    -0.015        ok
+    transition ZERO [ms]                                5.71       5.725    -0.015        ok
+    transition DEGRADED [ms]                            5.91        5.93     -0.02        ok
+    transition shed_done [ms]                          4.265       4.275     -0.01        ok
+    final state: DEGRADED
+VERDICT D_1008V_dabfault_25kW: PASS
+D done (203 s): PASS
+TB09 R2 protection state machine (R2-W460, damper, link brake 3 Ohm, stall-aware collapse, path-current limited soft bypass, device reverse conduction 2 V)
+run  case                         limits   failed
+A    A_1008V_hbopen_25kW          PASS     
+B    B_930V_hbopen_25kW           PASS     
+C    C_930V_enable_steer_25kW     PASS     
+D    D_1008V_dabfault_25kW        PASS     
+TB09 overall: PASS
+[prism_run] run_TB09 finished (1108.2 s)

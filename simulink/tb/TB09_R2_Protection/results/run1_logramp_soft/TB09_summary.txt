@@ -1,0 +1,7 @@
+TB09 R2 protection state machine (R2-W460, damper, link brake 3 Ohm, soft bypass 1 ms, device reverse conduction 2 V)
+run  case                         limits   failed
+A    A_1008V_hbopen_25kW          FAIL     degraded_reached
+B    B_930V_hbopen_25kW           FAIL     current_100A
+C    C_930V_enable_steer_25kW     PASS     
+D    D_1008V_dabfault_25kW        PASS     
+TB09 overall: FAIL

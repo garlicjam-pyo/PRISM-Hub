@@ -1,0 +1,27 @@
+TB09 case D_1008V_dabfault_25kW (V_bat 1008 V, 25 kW, event dab), dt 2.50 ns, wall 198 s
+(1) circuit limits:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    instantaneous: |i_p| 82.3 A, |i_h| 89.5 A, |v_s| 43.4 V, v_link 100.0-110.0 V, |i_byp| 286.9 A; bus(5 us) 459.4-503.9 V (loaded max 460.1 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = NaN V
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]             459.91      459.82   +0.0964        ok
+    max period-mean v_bus after event [V]             503.88      504.93     -1.05        ok
+    max period-mean i_p [A]                            82.25      81.961    +0.289        ok
+    max period-mean i_h [A]                           83.594      83.868    -0.274        ok
+    max period-mean v_link [V]                        110.01      110.04   -0.0304        ok
+    min period-mean v_link [V]                        100.03      99.994   +0.0368        ok
+    final mean v_bus [V]                              503.84      503.84 +3.22e-07        ok
+    brake energy [J]                                  9.7357      9.8146   -0.0789      info
+    transition DAB_HOLD [ms]                           1.265       1.275     -0.01        ok
+    transition DAB_RAMP [ms]                           4.265        4.28    -0.015        ok
+    transition ZERO [ms]                                5.71       5.725    -0.015        ok
+    transition DEGRADED [ms]                            5.91        5.93     -0.02        ok
+    transition shed_done [ms]                          4.265       4.275     -0.01        ok
+    final state: DEGRADED

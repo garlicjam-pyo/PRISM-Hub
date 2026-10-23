@@ -1,6 +1,6 @@
 """모든 Python 검증을 근거 번호 순서로 실행한다.
 
-  python run_all.py            전체(2코어 기준 약 5시간, 그중 E12 약 3시간)
+  python run_all.py            전체(2코어 기준 약 7시간, 그중 E12 약 3시간, E17 약 1.5시간)
   python run_all.py E3 E4      일부만
 
 E2-c·E11 대조는 MATLAB/Octave에서 matlab/E2_two_stage_crosscheck.m, E11_controller_crosscheck.m 을 먼저
@@ -29,6 +29,7 @@ STEPS = [
     ("E16", ["E16_charging_integration.py"]),
     ("E18", ["E18_industry_value_map.py"]),      # E15 결과(stage_a_grid, comparison)를 읽는다
     ("E19", ["E19_r2_window_module.py"]),
+    ("E17", ["E17_protection_integration.py"]),  # E12·E14·E19 모델을 쓰므로 마지막에(monitor·r2·figures)
 ]
 
 if __name__ == "__main__":

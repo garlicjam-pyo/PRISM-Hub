@@ -1,4 +1,4 @@
-function build_bus_loads(sys, posLoad, posLoss, T)
+function build_bus_loads(sys, posLoad, posLoss, T, opt)
 %BUILD_BUS_LOADS  400 V 버스의 부하 계산 서브시스템 두 개를 만든다(출력은 전류 지령 신호).
 %
 %   Load_CPL       : 정전력 부하. P(t) = P0(t < t_step), P1(t ≥ t_step) → i = P / max(v_bus, v_min)
@@ -7,12 +7,28 @@ function build_bus_loads(sys, posLoad, posLoss, T)
 %   두 출력은 최상위에서 Simulink-PS 변환기 → 제어 전류원(버스 → GND)으로 들어간다.
 %   두 모델 모두 회로 측정값을 시작 표본 보호(sl_startup_guard)를 거쳐 쓴다.
 %   T : 시험 구조체 이름. 필드 dt P0 P1 t_step vmin loss_prm ploss0 guard_t vb0 loss_meas0
+%   opt.ShedTag·ShedIndex·ShedWidth (선택, TB09): 400 V 부하 분리 신호가 1이면 P = T.Pc(분리 뒤 남는 부하)
 
+if nargin < 5, opt = struct(); end
 ld = [sys '/Load_CPL'];
 add_block('built-in/Subsystem', ld, 'Position', posLoad, 'BackgroundColor', 'lightBlue');
-sl_add(ld, 'simulink/Sources/Step', 'P_profile', [30 30 80 70], 'Time', [T '.t_step'], ...
-    'Before', [T '.P0'], 'After', [T '.P1'], 'SampleTime', [T '.dt']);
-sl_add(ld, 'simulink/Signal Routing/Goto', 'p_load', [120 10 200 30], 'GotoTag', 'p_load', 'TagVisibility', 'global');
+if isfield(opt, 'ShedTag')      % (TB09) 400 V 부하 분리: 상태기계 신호(태그 opt.ShedTag의 opt.ShedIndex번째)가 1이면 P = T.Pc
+    sl_add(ld, 'simulink/Sources/Constant', 'P_on', [30 20 90 40], 'Value', [T '.P0']);
+    sl_add(ld, 'simulink/Sources/Constant', 'P_shed', [30 80 90 100], 'Value', [T '.Pc']);
+    sl_add(ld, 'simulink/Signal Routing/From', 'shed_from', [30 50 100 70], 'GotoTag', opt.ShedTag);
+    sl_add(ld, 'simulink/Signal Routing/Selector', 'shed_sel', [115 50 135 70], 'IndexParamArray', {num2str(opt.ShedIndex)}, ...
+        'InputPortWidth', num2str(opt.ShedWidth));
+    sl_add(ld, 'simulink/Signal Routing/Switch', 'P_profile', [160 20 200 100], 'Criteria', 'u2 > Threshold', 'Threshold', '0.5');
+    sl_line(ld, 'P_shed/1', 'P_profile/1');
+    sl_line(ld, 'shed_from/1', 'shed_sel/1');
+    sl_line(ld, 'shed_sel/1', 'P_profile/2');
+    sl_line(ld, 'P_on/1', 'P_profile/3');
+else
+    sl_add(ld, 'simulink/Sources/Step', 'P_profile', [30 30 80 70], 'Time', [T '.t_step'], ...
+        'Before', [T '.P0'], 'After', [T '.P1'], 'SampleTime', [T '.dt']);
+end
+posG = [120 10 200 30]; if isfield(opt, 'ShedTag'), posG = [230 0 310 20]; end
+sl_add(ld, 'simulink/Signal Routing/Goto', 'p_load', posG, 'GotoTag', 'p_load', 'TagVisibility', 'global');
 sl_add(ld, 'simulink/Signal Routing/From', 'vbus_from', [30 110 110 130], 'GotoTag', 'vbus');
 sl_add(ld, 'simulink/Signal Routing/From', 't_from', [30 150 110 170], 'GotoTag', 't');
 sl_startup_guard(ld, 'Startup_guard', [150 105 190 175], [T '.vb0'], T, [120 190 190 210]);

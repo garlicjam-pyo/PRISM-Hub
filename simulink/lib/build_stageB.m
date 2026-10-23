@@ -6,6 +6,7 @@ function h = build_stageB(sys, name, pos, T, opt)
 %       DAB 1차(400 V 버스 측)·2차(100 V 링크 측) 소자 출력용량을 따로 준다(TB04B).
 %       생략하면 두 브리지 모개 [T '.B.Coss_d'](TB03·TB04와 같은 값)를 쓴다.
 %       opt.Xfmr(변압기 블록 이름), opt.DabNote(설명 주석의 DAB 정격)도 줄 수 있다(TB08 창 조정 모듈: 4.6:1, ≤ 4 kW).
+%       opt.Brake(링크 제동 저항 값 식, 예 'TB.Rbrk')를 주면 링크에 제동 저항과 스위치를 더한다(TB09, 태그 gBrk, 계측 ibrk).
 %
 %   외부 포트: SER(왼쪽, 직렬 포트 입력 = 경로 쪽 노드 N1), BUS(오른쪽, 400 V 버스 = N2), GND(오른쪽, 버스 기준)
 %   구성(노드 N1, N2 = BUS, LINK+, LINK−)
@@ -82,6 +83,20 @@ sl_pc(sb, 'I_Ldab', 'n', opt.Xfmr, 'p1');
 sl_pc(sb, opt.Xfmr, 'n1', 'DAB_Primary', 'AC2');
 sl_pc(sb, 'DAB_Primary', 'DC_P', 'BUS', 'port');
 sl_pc(sb, 'DAB_Primary', 'DC_N', 'GND', 'port');
+
+% ---- (선택) 링크 제동 저항: 링크(+) → 전류 센서 → R_brk → 스위치 → 링크(−), 게이트 태그 gBrk (TB09) ----------------
+if isfield(opt, 'Brake') && ~isempty(opt.Brake)
+    sl_add(sb, [fl 'Electrical Sensors/Current Sensor'], 'I_brk', [170 145 220 185]);
+    sl_add(sb, [fl 'Electrical Elements/Resistor'], 'R_brk', [245 155 295 175], 'R', opt.Brake);
+    sl_switch_cell(sb, 'S_BRK', [320 140 400 190], struct('tag', 'gBrk', 'label', 'BRK', 'Ron', [T '.B.Ron'], ...
+        'Goff', [T '.B.Goff'], 'Vf', [T '.B.Vf'], 'Rd', [T '.B.Rd'], 'Goffd', [T '.B.Goffd'], 'Coss', '', 'orient', 'right'));
+    sl_pc(sb, 'C_link', 'p', 'I_brk', 'p');                % 제동 전류 양의 방향: 링크(+) → 저항
+    sl_pc(sb, 'I_brk', 'n', 'R_brk', 'p');
+    sl_pc(sb, 'R_brk', 'n', 'S_BRK', 'D');
+    sl_pc(sb, 'S_BRK', 'S', 'C_link', 'n');
+    sl_meas(sb, 'I_brk', 'I', 'ibrk', [1160 720]);
+    sl_note(sb, sprintf('링크 제동 저항(선택, R2 보호): 강등 중 링크전압을 빨리 낮추거나\nDAB 고장 때 링크를 110 V 아래로 붙잡는다(게이트 gBrk)'), [430 140 760 175]);
+end
 
 % ---- 계측 태그 -----------------------------------------------------------------------------------
 sl_meas(sb, 'V_s',    'V', 'vs',    [560 720]);

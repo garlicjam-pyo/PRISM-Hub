@@ -1,0 +1,31 @@
+TB09 case A_1008V_hbopen_25kW (V_bat 1008 V, 25 kW, event hb_open), dt 2.50 ns, wall 368 s
+(1) circuit limits:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    instantaneous: |i_p| 71.1 A, |i_h| 71.6 A, |v_s| 76.2 V, v_link 3.3-100.0 V, |i_byp| 38.8 A; bus(5 us) 426.9-503.8 V (loaded max 460.1 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = -0.011 V
+    DAB stress (info): link-side peak n|i_L| 192.0 A (primary 41.7 A) at 7.810 ms in HB_COLLAPSE; rated-point link-side peak (E17 SPS) 45.8 A
+    soft bypass (info): entry 9.085 ms (v_link 3.53 V, v_s -7.52 V), duration 1.175 ms, device energy 0.0761 J, path instantaneous peak 37.1 A
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]             426.91      428.39     -1.48        ok
+    max period-mean v_bus after event [V]             503.85      503.84  +0.00481        ok
+    max period-mean i_p [A]                           71.052      74.837     -3.79        ok
+    max period-mean i_h [A]                           71.606      75.615     -4.01        ok
+    max period-mean v_link [V]                        100.01         100  +0.00994        ok
+    min period-mean v_link [V]                        3.3037    0.047946     +3.26      over
+    final mean v_bus [V]                              503.84      503.84 +1.59e-07        ok
+    brake energy [J]                                  2.2336      1.4539     +0.78      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      192.03      197.26     -5.23      info
+    soft-bypass device energy [J]                   0.076099    0.025987   +0.0501      info
+    transition HB_HOLD [ms]                            0.505       0.505        +0        ok
+    transition HB_COLLAPSE [ms]                        3.505        3.51    -0.005        ok
+    transition SOFT_BYP [ms]                           9.085       8.135     +0.95      over
+    transition DEGRADED [ms]                           10.26        9.14     +1.12      over
+    transition shed_done [ms]                          3.505       3.505 +4.44e-16        ok
+    final state: DEGRADED
