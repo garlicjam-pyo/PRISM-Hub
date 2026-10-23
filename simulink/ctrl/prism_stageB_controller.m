@@ -1,4 +1,4 @@
-function [u, dg] = prism_stageB_controller(y, prm, init, tab)
+function [u, dg] = prism_stageB_controller(y, prm, init, tab, rst)
 %#codegen
 %PRISM_STAGEB_CONTROLLER  Stage B 채택 제어기 1회 계산(제어주기 5 µs, 반송파 최댓값에서 표본).
 %
@@ -22,6 +22,10 @@ function [u, dg] = prism_stageB_controller(y, prm, init, tab)
 %          36 예측 사용(1)  37 데드타임 보상 사용(1)
 %   init = [q0 q_link0 m0 i_link0]   (평형점에서 시작: 적분기가 지령 = i_p가 되도록)
 %   tab  = [i_grid; E(i)]            데드타임 교정표(전류별 상승 전이 한 번의 전압·시간 손실)
+%   rst  = (선택, R2 창 조정 모듈 TB08) 1이면 이번 표본에서 무충격 재초기화한다. 적분기를 지령 = 경로전류가 되도록 맞추고
+%          링크 적분기·직전 변조율·ρ̂·ε̂를 처음 값(0, 0, 1, 0)으로 둔다(검증 코드 StageBController.reset과 같은 계산).
+%          영벡터·바이패스로 제어 출력이 쓰이지 않는 동안 매 표본 다시 맞춰, 제어를 시작할 때 충격이 없게 한다.
+%          네 입력으로 부르면(TB04–TB07) 이 기능은 없고 계산은 이전과 같다.
 %  출력
 %   u  = [PWM 비교값(데드타임 보상 후); DAB 유효 위상 지령 rad]
 %   dg = [m 지령(보상 전); 링크전류 지령; 브리지 전류지령; ρ̂; ε̂; 예측 링크전류]
@@ -41,6 +45,12 @@ k_scale = prm(31); k_from = prm(32); k_full = prm(33); Vtab = prm(34); nsub = pr
 
 ip = y(1); vs = y(2); vb = y(3); ih = y(4); vl = y(5); vbat = y(6);
 il_meas = y(7); ph_c0 = y(8); ph_c1 = y(9);
+if nargin >= 5                                   % (R2, TB08) 무충격 재초기화
+    if rst > 0.5
+        q = -(ip + K(1)*ip + K(2)*vs + K(3)*vb + K(4)*ih)/K(5);
+        qlink = 0; mprev = 0; rho = 1; epsA = 0; vbprev = vb;
+    end
+end
 
 % ---- (1) 1주기 예측 -----------------------------------------------------------------
 sip = ip; svs = vs; sih = ih;
