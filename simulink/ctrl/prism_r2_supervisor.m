@@ -22,6 +22,13 @@ function s = prism_r2_supervisor(t, y, fl, prm)
 %  (2026-10-24 TB09 1차 결과로 추가: 회로에서는 링크 붕괴가 3.5–22 V에서 멈췄고, 남은 직렬전압을 로그 램프로 닫자 경로전류가
 %   177 A까지 올랐다. 그래서 정체 감지와 경로전류 조절을 넣었다. 같은 논리를 검증 코드 E17에도 넣었다.)
 %
+%  (2026-10-24 TB10, 검증 코드 E20: prm이 60개면 다음을 켠다. 56개(TB09)면 이전과 같다.)
+%   prm(57) 전압비 정합 유지(1): H-브리지 강등 유지(9)의 링크 기준 = (V_A − (R + R_h)i_p − 2V_D)/(n + 1), 제동 저항은 기준 추종
+%   prm(58) 일시 감발(1): H-브리지 고장이면 V_A와 무관하게 400 V 부하 출력을 줄이고, V_A ≤ 상한이면 강등 T_RESTORE 뒤 되돌림
+%   prm(59) 소프트 투입 시간 상한이면 주 스위치를 닫지 않고 이중 고장(13)으로
+%   prm(60) T_RESTORE [s]
+%   DAB 변조(EPS)와 첨두 상한은 게이트 쪽 ctrl/prism_dab_eps_map.m이 맡는다(상태 9–11, DAB 모드 1).
+%
 %  입력  t    시각 [s]
 %        y    측정 [i_p v_s v_bus i_h v_link]
 %        fl   [게이트 구동기 고장 신호(H-브리지 개방), 하드웨어 비교기 차단 래치]
@@ -30,7 +37,8 @@ function s = prism_r2_supervisor(t, y, fl, prm)
 %             DAB 모드(0 제어기, 1 보조 지령, 2 정지); 보조 링크전류 지령; 바이패스 소프트 저항 [Ω]; 바이패스 주 스위치(1/0);
 %             제동 저항 게이트(1/0); 400 V 부하 분리(1/0); 상태 번호; 고장 검출(0 없음, 1 구동기, 2 비교기, 3 링크 창, 4 버스 창)]
 
-persistent st t_st t_det det shed_cmd shed sw_since vb_since rv0 rv1 rt1 rtype qb amode vl0 t0 tsoft0 Rs main brk mst gsince ip_s0 stall_t stall_v
+persistent st t_st t_det det shed_cmd shed sw_since vb_since rv0 rv1 rt1 rtype qb amode vl0 t0 tsoft0 Rs main brk mst gsince ip_s0 stall_t stall_v ...
+           curt_only restored
 VW = prm(1); upper = prm(2); H = prm(3); R = prm(4); Rh = prm(5); Cs = prm(6); Lh = prm(7); itau = prm(8);
 Clink = prm(9); VD = prm(10); t_ev = prm(11); ev = prm(12); pol = prm(13); prep = prm(14); cls = prm(15);
 t_prep = prm(16); t_wait = prm(17); RAMP = prm(18); HOLD = prm(19); ZERO = prm(20); t_shed = prm(21);
@@ -41,13 +49,17 @@ P_r = prm(39); link_max = prm(40); turns = prm(41); phmax = prm(42); fs = prm(43
 st0 = prm(46); Ts = prm(47); VS_GATE = prm(48); T_GATE = prm(49); T_GATE_MAX = prm(50);
 VL_STALL = prm(51); T_STALL = prm(52); DV_STALL = prm(53); DI_SOFT = prm(54); K_UP = prm(55); T_SOFT_MAX = prm(56);
 K_DN = (R_SOFT0/R_ON)^(Ts/T_SOFT);                    % 제한에 안 걸리면 10 Ω → 3.3 mΩ를 T_SOFT에 지나는 표본당 비율
+HOLD_MATCH = 0; CURTAIL = 0; SOFT_FAIL = 0; T_RESTORE = 0.5e-3;
+if numel(prm) >= 60
+    HOLD_MATCH = prm(57); CURTAIL = prm(58); SOFT_FAIL = prm(59); T_RESTORE = prm(60);
+end
 
 ip = y(1); vs = y(2); vb = y(3); ih = y(4); vl = y(5);
 if isempty(st)
     st = st0; t_st = 0; t_det = -1; det = 0; shed_cmd = -1; shed = 0; sw_since = -1; vb_since = -1;
     rv0 = VW; rv1 = VW; rt1 = 0; rtype = 0; qb = 0; amode = 0; vl0 = 100; t0 = 0; tsoft0 = 0;
     if st0 == 3, Rs = R_OPEN; main = 0; else, Rs = R_OPEN; main = 1; end
-    brk = 0; mst = 0; gsince = -1; ip_s0 = 0; stall_t = -1; stall_v = 0;
+    brk = 0; mst = 0; gsince = -1; ip_s0 = 0; stall_t = -1; stall_v = 0; curt_only = 0; restored = 0;
 end
 va_m = vbat/2 - R*ip;                                  % V_A 추정(배터리 전압 센서 − 경로 강하)
 gwin = (st == 5 && t - t_st >= HOLD - 1e-12) || (st == 8 && t - t_st >= RAMP + HOLD - 1e-12);
@@ -80,11 +92,16 @@ elseif fl(2) > 0.5 && det == 3 && st ~= 13 && st ~= 12 && st >= 6 && st <= 8
     st = 13; t_st = t;                                  % DAB 고장 강등 중 하드웨어 차단 → 이중 고장
 end
 sw_states = (st >= 1 && st <= 8);
-if t_det >= 0 && shed_cmd < 0 && va_m > upper - 2 && st ~= 0
+hb_det = det == 1 || det == 2 || det == 4;
+if t_det >= 0 && shed_cmd < 0 && st ~= 0 && (va_m > upper - 2 || (CURTAIL > 0.5 && hb_det))
     shed_cmd = t;
+    curt_only = double(va_m <= upper - 2);              % 상한 안이면 일시 감발(강등 뒤 되돌림)
 end
-if shed_cmd >= 0 && t - shed_cmd >= t_shed - 1e-12
+if shed_cmd >= 0 && t - shed_cmd >= t_shed - 1e-12 && restored < 0.5
     shed = 1;
+end
+if curt_only > 0.5 && st == 12 && restored < 0.5 && t - t_st >= T_RESTORE - 1e-12
+    shed = 0; restored = 1;                             % 버스 = V_A ≤ 상한: 400 V 부하 출력 되돌림
 end
 % ---- 강등 경로 선택 ----------------------------------------------------------------------------
 if (det == 1 || det == 2 || det == 4) && sw_states && st ~= 13
@@ -143,7 +160,11 @@ elseif st == 10 && (vl <= VL_SOFT || stalled || t - t_st >= T_COL_MAX - 1e-12)
     end
     t_st = t;
 elseif st == 11 && (Rs <= R_ON*(1 + 1e-9) || t - t_st >= T_SOFT_MAX - 1e-12)
-    main = 1; Rs = R_OPEN; st = 12; t_st = t;
+    if Rs > R_ON*(1 + 1e-9) && SOFT_FAIL > 0.5
+        st = 13; t_st = t;                              % 시간 상한: 닫지 않고 이중 고장(Stage A 협조 정지)
+    else
+        main = 1; Rs = R_OPEN; st = 12; t_st = t;
+    end
 end
 if st == 11 && t > tsoft0 + 1e-12                        % 소프트 투입(경로전류 조절)
     if ip > ip_s0 + DI_SOFT
@@ -173,7 +194,9 @@ end
 % 보조 링크 루프(H-브리지 강등 9–11)
 icmd_aux = 0; vlr = vl;
 if st >= 9 && st <= 11
-    if amode == 0
+    if amode == 0 && HOLD_MATCH > 0.5
+        vlr = min(max((vbat/2 - (R + Rh)*ip - 2*VD)/(turns + 1), 0), 100);   % DAB 전압비 정합(n·v_link = v_bus)
+    elseif amode == 0
         e = vb - VW;
         qb = min(max(qb + Ts*KI_B*e, -QB_MAX), QB_MAX);
         ff = vbat/2 - (R + Rh)*ip - 2*VD - VW;
@@ -195,8 +218,10 @@ end
 if det == 3, dmode = 2; end                              % DAB 고장: DAB 게이트는 고장 주입으로 이미 꺼져 있음
 % 제동 저항(정책 4·5, DAB 정책 2). H-브리지 강등 유지(9) 중에는 링크 과전압 보호만(110 V), 붕괴·소프트 투입(10·11) 중에는
 % 링크 기준 + 5 V 위에서 켠다(2026-10-24: 유지 중 기준 추종 제동은 경로전류 첨두를 키워 E17에서 W410 103 A로 불통과)
-if (pol == 4 || pol == 5) && st == 9
+if (pol == 4 || pol == 5) && st == 9 && HOLD_MATCH < 0.5
     if vl > 110, brk = 1; elseif vl < 105, brk = 0; end
+elseif (pol == 4 || pol == 5) && st == 9
+    if vl > vlr + 5, brk = 1; elseif vl < vlr + 2, brk = 0; end   % 정합 유지: DAB 정격 밖 전력을 제동 저항이
 elseif (pol == 4 || pol == 5) && st >= 10 && st <= 11
     if vl > vlr + 5, brk = 1; elseif vl < vlr + 2, brk = 0; end
 elseif pol == 2 && det == 3 && (st == 7 || st == 8 || st == 6)

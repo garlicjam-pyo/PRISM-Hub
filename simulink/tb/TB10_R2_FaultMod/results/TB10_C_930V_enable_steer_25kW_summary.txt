@@ -1,0 +1,27 @@
+TB10 case C_930V_enable_steer_25kW (V_bat 930 V, 25 kW, event enable), dt 2.50 ns, wall 131 s
+(1) circuit limits:
+    current_90A                    PASS
+    series_90V                     PASS
+    link_band                      PASS
+    class_upper                    PASS
+    bypass_current                 PASS
+    final_voltage                  PASS
+    instantaneous: |i_p| 59.1 A, |i_h| 62.2 A, |v_s| 4.3 V, v_link 99.9-100.0 V, |i_byp| 53.9 A; bus(5 us) 459.9-464.3 V (loaded max 464.3 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = NaN V
+    DAB stress (info): link-side peak n|i_L| 8.6 A (primary 1.9 A) at 3.535 ms in WINDOW; rated-point link-side peak (E17 SPS) 45.8 A
+    soft bypass (info): entry NaN ms (v_link NaN V, v_s NaN V), duration NaN ms, device energy NaN J, path instantaneous peak NaN A
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]             459.93      459.89   +0.0451        ok
+    max period-mean v_bus after event [V]             464.29      464.31   -0.0152        ok
+    max period-mean i_p [A]                           59.049      56.949      +2.1        ok
+    max period-mean i_h [A]                             60.7      67.107     -6.41      over
+    max period-mean v_link [V]                        100.02      100.01  +0.00994        ok
+    min period-mean v_link [V]                        99.931      99.943   -0.0125        ok
+    final mean v_bus [V]                              460.05         460   +0.0493        ok
+    brake energy [J]                               7.999e-07           0    +8e-07      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      8.5923      2.6911      +5.9      info
+    transition PREP [ms]                                 0.5         0.5        +0        ok
+    transition OPEN_WAIT [ms]                              1           1        +0        ok
+    transition WINDOW [ms]                             1.005       1.005 +2.22e-16        ok
+    final state: WINDOW

@@ -26,7 +26,8 @@ function build_stageB_control(sys, posCtrl, posGate, T, opt)
 %     (ctrl/prism_r2_gate_b.m, 상수 T.prot_prm)를 넣어 게이트 14개(gByp, gBrk 포함)와 고장 신호 r2_flags를 낸다.
 
 if nargin < 5, opt = struct(); end
-r2b = isfield(opt, 'r2b') && opt.r2b;          % (TB09) 측정 기반 보호 상태기계(시퀀서 대신)
+r2c = isfield(opt, 'r2c') && opt.r2c;          % (TB10) r2b + DAB 고장 모드 변조(EPS) 게이트
+r2b = (isfield(opt, 'r2b') && opt.r2b) || r2c;  % (TB09) 측정 기반 보호 상태기계(시퀀서 대신)
 r2 = (isfield(opt, 'r2') && opt.r2) || r2b;
 % ======================= 제어기 ==========================================================
 cs = [sys '/Controller_StageB'];
@@ -156,7 +157,11 @@ sl_add(gs, 'simulink/Discrete/Unit Delay', 'ilink_z1', [140 135 170 165], 'Sampl
 sl_add(gs, 'simulink/Sources/Constant', 'gate_prm',  [30 290 130 310], 'Value', [T '.gate_prm']);
 sl_add(gs, 'simulink/Sources/Constant', 'gate_init', [30 330 130 350], 'Value', [T '.gate_init']);
 sl_startup_guard(gs, 'Startup_guard', [190 125 220 215], [T '.gate_init(3)'], T, [60 190 160 210]);   % 링크전류 시작 표본 보호
-sl_mfunc(gs, 'StageB_Gate', [260 60 400 280], 'prism_gate_stageB.m');
+if r2c
+    sl_mfunc(gs, 'StageB_Gate', [260 60 400 280], 'prism_gate_stageB_e.m');   % SPS 생성기 + 1차 레그 2 지연(EPS)
+else
+    sl_mfunc(gs, 'StageB_Gate', [260 60 400 280], 'prism_gate_stageB.m');
+end
 sl_line(gs, 'Clock/1', 't/1');
 sl_line(gs, 'Clock/1', 'StageB_Gate/1');
 sl_line(gs, 'uc_from/1', 'StageB_Gate/2');
@@ -196,6 +201,28 @@ if r2b  % 보호 게이트 재정의(하드웨어 비교기, 고장 주입, 모�
     sl_line(gs, 'flags_z1/1', 'r2_flags/1');
     gt{13} = 'gByp'; gt{14} = 'gBrk';
     x0 = 640;
+    if r2c   % DAB 고장 모드 변조 지령(상태 9–11, DAB 모드 1): 상태기계 보조 지령 + 측정(한 간격 지연) → [켬; φ; D1]
+        y0 = 560;   % 보호 게이트 묶음(y ≤ 515) 아래에 따로 두고, 생성기 입력 6은 지역 태그 dab_eps로 잇는다(선 겹침 방지)
+        sl_add(gs, 'simulink/Signal Routing/From', 'eps_sup', [20 y0 80 y0+16], 'GotoTag', 'r2_sup', 'ShowName', 'off');
+        sl_add(gs, 'simulink/Signal Routing/From', 'eps_vb', [20 y0+35 80 y0+51], 'GotoTag', 'vbus', 'ShowName', 'off');
+        sl_add(gs, 'simulink/Signal Routing/From', 'eps_vl', [20 y0+60 80 y0+76], 'GotoTag', 'vlink', 'ShowName', 'off');
+        sl_add(gs, 'simulink/Signal Routing/Mux', 'eps_mux', [100 y0+33 105 y0+78], 'Inputs', '2', 'ShowName', 'off');
+        sl_add(gs, 'simulink/Discrete/Unit Delay', 'eps_z1', [120 y0+43 145 y0+67], 'SampleTime', [T '.dt'], ...
+            'InitialCondition', sprintf('[%s.vb0 %s.vl0]''', T, T), 'ShowName', 'off');      % 대수 루프 방지
+        sl_add(gs, 'simulink/Sources/Constant', 'eps_prm', [20 y0+95 95 y0+111], 'Value', [T '.eps_prm'], 'ShowName', 'off');   % 값(TB.eps_*)이 블록 안에 보임
+        sl_add(gs, 'simulink/Sources/Constant', 'eps_d',   [20 y0+125 95 y0+141], 'Value', [T '.eps_d'], 'ShowName', 'off');
+        sl_add(gs, 'simulink/Sources/Constant', 'eps_phi', [20 y0+155 95 y0+171], 'Value', [T '.eps_phi'], 'ShowName', 'off');
+        sl_add(gs, 'simulink/Sources/Constant', 'eps_pk',  [20 y0+185 95 y0+201], 'Value', [T '.eps_pk'], 'ShowName', 'off');
+        sl_mfunc(gs, 'DAB_EPS_Map', [180 y0 340 y0+205], 'prism_dab_eps_map.m');   % 함수 이름이 포트 이름과 겹치지 않게 넓게
+        sl_add(gs, 'simulink/Signal Routing/Goto', 'eps_to', [370 y0+95 440 y0+111], 'GotoTag', 'dab_eps', 'ShowName', 'off');
+        sl_add(gs, 'simulink/Signal Routing/From', 'eps_from', [190 254 245 270], 'GotoTag', 'dab_eps', 'ShowName', 'off');
+        sl_line(gs, 'eps_vb/1', 'eps_mux/1'); sl_line(gs, 'eps_vl/1', 'eps_mux/2'); sl_line(gs, 'eps_mux/1', 'eps_z1/1');
+        sl_line(gs, 'eps_sup/1', 'DAB_EPS_Map/1'); sl_line(gs, 'eps_z1/1', 'DAB_EPS_Map/2');
+        sl_line(gs, 'eps_prm/1', 'DAB_EPS_Map/3'); sl_line(gs, 'eps_d/1', 'DAB_EPS_Map/4');
+        sl_line(gs, 'eps_phi/1', 'DAB_EPS_Map/5'); sl_line(gs, 'eps_pk/1', 'DAB_EPS_Map/6');
+        sl_line(gs, 'DAB_EPS_Map/1', 'eps_to/1');
+        sl_line(gs, 'eps_from/1', 'StageB_Gate/6');
+    end
 elseif r2   % 게이트 재정의(모드: DAB 정지·영벡터·바이패스) → 13개 태그(바이패스 게이트 gByp 포함)
     sl_add(gs, 'simulink/Signal Routing/From', 'seq_from', [260 310 340 330], 'GotoTag', 'r2_seq');
     sl_add(gs, 'simulink/Signal Routing/Demux', 'seq_split', [360 300 365 360], 'Outputs', '3');
@@ -223,15 +250,22 @@ for s = 1:numel(gt)
 end
 sl_add(gs, 'simulink/Signal Routing/Goto', 'gate_aux', [460 420 + 100*r2b 560 440 + 100*r2b], 'GotoTag', 'gate_aux', 'TagVisibility', 'global');
 sl_line(gs, 'StageB_Gate/2', 'gate_aux/1');
+if r2c, gfile = 'prism_gate_stageB_e.m'; else, gfile = 'prism_gate_stageB.m'; end
 sl_note(gs, sprintf(['H-브리지: 유니폴라 PWM 200 kHz(반송파는 표본 시점에서 최댓값), 데드타임 50 ns.\n' ...
     'DAB: 반송파 반주기 중심에 대칭인 1·2차 에지(δ = φT/2π), 전이 반주기 평균 위상 갱신(직류 편류 방지), 데드타임 100 ns.\n' ...
-    '링크전류 주기 평균을 표본 직전에 확정해 제어기의 ρ̂·ε̂ 추정에 넘긴다(aux). 코드: ctrl/prism_gate_stageB.m(블록 안에 복사)']), ...
-    [30 460 + 100*r2b 800 520 + 100*r2b], 'box');
+    '링크전류 주기 평균을 표본 직전에 확정해 제어기의 ρ̂·ε̂ 추정에 넘긴다(aux). 코드: ctrl/%s(블록 안에 복사)'], gfile), ...
+    [30 460 + 100*r2b + 260*r2c 800 520 + 100*r2b + 260*r2c], 'box');
+if r2c
+    sl_note(gs, sprintf(['DAB 고장 모드 변조(TB10, ctrl/prism_dab_eps_map.m → ctrl/prism_gate_stageB_e.m): H-브리지 강등(상태 9–11)에서 보조 링크전류 지령을\n' ...
+        '1차 내부 위상천이(EPS) 지령 [φ; D1]으로 바꾼다(검증 코드 dab_modulation.py의 첨두 최소표, 첨두 ≤ 1.5 × 정격점). 레그 2를 D1·T/2 늦춰\n' ...
+        '1차 전압에 영구간을 넣는다. 그 밖의 상태에서는 SPS 생성기와 같다(eps = 0). 지령은 지역 태그 dab_eps로 생성기 입력 6에 간다']), ...
+        [30 1010 800 1060], 'box');
+end
 if r2b
     sl_note(gs, sprintf(['R2 보호 게이트 재정의(ctrl/prism_r2_gate_b.m, 적분 간격마다): 하드웨어 비교기(|i_p|·|i_h| > 110 A, v_link > 115 V,\n' ...
         '|v_s| > 100 V, 정상 조정 중 v_bus > 부품 상한, 1.2 µs 지속 → H-브리지 차단 래치), 고장 주입(H-브리지 개방·DAB 정지),\n' ...
         '브리지 모드(제어·영벡터·차단·조향), DAB 정지, 바이패스 주 스위치 gByp, 제동 저항 gBrk. 신호 r2_flags는 한 간격 지연해 상태기계로']), ...
-        [30 640 800 690], 'box');
+        [30 640 + 260*r2c 800 690 + 260*r2c], 'box');
 elseif r2
     sl_note(gs, sprintf(['R2 게이트 재정의(ctrl/prism_r2_gate.m): 모드 1 DAB 게이트 끔, 2 영벡터(A·B 하측 켬)·DAB 끔, 3 바이패스 켬·전 소자 끔,\n' ...
         '4 바이패스 + 영벡터. 게이트 구동기 수준의 재정의라 제어기 전달지연(5 µs)을 거치지 않는다. 바이패스 게이트 태그 gByp']), ...

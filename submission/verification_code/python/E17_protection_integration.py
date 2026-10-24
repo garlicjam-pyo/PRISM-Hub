@@ -161,6 +161,7 @@ from dataclasses import replace                                     # noqa: E402
 from model_stage_b import primary_power, current_limit, equilibrium  # noqa: E402
 from E14_protection_startup import va_est                            # noqa: E402
 import E19_r2_window_module as E19                                   # noqa: E402
+import dab_modulation as DM                                          # noqa: E402
 
 DT = 1e-7                    # 적분 간격(바이패스 3.3 mΩ·C_s 100 µF 시정수 0.33 µs를 중점법으로 안정하게)
 T_EV = .5e-3                 # 사건(켬 허가, 정지 요청, 고장) 시각
@@ -184,6 +185,8 @@ VL_SOFT = .5                 # 이 링크전압 아래에서 소프트 투입 �
 VL_STALL, T_STALL, DV_STALL = 15., .5e-3, .5   # 링크 기준이 0에 닿은 뒤 0.5 ms 동안 0.5 V도 안 내려가고 링크 ≤ 15 V면 정체
 DI_SOFT, K_UP = 25., 1.2     # 소프트 투입 중 경로전류 > 투입 시작값 + 25 A면 저항을 표본(5 µs)마다 1.2배로 되올린다
 T_SOFT_MAX = 5e-3            # 소프트 투입 시간 상한: 넘으면 주 스위치를 닫고 기록(soft_timeout)
+PK_FAULT = 1.5               # (E20) 강등 상태(9–11)의 DAB 링크 쪽 순시 첨두 상한 = 정격점 첨두의 1.5배(dmod 'eps'에서 지령 전류 제한)
+T_RESTORE = .5e-3            # (E20) 일시 감발 해제: 강등(바이패스 닫힘) 0.5 ms 뒤 400 V 부하 출력을 되돌린다
 T_PREP, T_WAIT = .5e-3, .2e-3  # 켬: 바이패스 + 영벡터 분담 시간, 바이패스 열림 뒤 제어 시작까지(TB08과 같음)
 R_DMP, C_DMP = 48.6e-3, 1.6e-3  # 버스 RC 감쇠기(E13 설계값, R2 기본형 구성). E19·TB08에는 없었으므로 '없음'을 감도로 본다
 R_BRK = 3.                   # 링크 제동 저항(선택): 110 V에서 4 kW. 창 조정 최대 흡수전력(W410 920 V·25 kW에서 약 3 kW)보다 크게
@@ -251,16 +254,22 @@ def share_state(vbat, P, p):
 
 class LinkAux:
     """강등 중 DAB 보조 루프: H-브리지가 꺼져 다이오드 정류기가 되면 직렬전압 = −(v_link + 2V_D)이므로,
-    DAB로 링크전압을 정해 버스를 잡는다(hold), 이어 링크를 0으로 내린다(collapse)."""
-    def __init__(self, p, VW):
-        self.p, self.VW, self.qb, self.mode, self.t0, self.vl0 = p, VW, 0., "hold", 0., 100.
+    DAB로 링크전압을 정해 버스를 잡는다(hold), 이어 링크를 0으로 내린다(collapse).
+    hold 'vw'  : 버스를 V_W에 붙잡는 링크 기준(버스 PI + 앞먹임). 링크가 40–67 V로 내려가 DAB 전압비가 어긋난다.
+    hold 'match': (E20) DAB 전압비를 1로 두는 링크 기준 n·v_link = v_bus, 즉 v_link = (V_A − (R + R_h)i_p − 2V_D)/(n + 1).
+                  버스는 V_A − (n + 1)/n·…로 V_W보다 낮지만(1008 V에서 약 410 V) 부품 상한·하한 안이고, DAB는 정격 전압비로
+                  동작한다. DAB 정격을 넘는 링크전력은 제동 저항이 받는다."""
+    def __init__(self, p, VW, hold="vw"):
+        self.p, self.VW, self.qb, self.mode, self.t0, self.vl0, self.hold = p, VW, 0., "hold", 0., 100., hold
 
     def collapse(self, t, vl):
         self.mode, self.t0, self.vl0 = "collapse", t, vl
 
     def step(self, x, t, vbat):
         p = self.p; ip, vs, vb, ih, vl, idab = x[:6]
-        if self.mode == "hold":
+        if self.mode == "hold" and self.hold == "match":
+            vref = float(np.clip((vbat / 2 - (p.R + p.Rh) * ip - 2 * VD) / (p.turns + 1), 0., 100.))
+        elif self.mode == "hold":
             e = vb - self.VW
             self.qb = float(np.clip(self.qb + p.Ts * KI_B * e, -QB_MAX, QB_MAX))
             ff = vbat / 2 - (p.R + p.Rh) * ip - 2 * VD - self.VW
@@ -293,7 +302,10 @@ def r2_run(job):
                  DAB 고장: 'ramp'(E19, 검출 즉시 V_A로 램프) | 'brk_hold'(링크 제동 저항으로 붙잡고 분리 뒤 램프)
          prep('zero' | 'steer'), t_prep, wait(켬), close('zero' | 'steer', 끔·DAB 고장의 바이패스 직전),
          vd, t_soft(제한 없는 소프트 램프 시간), t_shed, start_share, duration, keep,
-         dab_lowv(감도: 링크전압이 이 값 아래면 DAB 전달전류를 v_link/dab_lowv배로 줄인다 — 회로에서 본 붕괴 정체 모사)."""
+         dab_lowv(감도: 링크전압이 이 값 아래면 DAB 전달전류를 v_link/dab_lowv배로 줄인다 — 회로에서 본 붕괴 정체 모사),
+         hold('vw' | 'match', H-브리지 강등 유지의 링크 기준, E20), curtail(H-브리지 고장이면 V_A와 무관하게 400 V 부하 출력을
+         줄이고 강등 뒤 V_A ≤ 상한이면 되돌림, E20), dmod('sps' | 'eps', 강등 상태 9–11의 DAB 변조. 'eps'면 첨두 ≤ PK_FAULT × 정격점 첨두가 되도록
+         지령 전류를 제한, E20. pk_fault로 배수를 바꿈), soft_fail(소프트 투입 시간 상한이면 주 스위치를 닫지 않고 FAILSAFE로, E20)."""
     case, V, P, event = job["case"], job["V"], job["P"], job["event"]
     pol = job.get("policy", {"dab": "brk_hold"}.get(event, "clamp_brk")); vd = job.get("vd", VD)
     t_soft = job.get("t_soft", T_SOFT); t_shed = job.get("t_shed", T_SHED)
@@ -318,7 +330,12 @@ def r2_run(job):
     vt = [VW]                                                          # 추종 기준(V_A 추정)을 담는 칸
     track = lambda tt: vt[0]
     gate_since = None; gate_timeout = False
-    aux = LinkAux(p, VW)
+    hold, curtail, dmod = job.get("hold", "vw"), bool(job.get("curtail", False)), job.get("dmod", "sps")
+    soft_fail = bool(job.get("soft_fail", False))
+    aux = LinkAux(p, VW, hold)
+    curtail_only = False; dab_pk_hold = 0.; dab_pk_col = 0.
+    pk_rated = dab_sps_peak(VW, 100., p.power_max / 100., p)          # 정격점(링크 100 V, 정격 전력) 첨두
+    pkf = job.get("pk_fault", PK_FAULT)                               # 첨두 상한 배수(E20 감도: 회로 여유)
     buf = np.tile(u, (lag + 1, 1)); tick = 0
     t_st = 0.; hw_since = sw_since = vb_since = None; t_det = None; det_src = None; t_gdf = None
     shed_cmd = None; loads400 = True; bridge_dead = False; dab_dead = False; Gb = 0.; steer = False
@@ -400,8 +417,10 @@ def r2_run(job):
                 else:
                     vb_since = None
             # 고장 → 강등 경로
-            if t_det is not None and shed_cmd is None and va_m > upper - 2 and st not in ("BYPASS",):
+            if t_det is not None and shed_cmd is None and st not in ("BYPASS",) and (
+                    va_m > upper - 2 or (curtail and bridge_dead and det_src != "link_window")):
                 shed_cmd = t; events.append(("shed_cmd", round(t * 1e3, 4)))
+                curtail_only = va_m <= upper - 2                  # 상한 안이면 일시 감발(강등 뒤 되돌림)
             if bridge_dead and t_det is not None and det_src != "link_window" and st in SWITCHING:
                 hb_path(t, x)                                      # 검출된 뒤에만 반응(물리적 차단 ≠ 검출)
             elif bridge_dead and det_src == "link_window" and st in SWITCHING and any(e[0] == "hw_trip" for e in events):
@@ -453,16 +472,24 @@ def r2_run(job):
                     t_soft0 = t; r_soft = R_SOFT0; ip_soft0 = x[0]; G = 1. / r_soft; go("SOFT_BYP", t)
             elif st == "SOFT_BYP" and (r_soft <= R_BYP * (1 + 1e-9) or t - t_st >= T_SOFT_MAX):
                 soft_timeout = r_soft > R_BYP * (1 + 1e-9)
-                G = 1. / R_BYP; t_deg = t; go("DEGRADED", t)
+                if soft_timeout and soft_fail:                     # (E20) 시간 상한이면 닫지 않고 이중 고장 처리(Stage A 협조 정지)
+                    go("FAILSAFE", t)
+                else:
+                    G = 1. / R_BYP; t_deg = t; go("DEGRADED", t)
             # 소프트 투입(경로전류 조절): 제한 안이면 로그 램프(10 Ω → 3.3 mΩ, t_soft), 넘으면 저항을 되올린다
             if st == "SOFT_BYP" and t > t_soft0:
                 r_soft = min(r_soft * K_UP, R_SOFT0) if x[0] > ip_soft0 + DI_SOFT else max(r_soft / k_dn, R_BYP)
                 G = 1. / r_soft
             # SPS DAB 링크 쪽 전류 첨두(정보): DAB가 스위칭하는 상태에서
             if st in DAB_ON and not dab_dead:
-                pk = dab_sps_peak(x[2], x[4], x[5], p)
+                fault_st = st in ("HB_HOLD", "HB_COLLAPSE", "SOFT_BYP")
+                pk = DM.peak_A(x[2], x[4], x[5], p, "eps" if (fault_st and dmod == "eps") else "sps")
                 if pk > dab_pk:
                     dab_pk, dab_pk_t, dab_pk_st = pk, t, st
+                if st == "HB_HOLD":
+                    dab_pk_hold = max(dab_pk_hold, pk)
+                elif fault_st:
+                    dab_pk_col = max(dab_pk_col, pk)
             # 지령
             steer = (st in ("PREP", "OPEN_WAIT") and prep == "steer") or (st == "ZERO" and close == "steer")
             if st in ("WINDOW", "OFF_RAMP", "OFF_HOLD", "DAB_HOLD", "DAB_RAMP"):
@@ -472,12 +499,17 @@ def r2_run(job):
                 u = np.array([float(np.clip((x[1] + p.Rh * x[3] + p.Lh / p.inner_tau * (ihs - x[3])) / x[4], -.95, .95)), 0.])
             if st in ("HB_HOLD", "HB_COLLAPSE", "SOFT_BYP"):
                 icmd_aux, vl_aux_ref = aux.step(x, t, V)
+                if dmod == "eps":                                  # 첨두 상한을 지키는 전류만 지령(나머지는 제동 저항이 받음)
+                    lim_e = DM.eps_ilim(x[2], x[4], p, pkf * pk_rated)
+                    icmd_aux = float(np.clip(icmd_aux, -lim_e, lim_e))
             # 링크 제동 저항(선택): H-브리지 강등의 유지 중에는 링크 과전압 보호만(110 V 위에서 켬), 붕괴·소프트 투입 중에는
             # 링크 기준 + 5 V 위에서 켠다. DAB 고장에서는 110 V 위에서 켠다.
             # (2026-10-24 수정: 유지 중에도 기준 추종으로 켜면 링크가 너무 빨리 내려가 버스가 급히 올라 경로전류 첨두가 커졌다 —
             #  W410 920 V·25 kW 103 A. 유지 중 링크는 DAB 보조 루프만으로 내린다.)
-            if brk and st == "HB_HOLD":
+            if brk and st == "HB_HOLD" and hold == "vw":
                 Gb = 1. / R_BRK if x[4] > 110. else (0. if x[4] < 105. else Gb)
+            elif brk and st == "HB_HOLD":                          # 전압비 정합 유지: DAB 정격 밖 전력을 제동 저항이 받음
+                Gb = 1. / R_BRK if x[4] > vl_aux_ref + 5. else (0. if x[4] < vl_aux_ref + 2. else Gb)
             elif brk and st in ("HB_COLLAPSE", "SOFT_BYP"):
                 Gb = 1. / R_BRK if x[4] > vl_aux_ref + 5. else (0. if x[4] < vl_aux_ref + 2. else Gb)
             elif brk and st in ("DAB_HOLD", "DAB_RAMP", "ZERO") and dab_dead:
@@ -486,8 +518,10 @@ def r2_run(job):
                 Gb = 0.
         if st == "SOFT_BYP":
             e_soft += G * x[1] * x[1] * DT                        # 소프트 투입 소자(선형 영역)의 소비 에너지
-        if shed_cmd is not None and loads400 and t - shed_cmd >= t_shed:
+        if shed_cmd is not None and loads400 and t - shed_cmd >= t_shed and not (curtail_only and t_deg is not None):
             loads400 = False; events.append(("shed_done", round(t * 1e3, 4)))
+        if curtail_only and t_deg is not None and not loads400 and t - t_deg >= T_RESTORE:
+            loads400 = True; events.append(("restore", round(t * 1e3, 4)))   # 일시 감발 해제(버스 = V_A ≤ 상한)
         # ---- 적용(전달지연 버퍼) --------------------------------------------------------------------
         buf[tick] = u; applied = buf[(tick + 1) % len(buf)].copy(); tick = (tick + 1) % len(buf)
         if event in ("m_pos", "m_neg") and t >= T_EV:
@@ -543,7 +577,9 @@ def r2_run(job):
     m.update(dab_sec_peak=dab_pk, dab_prim_peak=dab_pk / p.turns, dab_peak_ms=None if dab_pk_t is None else round((dab_pk_t - T_EV) * 1e3, 4),
              dab_peak_state=dab_pk_st, dab_rated_sec_peak=rated_pk, dab_peak_ratio=dab_pk / rated_pk,
              soft_entry=soft_entry, soft_timeout=soft_timeout, soft_energy_J=e_soft,
-             soft_ms=None if (t_soft0 is None or t_deg is None) else round((t_deg - t_soft0) * 1e3, 4))
+             soft_ms=None if (t_soft0 is None or t_deg is None) else round((t_deg - t_soft0) * 1e3, 4),
+             hold=hold, curtail=curtail, dmod=dmod, soft_fail=soft_fail, dab_peak_hold=dab_pk_hold, dab_peak_collapse=dab_pk_col,
+             dab_peak_limit=pkf * pk_rated)
     if t_close is not None:                                        # 바이패스 투입 순간(소프트 투입 포함) + 50 µs
         w = (tt >= t_close) & (tt <= (t_deg if t_deg is not None else t_close) + 50e-6)
         m.update(close_ms=round((t_close - T_EV) * 1e3, 4), vs_at_close=float(log[np.searchsorted(tt, t_close), 1]),

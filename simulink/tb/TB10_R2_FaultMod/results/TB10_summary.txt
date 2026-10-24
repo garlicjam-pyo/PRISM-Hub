@@ -1,0 +1,6 @@
+TB10 DAB fault-mode modulation (R2-W460): ratio-matched hold, EPS peak limit 1.5x rated, temporary curtailment, soft-timeout to failsafe
+run  case                         limits   failed
+A    A_1008V_hbopen_25kW          PASS     
+B    B_930V_hbopen_25kW           PASS     
+C    C_930V_enable_steer_25kW     PASS     
+TB10 overall: PASS
