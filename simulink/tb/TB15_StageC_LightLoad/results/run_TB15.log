@@ -1,0 +1,103 @@
+[prism_run] run_TB15 start 2026-10-25 22:35:08
+TB15 case A_400V_ramp, dt 2.50 ns, wall 105 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 47.750-48.189 V, band 47.04-48.96 V; E22 47.789-48.178 V
+    output current 100 us mean max 107.0 A (E22 106.9 A), secondary device peak 84.7 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.21 V (500 edges), secondary 0.06 V (250 edges)
+    DCX gain n*v_o/v_I before event 0.9996, last 0.2 ms 0.9768
+    after event: duty max 0.605, mode changes 1, both-bridge drive fraction 0.04
+    end of run: v_o circuit - E22 +0.001 V, i_L circuit 21.68 A / E22 21.67 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.8306, ir1 rms 3.72 A, im peak 6.86 A
+A_400V_ramp done (105 s): PASS
+TB15 case C_504V_rev, dt 2.50 ns, wall 103 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 47.751-50.777 V, band 36.00-52.00 V; E22 47.773-50.952 V
+    output current 100 us mean max 103.6 A (E22 103.6 A), secondary device peak 81.6 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.11 V (250 edges), secondary 0.07 V (250 edges)
+    DCX gain n*v_o/v_I before event 0.9770, last 0.2 ms 1.0118
+    after event: duty max 0.475, mode changes 0, both-bridge drive fraction 0.00
+    end of run: v_o circuit - E22 +0.002 V, i_L circuit -12.97 A / E22 -13.02 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9673, ir1 rms 24.22 A, im peak 6.98 A
+C_504V_rev done (103 s): PASS
+TB15 case F_400V_rev_light, dt 2.50 ns, wall 99 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    dcx_gain_end           PASS
+    v_o (10 us mean) 46.923-48.170 V, band 36.00-52.00 V; E22 46.920-48.151 V
+    output current 100 us mean max 62.3 A (E22 62.4 A), secondary device peak 49.3 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.22 V (250 edges), secondary 0.07 V (500 edges)
+    DCX gain n*v_o/v_I before event 1.0118, last 0.2 ms 1.0013
+    after event: duty max 0.739, mode changes 0, both-bridge drive fraction 1.00
+    end of run: v_o circuit - E22 +0.000 V, i_L circuit -1.29 A / E22 -1.31 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9806, ir1 rms 14.54 A, im peak 6.78 A
+F_400V_rev_light done (99 s): PASS
+TB15 case G_270V_rev_light, dt 2.50 ns, wall 82 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    dcx_gain_end           PASS
+    v_o (10 us mean) 46.860-48.338 V, band 36.00-52.00 V; E22 46.855-48.317 V
+    output current 100 us mean max 62.3 A (E22 62.4 A), secondary device peak 49.2 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.21 V (250 edges), secondary 0.07 V (500 edges)
+    DCX gain n*v_o/v_I before event 1.0118, last 0.2 ms 1.0004
+    after event: duty max 0.970, mode changes 2, both-bridge drive fraction 0.89
+    end of run: v_o circuit - E22 +0.001 V, i_L circuit -0.42 A / E22 -0.44 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9819, ir1 rms 14.54 A, im peak 6.78 A
+G_270V_rev_light done (82 s): PASS
+TB15 case H_400V_cross, dt 2.50 ns, wall 80 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    dcx_gain_end           PASS
+    v_o (10 us mean) 47.786-48.071 V, band 47.04-48.96 V; E22 47.950-48.063 V
+    output current 100 us mean max 21.2 A (E22 21.5 A), secondary device peak 26.0 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.18 V (250 edges), secondary 0.08 V (250 edges)
+    DCX gain n*v_o/v_I before event 0.9961, last 0.2 ms 0.9804
+    after event: duty max 0.594, mode changes 4, both-bridge drive fraction 0.44
+    end of run: v_o circuit - E22 +0.003 V, i_L circuit -4.19 A / E22 -4.32 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9734, ir1 rms 5.89 A, im peak 6.82 A
+H_400V_cross done (80 s): PASS
+TB15 regulated Stage C with light-load both-bridge drive (sync buck + CLLC DCX 4.8:1), reference E22 averaged model
+case           result vo_min    vo_max    E22 min   E22 max   failed
+A_400V_ramp    PASS   47.75     48.19     47.79     48.18     
+C_504V_rev     PASS   47.75     50.78     47.77     50.95     
+F_400V_rev_light PASS   46.92     48.17     46.92     48.15     
+G_270V_rev_light PASS   46.86     48.34     46.85     48.32     
+H_400V_cross   PASS   47.79     48.07     47.95     48.06     
+TB15 overall: PASS
+[prism_run] run_TB15 finished (495.2 s)

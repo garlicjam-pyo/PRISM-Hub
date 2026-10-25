@@ -32,6 +32,7 @@ STEPS = [
     ("E17", ["E17_protection_integration.py"]),  # E12·E14·E19 모델을 쓰므로 마지막에(monitor·r2·figures)
     ("E20", ["E20_dab_fault_modulation.py"]),    # E17 상태기계를 쓴다(table·compare·figures, 약 10분)
     ("E21", ["E21_dab_switching_margin.py"]),    # 스위칭 표(모듈당 약 2분) + E17 상태기계(table·compare·figures)
+    ("E22", ["E22_stage_c_regulated.py"]),       # 조정형 Stage C(design zvs gain spice both dcx control figures, 2코어 약 15분)
 ]
 
 if __name__ == "__main__":

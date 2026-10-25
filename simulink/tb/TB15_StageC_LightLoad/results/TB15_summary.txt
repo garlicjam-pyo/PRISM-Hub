@@ -1,0 +1,8 @@
+TB15 regulated Stage C with light-load both-bridge drive (sync buck + CLLC DCX 4.8:1), reference E22 averaged model
+case           result vo_min    vo_max    E22 min   E22 max   failed
+A_400V_ramp    PASS   47.75     48.19     47.79     48.18     
+C_504V_rev     PASS   47.75     50.78     47.77     50.95     
+F_400V_rev_light PASS   46.92     48.17     46.92     48.15     
+G_270V_rev_light PASS   46.86     48.34     46.85     48.32     
+H_400V_cross   PASS   47.79     48.07     47.95     48.06     
+TB15 overall: PASS
