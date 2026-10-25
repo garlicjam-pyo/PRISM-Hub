@@ -1,0 +1,473 @@
+[
+  {
+    "case": "F_1008V_bus_25_5_25kW",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "T1_turnoff": true,
+      "T2_phase_peak": true,
+      "T3_vA_vs_noshed": true,
+      "T4_no_chatter": true
+    },
+    "n_turnoff": 740,
+    "n_bad": 0,
+    "ioff_max": 0.42318886518478394,
+    "phase_peak": 47.199993133544922,
+    "phase_peak_noshed": 44.184856414794922,
+    "vA": [
+      503.2777327609424,
+      503.96326535813853
+    ],
+    "vA_noshed": [
+      503.40564040361085,
+      503.96326535813853
+    ],
+    "events_ms": [
+      [
+        0.66878,
+        3
+      ],
+      [
+        0.67057,
+        1
+      ],
+      [
+        1.53574,
+        2
+      ]
+    ],
+    "n_shed": 1,
+    "n_ret": 1,
+    "n_cancel": 0,
+    "zcs_end": [
+      0.0061001696610769674,
+      0.0069778783877901367
+    ],
+    "wall_s": [
+      22.6560393,
+      21.9896168
+    ],
+    "dt_ns": 2.5,
+    "date": "2026-10-26 03:10:38",
+    "compare": [
+      {
+        "metric": "shed time [ms]",
+        "simscape": 0.67057,
+        "e24": 0.6716,
+        "tol": 0.02
+      },
+      {
+        "metric": "return time [ms]",
+        "simscape": 1.53574,
+        "e24": 1.5359,
+        "tol": 0.02
+      },
+      {
+        "metric": "phase peak [A]",
+        "simscape": 47.199993133544922,
+        "e24": 47.153911590576172,
+        "tol": 4.7153911590576172
+      },
+      {
+        "metric": "phase peak, no shedding [A]",
+        "simscape": 44.184856414794922,
+        "e24": 44.348777770996094,
+        "tol": 4.43487777709961
+      },
+      {
+        "metric": "V_A min [V]",
+        "simscape": 503.2777327609424,
+        "e24": 503.28250122070312,
+        "tol": 0.3
+      },
+      {
+        "metric": "V_A max [V]",
+        "simscape": 503.96326535813853,
+        "e24": 503.96749877929688,
+        "tol": 0.3
+      },
+      {
+        "metric": "max turn-off current [A]",
+        "simscape": 0.42318886518478394,
+        "e24": 0.49970856308937073,
+        "tol": null
+      }
+    ]
+  },
+  {
+    "case": "G_540V_bus_13p5_2p7_13p5kW",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "T1_turnoff": true,
+      "T2_phase_peak": true,
+      "T3_vA_vs_noshed": true,
+      "T4_no_chatter": true
+    },
+    "n_turnoff": 740,
+    "n_bad": 0,
+    "ioff_max": 0.42372593283653259,
+    "phase_peak": 47.507308959960938,
+    "phase_peak_noshed": 44.516597747802734,
+    "vA": [
+      269.2775946960432,
+      269.96300952591793
+    ],
+    "vA_noshed": [
+      269.40340001140959,
+      269.96300952591793
+    ],
+    "events_ms": [
+      [
+        0.66969,
+        3
+      ],
+      [
+        0.67060999999999993,
+        1
+      ],
+      [
+        1.53558,
+        2
+      ]
+    ],
+    "n_shed": 1,
+    "n_ret": 1,
+    "n_cancel": 0,
+    "zcs_end": [
+      0.0056575408191522356,
+      0.0070738685086648313
+    ],
+    "wall_s": [
+      21.845346,
+      22.3177431
+    ],
+    "dt_ns": 2.5,
+    "date": "2026-10-26 03:11:26",
+    "compare": [
+      {
+        "metric": "shed time [ms]",
+        "simscape": 0.67060999999999993,
+        "e24": 0.6716,
+        "tol": 0.02
+      },
+      {
+        "metric": "return time [ms]",
+        "simscape": 1.53558,
+        "e24": 1.5359,
+        "tol": 0.02
+      },
+      {
+        "metric": "phase peak [A]",
+        "simscape": 47.507308959960938,
+        "e24": 47.6607551574707,
+        "tol": 4.7660755157470707
+      },
+      {
+        "metric": "phase peak, no shedding [A]",
+        "simscape": 44.516597747802734,
+        "e24": 44.823810577392578,
+        "tol": 4.482381057739258
+      },
+      {
+        "metric": "V_A min [V]",
+        "simscape": 269.2775946960432,
+        "e24": 269.2747802734375,
+        "tol": 0.3
+      },
+      {
+        "metric": "V_A max [V]",
+        "simscape": 269.96300952591793,
+        "e24": 269.9674072265625,
+        "tol": 0.3
+      },
+      {
+        "metric": "max turn-off current [A]",
+        "simscape": 0.42372593283653259,
+        "e24": 0.49959960579872131,
+        "tol": null
+      }
+    ]
+  },
+  {
+    "case": "H_1008V_bus5kW_charger_74A",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "T1_turnoff": true,
+      "T2_phase_peak": true,
+      "T3_vA_vs_noshed": true,
+      "T4_no_chatter": true
+    },
+    "n_turnoff": 479,
+    "n_bad": 0,
+    "ioff_max": 0.76583874225616455,
+    "phase_peak": 52.547111511230469,
+    "phase_peak_noshed": 53.030586242675781,
+    "vA": [
+      503.78505997063149,
+      504.76868328957733
+    ],
+    "vA_noshed": [
+      503.89666181232957,
+      504.72269748859844
+    ],
+    "events_ms": [
+      [
+        0.1,
+        3
+      ],
+      [
+        0.10013000000000001,
+        1
+      ],
+      [
+        1.0501099999999999,
+        2
+      ]
+    ],
+    "n_shed": 1,
+    "n_ret": 1,
+    "n_cancel": 0,
+    "zcs_end": [
+      0.0092448028986948129,
+      0.0097008392432328047
+    ],
+    "wall_s": [
+      16.913874,
+      16.8832858
+    ],
+    "dt_ns": 2.5,
+    "date": "2026-10-26 03:12:03",
+    "compare": [
+      {
+        "metric": "shed time [ms]",
+        "simscape": 0.10013000000000001,
+        "e24": 0.1003,
+        "tol": 0.02
+      },
+      {
+        "metric": "return time [ms]",
+        "simscape": 1.0501099999999999,
+        "e24": 1.0499,
+        "tol": 0.02
+      },
+      {
+        "metric": "phase peak [A]",
+        "simscape": 52.547111511230469,
+        "e24": 52.610130310058594,
+        "tol": 5.2610130310058594
+      },
+      {
+        "metric": "phase peak, no shedding [A]",
+        "simscape": 53.030586242675781,
+        "e24": 53.050018310546875,
+        "tol": 5.305001831054688
+      },
+      {
+        "metric": "V_A min [V]",
+        "simscape": 503.78505997063149,
+        "e24": 503.7882080078125,
+        "tol": 0.3
+      },
+      {
+        "metric": "V_A max [V]",
+        "simscape": 504.76868328957733,
+        "e24": 504.7655029296875,
+        "tol": 0.3
+      },
+      {
+        "metric": "max turn-off current [A]",
+        "simscape": 0.76583874225616455,
+        "e24": 0.72900062799453735,
+        "tol": null
+      }
+    ]
+  },
+  {
+    "case": "I_1008V_bus_ramp_20_1p5_20kW",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "T1_turnoff": true,
+      "T2_phase_peak": true,
+      "T3_vA_vs_noshed": true,
+      "T4_no_chatter": true
+    },
+    "n_turnoff": 1089,
+    "n_bad": 0,
+    "ioff_max": 0.40318715572357178,
+    "phase_peak": 32.8162956237793,
+    "phase_peak_noshed": 32.800247192382812,
+    "vA": [
+      503.570653737957,
+      503.93702441216379
+    ],
+    "vA_noshed": [
+      503.57093273932571,
+      503.97027665707208
+    ],
+    "events_ms": [
+      [
+        1.11673,
+        3
+      ],
+      [
+        1.1172300000000002,
+        1
+      ],
+      [
+        1.78516,
+        2
+      ]
+    ],
+    "n_shed": 1,
+    "n_ret": 1,
+    "n_cancel": 0,
+    "zcs_end": [
+      0.0030805894015915316,
+      0.0040499216733439151
+    ],
+    "wall_s": [
+      27.2183057,
+      27.1184868
+    ],
+    "dt_ns": 2.5,
+    "date": "2026-10-26 03:13:00",
+    "compare": [
+      {
+        "metric": "shed time [ms]",
+        "simscape": 1.1172300000000002,
+        "e24": 1.1195,
+        "tol": 0.02
+      },
+      {
+        "metric": "return time [ms]",
+        "simscape": 1.78516,
+        "e24": 1.7849,
+        "tol": 0.02
+      },
+      {
+        "metric": "phase peak [A]",
+        "simscape": 32.8162956237793,
+        "e24": 33.018768310546875,
+        "tol": 3.3018768310546878
+      },
+      {
+        "metric": "phase peak, no shedding [A]",
+        "simscape": 32.800247192382812,
+        "e24": 33.254470825195312,
+        "tol": 3.3254470825195312
+      },
+      {
+        "metric": "V_A min [V]",
+        "simscape": 503.570653737957,
+        "e24": 503.57394409179688,
+        "tol": 0.3
+      },
+      {
+        "metric": "V_A max [V]",
+        "simscape": 503.93702441216379,
+        "e24": 503.939453125,
+        "tol": 0.3
+      },
+      {
+        "metric": "max turn-off current [A]",
+        "simscape": 0.40318715572357178,
+        "e24": 0.49992182850837708,
+        "tol": null
+      }
+    ]
+  },
+  {
+    "case": "J_1008V_bus5kW_rev_m16A",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "T1_turnoff": true,
+      "T2_phase_peak": true,
+      "T3_vA_vs_noshed": true,
+      "T4_no_chatter": true
+    },
+    "n_turnoff": 499,
+    "n_bad": 0,
+    "ioff_max": 0.71237045526504517,
+    "phase_peak": 16.280282974243164,
+    "phase_peak_noshed": 11.22590160369873,
+    "vA": [
+      503.64236479591204,
+      504.27717234849024
+    ],
+    "vA_noshed": [
+      503.71342756190984,
+      504.23769359000107
+    ],
+    "events_ms": [
+      [
+        0.1,
+        3
+      ],
+      [
+        0.10013000000000001,
+        1
+      ]
+    ],
+    "n_shed": 1,
+    "n_ret": 0,
+    "n_cancel": 0,
+    "zcs_end": [
+      0.013039061458925888,
+      null
+    ],
+    "wall_s": [
+      22.1279162,
+      21.9323859
+    ],
+    "dt_ns": 2.5,
+    "date": "2026-10-26 03:13:47",
+    "compare": [
+      {
+        "metric": "shed time [ms]",
+        "simscape": 0.10013000000000001,
+        "e24": 0.1003,
+        "tol": 0.02
+      },
+      {
+        "metric": "return time [ms]",
+        "simscape": null,
+        "e24": null,
+        "tol": 0.02
+      },
+      {
+        "metric": "phase peak [A]",
+        "simscape": 16.280282974243164,
+        "e24": 16.506105422973633,
+        "tol": 1.6506105422973634
+      },
+      {
+        "metric": "phase peak, no shedding [A]",
+        "simscape": 11.22590160369873,
+        "e24": 11.204578399658203,
+        "tol": 1.1204578399658203
+      },
+      {
+        "metric": "V_A min [V]",
+        "simscape": 503.64236479591204,
+        "e24": 503.64114379882812,
+        "tol": 0.3
+      },
+      {
+        "metric": "V_A max [V]",
+        "simscape": 504.27717234849024,
+        "e24": 504.281005859375,
+        "tol": 0.3
+      },
+      {
+        "metric": "max turn-off current [A]",
+        "simscape": 0.71237045526504517,
+        "e24": 0.62021738290786743,
+        "tol": null
+      }
+    ]
+  }
+]

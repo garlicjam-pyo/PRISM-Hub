@@ -37,8 +37,9 @@
           (T3) V_A 최저·최고가 셰딩 없는 2위상 운전(같은 프로파일)과 0.5 V 안
           (T4) 모드 전환이 문턱 사건마다 한 번(셰딩·복귀가 예상 횟수, 채터링 없음)
 
-■ 실행   python E24_stage_a_shedding.py design static transient figures   (2코어 약 6분)
-■ 결과   results/E24/design.json, static.json, transient.json, E24_stage_a_shedding.png
+  deadfix: 데드타임 전류 소멸 처리의 영향(TB16·TB17 회로의 Stage A 운전점에서 이전 처리와 회로 V_A 비교)
+■ 실행   python E24_stage_a_shedding.py design static transient deadfix figures   (2코어 약 10분)
+■ 결과   results/E24/design.json, static.json, transient.json, deadfix.json, E24_stage_a_shedding.png
 """
 import json
 import sys
@@ -263,7 +264,36 @@ def figures():
     print("  figures saved")
 
 
-PARTS = dict(design=design, static=static, transient=transient, figures=figures)
+# TB16·TB17 회로의 Stage A 운전점(배터리 전압, 모듈 출력전류)과 그 회로의 V_A 평균(10 µs 평균의 0.2 ms 평균)
+DF_POINTS = [(540., 37.53, 269.611), (540., 56.26, 269.415), (806., 44.88, 402.533), (806., 69.82, 402.273),
+             (907., 33.43, 453.153), (907., 15.60, 453.339), (1008., 49.95, 503.481), (930., 54.39, 464.434)]
+
+
+def _df(args):
+    V, I, fix = args
+    r = A.sim_array(N=2, Vbat=V, Iload=I, Cbus=CA, mode="zcp", ncyc=80, dead_fix=fix)
+    ph, bus = A.analyze(r, ncyc_last=10)
+    return dict(V=V, I=I, fix=fix, vA=bus["Vbus"], zcs=max(p["zcs"] for p in ph))
+
+
+def deadfix():
+    """데드타임 전류 소멸 처리의 영향: TB16·TB17 회로의 Stage A 운전점에서 이전 처리(E1–E23)와 고친 처리의 V_A·ZCS."""
+    jobs = [(V, I, f) for V, I, _ in DF_POINTS for f in (False, True)]
+    with Pool(workers()) as p:
+        rr = p.map(_df, jobs)
+    rows = []
+    for V, I, vc in DF_POINTS:
+        a = next(r for r in rr if r["V"] == V and r["I"] == I and not r["fix"])
+        b = next(r for r in rr if r["V"] == V and r["I"] == I and r["fix"])
+        rows.append(dict(V=V, I=I, vA_circuit=vc, vA_old=a["vA"], vA_fix=b["vA"], zcs_old=a["zcs"], zcs_fix=b["zcs"]))
+        print("  %4.0f V %6.2f A: V_A 회로 %.3f, 이전 %.3f(%+.3f), 고침 %.3f(%+.3f) / ZCS 이전 %.2f %%, 고침 %.2f %%"
+              % (V, I, vc, a["vA"], vc - a["vA"], b["vA"], vc - b["vA"], 100 * a["zcs"], 100 * b["zcs"]))
+    e0 = max(abs(r["vA_circuit"] - r["vA_old"]) for r in rows); e1 = max(abs(r["vA_circuit"] - r["vA_fix"]) for r in rows)
+    verdict("(deadfix) 고친 처리가 회로 V_A에 더 가깝다", e1 < e0, "최대 차 이전 %.3f V, 고침 %.3f V" % (e0, e1))
+    save_json(EID, "deadfix", dict(rows=rows, max_err_old=e0, max_err_fix=e1))
+
+
+PARTS = dict(design=design, static=static, transient=transient, deadfix=deadfix, figures=figures)
 
 if __name__ == "__main__":
     want = sys.argv[1:] or list(PARTS)
