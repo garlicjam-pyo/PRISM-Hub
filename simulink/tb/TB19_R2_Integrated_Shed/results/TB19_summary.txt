@@ -1,0 +1,5 @@
+TB19 R2-W460 integrated (Stage A module 1 + window Stage B with H-bridge-open degrade + regulated Stage C), reference E23 degrade / E17 / E1
+case             result vo_min    vo_max    bus_min    bus_max   final       failed
+A_1008V_hbopen   PASS   47.997    48.008    409.4      503.9     DEGRADED    
+B_930V_hbopen    PASS   47.996    48.012    380.2      464.9     DEGRADED    
+TB19 overall: PASS

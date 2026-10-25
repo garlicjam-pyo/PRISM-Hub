@@ -1,0 +1,114 @@
+[prism_run] run_TB19 start 2026-10-26 03:23:10
+TB19 case A_1008V_hbopen (V_bat 1008 V, 400 V load 20 kW + Stage C 4905 W at 48 V, event hb_open at 1.5 ms), dt 2.50 ns, wall 896 s
+(1) criteria:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    dab_peak_1p5x_rated            PASS
+    vo_contract                    PASS
+    stageC_current                 PASS
+    stageC_zvs                     PASS
+    dcx_gain_end                   PASS
+    stageA_pre                     PASS
+    stageA_final                   PASS
+    T1_turnoff                     PASS
+    T2_phaseA_peak                 PASS
+    T4_shedding                    PASS
+    protection: |i_p| 57.9 A, |i_h| 57.9 A, |v_s| 93.9 V, v_link -1.0-100.0 V, |i_byp| 44.8 A; bus(5 us) 409.4-503.9 V (loaded max 460.0 V)
+    DAB link-side peak in states 9-11: n|i_L| 66.4 A (limit 1.5x 68.7 A)
+    soft bypass: entry 14.505 ms (v_link 4.65 V, v_s -8.70 V), duration 1.005 ms, device energy 0.0510 J, path peak 42.3 A
+    48 V (10 us mean, from 1.3 ms): 47.997-48.008 V, band 47.04-48.96 V; E23 47.992-48.006 V
+    Stage C: output 100 us mean max 102.6 A, secondary device peak 80.7 A; ZVS primary 0.11 V (8500 edges), secondary 0.00 V (0 edges); end DCX gain 0.9771
+    Stage C input power (10 us mean, after event): 5014-5120 W (E23 avg model 4967-5026 W)
+    Stage A pre  : phases 2 (ref 2), ZCS 0.52 / 0.51 % (ref [0.4 0.46] %), Ipk 40.8 / 40.6 A, V_A 503.481 V (ref 503.491 V), sharing 0.28 %, i_A 49.95 A (ref 49.85 A)
+    Stage A final: phases 1 (ref 1), ZCS 1.31 / NaN % (ref 1.58 %), Ipk 16.2 / 0.0 A, V_A 503.792 V (ref 503.798 V), sharing NaN %, i_A 10.01 A (ref 9.92 A)
+    Stage A shedding: turn-offs after 1 ms 8708, (T1) violations 0, max |i_off| 0.72 A; phase peak 47.4 A (rated 76.4 A); cancels 0, end mode 1
+    shedding events [ms, mode]: [1.722 3;1.723 1;3.334 2;4.752 3;4.753 1;4.934 2;15.613 3;15.615 1]
+    (info) Stage A after 1 ms (50 us windows): max half-cycle ZCS 31.60 % at 1.750 ms (i_A 1.8 A, window phase peak 8.5 A); max turn-off current 0.72 A; i_A range -5.3 to 57.4 A
+(2) comparison with E17 / E23 (info):
+    metric                                          Simscape   reference      diff    result
+    min period-mean v_bus after event [V]              409.4      409.49   -0.0904        ok
+    max period-mean v_bus after event [V]             503.89      503.85   +0.0388        ok
+    max period-mean i_p [A]                           57.835      55.972     +1.86        ok
+    max period-mean i_h [A]                           57.918      56.074     +1.84        ok
+    max period-mean v_link [V]                           100      100.01  -0.00847        ok
+    min period-mean v_link [V]                       -1.0388    -0.15002    -0.889        ok
+    final mean v_bus [V]                              503.73      503.84    -0.107        ok
+    brake energy [J]                                  8.1378      8.0644   +0.0734      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      66.364      63.674     +2.69      info
+    soft-bypass device energy [J]                   0.051045    0.048262  +0.00278      info
+    48 V min (10 us mean, E23) [V]                    47.997      47.992  +0.00435        ok
+    48 V max (10 us mean, E23) [V]                    48.008      48.006  +0.00238        ok
+    48 V end (E23) [V]                                    48          48  -0.00022        ok
+    transition HB_HOLD [ms]                            1.505       1.505 +2.22e-16        ok
+    transition HB_COLLAPSE [ms]                        4.505        4.51    -0.005        ok
+    transition SOFT_BYP [ms]                          14.505      14.515     -0.01        ok
+    transition DEGRADED [ms]                           15.51       15.52     -0.01        ok
+    transition shed_done [ms]                          4.505      4.5051   -0.0001        ok
+    final state: DEGRADED
+VERDICT A_1008V_hbopen: PASS
+A_1008V_hbopen done (896 s): PASS
+TB19 case B_930V_hbopen (V_bat 930 V, 400 V load 20 kW + Stage C 4905 W at 48 V, event hb_open at 1.5 ms), dt 2.50 ns, wall 905 s
+(1) criteria:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    dab_peak_1p5x_rated            PASS
+    vo_contract                    PASS
+    stageC_current                 PASS
+    stageC_zvs                     PASS
+    dcx_gain_end                   PASS
+    stageA_pre                     PASS
+    stageA_final                   PASS
+    T1_turnoff                     PASS
+    T2_phaseA_peak                 PASS
+    T4_shedding                    PASS
+    protection: |i_p| 58.6 A, |i_h| 54.5 A, |v_s| 83.9 V, v_link -2.0-100.1 V, |i_byp| 58.6 A; bus(5 us) 380.2-464.9 V (loaded max 464.4 V)
+    DAB link-side peak in states 9-11: n|i_L| 64.4 A (limit 1.5x 68.7 A)
+    soft bypass: entry 14.505 ms (v_link 0.74 V, v_s -4.74 V), duration 1.005 ms, device energy 0.0282 J, path peak 34.4 A
+    48 V (10 us mean, from 1.3 ms): 47.996-48.012 V, band 47.04-48.96 V; E23 47.992-48.012 V
+    Stage C: output 100 us mean max 102.6 A, secondary device peak 80.8 A; ZVS primary 0.11 V (8500 edges), secondary 0.00 V (0 edges); end DCX gain 0.9771
+    Stage C input power (10 us mean, after event): 5012-5117 W (E23 avg model 4966-5029 W)
+    Stage A pre  : phases 2 (ref 2), ZCS 0.77 / 0.73 % (ref [0.41 0.46] %), Ipk 44.5 / 44.3 A, V_A 464.434 V (ref 464.450 V), sharing 0.48 %, i_A 54.39 A (ref 53.88 A)
+    Stage A final: phases 2 (ref 2), ZCS 0.72 / 0.79 % (ref [0.41 0.46] %), Ipk 43.6 / 44.1 A, V_A 464.438 V (ref 464.450 V), sharing 1.13 %, i_A 54.00 A (ref 53.87 A)
+    Stage A shedding: turn-offs after 1 ms 8853, (T1) violations 0, max |i_off| 0.70 A; phase peak 48.6 A (rated 76.4 A); cancels 0, end mode 2
+    shedding events [ms, mode]: [1.725 3;1.725 1;4.347 2;4.757 3;4.759 1;4.927 2;14.526 3;14.527 1;15.021 2;15.635 3;15.637 1;16.044 2]
+    (info) Stage A after 1 ms (50 us windows): max half-cycle ZCS 35.96 % at 1.750 ms (i_A 1.7 A, window phase peak 8.3 A); max turn-off current 0.70 A; i_A range -6.4 to 58.4 A
+(2) comparison with E17 / E23 (info):
+    metric                                          Simscape   reference      diff    result
+    min period-mean v_bus after event [V]             380.25      380.54    -0.288        ok
+    max period-mean v_bus after event [V]             464.87      464.83   +0.0375        ok
+    max period-mean i_p [A]                           58.549      56.275     +2.27        ok
+    max period-mean i_h [A]                            53.04      54.297     -1.26        ok
+    max period-mean v_link [V]                        100.05      100.02   +0.0221        ok
+    min period-mean v_link [V]                            -2     -1.1618    -0.838        ok
+    final mean v_bus [V]                               464.1      464.11   -0.0132        ok
+    brake energy [J]                                  6.7439      6.5839     +0.16      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      64.447       63.75    +0.697      info
+    soft-bypass device energy [J]                   0.028221    0.025379  +0.00284      info
+    48 V min (10 us mean, E23) [V]                    47.996      47.992  +0.00346        ok
+    48 V max (10 us mean, E23) [V]                    48.012      48.012 -0.000894        ok
+    48 V end (E23) [V]                                    48          48 -0.000426        ok
+    transition HB_HOLD [ms]                            1.505       1.505 +2.22e-16        ok
+    transition HB_COLLAPSE [ms]                        4.505        4.51    -0.005        ok
+    transition SOFT_BYP [ms]                          14.505      14.515     -0.01        ok
+    transition DEGRADED [ms]                           15.51       15.52     -0.01        ok
+    transition shed_done [ms]                          4.505      4.5051   -0.0001        ok
+    transition restore [ms]                            16.01       16.02     -0.01        ok
+    final state: DEGRADED
+VERDICT B_930V_hbopen: PASS
+B_930V_hbopen done (905 s): PASS
+TB19 R2-W460 integrated (Stage A module 1 + window Stage B with H-bridge-open degrade + regulated Stage C), reference E23 degrade / E17 / E1
+case             result vo_min    vo_max    bus_min    bus_max   final       failed
+A_1008V_hbopen   PASS   47.997    48.008    409.4      503.9     DEGRADED    
+B_930V_hbopen    PASS   47.996    48.012    380.2      464.9     DEGRADED    
+TB19 overall: PASS
+[prism_run] run_TB19 finished (1821.7 s)
