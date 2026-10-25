@@ -1,0 +1,6 @@
+TB14 solver probe, case A_400V_ramp: variable cost (wall 1432 s) vs fixed cost 3 iterations (run_TB14)
+  v_o  max |diff| 0.0000, steady mean variable 48.0404 / fixed 48.0404
+  i_L  max |diff| 0.0000, steady mean variable 0.4484 / fixed 0.4484
+  v_I  max |diff| 0.0000, steady mean variable 228.2996 / fixed 228.2996
+  i_x  max |diff| 0.0000, steady mean variable 2.2466 / fixed 2.2466
+  v_o min/max variable 47.740/48.194, fixed 47.740/48.194

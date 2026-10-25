@@ -14,7 +14,7 @@
 | E22/E22_stage_c_regulated.png | 후보 손실, DCX 이득·ZVS 여유, 계단 응답 3종, 임피던스 |
 | E22/E22_zvs_gain.png | L\_m별 V\_ds, 데드타임 창(출력용량 공차), 역방향 경부하 이득 상승(레그 모델·ngspice·원인 점검), 두 브리지 구동 창 |
 | TB14_run1/ | TB14 1차 실행(L\_m 62.2 µH, 데드타임 100 ns) 요약 5사례와 사례 C의 CLLC 파형 그림 |
-| TB14/ | TB14 2차 실행 요약 7사례, 사례 F·G의 시험 전 예상(`expect_F_G.txt`), 제어기 Octave 대조 |
+| TB14/ | TB14 2차 실행 요약 7사례, 사례 F·G의 시험 전 예상(`expect_F_G.txt`), 제어기 Octave 대조, 해석기 점검(`TB14_solver_probe.txt`: 사례 A 가변 비용 대 고정 비용 최대 차 0.0000) |
 | TB15/ | TB15 요약 5사례, 제어기 Octave 대조 |
 
 | 항목 | 결과 |
