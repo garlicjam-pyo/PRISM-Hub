@@ -1082,6 +1082,8 @@ def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec, bus, tQ, QQ):
         mode = 2
     Iv = ix                                   # 전압 PI 적분(출력 쪽 전류 지령 단위)
     Ii = 0.                                   # 전류 PI 적분(전압 단위)
+    if ctl.size > 18 and ctl[18] > 0.:        # (E23 degrade·TB17) 전류 적분을 평형값으로: u = v_I + R_L·i_L이 되도록
+        Ii = (RL + ctl[1] * (1. - ctl[15])) * iL   # (비례항 지령 가중 b 때문에 i* = i_L에서도 K_pi(b − 1)i_L이 남는다)
     Ib = 0.                                   # 충전전류 루프 적분(출력전류 단위)
     tol = 0.                                  # 정격 초과 누적 시간(과부하 시간 제한)
     d_next = d; iref = iL
@@ -1186,15 +1188,17 @@ def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec, bus, tQ, QQ):
 
 
 def run_avg(c, eq, g, tP, PP, tV, VV, battery=False, T_end=8e-3, inj=(0., 0.), Vref=VO_NOM, dt=0.05e-6, dec=20, ff=True, both=None,
-            bus=None, tQ=(0., 1.), QQ=(0., 0.)):
+            bus=None, tQ=(0., 1.), QQ=(0., 0.), start_eq=False):
     """both: (P_in, P_out) 경부하 두 브리지 구동 문턱. None이면 설계(c)의 값, (0, 0)이면 끔(TB14 기준값).
     bus: None이면 버스는 tV·VV 지령(이상 전원). [V_s, R_A, C_A, R_w, L_w, C_b, R_d, C_d, v_min]이면 버스 회로를 같이 푼다(E23).
-    tQ·QQ: 버스 모델의 400 V 정전력 부하 전력(구간 선형)."""
+    tQ·QQ: 버스 모델의 400 V 정전력 부하 전력(구간 선형).
+    start_eq: True면 전류 PI 적분을 평형값으로 시작한다(E23 degrade·TB17). False(기본, E22·TB14–TB16)는 0에서 시작해
+    부하가 있는 시작점에서 시작 과도가 생긴다(판정 구간 밖)."""
     if both is None:
         both = (c.get("P_in", 0.), c.get("P_out", 0.))
     prm = np.array([c["L"], K["mag_ind_cu"] * PO_MAX / (PO_MAX * 1.03 / (c["n"] * VO_NOM)) ** 2, CI, c["n"], eq["Lx"], eq["Rx"], CO, Vref])
     ctl = np.array([1 / FS_CTRL, g["Kpi"], g["Kii"], g["Kpv"], g["Kiv"], I_LIM, -PO_REV / VO_CV[0] * 1.1, 1. if ff else 0., HYST, DMAX,
-                    g["Kpb"], g["Kib"], IBAT_MAX, IO_MAX, T_OL, g["b"], both[0], both[1]])
+                    g["Kpb"], g["Kib"], IBAT_MAX, IO_MAX, T_OL, g["b"], both[0], both[1]] + ([1.] if start_eq else []))
     bat = np.array([1. if battery else 0., BAT["OCV"], BAT["R"]])
     busa = np.zeros(10) if bus is None else np.concatenate(([1.], np.asarray(bus, float)))
     return _avg(prm, ctl, np.asarray(tP, float), np.asarray(PP, float), np.asarray(tV, float), np.asarray(VV, float),

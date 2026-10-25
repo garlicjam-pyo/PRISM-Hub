@@ -19,8 +19,10 @@ function u = prism_stageC_reg_ctrl(t, meas, prm)
 %
 %   입력  t     시각 [s]
 %         meas  [v_bus; i_L; v_I; v_o; i_load; i_bat]  (i_bat: 충전 +, 배터리가 없으면 0)
-%         prm   [T_s K_pi K_ii K_pv K_iv I_lim I_rev ff hyst d_max K_pb K_ib I_bat_max I_rated T_OL b  V_ref dt bat_on  I_v0 d0 mode0 iL0 n (P_in P_out)]
+%         prm   [T_s K_pi K_ii K_pv K_iv I_lim I_rev ff hyst d_max K_pb K_ib I_bat_max I_rated T_OL b  V_ref dt bat_on  I_v0 d0 mode0 iL0 n (P_in P_out (I_i0))]
 %               (1–16 = E22 ctl 벡터와 같은 순서, 25·26번이 없으면 두 브리지 구동 안 함(TB14))
+%               27번(TB17부터): 전류 PI 적분의 시작값 = (R_L + K_pi(1 − b))·i_L0. 부하가 있는 시작점에서 시작 과도를 없앤다
+%               (없으면 0에서 시작: TB14–TB16, 검증 코드 E22와 같음)
 %   출력  u     [d; 모드(+1 1차가 보냄, −1 2차가 보냄, 2 두 브리지 구동); i_L 지령 [A]; 선택(0 전압, 1 충전 제한, 2 상한, 3 하한)]
 
 persistent init tn d dn Iv Ii Ib tol mode iref sel
@@ -33,6 +35,7 @@ if numel(prm) >= 26, Pin = prm(25); Pout = prm(26); end
 if isempty(init)
     init = 1; tn = 0; d = prm(21); dn = prm(21); Iv = prm(20); Ii = 0; Ib = 0; tol = 0;
     mode = prm(22); iref = prm(23); sel = 0;
+    if numel(prm) >= 27, Ii = prm(27); end
 end
 if t >= tn - 0.5*dt
     tn = tn + Ts;

@@ -5,7 +5,8 @@
   전원(지령 전압)으로 확인했다. 이 시험은 (1) Stage A 출력 임피던스·V_A 노드 커패시터·배선·버스 감쇠기와 400 V 정전력 부하가
   있는 버스에서 Stage C의 48 V 조정과 버스 전압을 함께 계산하고, (2) Stage A 출력 커패시터 C_A를 넣은 버스 임피던스로
   Stage C 입력 임피던스와의 Middlebrook 여유를 다시 보며, (3) 회로 모델 TB16(Stage A 스위칭 회로 + 조정형 Stage C)의
-  기준값과 Stage A 기준값(E1 영교차 추종)을 만든다.
+  기준값과 Stage A 기준값(E1 영교차 추종)을 만든다. (4) R2-W460 창 조정 모듈의 H-브리지 개방 강등(E17) 동안 움직이는 버스에서
+  48 V를 계산하고 회로 모델 TB17(Stage A + 창 조정 Stage B + 조정형 Stage C)의 기준값을 만든다.
 
 ■ 왜 필요한가
   E22 T7은 Stage A를 이상 전원 + 13.2 mΩ + 1.5 µH로 두고 C_A를 뺐다. 실제 V_A 노드에는 C_A 400 µF와 공진 스위치드
@@ -18,6 +19,10 @@
            48.6 mΩ + 1.6 mF ∥ 400 V 정전력 부하 ∥ Stage C 입력(d·i_L). 사례 3개(TB16과 같음)를 2 ms 사건, 5 ms까지 계산한다.
            Stage A 기준값은 E1(model_stage_a, 영교차 추종 2위상)로 사건 전·끝 평균 출력전류에서 계산한다.
   zbus   : C_A와 Stage A 출력저항을 넣은 버스 임피던스와 E22 T7의 Stage C 입력 임피던스(5 kW, 270·504 V)를 비교한다.
+  degrade: R2-W460 창 조정 모듈의 H-브리지 개방 강등(E17 보호 상태기계, 강등 방식은 E21 P3t = TB13과 같음, 고장 시각만
+           1.5 ms) 동안 버스는 V_W 460 V → 다이오드 클램프 → 부하 분리·링크 붕괴 → 소프트 바이패스 → V_A로 움직인다. 그 버스
+           궤적(5 µs 평균)을 E22 평균모델의 이상 버스 전원으로 넣어 48 V를 계산한다. Stage C 부하는 입력 5 kW(= E17 P_C)가
+           되는 4.9 kW. Stage A 기준값은 E1(사건 전·끝 평균 전류, 끝은 위상 하나만 운전한 경우도). 회로 TB17의 기준값이다.
   figures: 사례 응답, 임피던스.
 
 ■ 사례(시험 전에 고정, TB16과 같음)
@@ -32,9 +37,11 @@
   (d) Stage C 전류: 출력 100 µs 평균 ≤ 136.5 A, 2차 소자 순간(π/2·|i_x|/2) ≤ 329 A
 ■ 판정 기준(zbus)
   |Z_bus| ≤ |Z_in|/2(6 dB, 10 Hz–20 kHz, 5 kW, 입력 270·504 V). E22 T7과 같은 기준, 버스 등가에 C_A와 R_A를 넣었다.
+■ 판정 기준(degrade)
+  48 V ±2 %(고장 0.2 ms 전부터 끝까지), Stage C 전류(base (d)와 같음), E17 고장 판정 통과. 정보: E1 Stage A ZCS ≤ 5 %(2위상)
 
-■ 실행   python E23_r2_integrated.py base zbus figures   (약 1분, E22 design zvs both dcx 결과가 있어야 함)
-■ 결과   results/E23/base.json, zbus.json, E23_r2_integrated.png
+■ 실행   python E23_r2_integrated.py base zbus degrade figures   (약 2분, E22 design zvs both dcx와 E21 table 결과가 있어야 함)
+■ 결과   results/E23/base.json, zbus.json, degrade.json, E23_r2_integrated.png, E23_degrade.png
 """
 import json
 import math
@@ -97,10 +104,11 @@ def avg5(Z, col, Ts=5e-6):
     return Z[:m * w, 0].reshape(m, w)[:, -1], Z[:m * w, col].reshape(m, w).mean(axis=1)
 
 
-def stage_a_ref(vbat, iout):
-    """E1 영교차 추종 2위상(1모듈): V_A 노드 400 µF에 일정 전류 iout을 끄는 정상상태(마지막 10주기). TB06과 같은 계산."""
+def stage_a_ref(vbat, iout, N=2):
+    """E1 영교차 추종 2위상(1모듈): V_A 노드 400 µF에 일정 전류 iout을 끄는 정상상태(마지막 10주기). TB06과 같은 계산.
+    N = 1이면 위상 하나만 운전(경부하 위상 셰딩, degrade의 비교용)."""
     import model_stage_a as A
-    r = A.sim_array(N=2, Vbat=vbat, Iload=iout, Cbus=CA, mode="zcp", ncyc=80)
+    r = A.sim_array(N=N, Vbat=vbat, Iload=iout, Cbus=CA, mode="zcp", ncyc=80)
     ph, bus = A.analyze(r, ncyc_last=10)
     return dict(iout=float(iout), vA_mean=bus["Vbus"], vA_ripple=bus["ripple"],
                 zcs=[float(p["zcs"]) for p in ph], Ipk=[float(p["Ipk"]) for p in ph], Iavg=[float(p["Iavg"]) for p in ph],
@@ -216,10 +224,123 @@ def figures():
     a.set_xlabel("주파수 [Hz]"); a.set_ylabel("[Ω]"); a.set_title("(d) Middlebrook: 최소 여유 %.1f dB" % Zb["min_margin_db"], fontsize=9)
     a.legend(fontsize=7)
     fig.tight_layout(); fig.savefig(outdir(EID) / "E23_r2_integrated.png", dpi=150); plt.close(fig)
+    if (outdir(EID) / "degrade.json").exists():         # R2-W460 강등 중 48 V
+        fig, ax = plt.subplots(2, 1, figsize=(11, 7), sharex=True)
+        for (name, cs), col in zip(DEG_CASES.items(), (C["red"], C["blue"])):
+            job, m, tr, Z, p48 = degrade_case(name, c, eq, g)
+            ax[0].plot(tr["t"] * 1e3, tr["log"][:, 2], color=col, lw=1, label="%s 버스(E17)" % name)
+            ax[1].plot(Z[:, 0] * 1e3, Z[:, 5], color=col, lw=1, label="%s 48 V(E22, 부하 %.0f W)" % (name, p48))
+        ax[0].axhline(470, color="k", ls=":", lw=0.8)
+        ax[0].set_ylabel("400 V 버스 [V]"); ax[0].legend(fontsize=7)
+        ax[0].set_title("(a) H-브리지 개방 강등(고장 %.1f ms): 창 460 V → 클램프 → 부하 분리·링크 붕괴 → 소프트 바이패스 → V_A" % (T_EV_DEG * 1e3),
+                        fontsize=9)
+        ax[1].axhspan(S.VO_NOM * 0.98, S.VO_NOM * 1.02, color=C["green"], alpha=0.08)
+        ax[1].set_ylabel("48 V 출력 [V]"); ax[1].set_xlabel("시간 [ms]"); ax[1].legend(fontsize=7)
+        ax[1].set_title("(b) 조정형 Stage C 48 V(입력 5 kW, 녹색 띠 ±2 %)", fontsize=9)
+        fig.tight_layout(); fig.savefig(outdir(EID) / "E23_degrade.png", dpi=150); plt.close(fig)
     print("  figures saved")
 
 
-PARTS = dict(base=base, zbus=zbus, figures=figures)
+# ---------------------------------------------------------------------------------------------
+# degrade: R2-W460 창 조정 모듈의 H-브리지 개방 강등 중 48 V(회로 TB17의 기준값)
+# ---------------------------------------------------------------------------------------------
+T_EV_DEG = 1.5e-3      # 고장 시각. Stage A 회로가 정착(TB16에서 약 0.3 ms)하고 사건 전 구간(1.3–1.5 ms)을 두도록 E17 기본 0.5 ms보다 1 ms 늦춤
+PC_IN = 5000.          # Stage C 입력 전력 = E17 P_C(400 V 부하 분리 뒤 남는 부하)
+PKD = round(1.5 / (1.03 * 1.05), 3)   # 설계 상한 1.387 × 정격점(E21 P3t, TB13과 같음)
+DEG_CASES = {           # TB13과 같은 고장·강등 방식(E21 P3t), 고장 시각만 T_EV_DEG
+    "A_1008V_hbopen": dict(V=1008., P=25000.),
+    "B_930V_hbopen": dict(V=930., P=25000.),
+}
+
+
+def p48_for_input(c, eq, pin=PC_IN):
+    """평균모델 정상상태에서 Stage C 입력 전력이 pin이 되는 48 V 부하 전력.
+    입력 = (v_I + R_L·i_L)·i_L, v_I = n(V_o + R_x·i_x), i_L = i_x/n → pin = V_o·i_x + (R_x + R_L/n²)·i_x²."""
+    n = c["n"]
+    RL = S.K["mag_ind_cu"] * S.PO_MAX / (S.PO_MAX * 1.03 / (n * S.VO_NOM)) ** 2
+    a = eq["Rx"] + RL / n ** 2
+    ix = (-S.VO_NOM + math.sqrt(S.VO_NOM ** 2 + 4 * a * pin)) / (2 * a)
+    return S.VO_NOM * ix
+
+
+def degrade_job(V, P):
+    import E17_protection_integration as E17
+    return dict(case="W460_240s", keep=True, V=V, P=P, event="hb_open", policy="clamp_brk", t_shed=3e-3,
+                duration=T_EV_DEG + 16.5e-3, hold="match", dmod="eps", soft_fail=True, curtail=True, pk_table="sw", pk_fault=PKD)
+
+
+def degrade_case(name, c=None, eq=None, g=None):
+    """E17 보호 상태기계(고장 시각 T_EV_DEG)로 버스 궤적을 구하고, 그 버스를 E22 평균모델(이상 버스 전원 = E17 버스)에 넣는다.
+    반환: (job, E17 지표, E17 궤적, Stage C 평균모델 Z, P48)"""
+    import E17_protection_integration as E17
+    if c is None:
+        c, eq, g = design()
+    cs = DEG_CASES[name]
+    job = degrade_job(cs["V"], cs["P"])
+    t_ev0 = E17.T_EV
+    E17.T_EV = T_EV_DEG                         # r2_run은 모듈 전역 T_EV를 실행 중에 읽는다(파이썬 루프)
+    try:
+        m = E17.r2_run(dict(job))
+    finally:
+        E17.T_EV = t_ev0
+    tr = m.pop("trace")
+    t, L = tr["t"], tr["log"]                   # 1 µs, [ip vs vbus ih vlink idab ibyp loads400 bridge Pbrk]
+    w = 5                                       # 5 µs 평균 버스(회로 판정 주기)
+    nn = (t.size // w) * w
+    tV = np.concatenate(([0.], t[:nn].reshape(-1, w)[:, -1]))
+    VV = np.concatenate(([L[0, 2]], L[:nn, 2].reshape(-1, w).mean(axis=1)))
+    p48 = p48_for_input(c, eq)
+    Z = S.run_avg(c, eq, g, [0., 1.], [p48, p48], tV, VV, T_end=job["duration"], dec=20, start_eq=True)
+    return job, m, tr, Z, p48
+
+
+def degrade():
+    c, eq, g = design()
+    out = {}
+    for name, cs in DEG_CASES.items():
+        job, m, tr, Z, p48 = degrade_case(name, c, eq, g)
+        t, L = tr["t"], tr["log"]
+        mm = S.metrics(Z, T_EV_DEG - 0.2e-3)
+        q = Z[:, 0] >= T_EV_DEG - 0.2e-3
+        pin = Z[q, 9] * Z[q, 1]
+        band = (S.VO_NOM * (1 - S.VO_TOL), S.VO_NOM * (1 + S.VO_TOL))
+        pre = (t > T_EV_DEG - 0.2e-3) & (t <= T_EV_DEG); fin = t > t[-1] - 0.2e-3
+        ip_pre, ip_end = float(L[pre, 0].mean()), float(L[fin, 0].mean())
+        Lm = dict(voltage=bool(mm["vo_min"] >= band[0] and mm["vo_max"] <= band[1]),
+                  current_avg100=bool(mm["ix_avg100_max"] <= S.I_LIM * 1.05),
+                  device_pulse=bool(mm["ix_dev_peak"] <= S.ID_PULSE_S),
+                  e17_pass=bool(m["pass_"]))
+        e = dict(case=name, vbat=cs["V"], P0=cs["P"], p48=p48, limits=Lm, passed=all(Lm.values()), band=list(band),
+                 vo_min=mm["vo_min"], vo_max=mm["vo_max"], vo_end=float(Z[-1, 5]), dev_pct=mm["dev_pct"],
+                 ix_avg100_max=mm["ix_avg100_max"], ix_dev_peak=mm["ix_dev_peak"], d_max=float(Z[q, 6].max()),
+                 d_min=float(Z[q, 6].min()), pin_min=float(pin.min()), pin_max=float(pin.max()),
+                 bus_min=float(L[t >= T_EV_DEG, 2].min()), bus_max=float(L[t >= T_EV_DEG, 2].max()), bus_end=float(L[fin, 2].mean()),
+                 dvdt_max_V_per_ms=float(np.abs(np.diff(L[:, 2]) / np.diff(t)).max() * 1e-3),
+                 ip_pre=ip_pre, ip_end=ip_end, events=m["events"], final_state=m["final_state"],
+                 e17=dict(checks=m["checks"], path_peak=m["path_peak"], vbus_min=m["vbus_min"], vbus_max=m["vbus_max"],
+                          dab_sec_peak=m.get("dab_sec_peak"), soft_energy_J=m.get("soft_energy_J"), brk_energy_J=m["brk_energy_J"]),
+                 stageA=dict(pre=stage_a_ref(cs["V"], ip_pre), final=stage_a_ref(cs["V"], ip_end),
+                             final_1ph=stage_a_ref(cs["V"], ip_end, N=1)))
+        out[name] = e
+        sa = e["stageA"]
+        print("  %-15s P48 %.0f W(입력 %.0f–%.0f W), 버스 %.1f–%.1f V(끝 %.1f, 최대 %.0f V/ms), v_o %.3f–%.3f V(%.2f %%), 최종 %s"
+              % (name, p48, e["pin_min"], e["pin_max"], e["bus_min"], e["bus_max"], e["bus_end"], e["dvdt_max_V_per_ms"],
+                 e["vo_min"], e["vo_max"], e["dev_pct"], e["final_state"]))
+        print("      E1 Stage A: 사건 전 %.1f A ZCS %.2f·%.2f %%, 끝 %.1f A ZCS %.2f·%.2f %%(위상 하나만 운전하면 %.2f %%), V_A %.2f / %.2f V"
+              % (ip_pre, 100 * sa["pre"]["zcs"][0], 100 * sa["pre"]["zcs"][1], ip_end, 100 * sa["final"]["zcs"][0],
+                 100 * sa["final"]["zcs"][1], 100 * sa["final_1ph"]["zcs"][0], sa["pre"]["vA_mean"], sa["final"]["vA_mean"]))
+    verdict("(degrade) R2-W460 H-브리지 개방 강등 중 48 V ±2 %·Stage C 전류(E17 버스 궤적, 2사례)",
+            all(e["passed"] for e in out.values()),
+            ", ".join("%s %.2f–%.2f V" % (k[:1], e["vo_min"], e["vo_max"]) for k, e in out.items()))
+    za = {k: max(e["stageA"]["pre"]["zcs"] + e["stageA"]["final"]["zcs"]) for k, e in out.items()}
+    verdict("(degrade) E1 Stage A ZCS ≤ 5 %(2위상, 사건 전·끝 평균 전류)", max(za.values()) <= 0.05,
+            ", ".join("%s 최대 %.2f %%" % (k[:1], 100 * v) for k, v in za.items())
+            + " — 강등 뒤 Stage C만 남는 경부하(1008 V, 약 10 A)에서는 검출 문턱·지연에 비해 공진전류 첨두가 작다. 위상 하나만 운전하면 "
+            + ", ".join("%s %.2f %%" % (k[:1], 100 * e["stageA"]["final_1ph"]["zcs"][0]) for k, e in out.items()))
+    save_json(EID, "degrade", dict(cases=out, T_EV=T_EV_DEG, PC_IN=PC_IN, PKD=PKD))
+
+
+PARTS = dict(base=base, zbus=zbus, degrade=degrade, figures=figures)
 
 if __name__ == "__main__":
     want = sys.argv[1:] or list(PARTS)

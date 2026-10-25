@@ -1,4 +1,4 @@
-function h = build_stageC_reg(sys, name, pos, T)
+function h = build_stageC_reg(sys, name, pos, T, opt)
 %BUILD_STAGEC_REG  조정형 Stage C 전력단(동기 벅 + 중간 커패시터 + 양방향 CLLC 직류변압기) 서브시스템을 만든다(TB14).
 %
 %   h = build_stageC_reg(sys, 'StageC_Regulated', [x1 y1 x2 y2], 'TB')
@@ -14,7 +14,10 @@ function h = build_stageC_reg(sys, name, pos, T)
 %             ix(DCX 출력전류), vcr1, vleg1(1차 레그 1 − DC_N), vlegs1(2차 레그 1 − VO_N), vswb(벅 스위치 노드 − DC_N)
 %   T : 시험 구조체 이름(문자열). 필드 SB·CP·CS(Ron Goff Vf Rd Goffd Coss), C(n Lr1 Cr1 Lm Lr2 Cr2 Rw1 Rw2 Co CI L RL),
 %       x0 = [iL0 vI0 vo0 ix0]
+%   opt.iLTag(선택, TB17): 벅 인덕터 전류 태그 이름(기본 'iL'). Stage B(DAB 누설 인덕터 전류 'iL')와 한 모델에 둘 때 바꾼다.
 
+if nargin < 5, opt = struct(); end
+tagL = 'iL'; if isfield(opt, 'iLTag'), tagL = opt.iLTag; end
 sc = [sys '/' name];
 h = add_block('built-in/Subsystem', sc, 'Position', pos);
 fl = 'fl_lib/Electrical/';
@@ -108,7 +111,7 @@ sl_add(sc, [fl 'Electrical Elements/Electrical Reference'], 'GND_secondary', [17
 sl_pc(sc, 'GND_secondary', 'V', 'C_o', 'n');            % 절연 2차측 전위 고정(1차와 전류 경로 없음)
 
 % ---- 계측 태그 ----------------------------------------------------------------------------------------------
-sl_meas(sc, 'I_L',     'I', 'iL',     [320 640]);
+sl_meas(sc, 'I_L',     'I', tagL,     [320 640]);
 sl_meas(sc, 'V_I',     'V', 'vI',     [470 640]);
 sl_meas(sc, 'V_swb',   'V', 'vswb',   [150 640]);
 sl_meas(sc, 'I_r1',    'I', 'ir1',    [970 640]);
