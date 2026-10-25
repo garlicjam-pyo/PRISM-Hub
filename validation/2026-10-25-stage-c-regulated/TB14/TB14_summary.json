@@ -1,0 +1,342 @@
+[
+  {
+    "case": "A_400V_ramp",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "voltage": true,
+      "current_avg100": true,
+      "device_pulse": true,
+      "zvs": true,
+      "dcx_gain": true,
+      "e22_vo_extremes": true,
+      "e22_vo_end": true,
+      "e22_iL_end": true
+    },
+    "wall_s": 104.5945688,
+    "vo_min": 47.7399792712367,
+    "vo_max": 48.194129446496113,
+    "band": [
+      47.04,
+      48.96
+    ],
+    "ix_avg100_max": 106.95603182037165,
+    "dev_peak_A": 84.68584126837581,
+    "ix_late": null,
+    "zvs": {
+      "primary_max_V": 0.18794522289171717,
+      "primary_n": 500,
+      "secondary_max_V": 0,
+      "secondary_n": 0
+    },
+    "dcx_gain": 1.0100492195762096,
+    "dcx_gain_end": 0.97678805770917054,
+    "d_max_post": 0.60500903971791242,
+    "mode_flips_post": 0,
+    "eff_pre_event": 0.91920567261600217,
+    "vo_end_diff": 0.0014916200717252082,
+    "iL_end": [
+      21.679075902537473,
+      21.666186258999996
+    ],
+    "ref": {
+      "vo_min": 47.789102559159865,
+      "vo_max": 48.178191342412845,
+      "ix_avg100_max": 106.90907053014354
+    },
+    "ir1_rms_pre": 3.5696578506919834,
+    "im_pk_pre": 6.7604263928016728
+  },
+  {
+    "case": "B_270V_step",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "voltage": true,
+      "current_avg100": true,
+      "device_pulse": true,
+      "zvs": true,
+      "dcx_gain": true,
+      "e22_vo_extremes": true,
+      "e22_vo_end": true,
+      "e22_iL_end": true
+    },
+    "wall_s": 103.675892,
+    "vo_min": 44.0852892008389,
+    "vo_max": 48.178458490347523,
+    "band": [
+      36,
+      52
+    ],
+    "ix_avg100_max": 125.5831668119186,
+    "dev_peak_A": 98.81241952463526,
+    "ix_late": null,
+    "zvs": {
+      "primary_max_V": 0.1879321490665179,
+      "primary_n": 500,
+      "secondary_max_V": 0,
+      "secondary_n": 0
+    },
+    "dcx_gain": 1.010066207607389,
+    "dcx_gain_end": 0.97676214701614927,
+    "d_max_post": 0.97,
+    "mode_flips_post": 0,
+    "eff_pre_event": 0.994576729538472,
+    "vo_end_diff": 0.00076377122378801232,
+    "iL_end": [
+      21.709629352259117,
+      21.688421568499997
+    ],
+    "ref": {
+      "vo_min": 44.332764992343066,
+      "vo_max": 48.178598917637764,
+      "ix_avg100_max": 125.428850336567
+    },
+    "ir1_rms_pre": 3.569498904202955,
+    "im_pk_pre": 6.7596406702701621
+  },
+  {
+    "case": "C_504V_rev",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "voltage": true,
+      "current_avg100": true,
+      "device_pulse": true,
+      "zvs": true,
+      "dcx_gain": true,
+      "e22_vo_extremes": true,
+      "e22_vo_end": true,
+      "e22_iL_end": true
+    },
+    "wall_s": 98.7668449,
+    "vo_min": 47.751190414966409,
+    "vo_max": 50.777297139631429,
+    "band": [
+      36,
+      52
+    ],
+    "ix_avg100_max": 103.57743878994927,
+    "dev_peak_A": 81.6355461389627,
+    "ix_late": null,
+    "zvs": {
+      "primary_max_V": 0.10594155394618512,
+      "primary_n": 250,
+      "secondary_max_V": 0.072179373286211185,
+      "secondary_n": 250
+    },
+    "dcx_gain": 0.97698380584010724,
+    "dcx_gain_end": 1.011788664013872,
+    "d_max_post": 0.47456153437777993,
+    "mode_flips_post": 0,
+    "eff_pre_event": 0.96727068605200339,
+    "vo_end_diff": 0.0023828059171435712,
+    "iL_end": [
+      -12.970846859166201,
+      -13.015878801000003
+    ],
+    "ref": {
+      "vo_min": 47.7726914904813,
+      "vo_max": 50.95198325883954,
+      "ix_avg100_max": 103.59226953161809
+    },
+    "ir1_rms_pre": 24.216468305420058,
+    "im_pk_pre": 6.9775118809364525
+  },
+  {
+    "case": "D_bus_step",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "voltage": true,
+      "current_avg100": true,
+      "device_pulse": true,
+      "zvs": true,
+      "dcx_gain": true,
+      "e22_vo_extremes": true,
+      "e22_vo_end": true,
+      "e22_iL_end": true
+    },
+    "wall_s": 62.8559464,
+    "vo_min": 47.999975230288548,
+    "vo_max": 48.18818681935781,
+    "band": [
+      47.04,
+      48.96
+    ],
+    "ix_avg100_max": 65.195322786794691,
+    "dev_peak_A": 56.262663882525743,
+    "ix_late": null,
+    "zvs": {
+      "primary_max_V": 0.14946980778367952,
+      "primary_n": 500,
+      "secondary_max_V": 0,
+      "secondary_n": 0
+    },
+    "dcx_gain": 0.98530127019512914,
+    "dcx_gain_end": 0.98518901977304885,
+    "d_max_post": 0.52040610633810047,
+    "mode_flips_post": 0,
+    "eff_pre_event": 0.98097204932520232,
+    "vo_end_diff": 0.00079212274049922371,
+    "iL_end": [
+      13.034142099106381,
+      13.016967675
+    ],
+    "ref": {
+      "vo_min": 47.997977966181978,
+      "vo_max": 48.192376547420785,
+      "ix_avg100_max": 65.340492035859938
+    },
+    "ir1_rms_pre": 14.840201947803456,
+    "im_pk_pre": 6.9359271737843748
+  },
+  {
+    "case": "E_400V_bat",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "voltage": true,
+      "current_avg100": true,
+      "device_pulse": true,
+      "overload_time_limit": true,
+      "zvs": true,
+      "dcx_gain": true,
+      "e22_vo_extremes": true,
+      "e22_vo_end": true,
+      "e22_iL_end": true
+    },
+    "wall_s": 94.7055776,
+    "vo_min": 46.427832428623269,
+    "vo_max": 47.522428731913067,
+    "band": [
+      36,
+      52
+    ],
+    "ix_avg100_max": 129.97628061716182,
+    "dev_peak_A": 105.83001411678308,
+    "ix_late": 105.38611896219737,
+    "zvs": {
+      "primary_max_V": 0.18220886697062216,
+      "primary_n": 500,
+      "secondary_max_V": 0,
+      "secondary_n": 0
+    },
+    "dcx_gain": 0.99298092806896843,
+    "dcx_gain_end": 0.97609125860712687,
+    "d_max_post": 0.85228830517712,
+    "mode_flips_post": 0,
+    "eff_pre_event": 0.96955231285237764,
+    "vo_end_diff": -0.0012725219812708133,
+    "iL_end": [
+      21.87874831760292,
+      21.875009452999997
+    ],
+    "ref": {
+      "vo_min": 46.426554781684438,
+      "vo_max": 47.523368307295527,
+      "ix_avg100_max": 129.99999733654045
+    },
+    "ir1_rms_pre": 7.4153038822170183,
+    "im_pk_pre": 6.8031161925522126
+  },
+  {
+    "case": "F_400V_rev_light",
+    "verdict": "PASS",
+    "failed": [],
+    "limits": {
+      "voltage": true,
+      "current_avg100": true,
+      "device_pulse": true,
+      "zvs": true,
+      "dcx_gain": true,
+      "e22_vo_extremes": true,
+      "e22_vo_end": true,
+      "e22_iL_end": true
+    },
+    "wall_s": 82.65375,
+    "vo_min": 47.253224877862145,
+    "vo_max": 48.5231487763859,
+    "band": [
+      36,
+      52
+    ],
+    "ix_avg100_max": 62.305634113937082,
+    "dev_peak_A": 71.598546867317708,
+    "ix_late": null,
+    "zvs": {
+      "primary_max_V": 0,
+      "primary_n": 0,
+      "secondary_max_V": 0.082791382017234127,
+      "secondary_n": 500
+    },
+    "dcx_gain": 1.0117725267752815,
+    "dcx_gain_end": 0.9096000539718111,
+    "d_max_post": 0.73862434663881,
+    "mode_flips_post": 14,
+    "eff_pre_event": 0.98062451284922825,
+    "vo_end_diff": 0.072220645410780548,
+    "iL_end": [
+      -1.1351619668735204,
+      -1.3066118721000002
+    ],
+    "ref": {
+      "vo_min": 47.255880767241749,
+      "vo_max": 48.1934450862049,
+      "ix_avg100_max": 62.350671684174017
+    },
+    "ir1_rms_pre": 14.544812964508475,
+    "im_pk_pre": 6.7770030074410039
+  },
+  {
+    "case": "G_270V_rev_light",
+    "verdict": "FAIL",
+    "failed": [
+      "zvs",
+      "e22_iL_end"
+    ],
+    "limits": {
+      "voltage": true,
+      "current_avg100": true,
+      "device_pulse": true,
+      "zvs": false,
+      "dcx_gain": true,
+      "e22_vo_extremes": true,
+      "e22_vo_end": true,
+      "e22_iL_end": false
+    },
+    "wall_s": 83.2445166,
+    "vo_min": 46.877769677777813,
+    "vo_max": 48.570228900808324,
+    "band": [
+      36,
+      52
+    ],
+    "ix_avg100_max": 62.3013660242244,
+    "dev_peak_A": 168.3295325332476,
+    "ix_late": null,
+    "zvs": {
+      "primary_max_V": 0.18786976401782793,
+      "primary_n": 20,
+      "secondary_max_V": 39.968770899221077,
+      "secondary_n": 480
+    },
+    "dcx_gain": 1.0117724034698186,
+    "dcx_gain_end": 0.91084737775926428,
+    "d_max_post": 0.97,
+    "mode_flips_post": 41,
+    "eff_pre_event": 0.98191045087205653,
+    "vo_end_diff": 0.039575440044693266,
+    "iL_end": [
+      -0.13181067319680623,
+      -0.45569876248499996
+    ],
+    "ref": {
+      "vo_min": 47.190814899892096,
+      "vo_max": 48.258691831574673,
+      "ix_avg100_max": 62.3506716841741
+    },
+    "ir1_rms_pre": 14.543031191712053,
+    "im_pk_pre": 6.7772237754696505
+  }
+]

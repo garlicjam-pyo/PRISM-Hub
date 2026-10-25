@@ -1,0 +1,17 @@
+TB14 case E_400V_bat, dt 2.50 ns, wall 92 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    overload_time_limit    PASS
+    zvs                    FAIL
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 46.431-47.522 V, band 36.00-52.00 V; E22 46.405-47.523 V
+    output current 100 us mean max 130.1 A (E22 130.0 A), secondary device peak 105.7 A (rating 329 A), late 105.6 A
+    ZVS (V_ds before turn-on): primary 66.72 V (500 edges), secondary 0.00 V (0 edges)
+    DCX gain n*v_o/v_I before event 0.9913
+    end of run: v_o circuit - E22 +0.002 V, i_L circuit 21.88 A / E22 21.88 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9769, ir1 rms 6.77 A, im peak 3.61 A

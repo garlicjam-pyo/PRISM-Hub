@@ -1,0 +1,139 @@
+[prism_run] run_TB14 start 2026-10-25 22:22:38
+TB14 case A_400V_ramp, dt 2.50 ns, wall 105 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 47.740-48.194 V, band 47.04-48.96 V; E22 47.789-48.178 V
+    output current 100 us mean max 107.0 A (E22 106.9 A), secondary device peak 84.7 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.19 V (500 edges), secondary 0.00 V (0 edges)
+    DCX gain n*v_o/v_I before event 1.0100, last 0.2 ms 0.9768
+    after event: duty max 0.605, sending-side changes 0
+    end of run: v_o circuit - E22 +0.001 V, i_L circuit 21.68 A / E22 21.67 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9192, ir1 rms 3.57 A, im peak 6.76 A
+A_400V_ramp done (105 s): PASS
+TB14 case B_270V_step, dt 2.50 ns, wall 104 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 44.085-48.178 V, band 36.00-52.00 V; E22 44.333-48.179 V
+    output current 100 us mean max 125.6 A (E22 125.4 A), secondary device peak 98.8 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.19 V (500 edges), secondary 0.00 V (0 edges)
+    DCX gain n*v_o/v_I before event 1.0101, last 0.2 ms 0.9768
+    after event: duty max 0.970, sending-side changes 0
+    end of run: v_o circuit - E22 +0.001 V, i_L circuit 21.71 A / E22 21.69 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9946, ir1 rms 3.57 A, im peak 6.76 A
+B_270V_step done (104 s): PASS
+TB14 case C_504V_rev, dt 2.50 ns, wall 99 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 47.751-50.777 V, band 36.00-52.00 V; E22 47.773-50.952 V
+    output current 100 us mean max 103.6 A (E22 103.6 A), secondary device peak 81.6 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.11 V (250 edges), secondary 0.07 V (250 edges)
+    DCX gain n*v_o/v_I before event 0.9770, last 0.2 ms 1.0118
+    after event: duty max 0.475, sending-side changes 0
+    end of run: v_o circuit - E22 +0.002 V, i_L circuit -12.97 A / E22 -13.02 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9673, ir1 rms 24.22 A, im peak 6.98 A
+C_504V_rev done (99 s): PASS
+TB14 case D_bus_step, dt 2.50 ns, wall 63 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 48.000-48.188 V, band 47.04-48.96 V; E22 47.998-48.192 V
+    output current 100 us mean max 65.2 A (E22 65.3 A), secondary device peak 56.3 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.15 V (500 edges), secondary 0.00 V (0 edges)
+    DCX gain n*v_o/v_I before event 0.9853, last 0.2 ms 0.9852
+    after event: duty max 0.520, sending-side changes 0
+    end of run: v_o circuit - E22 +0.001 V, i_L circuit 13.03 A / E22 13.02 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9810, ir1 rms 14.84 A, im peak 6.94 A
+D_bus_step done (63 s): PASS
+TB14 case E_400V_bat, dt 2.50 ns, wall 95 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    overload_time_limit    PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 46.428-47.522 V, band 36.00-52.00 V; E22 46.427-47.523 V
+    output current 100 us mean max 130.0 A (E22 130.0 A), secondary device peak 105.8 A (rating 329 A), late 105.4 A
+    ZVS (V_ds before turn-on): primary 0.18 V (500 edges), secondary 0.00 V (0 edges)
+    DCX gain n*v_o/v_I before event 0.9930, last 0.2 ms 0.9761
+    after event: duty max 0.852, sending-side changes 0
+    end of run: v_o circuit - E22 -0.001 V, i_L circuit 21.88 A / E22 21.88 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9696, ir1 rms 7.42 A, im peak 6.80 A
+E_400V_bat done (95 s): PASS
+TB14 case F_400V_rev_light, dt 2.50 ns, wall 83 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 47.253-48.523 V, band 36.00-52.00 V; E22 47.256-48.193 V
+    output current 100 us mean max 62.3 A (E22 62.4 A), secondary device peak 71.6 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.00 V (0 edges), secondary 0.08 V (500 edges)
+    DCX gain n*v_o/v_I before event 1.0118, last 0.2 ms 0.9096
+    after event: duty max 0.739, sending-side changes 14
+    end of run: v_o circuit - E22 +0.072 V, i_L circuit -1.14 A / E22 -1.31 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9806, ir1 rms 14.54 A, im peak 6.78 A
+F_400V_rev_light done (83 s): PASS
+TB14 case G_270V_rev_light, dt 2.50 ns, wall 83 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    FAIL
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             FAIL
+    v_o (10 us mean) 46.878-48.570 V, band 36.00-52.00 V; E22 47.191-48.259 V
+    output current 100 us mean max 62.3 A (E22 62.4 A), secondary device peak 168.3 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.19 V (20 edges), secondary 39.97 V (480 edges)
+    DCX gain n*v_o/v_I before event 1.0118, last 0.2 ms 0.9108
+    after event: duty max 0.970, sending-side changes 41
+    end of run: v_o circuit - E22 +0.040 V, i_L circuit -0.13 A / E22 -0.46 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9819, ir1 rms 14.54 A, im peak 6.78 A
+G_270V_rev_light done (83 s): FAIL
+TB14 regulated Stage C 5 kW (sync buck + CLLC DCX 4.8:1), reference E22 averaged model
+case           result vo_min    vo_max    E22 min   E22 max   failed
+A_400V_ramp    PASS   47.74     48.19     47.79     48.18     
+B_270V_step    PASS   44.09     48.18     44.33     48.18     
+C_504V_rev     PASS   47.75     50.78     47.77     50.95     
+D_bus_step     PASS   48.00     48.19     48.00     48.19     
+E_400V_bat     PASS   46.43     47.52     46.43     47.52     
+F_400V_rev_light PASS   47.25     48.52     47.26     48.19     
+G_270V_rev_light FAIL   46.88     48.57     47.19     48.26     zvs, e22_iL_end
+TB14 overall: FAIL
+[prism_run] run_TB14 finished (667.2 s)

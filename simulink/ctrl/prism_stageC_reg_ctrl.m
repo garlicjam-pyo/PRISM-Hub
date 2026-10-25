@@ -12,19 +12,24 @@ function u = prism_stageC_reg_ctrl(t, meas, prm)
 %     인덕터 전류 지령 i_L* = i_x*/n(DCX 전류비)
 %     인덕터 전류 PI(교차 5 kHz, 비례항 지령 가중 b) + 중간전압 앞먹임 → 듀티 d = u/v_bus, 0.02 ≤ d ≤ 0.97
 %     DCX 보내는 쪽: i_L* > +0.5 A → 1차(V_I → 48 V), < −0.5 A → 2차(48 V → V_I), 그 사이는 유지
+%     경부하 두 브리지 구동(prm(25) = P_in > 0일 때, TB15부터): 출력 전력 지령 |i_x*·v_o| < P_in이면 모드 2(두 브리지 같은
+%       위상 구동), 모드 2에서 |i_x*·v_o| > P_out(prm(26))이 되면 지령 부호의 보내는 쪽으로 돌아간다. 받는 쪽만 다이오드로 두면
+%       역방향 경부하에서 받는 쪽 1차 레그 용량 때문에 DCX 이득이 오른다(검증 코드 E22 gain·both, TB14 사례 F·G).
 %   누적 방지: 조건부 적분(포화 방향으로는 적분하지 않음)
 %
 %   입력  t     시각 [s]
 %         meas  [v_bus; i_L; v_I; v_o; i_load; i_bat]  (i_bat: 충전 +, 배터리가 없으면 0)
-%         prm   [T_s K_pi K_ii K_pv K_iv I_lim I_rev ff hyst d_max K_pb K_ib I_bat_max I_rated T_OL b  V_ref dt bat_on  I_v0 d0 mode0 iL0]
-%               (1–16 = E22 ctl 벡터와 같은 순서)
-%   출력  u     [d; 보내는 쪽(+1 1차, −1 2차); i_L 지령 [A]; 선택(0 전압, 1 충전 제한, 2 상한, 3 하한)]
+%         prm   [T_s K_pi K_ii K_pv K_iv I_lim I_rev ff hyst d_max K_pb K_ib I_bat_max I_rated T_OL b  V_ref dt bat_on  I_v0 d0 mode0 iL0 n (P_in P_out)]
+%               (1–16 = E22 ctl 벡터와 같은 순서, 25·26번이 없으면 두 브리지 구동 안 함(TB14))
+%   출력  u     [d; 모드(+1 1차가 보냄, −1 2차가 보냄, 2 두 브리지 구동); i_L 지령 [A]; 선택(0 전압, 1 충전 제한, 2 상한, 3 하한)]
 
 persistent init tn d dn Iv Ii Ib tol mode iref sel
 Ts = prm(1); Kpi = prm(2); Kii = prm(3); Kpv = prm(4); Kiv = prm(5);
 Ilim = prm(6); Irev = prm(7); ffon = prm(8); hyst = prm(9); dmax = prm(10);
 Kpb = prm(11); Kib = prm(12); Ibmax = prm(13); Irated = prm(14); TOL = prm(15); b = prm(16);
 Vref = prm(17); dt = prm(18); bat = prm(19); n = prm(24);
+Pin = 0; Pout = 0;
+if numel(prm) >= 26, Pin = prm(25); Pout = prm(26); end
 if isempty(init)
     init = 1; tn = 0; d = prm(21); dn = prm(21); Iv = prm(20); Ii = 0; Ib = 0; tol = 0;
     mode = prm(22); iref = prm(23); sel = 0;
@@ -70,7 +75,16 @@ if t >= tn - 0.5*dt
         Iv = min(Iv, ixr - Kpv*ev - ff);             % 충전 제한 중: 전압 적분이 지령을 따라가게
     end
     iref = ixr/n;
-    if iref > hyst
+    pr = ixr*vo;                                     % 출력 전력 지령
+    if Pin > 0 && mode == 2                          % 두 브리지 구동 중: |P*| > P_out이면 보내는 쪽 하나로
+        if pr > Pout
+            mode = 1;
+        elseif pr < -Pout
+            mode = -1;
+        end
+    elseif Pin > 0 && abs(pr) < Pin
+        mode = 2;
+    elseif iref > hyst
         mode = 1;
     elseif iref < -hyst
         mode = -1;

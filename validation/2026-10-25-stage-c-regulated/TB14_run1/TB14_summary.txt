@@ -1,0 +1,8 @@
+TB14 regulated Stage C 5 kW (sync buck + CLLC DCX 4.8:1), reference E22 averaged model
+case           result vo_min    vo_max    E22 min   E22 max   failed
+A_400V_ramp    FAIL   47.77     48.19     47.79     48.18     zvs
+B_270V_step    FAIL   44.17     48.19     44.27     48.19     zvs
+C_504V_rev     FAIL   47.76     50.92     47.78     51.00     zvs
+D_bus_step     FAIL   48.00     48.19     48.00     48.19     zvs
+E_400V_bat     FAIL   46.43     47.52     46.40     47.52     zvs
+TB14 overall: FAIL

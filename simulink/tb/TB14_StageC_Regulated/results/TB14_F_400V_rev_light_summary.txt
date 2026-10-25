@@ -1,0 +1,17 @@
+TB14 case F_400V_rev_light, dt 2.50 ns, wall 83 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 47.253-48.523 V, band 36.00-52.00 V; E22 47.256-48.193 V
+    output current 100 us mean max 62.3 A (E22 62.4 A), secondary device peak 71.6 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 0.00 V (0 edges), secondary 0.08 V (500 edges)
+    DCX gain n*v_o/v_I before event 1.0118, last 0.2 ms 0.9096
+    after event: duty max 0.739, sending-side changes 14
+    end of run: v_o circuit - E22 +0.072 V, i_L circuit -1.14 A / E22 -1.31 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9806, ir1 rms 14.54 A, im peak 6.78 A

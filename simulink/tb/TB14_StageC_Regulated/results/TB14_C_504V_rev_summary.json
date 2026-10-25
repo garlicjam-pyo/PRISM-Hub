@@ -1,0 +1,48 @@
+{
+  "case": "C_504V_rev",
+  "verdict": "PASS",
+  "failed": [],
+  "limits": {
+    "voltage": true,
+    "current_avg100": true,
+    "device_pulse": true,
+    "zvs": true,
+    "dcx_gain": true,
+    "e22_vo_extremes": true,
+    "e22_vo_end": true,
+    "e22_iL_end": true
+  },
+  "wall_s": 98.7668449,
+  "vo_min": 47.751190414966409,
+  "vo_max": 50.777297139631429,
+  "band": [
+    36,
+    52
+  ],
+  "ix_avg100_max": 103.57743878994927,
+  "dev_peak_A": 81.6355461389627,
+  "ix_late": null,
+  "zvs": {
+    "primary_max_V": 0.10594155394618512,
+    "primary_n": 250,
+    "secondary_max_V": 0.072179373286211185,
+    "secondary_n": 250
+  },
+  "dcx_gain": 0.97698380584010724,
+  "dcx_gain_end": 1.011788664013872,
+  "d_max_post": 0.47456153437777993,
+  "mode_flips_post": 0,
+  "eff_pre_event": 0.96727068605200339,
+  "vo_end_diff": 0.0023828059171435712,
+  "iL_end": [
+    -12.970846859166201,
+    -13.015878801000003
+  ],
+  "ref": {
+    "vo_min": 47.7726914904813,
+    "vo_max": 50.95198325883954,
+    "ix_avg100_max": 103.59226953161809
+  },
+  "ir1_rms_pre": 24.216468305420058,
+  "im_pk_pre": 6.9775118809364525
+}

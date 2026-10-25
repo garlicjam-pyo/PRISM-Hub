@@ -81,8 +81,10 @@
   모든 시험에서
   듀티 포화가 0.5 ms를 넘지 않음. T7 |Z_bus| ≤ |Z_in|/2(6 dB, 10 Hz–20 kHz, 5 kW·입력 270·504 V).
 
-■ 실행   python E22_stage_c_regulated.py design zvs dcx control figures   (약 20분, 그중 zvs 약 10분, 2코어)
-■ 결과   results/E22/design.json, zvs.json, dcx.json, control.json, E22_stage_c_regulated.png
+■ 실행   python E22_stage_c_regulated.py design zvs gain spice both dcx control figures   (2코어 약 15분: zvs 6분, both 3분.
+         spice는 ngspice가 있을 때만)
+■ 결과   results/E22/design.json, zvs.json, gain.json, spice.json, both.json, dcx.json, control.json,
+         E22_stage_c_regulated.png, E22_zvs_gain.png
 """
 import json
 import math
@@ -308,6 +310,12 @@ def selected(apply_zvs=True):
         if ch:
             c.update(Lm=ch["Lm"], td_p=ch["td_p"], td_s=ch["td_s"], zvs_applied=True)
             c["im_pk"] = c["n"] * VO_CV[1] / (4 * c["fr"] * c["Lm"]); c["m"] = c["Lm"] / c["Lr"]
+    c.update(P_in=0., P_out=0., td_sb=c["td_s"])                # 경부하 두 브리지 구동(both 파트): 없으면 끔
+    fb = outdir(EID) / "both.json"
+    if apply_zvs and c["zvs_applied"] and fb.exists():
+        ch = json.loads(fb.read_text(encoding="utf-8")).get("choice")
+        if ch and abs(json.loads(fb.read_text(encoding="utf-8"))["Lm"] - c["Lm"]) < 1e-9:
+            c.update(P_in=ch["P_b"], P_out=ch["P_out"], td_sb=ch["tdsb"])
     # 직렬 저항(1차 환산): 1차 브리지 2소자 + 권선 절반, 2차 브리지 2소자 + 권선 절반
     Ip_r = math.sqrt((math.pi * (PO_MAX / VO_NOM) / (2 * c["n"])) ** 2 / 2 + c["im_pk"] ** 2 / 3)
     Rw = K["mag_tr_cu"] * PO_MAX / Ip_r ** 2
@@ -882,6 +890,105 @@ def spice():
 
 
 # ---------------------------------------------------------------------------------------------
+# both: 경부하에서 두 브리지를 모두 구동(gain 파트의 역방향 경부하 이득 상승 대책)
+# ---------------------------------------------------------------------------------------------
+BOTH_TDS = tuple(x * 1e-9 for x in range(40, 161, 10))        # 두 브리지 구동 때 2차 데드타임 후보
+BOTH_P = (-2000., -1500., -1000., -700., -600., -500., 0., 500., 600., 700., 1000., 1500., 2000.)
+BOTH_LEVELS = (500., 600., 700., 1000., 1500., 2000.)          # 두 브리지 구동 구간 |P| 상한 후보
+BOTH_MINW = 20e-9                                             # 데드타임 창 최소 폭(격자 3점, 게이트 지연 편차 여유)
+
+
+def legs_solve_both(c, tdsb, Po, Vo, cscale=1.):
+    """두 브리지 구동(1차 데드타임 td_p, 2차 tdsb)에서 P_out = Po가 되는 V_I(묶은 할선법). 반환: (V_I, 결과, reached)."""
+    V0 = c["n"] * Vo
+    f = lambda VI: legs_point(c, c["Lm"], c["td_p"], VI, Vo, 1, cscale, drv=1, tdr=tdsb)
+    a, b = V0 * 0.985, V0 * 1.015
+    ra, rb = f(a), f(b); ga, gb = ra[1] - Po, rb[1] - Po
+    if ga > 0:
+        return a, ra, False
+    if gb < 0:
+        return b, rb, False
+    x, rx = a, ra; side = 0; tol = max(5., 0.003 * abs(Po))
+    for _ in range(40):
+        x = b - gb * (b - a) / (gb - ga)
+        rx = f(x); gx = rx[1] - Po
+        if abs(gx) < tol or abs(b - a) < 1e-3:
+            break
+        if gx * gb > 0:
+            b, gb = x, gx
+            if side == 1:
+                ga *= 0.5
+            side = 1
+        else:
+            a, ga = x, gx
+            if side == -1:
+                gb *= 0.5
+            side = -1
+    return x, rx, True
+
+
+def _both_case(c, tdsb, cscale):
+    rows = []
+    for Vo in (VO_CV[0], VO_NOM, VO_CV[1]):
+        for Po in BOTH_P:
+            VI, r, ok = legs_solve_both(c, tdsb, Po, Vo, cscale)
+            rows.append(dict(Vo=Vo, Po=Po, VI=VI, gain=c["n"] * Vo / VI, Pout=float(r[1]), vds_p_pct=100 * r[2] / VI,
+                             vds_s_pct=100 * r[5] / Vo, reached=ok))
+    return dict(tdsb=tdsb, cscale=cscale, rows=rows)
+
+
+def _both_job(a):
+    return _both_case(*a)
+
+
+def both():
+    """경부하(|P| ≤ P_b)에서 받는 쪽 브리지도 같은 위상으로 구동한다. 받는 쪽 노드를 게이트가 정하므로 레그 용량에 의한
+    이득 상승이 없고(gain 파트 대책 후보), 두 방향이 대칭이며 전류가 0을 지나도 끊기지 않는다(평균모델의 선형 DCX와 같은 꼴).
+    자화 전류가 두 브리지로 나뉘므로 2차 데드타임(tdsb)을 따로 고른다. 1차는 td_p 그대로.
+    판정: 두 브리지 모두 켜짐 직전 V_ds ≤ 5 %(출력용량 ×0.8·×1·×1.2). 창 폭 20 ns 이상으로 통과하는 가장 큰 P_b(들어가는 문턱)와
+    그 창의 가운데 데드타임을 고르고, 그 데드타임이 아직 통과하는 가장 큰 상한을 나가는 문턱으로 둔다(히스테리시스).
+    처음 판(문턱 후보 0.5·1·1.5·2 kW, 창 폭 제한 없음)은 0.5 kW·90 ns였고, 0.6·0.7 kW를 더해 문턱을 올렸다.
+    처음 안(dcx 'first_try': 모든 부하에서 두 브리지 구동)은 5 kW에서 2차 ZVS가 깨졌다. 그래서 경부하에만 쓴다."""
+    import os
+    from concurrent.futures import ProcessPoolExecutor
+    c = selected()
+    print("  설계: L_m %.1f µH, 1차 데드타임 %.0f ns" % (c["Lm"] * 1e6, c["td_p"] * 1e9))
+    jobs = [(c, td, k) for k in (1.,) + ZVS_CTOL for td in BOTH_TDS]
+    with ProcessPoolExecutor(max_workers=max(1, min(4, os.cpu_count() or 1))) as ex:
+        res = list(ex.map(_both_job, jobs))
+    worst = {}
+    for e in res:
+        for lev in BOTH_LEVELS:
+            rr = [r for r in e["rows"] if abs(r["Po"]) <= lev]
+            w = max(max(r["vds_p_pct"], r["vds_s_pct"]) for r in rr)
+            key = (lev, e["tdsb"])
+            worst[key] = max(worst.get(key, 0.), w)
+    for lev in BOTH_LEVELS:
+        print("  |P| ≤ %4.0f W: " % lev + ", ".join("%3.0f ns %4.1f %%" % (td * 1e9, worst[(lev, td)]) for td in BOTH_TDS))
+    choice = None
+    for lev in sorted(BOTH_LEVELS, reverse=True):              # 창 폭 ≥ 20 ns인 가장 큰 상한 = 들어가는 문턱 P_in
+        ent = [dict(td=td, worst_pct=worst[(lev, td)]) for td in BOTH_TDS]
+        w = _window(ent, 90e-9)
+        if w and w["hi"] - w["lo"] >= BOTH_MINW - 1e-12:
+            choice = dict(P_b=lev, tdsb=w["td"], window=[w["lo"], w["hi"]], worst_pct=w["worst_pct"])
+            break
+    if choice:                                                 # 나가는 문턱 P_out: 고른 데드타임이 아직 통과하는 가장 큰 상한(히스테리시스)
+        ok = [lev for lev in BOTH_LEVELS if lev >= choice["P_b"] and worst[(lev, choice["tdsb"])] <= ZVS_LIM]
+        choice["P_out"] = max(ok)
+        print("  두 브리지 구동: 들어가는 문턱 |P| < %.0f W, 나가는 문턱 |P| > %.0f W, 2차 데드타임 %.0f ns(창 %.0f–%.0f ns)"
+              % (choice["P_b"], choice["P_out"], choice["tdsb"] * 1e9, choice["window"][0] * 1e9, choice["window"][1] * 1e9))
+    gains = [r["gain"] for e in res if e["cscale"] == 1. and choice and e["tdsb"] == choice["tdsb"] for r in e["rows"]
+             if abs(r["Po"]) <= choice["P_b"]]
+    verdict("(both) 두 브리지 구동 구간에서 두 브리지 모두 V_ds ≤ 5 %(출력용량 ±20 %)", choice is not None,
+            ("|P| ≤ %.0f W, 2차 데드타임 %.0f ns(창 %.0f–%.0f ns), 최대 %.1f %%" % (choice["P_b"], choice["tdsb"] * 1e9, choice["window"][0] * 1e9,
+                                                                      choice["window"][1] * 1e9, choice["worst_pct"])) if choice else "없음")
+    if choice:
+        verdict("(both) 두 브리지 구동 구간에서 이득 1 ± 3 %(0 W 포함)", all(abs(g - 1) <= 0.03 for g in gains),
+                "%.4f–%.4f" % (min(gains), max(gains)))
+    save_json(EID, "both", dict(results=res, choice=choice, td_p=c["td_p"], Lm=c["Lm"]))
+
+
+# ---------------------------------------------------------------------------------------------
 # control: 전단 벅 + DCX 평균모델과 디지털 제어
 # ---------------------------------------------------------------------------------------------
 CI = 20e-6           # 중간 커패시터(필름) [F]
@@ -932,7 +1039,8 @@ def _interp(t, tt, yy):
 @njit(cache=True)
 def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec):
     """평균모델. prm = [L, R_L, C_I, n, L_x, R_x, C_o, V_ref], ctl = [T_s, K_pi, K_ii, K_pv, K_iv, I_fwd(과도), I_rev, 앞먹임, 히스, d_max,
-    K_pb, K_ib, I_bat_max, I_정격, T_OL, 지령 가중 b], bat = [켬, OCV, R_b], inj = [진폭 V, 주파수 Hz](버스 정현 섭동).
+    K_pb, K_ib, I_bat_max, I_정격, T_OL, 지령 가중 b, P_in, P_out], bat = [켬, OCV, R_b], inj = [진폭 V, 주파수 Hz](버스 정현 섭동).
+    P_in > 0이면 경부하 두 브리지 구동: |i_x*·v_o| < P_in이면 방향 2(두 브리지, DCX 전류 양방향), > P_out이면 보내는 쪽 하나.
     반환 행: [t, v_bus, i_L, v_I, i_x, v_o, d, 방향, i_bat, i_in, p_load, i_L 지령]"""
     L, RL, CIx, n, Lx, Rx, Co, Vref = prm[0], prm[1], prm[2], prm[3], prm[4], prm[5], prm[6], prm[7]
     Ts = ctl[0]
@@ -947,6 +1055,8 @@ def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec):
     iL = ix / n
     d = (vI + RL * iL) / vb0
     mode = 1 if iL >= 0. else -1
+    if ctl[16] > 0. and abs(p0) < ctl[16]:
+        mode = 2
     Iv = ix                                   # 전압 PI 적분(출력 쪽 전류 지령 단위)
     Ii = 0.                                   # 전류 PI 적분(전압 단위)
     Ib = 0.                                   # 충전전류 루프 적분(출력전류 단위)
@@ -993,7 +1103,15 @@ def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec):
             elif sel == 1:                    # 충전 제한 중에는 전압 적분이 지령을 따라가게 둔다(전환 때 튀지 않게)
                 Iv = min(Iv, ixr - ctl[3] * ev - ff)
             iref = ixr / n
-            if iref > ctl[8]:
+            pr = ixr * vo
+            if ctl[16] > 0. and mode == 2:             # 두 브리지 구동 중: |P*| > P_out이면 보내는 쪽 하나로
+                if pr > ctl[17]:
+                    mode = 1
+                elif pr < -ctl[17]:
+                    mode = -1
+            elif ctl[16] > 0. and abs(pr) < ctl[16]:
+                mode = 2
+            elif iref > ctl[8]:
                 mode = 1
             elif iref < -ctl[8]:
                 mode = -1
@@ -1019,9 +1137,9 @@ def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec):
         dix = (vI / n - vo - Rx * ix) / Lx
         dvo = (ix - il - ib) / Co
         iL += diL * dt; vI += dvI * dt; ix += dix * dt; vo += dvo * dt
-        if mode > 0 and ix < 0.:               # 받는 쪽 동기정류: 보내는 방향과 반대 전류는 흐르지 않는다
+        if mode == 1 and ix < 0.:              # 받는 쪽 동기정류: 보내는 방향과 반대 전류는 흐르지 않는다(방향 2는 양방향)
             ix = 0.
-        elif mode < 0 and ix > 0.:
+        elif mode == -1 and ix > 0.:
             ix = 0.
         if k % dec == 0:
             out[j, 0] = t; out[j, 1] = vb; out[j, 2] = iL; out[j, 3] = vI; out[j, 4] = ix; out[j, 5] = vo
@@ -1030,10 +1148,13 @@ def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec):
     return out[:j]
 
 
-def run_avg(c, eq, g, tP, PP, tV, VV, battery=False, T_end=8e-3, inj=(0., 0.), Vref=VO_NOM, dt=0.05e-6, dec=20, ff=True):
+def run_avg(c, eq, g, tP, PP, tV, VV, battery=False, T_end=8e-3, inj=(0., 0.), Vref=VO_NOM, dt=0.05e-6, dec=20, ff=True, both=None):
+    """both: (P_in, P_out) 경부하 두 브리지 구동 문턱. None이면 설계(c)의 값, (0, 0)이면 끔(TB14 기준값)."""
+    if both is None:
+        both = (c.get("P_in", 0.), c.get("P_out", 0.))
     prm = np.array([c["L"], K["mag_ind_cu"] * PO_MAX / (PO_MAX * 1.03 / (c["n"] * VO_NOM)) ** 2, CI, c["n"], eq["Lx"], eq["Rx"], CO, Vref])
     ctl = np.array([1 / FS_CTRL, g["Kpi"], g["Kii"], g["Kpv"], g["Kiv"], I_LIM, -PO_REV / VO_CV[0] * 1.1, 1. if ff else 0., HYST, DMAX,
-                    g["Kpb"], g["Kib"], IBAT_MAX, IO_MAX, T_OL, g["b"]])
+                    g["Kpb"], g["Kib"], IBAT_MAX, IO_MAX, T_OL, g["b"], both[0], both[1]])
     bat = np.array([1. if battery else 0., BAT["OCV"], BAT["R"]])
     return _avg(prm, ctl, np.asarray(tP, float), np.asarray(PP, float), np.asarray(tV, float), np.asarray(VV, float),
                 bat, np.asarray(inj, float), T_end, dt, dec)
@@ -1164,6 +1285,22 @@ def control():
     w6 = max(x["dev_pct"] for x in t6)
     ok_all["T6"] = w6 <= 2.
     verdict("(control T6) 전력 방향 전환에서 48 V ±2 %", ok_all["T6"], "최대 편차 %.2f %%, 전환 %d회" % (w6, max(x["flips"] for x in t6)))
+    # T8 경부하 두 브리지 구동(both 파트, |P*| < P_in): −3 → −0.3 kW 계단(36–52 V), +1 → −1 → +1 kW 램프 1 kW/ms(48 V ±2 %)
+    if c.get("P_in", 0.) > 0.:
+        t8 = []
+        for Vb in VBUS_GRID:
+            Z = run_avg(c, eq, g, [0, 1.5e-3, 1.5e-3 + 1e-9, 1], [-3000., -3000., -300., -300.], [0, 1], [Vb, Vb], T_end=5e-3)
+            m = metrics(Z, 1.3e-3); m.update(Vbus=Vb, kind="step", both_frac_end=float(np.mean(Z[Z[:, 0] > 4e-3, 7] == 2)))
+            t8.append(m)
+            Z = run_avg(c, eq, g, [0, 1.5e-3, 3.5e-3, 5.5e-3, 1], [1000., 1000., -1000., 1000., 1000.], [0, 1], [Vb, Vb], T_end=7e-3)
+            m = metrics(Z, 1.3e-3); m.update(Vbus=Vb, kind="ramp", both_frac_end=float(np.mean(Z[Z[:, 0] > 6.5e-3, 7] == 2)))
+            t8.append(m)
+        T["T8"] = t8
+        ok_all["T8"] = all((x["vo_min"] >= VO_CV[0] and x["vo_max"] <= VO_CV[1]) if x["kind"] == "step" else x["dev_pct"] <= 2. for x in t8)
+        verdict("(control T8) 경부하 두 브리지 구동: −3 → −0.3 kW 계단 36–52 V, ±1 kW 램프 48 V ±2 %", ok_all["T8"],
+                "계단 %.2f–%.2f V, 램프 최대 편차 %.2f %%, 모드 전환 최대 %d회" % (
+                    min(x["vo_min"] for x in t8 if x["kind"] == "step"), max(x["vo_max"] for x in t8 if x["kind"] == "step"),
+                    max(x["dev_pct"] for x in t8 if x["kind"] == "ramp"), max(x["flips"] for x in t8)))
     # T7 입력 임피던스(버스 정현 섭동 1 V) 대 버스 임피던스
     t7 = []
     for Vb in (270., 504.):
@@ -1237,10 +1374,74 @@ def figures():
     a.set_xlabel("주파수 [Hz]"); a.set_ylabel("[Ω]"); a.set_title("(f) 입력 임피던스와 버스 임피던스(Middlebrook)", fontsize=9)
     a.legend(fontsize=7)
     fig.tight_layout(); fig.savefig(outdir(EID) / "E22_stage_c_regulated.png", dpi=150); plt.close(fig)
+    figures_zvs(plt, C)
+
+
+def figures_zvs(plt, C):
+    """두 번째 그림: TB14 1차 실행 뒤 추가한 zvs·gain·spice·both 파트."""
+    Z = json.loads((outdir(EID) / "zvs.json").read_text(encoding="utf-8"))
+    G = json.loads((outdir(EID) / "gain.json").read_text(encoding="utf-8"))
+    S = json.loads((outdir(EID) / "spice.json").read_text(encoding="utf-8"))
+    B = json.loads((outdir(EID) / "both.json").read_text(encoding="utf-8"))
+    ch = Z["choice"]
+    fig, ax = plt.subplots(2, 2, figsize=(13, 8.6))
+    # (a) 성긴 격자: L_m별 최악 V_ds(가장 좋은 데드타임)
+    a = ax[0, 0]
+    Lms = sorted({x["Lm"] for x in Z["sweep"]}, reverse=True)
+    for d, col, lab in (("fwd", C["blue"], "1차가 보냄(1차 100–200 ns 중 최선)"), ("rev", C["orange"], "2차가 보냄(2차 30–100 ns 중 최선)")):
+        a.plot([L * 1e6 for L in Lms], [min(x["worst_pct"] for x in Z["sweep"] if x["dir"] == d and x["Lm"] == L) for L in Lms],
+               "-o", ms=4, color=col, label=lab)
+    a.axhline(ZVS_LIM, color=C["red"], ls=":", lw=.8); a.axvline(ch["Lm"] * 1e6, color=C["gray"], ls="--", lw=.8)
+    a.set_xlabel("자화 인덕턴스 L_m [µH]"); a.set_ylabel("켜짐 직전 V_ds 최대 [레일의 %]"); a.set_yscale("symlog", linthresh=1); a.set_ylim(0, 150)
+    a.set_title("(a) 레그 출력용량 모델: L_m별 최선의 데드타임에서 V_ds(공칭 출력용량)", fontsize=9); a.legend(fontsize=7)
+    # (b) 고른 L_m의 촘촘한 격자와 출력용량 공차
+    a = ax[0, 1]
+    for d, col, mk in (("fwd", C["blue"], "o"), ("rev", C["orange"], "s")):
+        for k, ls in ((1., "-"), (0.8, "--"), (1.2, ":")):
+            e = sorted([x for x in Z["fine"] if x["dir"] == d and x["cscale"] == k and abs(x["Lm"] - ch["Lm"]) < 1e-9], key=lambda x: x["td"])
+            a.plot([x["td"] * 1e9 for x in e], [x["worst_pct"] for x in e], ls, marker=mk, ms=3, color=col,
+                   label="%s, 출력용량 ×%.1f" % ("1차가 보냄" if d == "fwd" else "2차가 보냄", k))
+    for td, col in ((ch["td_p"], C["blue"]), (ch["td_s"], C["orange"])):
+        a.axvline(td * 1e9, color=col, ls="--", lw=.8)
+    a.axhline(ZVS_LIM, color=C["red"], ls=":", lw=.8); a.set_ylim(0, 60)
+    a.set_xlabel("데드타임 [ns]"); a.set_ylabel("켜짐 직전 V_ds 최대 [레일의 %]")
+    a.set_title("(b) L_m %.0f µH: 데드타임 창(세로선 = 선택 1차 %.0f ns, 2차 %.0f ns)" % (ch["Lm"] * 1e6, ch["td_p"] * 1e9, ch["td_s"] * 1e9), fontsize=9)
+    a.legend(fontsize=6.5, ncol=2)
+    # (c) 역방향 경부하 이득 상승
+    a = ax[1, 0]
+    for Vo, col in (("36.0", C["gray"]), ("48.0", C["blue"]), ("52.0", C["green"])):
+        rows = G["rev"][Vo]
+        a.plot([r[0] for r in rows], [-r[1] / 1e3 for r in rows], "-o", ms=3, color=col, label="레그 모델, V_o %s V" % Vo[:2])
+    sp = [r for r in S["rows"] if r["cpscale"] == 1.]
+    a.plot([r["k"] for r in sp], [r["P_spice"] / 1e3 for r in sp], "x", ms=8, mew=2, color=C["red"], label="ngspice, V_o 48 V")
+    a.plot([r[0] for r in G["cause"]], [-r[1] / 1e3 for r in G["cause"]], "--^", ms=4, color=C["orange"], label="1차 레그 용량 ×0.01, 48 V")
+    a.axvline(1.03, color=C["red"], ls=":", lw=.8)
+    a.set_xlabel("V_I / (n·V_o)"); a.set_ylabel("역방향 전력(48 V → 버스) [kW]")
+    a.set_title("(c) 받는 쪽 1차 다이오드 정류의 경부하 이득 상승(2차가 보냄)", fontsize=9); a.legend(fontsize=7)
+    # (d) 두 브리지 구동: 2차 데드타임별 최악 V_ds
+    a = ax[1, 1]
+    tds = sorted({e["tdsb"] for e in B["results"]})
+    for lev, col in ((500., C["green"]), (600., C["blue"]), (700., C["orange"]), (1000., C["gray"])):
+        w = []
+        for td in tds:
+            v = 0.
+            for e in B["results"]:
+                if e["tdsb"] == td:
+                    v = max([v] + [max(r["vds_p_pct"], r["vds_s_pct"]) for r in e["rows"] if abs(r["Po"]) <= lev])
+            w.append(v)
+        a.plot([t * 1e9 for t in tds], w, "-o", ms=3, color=col, label="|P| ≤ %.0f W" % lev)
+    a.axhline(ZVS_LIM, color=C["red"], ls=":", lw=.8)
+    if B["choice"]:
+        a.axvline(B["choice"]["tdsb"] * 1e9, color=C["gray"], ls="--", lw=.8)
+    a.set_ylim(0, 60); a.set_xlabel("두 브리지 구동 때 2차 데드타임 [ns]"); a.set_ylabel("두 브리지 V_ds 최대 [레일의 %](출력용량 ±20 %)")
+    a.set_title("(d) 경부하 두 브리지 구동: 들어감 < %.0f W, 나감 > %.0f W" % (B["choice"]["P_b"], B["choice"]["P_out"]) if B["choice"] else "(d)",
+                fontsize=9)
+    a.legend(fontsize=7)
+    fig.tight_layout(); fig.savefig(outdir(EID) / "E22_zvs_gain.png", dpi=150); plt.close(fig)
     print("  figures saved")
 
 
-PARTS = dict(design=design, zvs=zvs, gain=gain, spice=spice, dcx=dcx, control=control, figures=figures)
+PARTS = dict(design=design, zvs=zvs, gain=gain, spice=spice, both=both, dcx=dcx, control=control, figures=figures)
 
 if __name__ == "__main__":
     want = sys.argv[1:] or list(PARTS)

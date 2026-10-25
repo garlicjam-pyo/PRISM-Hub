@@ -38,7 +38,8 @@ Ip_r = np.sqrt((np.pi * (E.PO_MAX / E.VO_NOM) / (2 * n)) ** 2 / 2 + c["im_pk"] *
 Rw = K["mag_tr_cu"] * E.PO_MAX / Ip_r ** 2                 # 변압기 권선(1차 환산), 1·2차에 절반씩
 out = {}
 for name, cs in CASES.items():
-    Z = E.run_avg(c, eq, g, cs["P"][0], cs["P"][1], cs["Vb"][0], cs["Vb"][1], battery=cs["bat"], T_end=cs["t_end"], dec=20)
+    Z = E.run_avg(c, eq, g, cs["P"][0], cs["P"][1], cs["Vb"][0], cs["Vb"][1], battery=cs["bat"], T_end=cs["t_end"], dec=20,
+                  both=(0., 0.))                     # TB14는 경부하 두 브리지 구동 없음(TB15에서 확인)
     m = E.metrics(Z, T0 - 0.2e-3)
     m.update(ix_late=E.ix_late(Z, T0 + 2.5e-3, cs["t_end"]) if cs["t_end"] > T0 + 2.6e-3 else float("nan"))
     p0 = cs["P"][1][0]; vb0 = cs["Vb"][1][0]

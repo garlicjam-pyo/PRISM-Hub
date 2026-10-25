@@ -1,0 +1,16 @@
+TB14 case D_bus_step, dt 2.50 ns, wall 65 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    FAIL
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 48.000-48.188 V, band 47.04-48.96 V; E22 47.997-48.193 V
+    output current 100 us mean max 65.2 A (E22 65.4 A), secondary device peak 56.2 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 51.78 V (500 edges), secondary 0.00 V (0 edges)
+    DCX gain n*v_o/v_I before event 0.9840
+    end of run: v_o circuit - E22 -0.001 V, i_L circuit 13.02 A / E22 13.02 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9709, ir1 rms 14.53 A, im peak 3.66 A

@@ -3,3 +3,5 @@ B_270V_step: max|Δv_o| 0.0000 V, max|Δi_L| 0.0000 A, max|Δi_x| 0.000 A (E22 �
 C_504V_rev: max|Δv_o| 0.0000 V, max|Δi_L| 0.0000 A, max|Δi_x| 0.000 A (E22 대비, 4500점)
 D_bus_step: max|Δv_o| 0.0000 V, max|Δi_L| 0.0000 A, max|Δi_x| 0.000 A (E22 대비, 3500점)
 E_400V_bat: max|Δv_o| 0.0000 V, max|Δi_L| 0.0000 A, max|Δi_x| 0.000 A (E22 대비, 5000점)
+F_400V_rev_light: max|Δv_o| 0.0000 V, max|Δi_L| 0.0000 A, max|Δi_x| 0.000 A (E22 대비, 4500점)
+G_270V_rev_light: max|Δv_o| 0.0000 V, max|Δi_L| 0.0000 A, max|Δi_x| 0.000 A (E22 대비, 4500점)

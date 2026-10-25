@@ -1,0 +1,16 @@
+TB14 case C_504V_rev, dt 2.50 ns, wall 97 s
+(1) criteria:
+    voltage                PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    FAIL
+    dcx_gain               PASS
+    e22_vo_extremes        PASS
+    e22_vo_end             PASS
+    e22_iL_end             PASS
+    v_o (10 us mean) 47.761-50.918 V, band 36.00-52.00 V; E22 47.783-50.999 V
+    output current 100 us mean max 103.5 A (E22 103.6 A), secondary device peak 81.6 A (rating 329 A), late NaN A
+    ZVS (V_ds before turn-on): primary 68.53 V (250 edges), secondary 48.05 V (250 edges)
+    DCX gain n*v_o/v_I before event 0.9755
+    end of run: v_o circuit - E22 +0.002 V, i_L circuit -13.03 A / E22 -13.02 A
+(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) 0.9691, ir1 rms 24.04 A, im peak 3.68 A
