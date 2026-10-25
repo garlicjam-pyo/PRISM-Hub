@@ -1,0 +1,6 @@
+TB16 R2 base integrated (Stage A module 1 + 400 V bus with damper + regulated Stage C), reference E23 / E1
+case            result vo_min    vo_max    E23 min   E23 max   bus_min   bus_max   failed
+A_540V_Cstep    PASS   44.16     48.19     44.31     48.18     269.05    269.50    
+B_806V_Qstep    PASS   48.00     48.04     48.00     48.03     401.56    402.40    
+C_907V_Cregen   PASS   47.73     50.73     47.75     50.91     453.05    453.60    
+TB16 overall: PASS

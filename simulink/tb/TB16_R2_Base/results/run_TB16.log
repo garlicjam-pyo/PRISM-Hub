@@ -1,0 +1,71 @@
+[prism_run] run_TB16 start 2026-10-25 23:41:55
+TB16 case A_540V_Cstep, V_bat 540 V, dt 2.50 ns, wall 93 s
+(1) criteria:
+    voltage                PASS
+    bus_band               PASS
+    bus_settle             PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    stageA                 PASS
+    e23_vo_extremes        PASS
+    e23_vo_end             PASS
+    e23_bus                PASS
+    dcx_gain_end           PASS
+    v_o (10 us mean) 44.163-48.189 V, band 36.00-52.00 V; E23 44.308-48.182 V; end diff +0.000 V
+    bus (10 us mean) 269.05-269.50 V (pre 269.50, end 269.25, band 261.17-277.58); E23 269.07-269.51 V; end diff -0.014 V; end osc 0.001 V
+    Stage C output current 100 us mean max 125.5 A (E23 125.4 A), secondary device peak 98.8 A (rating 329 A)
+    Stage C ZVS (V_ds before turn-on): primary 0.21 V (725 edges), secondary 0.06 V (475 edges); end DCX gain 0.9768
+    Stage A pre  : ZCS 0.12 / 0.07 % (E1 1.46 / 1.63 %), Ipk 30.5 / 30.3 A, V_A 269.611 V (E1 269.666 V), sharing 0.68 %, i_A 37.53 A (E1 37.48 A)
+    Stage A final: ZCS 0.75 / 0.71 % (E1 1.04 / 1.12 %), Ipk 45.8 / 45.5 A, V_A 269.415 V (E1 269.481 V), sharing 0.64 %, i_A 56.26 A (E1 56.07 A)
+(2) info: after event duty max 0.970, mode changes 0, both-bridge fraction 0.00; bus raw ripple end 0.058 V; Stage C input 106 / 5144 W
+A_540V_Cstep done (93 s): PASS
+TB16 case B_806V_Qstep, V_bat 806 V, dt 2.50 ns, wall 92 s
+(1) criteria:
+    voltage                PASS
+    bus_band               PASS
+    bus_settle             PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    stageA                 PASS
+    e23_vo_extremes        PASS
+    e23_vo_end             PASS
+    e23_bus                PASS
+    dcx_gain_end           PASS
+    v_o (10 us mean) 48.000-48.037 V, band 47.04-48.96 V; E23 48.000-48.034 V; end diff -0.000 V
+    bus (10 us mean) 401.56-402.40 V (pre 402.40, end 402.06, band 390.00-414.47); E23 401.58-402.41 V; end diff -0.016 V; end osc 0.000 V
+    Stage C output current 100 us mean max 62.7 A (E23 62.5 A), secondary device peak 49.4 A (rating 329 A)
+    Stage C ZVS (V_ds before turn-on): primary 0.15 V (725 edges), secondary 0.00 V (0 edges); end DCX gain 0.9852
+    Stage A pre  : ZCS 0.54 / 0.50 % (E1 1.39 / 1.41 %), Ipk 36.5 / 36.3 A, V_A 402.533 V (E1 402.612 V), sharing 0.80 %, i_A 44.88 A (E1 44.80 A)
+    Stage A final: ZCS 0.97 / 0.93 % (E1 0.84 / 0.91 %), Ipk 56.9 / 56.5 A, V_A 402.273 V (E1 402.363 V), sharing 0.65 %, i_A 69.82 A (E1 69.73 A)
+(2) info: after event duty max 0.588, mode changes 0, both-bridge fraction 0.00; bus raw ripple end 0.080 V; Stage C input 3051 / 3058 W
+B_806V_Qstep done (92 s): PASS
+TB16 case C_907V_Cregen, V_bat 907 V, dt 2.50 ns, wall 93 s
+(1) criteria:
+    voltage                PASS
+    bus_band               PASS
+    bus_settle             PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    stageA                 PASS
+    e23_vo_extremes        PASS
+    e23_vo_end             PASS
+    e23_bus                PASS
+    dcx_gain_end           PASS
+    v_o (10 us mean) 47.731-50.733 V, band 36.00-52.00 V; E23 47.753-50.910 V; end diff +0.000 V
+    bus (10 us mean) 453.05-453.60 V (pre 453.05, end 453.29, band 439.46-466.89); E23 453.06-453.58 V; end diff -0.003 V; end osc 0.001 V
+    Stage C output current 100 us mean max 103.9 A (E23 103.9 A), secondary device peak 81.9 A (rating 329 A)
+    Stage C ZVS (V_ds before turn-on): primary 0.11 V (475 edges), secondary 0.07 V (250 edges); end DCX gain 1.0118
+    Stage A pre  : ZCS 0.14 / 0.14 % (E1 1.75 / 1.78 %), Ipk 27.1 / 27.1 A, V_A 453.153 V (E1 453.218 V), sharing 0.42 %, i_A 33.43 A (E1 33.30 A)
+    Stage A final: ZCS 2.27 / 2.27 % (E1 3.73 / 3.80 %), Ipk 12.5 / 12.5 A, V_A 453.339 V (E1 453.317 V), sharing 0.31 %, i_A 15.60 A (E1 15.53 A)
+(2) info: after event duty max 0.527, mode changes 0, both-bridge fraction 0.00; bus raw ripple end 0.081 V; Stage C input 5196 / -2944 W
+C_907V_Cregen done (93 s): PASS
+TB16 R2 base integrated (Stage A module 1 + 400 V bus with damper + regulated Stage C), reference E23 / E1
+case            result vo_min    vo_max    E23 min   E23 max   bus_min   bus_max   failed
+A_540V_Cstep    PASS   44.16     48.19     44.31     48.18     269.05    269.50    
+B_806V_Qstep    PASS   48.00     48.04     48.00     48.03     401.56    402.40    
+C_907V_Cregen   PASS   47.73     50.73     47.75     50.91     453.05    453.60    
+TB16 overall: PASS
+[prism_run] run_TB16 finished (293.2 s)

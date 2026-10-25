@@ -1046,22 +1046,36 @@ def _interp(t, tt, yy):
 
 
 @njit(cache=True)
-def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec):
+def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec, bus, tQ, QQ):
     """평균모델. prm = [L, R_L, C_I, n, L_x, R_x, C_o, V_ref], ctl = [T_s, K_pi, K_ii, K_pv, K_iv, I_fwd(과도), I_rev, 앞먹임, 히스, d_max,
     K_pb, K_ib, I_bat_max, I_정격, T_OL, 지령 가중 b, P_in, P_out], bat = [켬, OCV, R_b], inj = [진폭 V, 주파수 Hz](버스 정현 섭동).
     P_in > 0이면 경부하 두 브리지 구동: |i_x*·v_o| < P_in이면 방향 2(두 브리지, DCX 전류 양방향), > P_out이면 보내는 쪽 하나.
-    반환 행: [t, v_bus, i_L, v_I, i_x, v_o, d, 방향, i_bat, i_in, p_load, i_L 지령]"""
+    bus[0] > 0이면 버스를 상태로 푼다(E23 R2 통합): V_s = bus[1](Stage A 정적 등가 V_bat/2), R_A = bus[2] → C_A = bus[3](v_A)
+    → 배선 R_w = bus[4]·L_w = bus[5](i_w) → C_b = bus[6](v_b) ∥ 감쇠기 R_d = bus[7] + C_d = bus[8] ∥ 400 V 정전력 부하
+    Q(t)/max(v_b, bus[9])(구간 선형 tQ·QQ) ∥ Stage C 입력 d·i_L. 이때 tV·VV는 쓰지 않는다.
+    반환 행: [t, v_bus, i_L, v_I, i_x, v_o, d, 방향, i_bat, i_in, p_load, i_L 지령] (+ 버스 모델이면 [v_A, i_A, 400 V 부하 전력])"""
     L, RL, CIx, n, Lx, Rx, Co, Vref = prm[0], prm[1], prm[2], prm[3], prm[4], prm[5], prm[6], prm[7]
     Ts = ctl[0]
     N = int(T_end / dt); ns = int(round(Ts / dt))
-    out = np.zeros((N // dec + 1, 12))
+    busen = bus[0] > 0.
+    out = np.zeros((N // dec + 1, 15 if busen else 12))
     # 초기 정상상태(시작 시각의 부하·버스)
-    vb0 = _interp(0., tV, VV); p0 = _interp(0., tP, PP)
+    p0 = _interp(0., tP, PP)
     vo = Vref
     ib = (vo - bat[1]) / bat[2] if bat[0] > 0 else 0.
     ix = p0 / vo + ib
     vI = n * (vo + Rx * ix)
     iL = ix / n
+    if busen:                                 # 버스 평형: v_b = V_s − (R_A + R_w)·(Q0 + P_C,in)/v_b
+        q0 = _interp(0., tQ, QQ); pci = (vI + RL * iL) * iL
+        Rt = bus[2] + bus[4]
+        vb0 = 0.5 * (bus[1] + math.sqrt(bus[1] ** 2 - 4. * Rt * (q0 + pci)))
+        iw = (q0 + pci) / vb0
+        vA = vb0 + bus[4] * iw
+        vbs = vb0; vd = vb0
+    else:
+        vb0 = _interp(0., tV, VV)
+        iw = 0.; vA = 0.; vbs = 0.; vd = 0.; q0 = 0.
     d = (vI + RL * iL) / vb0
     mode = 1 if iL >= 0. else -1
     if ctl[16] > 0. and abs(p0) < ctl[16]:
@@ -1076,7 +1090,10 @@ def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec):
     j = 0
     for k in range(N):
         t = k * dt
-        vb = _interp(t, tV, VV) + inj[0] * math.sin(2. * math.pi * inj[1] * t)
+        if busen:
+            vb = vbs
+        else:
+            vb = _interp(t, tV, VV) + inj[0] * math.sin(2. * math.pi * inj[1] * t)
         pl = _interp(t, tP, PP)
         if k % ns == 0:                       # 디지털 제어 표본: 이번에 계산한 듀티는 다음 표본부터 적용(계산 지연 1주기)
             d = d_next
@@ -1145,6 +1162,15 @@ def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec):
         dvI = (iL - ix / n) / CIx
         dix = (vI / n - vo - Rx * ix) / Lx
         dvo = (ix - il - ib) / Co
+        if busen:                              # 버스: Stage A 정적 등가 → C_A → 배선 → C_b ∥ 감쇠기 ∥ 400 V 부하 ∥ Stage C
+            q = _interp(t, tQ, QQ)
+            iA = (bus[1] - vA) / bus[2]
+            iq = q / max(vbs, bus[9])
+            idm = (vbs - vd) / bus[7]
+            dvA = (iA - iw) / bus[3]
+            diw = (vA - vbs - bus[4] * iw) / bus[5]
+            dvb = (iw - iq - idm - d * iL) / bus[6]
+            vA += dvA * dt; iw += diw * dt; vbs += dvb * dt; vd += idm / bus[8] * dt
         iL += diL * dt; vI += dvI * dt; ix += dix * dt; vo += dvo * dt
         if mode == 1 and ix < 0.:              # 받는 쪽 동기정류: 보내는 방향과 반대 전류는 흐르지 않는다(방향 2는 양방향)
             ix = 0.
@@ -1153,20 +1179,26 @@ def _avg(prm, ctl, tP, PP, tV, VV, bat, inj, T_end, dt, dec):
         if k % dec == 0:
             out[j, 0] = t; out[j, 1] = vb; out[j, 2] = iL; out[j, 3] = vI; out[j, 4] = ix; out[j, 5] = vo
             out[j, 6] = d; out[j, 7] = mode; out[j, 8] = ib; out[j, 9] = d * iL; out[j, 10] = pl; out[j, 11] = iref
+            if busen:
+                out[j, 12] = vA; out[j, 13] = (bus[1] - vA) / bus[2]; out[j, 14] = _interp(t, tQ, QQ)
             j += 1
     return out[:j]
 
 
-def run_avg(c, eq, g, tP, PP, tV, VV, battery=False, T_end=8e-3, inj=(0., 0.), Vref=VO_NOM, dt=0.05e-6, dec=20, ff=True, both=None):
-    """both: (P_in, P_out) 경부하 두 브리지 구동 문턱. None이면 설계(c)의 값, (0, 0)이면 끔(TB14 기준값)."""
+def run_avg(c, eq, g, tP, PP, tV, VV, battery=False, T_end=8e-3, inj=(0., 0.), Vref=VO_NOM, dt=0.05e-6, dec=20, ff=True, both=None,
+            bus=None, tQ=(0., 1.), QQ=(0., 0.)):
+    """both: (P_in, P_out) 경부하 두 브리지 구동 문턱. None이면 설계(c)의 값, (0, 0)이면 끔(TB14 기준값).
+    bus: None이면 버스는 tV·VV 지령(이상 전원). [V_s, R_A, C_A, R_w, L_w, C_b, R_d, C_d, v_min]이면 버스 회로를 같이 푼다(E23).
+    tQ·QQ: 버스 모델의 400 V 정전력 부하 전력(구간 선형)."""
     if both is None:
         both = (c.get("P_in", 0.), c.get("P_out", 0.))
     prm = np.array([c["L"], K["mag_ind_cu"] * PO_MAX / (PO_MAX * 1.03 / (c["n"] * VO_NOM)) ** 2, CI, c["n"], eq["Lx"], eq["Rx"], CO, Vref])
     ctl = np.array([1 / FS_CTRL, g["Kpi"], g["Kii"], g["Kpv"], g["Kiv"], I_LIM, -PO_REV / VO_CV[0] * 1.1, 1. if ff else 0., HYST, DMAX,
                     g["Kpb"], g["Kib"], IBAT_MAX, IO_MAX, T_OL, g["b"], both[0], both[1]])
     bat = np.array([1. if battery else 0., BAT["OCV"], BAT["R"]])
+    busa = np.zeros(10) if bus is None else np.concatenate(([1.], np.asarray(bus, float)))
     return _avg(prm, ctl, np.asarray(tP, float), np.asarray(PP, float), np.asarray(tV, float), np.asarray(VV, float),
-                bat, np.asarray(inj, float), T_end, dt, dec)
+                bat, np.asarray(inj, float), T_end, dt, dec, busa, np.asarray(tQ, float), np.asarray(QQ, float))
 
 
 def metrics(Z, t0, sat_ms=0.5, Ts=1 / FS_CTRL):

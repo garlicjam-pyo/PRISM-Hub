@@ -33,6 +33,7 @@ STEPS = [
     ("E20", ["E20_dab_fault_modulation.py"]),    # E17 상태기계를 쓴다(table·compare·figures, 약 10분)
     ("E21", ["E21_dab_switching_margin.py"]),    # 스위칭 표(모듈당 약 2분) + E17 상태기계(table·compare·figures)
     ("E22", ["E22_stage_c_regulated.py"]),       # 조정형 Stage C(design zvs gain spice both dcx control figures, 2코어 약 15분)
+    ("E23", ["E23_r2_integrated.py"]),           # R2 기본형 통합(E22 결과를 읽는다. base zbus figures, 약 1분)
 ]
 
 if __name__ == "__main__":

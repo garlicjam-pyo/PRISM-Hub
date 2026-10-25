@@ -1,0 +1,20 @@
+TB16 case B_806V_Qstep, V_bat 806 V, dt 2.50 ns, wall 92 s
+(1) criteria:
+    voltage                PASS
+    bus_band               PASS
+    bus_settle             PASS
+    current_avg100         PASS
+    device_pulse           PASS
+    zvs                    PASS
+    stageA                 PASS
+    e23_vo_extremes        PASS
+    e23_vo_end             PASS
+    e23_bus                PASS
+    dcx_gain_end           PASS
+    v_o (10 us mean) 48.000-48.037 V, band 47.04-48.96 V; E23 48.000-48.034 V; end diff -0.000 V
+    bus (10 us mean) 401.56-402.40 V (pre 402.40, end 402.06, band 390.00-414.47); E23 401.58-402.41 V; end diff -0.016 V; end osc 0.000 V
+    Stage C output current 100 us mean max 62.7 A (E23 62.5 A), secondary device peak 49.4 A (rating 329 A)
+    Stage C ZVS (V_ds before turn-on): primary 0.15 V (725 edges), secondary 0.00 V (0 edges); end DCX gain 0.9852
+    Stage A pre  : ZCS 0.54 / 0.50 % (E1 1.39 / 1.41 %), Ipk 36.5 / 36.3 A, V_A 402.533 V (E1 402.612 V), sharing 0.80 %, i_A 44.88 A (E1 44.80 A)
+    Stage A final: ZCS 0.97 / 0.93 % (E1 0.84 / 0.91 %), Ipk 56.9 / 56.5 A, V_A 402.273 V (E1 402.363 V), sharing 0.65 %, i_A 69.82 A (E1 69.73 A)
+(2) info: after event duty max 0.588, mode changes 0, both-bridge fraction 0.00; bus raw ripple end 0.080 V; Stage C input 3051 / 3058 W
