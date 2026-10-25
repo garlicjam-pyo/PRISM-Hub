@@ -37,7 +37,7 @@
             켜짐 직전 V_ds가 1차 51.8–68.5 V, 2차 48 V였다. 그래서 레그 노드 4개(1차 A·B, 2차 a·b)의 출력용량과
             다이오드 클램프를 넣은 DCX(반암시적 오일러, 1 ns)로 L_m(62.2–30 µH)과 보내는 쪽별 데드타임(1차 100–200 ns,
             2차 30–100 ns)을 훑었다. 두 방향 모두 V_ds ≤ 5 %인 가장 큰 L_m을 고르고, 그 L_m에서 촘촘한 격자(1차 40–160 ns,
-            2차 10–80 ns)로 통과 구간의 가운데 데드타임을 고른 뒤, 출력용량 ±20 %에서 다시 확인한다.
+            2차 10–80 ns)를 출력용량 ×1·×0.8·×1.2로 계산해 세 경우 모두 통과하는 구간의 가운데 데드타임을 고른다.
             선택 값은 zvs.json에 저장되고 selected()가 읽어 dcx·control·TB14가 같은 값을 쓴다.
   control : 전단 벅 + DCX 평균모델(벅 인덕터, C_I, DCX 등가 L_x·R_x(dcx 계단 응답에서), C_o, 48 V 배터리·정전력 부하)과
             디지털 제어(100 kHz 표본, 계산 지연 1주기): 인덕터 전류 PI(교차 5 kHz, 입력전압 앞먹임) ← 출력전류 지령 =
@@ -81,7 +81,7 @@
   모든 시험에서
   듀티 포화가 0.5 ms를 넘지 않음. T7 |Z_bus| ≤ |Z_in|/2(6 dB, 10 Hz–20 kHz, 5 kW·입력 270·504 V).
 
-■ 실행   python E22_stage_c_regulated.py design zvs dcx control figures   (약 15분, 그중 zvs 약 8분)
+■ 실행   python E22_stage_c_regulated.py design zvs dcx control figures   (약 20분, 그중 zvs 약 10분, 2코어)
 ■ 결과   results/E22/design.json, zvs.json, dcx.json, control.json, E22_stage_c_regulated.png
 """
 import json
@@ -582,16 +582,29 @@ def _td_case(c, Lm, td, d, cscale=1.):
     return dict(dir=d, Lm=Lm, td=td, cscale=cscale, worst_pct=w, rows=rows)
 
 
+def _td_case_job(a):
+    return _td_case(*a)
+
+
+def _run_cases(c, jobs):
+    """(L_m, 데드타임, 방향, 출력용량 배율) 묶음을 프로세스 병렬로 계산(결과 순서는 jobs와 같음)."""
+    import os
+    from concurrent.futures import ProcessPoolExecutor
+    with ProcessPoolExecutor(max_workers=max(1, min(4, os.cpu_count() or 1))) as ex:
+        return list(ex.map(_td_case_job, [(c,) + tuple(j) for j in jobs], chunksize=2))
+
+
 def _window(entries, td0):
-    """td0을 포함하는 연속 통과 구간 [lo, hi]와 그 가운데에 가장 가까운 격자 값."""
-    e = sorted(entries, key=lambda x: x["td"])
-    tds = [x["td"] for x in e]; ok = [x["worst_pct"] <= ZVS_LIM for x in e]
-    k = min(range(len(tds)), key=lambda j: abs(tds[j] - td0))
-    if not ok[k]:
-        cand = [j for j in range(len(tds)) if ok[j]]
-        if not cand:
-            return None
-        k = min(cand, key=lambda j: abs(tds[j] - td0))
+    """td0에 가장 가까운 통과 점을 포함하는 연속 통과 구간 [lo, hi]와 그 가운데에 가장 가까운 격자 값.
+    entries: dict(td, worst_pct) 목록(같은 td가 여럿이면 가장 나쁜 값)."""
+    w = {}
+    for x in entries:
+        w[x["td"]] = max(w.get(x["td"], 0.), x["worst_pct"])
+    tds = sorted(w); ok = [w[t] <= ZVS_LIM for t in tds]
+    cand = [j for j in range(len(tds)) if ok[j]]
+    if not cand:
+        return None
+    k = min(cand, key=lambda j: abs(tds[j] - td0))
     lo = k
     while lo > 0 and ok[lo - 1]:
         lo -= 1
@@ -599,25 +612,23 @@ def _window(entries, td0):
     while hi < len(tds) - 1 and ok[hi + 1]:
         hi += 1
     mid = 0.5 * (tds[lo] + tds[hi])
-    j = min(range(lo, hi + 1), key=lambda q: abs(tds[q] - mid))
-    return dict(lo=tds[lo], hi=tds[hi], td=tds[j], worst_pct=e[j]["worst_pct"])
+    j = min(range(lo, hi + 1), key=lambda q: (abs(tds[q] - mid), -tds[q]))   # 가운데가 두 격자 사이면 긴 쪽
+    return dict(lo=tds[lo], hi=tds[hi], td=tds[j], worst_pct=w[tds[j]])
 
 
 def zvs():
     """레그 출력용량을 넣은 DCX로 L_m과 보내는 쪽별 데드타임을 정한다.
     1) 성긴 격자(L_m 5개 × 데드타임): 두 방향 모두 V_ds ≤ 5 %인 데드타임이 있는 가장 큰 L_m(순환전류·손실 최소)
-    2) 그 L_m에서 촘촘한 격자: 통과 구간의 가운데 데드타임(게이트 구동 지연·공차에 여유)
-    3) 고른 점에서 출력용량 ±20 % 공차 점검"""
+    2) 그 L_m에서 촘촘한 격자를 출력용량 ×1·×0.8·×1.2로 계산해, 세 경우 모두 통과하는 구간(공차 창)의 가운데 데드타임.
+       공차 창이 없으면 공칭 창의 가운데를 쓰고 공차 불통과로 기록한다.
+    처음 1차 실행(공칭 창 가운데 90·35 ns)은 공차 점검에서 −200 W(×0.8)·36 V 3.78 kW(×1.2)가 깨져 2)를 공차 창으로 바꿨다."""
     c = selected(apply_zvs=False)
-    print("  레그 모델 점검(처음 설계 L_m %.1f µH, 데드타임 100 ns): TB14 1차 실행은 1차 V_ds 51.8 V(3 kW), 2차 48.0 V(−3 kW)" % (c["Lm"] * 1e6))
-    sweep = []
-    for Lm in ZVS_LM:
-        for td in ZVS_TDP:
-            e = _td_case(c, Lm, td, "fwd"); sweep.append(e)
-            print("  1차 → 2차: L_m %4.1f µH, t_d %3.0f ns → V_ds 최대 %5.1f %% V_I" % (Lm * 1e6, td * 1e9, e["worst_pct"]))
-        for td in ZVS_TDS:
-            e = _td_case(c, Lm, td, "rev"); sweep.append(e)
-            print("  2차 → 1차: L_m %4.1f µH, t_d %3.0f ns → V_ds 최대 %5.1f %% V_o" % (Lm * 1e6, td * 1e9, e["worst_pct"]))
+    print("  레그 모델 점검(처음 설계 L_m %.1f µH, 데드타임 100 ns): TB14 1차 실행은 1차 V_ds 51.8–68.5 V, 2차 48.0 V(−3 kW)" % (c["Lm"] * 1e6))
+    jobs = [(Lm, td, "fwd", 1.) for Lm in ZVS_LM for td in ZVS_TDP] + [(Lm, td, "rev", 1.) for Lm in ZVS_LM for td in ZVS_TDS]
+    sweep = _run_cases(c, jobs)
+    for e in sweep:
+        print("  %s: L_m %4.1f µH, t_d %3.0f ns → V_ds 최대 %5.1f %%" % ("1차 → 2차" if e["dir"] == "fwd" else "2차 → 1차",
+                                                                   e["Lm"] * 1e6, e["td"] * 1e9, e["worst_pct"]))
     coarse = None
     for Lm in ZVS_LM:
         f = [x for x in sweep if x["dir"] == "fwd" and x["Lm"] == Lm and x["worst_pct"] <= ZVS_LIM]
@@ -625,38 +636,46 @@ def zvs():
         if f and r:
             coarse = dict(Lm=Lm, td_p=min(f, key=lambda x: x["td"])["td"], td_s=min(r, key=lambda x: x["worst_pct"])["td"])
             break
-    choice = None; fine = []; tol = []
+    choice = None; fine = []
     if coarse:
         Lm = coarse["Lm"]
-        print("  성긴 격자 선택: L_m %.1f µH(1차 %.0f ns, 2차 %.0f ns 통과) → 촘촘한 격자" % (Lm * 1e6, coarse["td_p"] * 1e9, coarse["td_s"] * 1e9))
-        for td in ZVS_TDP_FINE:
-            e = _td_case(c, Lm, td, "fwd"); fine.append(e)
-            print("    1차 → 2차 t_d %3.0f ns → %5.1f %%" % (td * 1e9, e["worst_pct"]))
-        for td in ZVS_TDS_FINE:
-            e = _td_case(c, Lm, td, "rev"); fine.append(e)
-            print("    2차 → 1차 t_d %3.0f ns → %5.1f %%" % (td * 1e9, e["worst_pct"]))
-        wp = _window([x for x in fine if x["dir"] == "fwd"], coarse["td_p"])
-        ws = _window([x for x in fine if x["dir"] == "rev"], coarse["td_s"])
-        if wp and ws:
-            choice = dict(Lm=Lm, td_p=wp["td"], td_s=ws["td"], window_p=[wp["lo"], wp["hi"]], window_s=[ws["lo"], ws["hi"]],
-                          worst_fwd_pct=wp["worst_pct"], worst_rev_pct=ws["worst_pct"])
-            for k in ZVS_CTOL:
-                tol.append(_td_case(c, Lm, choice["td_p"], "fwd", k)); tol.append(_td_case(c, Lm, choice["td_s"], "rev", k))
-            choice["tol_worst_pct"] = max(x["worst_pct"] for x in tol)
-            print("  통과 창: 1차 %.0f–%.0f ns → %.0f ns, 2차 %.0f–%.0f ns → %.0f ns; 출력용량 ×0.8·×1.2에서 최대 %.1f %%"
-                  % (wp["lo"] * 1e9, wp["hi"] * 1e9, wp["td"] * 1e9, ws["lo"] * 1e9, ws["hi"] * 1e9, ws["td"] * 1e9, choice["tol_worst_pct"]))
-    verdict("(zvs) 두 방향 모두 V_ds ≤ 5 %인 L_m·데드타임 존재(통과 창 가운데)", choice is not None,
-            ("L_m %.1f µH, t_d 1차 %.0f ns·2차 %.0f ns(최대 %.1f·%.1f %%)" % (choice["Lm"] * 1e6, choice["td_p"] * 1e9, choice["td_s"] * 1e9,
-                                                                    choice["worst_fwd_pct"], choice["worst_rev_pct"])) if choice else "없음")
+        print("  성긴 격자 선택: L_m %.1f µH(1차 %.0f ns, 2차 %.0f ns 통과) → 촘촘한 격자 × 출력용량 ×1·×0.8·×1.2"
+              % (Lm * 1e6, coarse["td_p"] * 1e9, coarse["td_s"] * 1e9))
+        jobs = [(Lm, td, "fwd", k) for k in (1.,) + ZVS_CTOL for td in ZVS_TDP_FINE] + \
+               [(Lm, td, "rev", k) for k in (1.,) + ZVS_CTOL for td in ZVS_TDS_FINE]
+        fine = _run_cases(c, jobs)
+        for d, grid in (("fwd", ZVS_TDP_FINE), ("rev", ZVS_TDS_FINE)):
+            for td in grid:
+                v = [x["worst_pct"] for k in (1.,) + ZVS_CTOL for x in fine if x["dir"] == d and x["td"] == td and x["cscale"] == k]
+                print("    %s t_d %3.0f ns → V_ds 최대 %5.1f %%(×1), %5.1f %%(×0.8), %5.1f %%(×1.2)"
+                      % ("1차 → 2차" if d == "fwd" else "2차 → 1차", td * 1e9, v[0], v[1], v[2]))
+        nom = {d: _window([x for x in fine if x["dir"] == d and x["cscale"] == 1.], coarse["td_p" if d == "fwd" else "td_s"])
+               for d in ("fwd", "rev")}
+        rob = {d: _window([x for x in fine if x["dir"] == d], coarse["td_p" if d == "fwd" else "td_s"]) for d in ("fwd", "rev")}
+        if nom["fwd"] and nom["rev"]:
+            use = {d: (rob[d] or nom[d]) for d in ("fwd", "rev")}
+            choice = dict(Lm=Lm, td_p=use["fwd"]["td"], td_s=use["rev"]["td"],
+                          window_p=[nom["fwd"]["lo"], nom["fwd"]["hi"]], window_s=[nom["rev"]["lo"], nom["rev"]["hi"]],
+                          robust_p=[rob["fwd"]["lo"], rob["fwd"]["hi"]] if rob["fwd"] else None,
+                          robust_s=[rob["rev"]["lo"], rob["rev"]["hi"]] if rob["rev"] else None,
+                          worst_fwd_pct=use["fwd"]["worst_pct"], worst_rev_pct=use["rev"]["worst_pct"],
+                          robust=bool(rob["fwd"] and rob["rev"]))
+            fmt = lambda w: ("%.0f–%.0f ns" % (w[0] * 1e9, w[1] * 1e9)) if w else "없음"
+            print("  통과 창(공칭): 1차 %s, 2차 %s / 공차 창(×0.8·×1·×1.2 모두): 1차 %s, 2차 %s → t_d 1차 %.0f ns, 2차 %.0f ns"
+                  % (fmt(choice["window_p"]), fmt(choice["window_s"]), fmt(choice["robust_p"]), fmt(choice["robust_s"]),
+                     choice["td_p"] * 1e9, choice["td_s"] * 1e9))
+    verdict("(zvs) 두 방향 모두 V_ds ≤ 5 %인 L_m·데드타임 존재(공칭 출력용량)", choice is not None,
+            ("L_m %.1f µH, t_d 1차 %.0f ns·2차 %.0f ns" % (choice["Lm"] * 1e6, choice["td_p"] * 1e9, choice["td_s"] * 1e9)) if choice else "없음")
     if choice:
-        verdict("(zvs) 출력용량 ±20 %에서도 V_ds ≤ 5 %", choice["tol_worst_pct"] <= ZVS_LIM, "최대 %.1f %%" % choice["tol_worst_pct"])
+        verdict("(zvs) 출력용량 ±20 %에서도 V_ds ≤ 5 %인 데드타임 구간 존재(두 방향)", choice["robust"],
+                "고른 데드타임에서 세 경우 최대 %.1f·%.1f %%" % (choice["worst_fwd_pct"], choice["worst_rev_pct"]))
     loss = None
     if choice:
         c2 = dict(c, Lm=choice["Lm"])
         loss = {str(P): dcx_loss(c2, P, VO_NOM, c["np"], c["ns"])[0]["total"] - dcx_loss(c, P, VO_NOM, c["np"], c["ns"])[0]["total"]
                 for P in (1500., PO_MAX)}
         print("  L_m 변경에 따른 DCX 손실 증가: 1.5 kW %+.1f W, 5 kW %+.1f W" % (loss["1500.0"], loss["5000.0"]))
-    save_json(EID, "zvs", dict(sweep=sweep, coarse=coarse, fine=fine, tol=tol, choice=choice, loss_delta=loss, Lm0=c["Lm"],
+    save_json(EID, "zvs", dict(sweep=sweep, coarse=coarse, fine=fine, choice=choice, loss_delta=loss, Lm0=c["Lm"],
                                Cp=2 * c["np"] * DEV["GaN650"]["Ctr"], Cs=2 * c["ns"] * DEV["GaN150"]["Ctr"], vf=0.05, lim_pct=ZVS_LIM))
 
 
