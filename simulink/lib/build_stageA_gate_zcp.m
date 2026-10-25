@@ -1,4 +1,4 @@
-function build_stageA_gate_zcp(sys, pos, T, phases)
+function build_stageA_gate_zcp(sys, pos, T, phases, opt)
 %BUILD_STAGEA_GATE_ZCP  Stage A 영교차 추종 게이트 생성기 서브시스템(Gate_StageA)을 만든다.
 %
 %   build_stageA_gate_zcp(sys, [x1 y1 x2 y2], 'TB', [1 2])
@@ -8,7 +8,11 @@ function build_stageA_gate_zcp(sys, pos, T, phases)
 %         → 게이트 태그 gA_P<k>_S1–S4, 구간 태그 stA_P<k>(0 데드타임, 1 충전, 2 방전)
 %   T      : 시험 구조체 이름(문자열). 필드 dt, gateA_zcp_prm, gateA_en, gateA_off, guard_t
 %   phases : 동작 위상 번호(예 [1 2] = 모듈 1)
+%   opt.shed(선택, TB18): true면 경부하 위상 셰딩 게이트 ctrl/prism_gate_stageA_zcps.m을 쓴다. 파라미터는 T.gateA_zcps_prm,
+%            셋째 출력 [셰딩 모드; 필터한 모듈 출력전류]는 태그 stA_shed로 내보낸다.
 
+if nargin < 5, opt = struct(); end
+shed = isfield(opt, 'shed') && opt.shed;
 gs = [sys '/Gate_StageA'];
 add_block('built-in/Subsystem', gs, 'Position', pos, 'BackgroundColor', 'yellow');
 sl_add(gs, 'simulink/Sources/Digital Clock', 'Clock', [30 20 80 50], 'SampleTime', [T '.dt']);
@@ -30,10 +34,20 @@ sl_line(gs, 'iC_mux/1', 'iC_z1/1');
 sl_startup_guard(gs, 'Startup_guard', [290 90 320 160], 'zeros(8,1)', T, [190 250 280 270]);
 sl_line(gs, 'iC_z1/1', 'Startup_guard/1');
 sl_line(gs, 'Clock/1', 'Startup_guard/2');
-sl_add(gs, 'simulink/Sources/Constant', 'zcp_prm', [230 300 330 320], 'Value', [T '.gateA_zcp_prm']);
+if shed
+    sl_add(gs, 'simulink/Sources/Constant', 'zcp_prm', [230 300 330 320], 'Value', [T '.gateA_zcps_prm']);
+else
+    sl_add(gs, 'simulink/Sources/Constant', 'zcp_prm', [230 300 330 320], 'Value', [T '.gateA_zcp_prm']);
+end
 sl_add(gs, 'simulink/Sources/Constant', 'phase_en', [230 340 330 360], 'Value', [T '.gateA_en']);
 sl_add(gs, 'simulink/Sources/Constant', 'phase_off', [230 380 330 400], 'Value', [T '.gateA_off']);
-sl_mfunc(gs, 'StageA_ZCP_Gate', [380 60 540 420], 'prism_gate_stageA_zcp.m');
+if shed
+    sl_mfunc(gs, 'StageA_ZCP_Gate', [380 60 540 420], 'prism_gate_stageA_zcps.m');
+    sl_add(gs, 'simulink/Signal Routing/Goto', 'stA_shed', [580 440 680 460], 'GotoTag', 'stA_shed', 'TagVisibility', 'global');
+    sl_line(gs, 'StageA_ZCP_Gate/3', 'stA_shed/1');
+else
+    sl_mfunc(gs, 'StageA_ZCP_Gate', [380 60 540 420], 'prism_gate_stageA_zcp.m');
+end
 sl_line(gs, 'Clock/1', 'StageA_ZCP_Gate/1');
 sl_line(gs, 'Startup_guard/1', 'StageA_ZCP_Gate/2');
 sl_line(gs, 'zcp_prm/1', 'StageA_ZCP_Gate/3');
@@ -75,6 +89,11 @@ for e = si(2:end)
     nm = sprintf('idle_states_%d', e);
     sl_add(gs, 'simulink/Sinks/Terminator', nm, [660 ys+30*np 680 ys+20+30*np]);
     sl_line(gs, sprintf('state_demux/%d', e), [nm '/1']);
+end
+if shed
+    sl_note(gs, sprintf(['경부하 위상 셰딩(TB18): 필터한 모듈 출력전류 |I| < I_off가 지속 시간 이어지면 위상 하나가 자연 턴오프 뒤 멈추고,\n' ...
+        '|I| > I_on 또는 남는 위상 |i| > I_pk,on이면 다시 시작한다. 코드: ctrl/prism_gate_stageA_zcps.m(검증 코드 E24와 같은 논리)']), ...
+        [30 ys+30*numel(ssz)+100 820 ys+30*numel(ssz)+130], 'box');
 end
 sl_note(gs, sprintf(['영교차 추종(자기발진) 게이트: 데드타임 100 ns 뒤 다음 구간(S1·S3 충전 ↔ S2·S4 방전) 시작,\n' ...
     '공진전류가 펄스 부호 기준으로 i_thr 아래로 돌아오면 검출 지연 뒤 끈다. 블랭킹·보호 창은 공칭 도통시간의 0.80–1.12배.\n' ...

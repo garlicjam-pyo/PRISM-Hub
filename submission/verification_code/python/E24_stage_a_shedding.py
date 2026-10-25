@@ -188,8 +188,12 @@ def run_case(name, shed=True):
 
 
 def _transient(name):
+    return case_metrics(name, run_case(name, True), run_case(name, False))
+
+
+def case_metrics(name, r, b):
+    """과도 사례 판정(T1–T4)과 지표. r = 셰딩 켬, b = 셰딩 없음(같은 프로파일). TB18 기준값도 이 함수로 만든다."""
     c = CASES[name]
-    r = run_case(name, True); b = run_case(name, False)
     t = r["t"]; w = t > 0.3e-3
     to = turnoffs(r, 0.3e-3)
     bad = [x for x in to if abs(x[2]) > max(0.05 * x[3], I_ABS)]

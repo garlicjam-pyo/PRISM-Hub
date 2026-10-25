@@ -1,0 +1,18 @@
+TB18 case G_540V_bus_13p5_2p7_13p5kW (V_bat 540 V), dt 2.50 ns, wall 22 s (shed) + 22 s (no shed)
+(1) criteria (t >= 0.3 ms):
+    T1_turnoff           PASS
+    T2_phase_peak        PASS
+    T3_vA_vs_noshed      PASS
+    T4_no_chatter        PASS
+    turn-offs 740, violations 0 (worst |i_off| 0.42 A); phase peak 47.5 A (no shedding 44.5 A, rated 76.4 A)
+    V_A 269.278-269.963 V (no shedding 269.403-269.963 V); shedding events: [0.6697 3;0.6706 1;1.5356 2]
+    shed 1, return 1, cancel 0 (expected 1, 1, 0); end-window ZCS 0.57 / 0.71 %
+(2) comparison with E24 (info):
+    metric                              Simscape         E24      diff    result
+    shed time [ms]                       0.67061      0.6716  -0.00099        ok
+    return time [ms]                      1.5356      1.5359  -0.00032        ok
+    phase peak [A]                        47.507      47.661    -0.153        ok
+    phase peak, no shedding [A]           44.517      44.824    -0.307        ok
+    V_A min [V]                           269.28      269.27  +0.00281        ok
+    V_A max [V]                           269.96      269.97   -0.0044        ok
+    max turn-off current [A]             0.42373      0.4996   -0.0759      info

@@ -1,0 +1,18 @@
+TB18 case F_1008V_bus_25_5_25kW (V_bat 1008 V), dt 2.50 ns, wall 23 s (shed) + 22 s (no shed)
+(1) criteria (t >= 0.3 ms):
+    T1_turnoff           PASS
+    T2_phase_peak        PASS
+    T3_vA_vs_noshed      PASS
+    T4_no_chatter        PASS
+    turn-offs 740, violations 0 (worst |i_off| 0.42 A); phase peak 47.2 A (no shedding 44.2 A, rated 76.4 A)
+    V_A 503.278-503.963 V (no shedding 503.406-503.963 V); shedding events: [0.6688 3;0.6706 1;1.5357 2]
+    shed 1, return 1, cancel 0 (expected 1, 1, 0); end-window ZCS 0.61 / 0.70 %
+(2) comparison with E24 (info):
+    metric                              Simscape         E24      diff    result
+    shed time [ms]                       0.67057      0.6716  -0.00103        ok
+    return time [ms]                      1.5357      1.5359  -0.00016        ok
+    phase peak [A]                          47.2      47.154   +0.0461        ok
+    phase peak, no shedding [A]           44.185      44.349    -0.164        ok
+    V_A min [V]                           503.28      503.28  -0.00477        ok
+    V_A max [V]                           503.96      503.97  -0.00423        ok
+    max turn-off current [A]             0.42319     0.49971   -0.0765      info

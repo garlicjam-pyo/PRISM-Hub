@@ -1,0 +1,18 @@
+TB18 case H_1008V_bus5kW_charger_74A (V_bat 1008 V), dt 2.50 ns, wall 17 s (shed) + 17 s (no shed)
+(1) criteria (t >= 0.3 ms):
+    T1_turnoff           PASS
+    T2_phase_peak        PASS
+    T3_vA_vs_noshed      PASS
+    T4_no_chatter        PASS
+    turn-offs 479, violations 0 (worst |i_off| 0.77 A); phase peak 52.5 A (no shedding 53.0 A, rated 76.4 A)
+    V_A 503.785-504.769 V (no shedding 503.897-504.723 V); shedding events: [0.1 3;0.1001 1;1.0501 2]
+    shed 1, return 1, cancel 0 (expected 1, 1, 0); end-window ZCS 0.92 / 0.97 %
+(2) comparison with E24 (info):
+    metric                              Simscape         E24      diff    result
+    shed time [ms]                       0.10013      0.1003  -0.00017        ok
+    return time [ms]                      1.0501      1.0499  +0.00021        ok
+    phase peak [A]                        52.547       52.61    -0.063        ok
+    phase peak, no shedding [A]           53.031       53.05   -0.0194        ok
+    V_A min [V]                           503.79      503.79  -0.00315        ok
+    V_A max [V]                           504.77      504.77  +0.00318        ok
+    max turn-off current [A]             0.76584       0.729   +0.0368      info

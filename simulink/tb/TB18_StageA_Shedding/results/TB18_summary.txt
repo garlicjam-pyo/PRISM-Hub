@@ -1,0 +1,8 @@
+TB18 Stage A light-load phase shedding (module 1 + shedding gate + R2 bus), reference E24
+case                           result peak[A]   noshed    vA[V]           vA noshed       failed
+F_1008V_bus_25_5_25kW          PASS   47.2      44.2      503.28 -503.96  503.41 -503.96  
+G_540V_bus_13p5_2p7_13p5kW     PASS   47.5      44.5      269.28 -269.96  269.40 -269.96  
+H_1008V_bus5kW_charger_74A     PASS   52.5      53.0      503.79 -504.77  503.90 -504.72  
+I_1008V_bus_ramp_20_1p5_20kW   PASS   32.8      32.8      503.57 -503.94  503.57 -503.97  
+J_1008V_bus5kW_rev_m16A        PASS   16.3      11.2      503.64 -504.28  503.71 -504.24  
+TB18 overall: PASS

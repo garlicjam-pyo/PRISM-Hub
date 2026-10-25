@@ -1,0 +1,1 @@
+gate parity (case F, 102000 steps): mismatch phase1 0, phase2 0, shed mode 0 -> PASS

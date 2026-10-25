@@ -1,0 +1,116 @@
+{
+ "case": "W460_240s",
+ "V": 930.0,
+ "P": 25000.0,
+ "event": "hb_open",
+ "policy": "clamp_brk",
+ "prep": "-",
+ "t_prep_ms": 0.5,
+ "close": "-",
+ "start_share": false,
+ "tag": null,
+ "damper": true,
+ "vd": 2.0,
+ "t_soft_us": 1000.0,
+ "t_shed_ms": 3.0,
+ "wait_ms": 0.2,
+ "events": [
+  [
+   "shed_cmd",
+   1.505
+  ],
+  [
+   "HB_HOLD",
+   1.505
+  ],
+  [
+   "shed_done",
+   4.5051
+  ],
+  [
+   "HB_COLLAPSE",
+   4.51
+  ],
+  [
+   "SOFT_BYP",
+   14.515
+  ],
+  [
+   "DEGRADED",
+   15.52
+  ],
+  [
+   "restore",
+   16.02
+  ]
+ ],
+ "det_src": "gate_driver_fault",
+ "det_ms": 0.005,
+ "final_state": "DEGRADED",
+ "path_peak": 56.27858684203893,
+ "bridge_peak": 54.33958310408998,
+ "series_peak": 83.6048247273289,
+ "vlink_max": 100.03376423231559,
+ "vlink_min": -1.1618127032105874,
+ "vbus_min": 380.5356569311901,
+ "vbus_max": 464.8308918213654,
+ "vbus_max_loaded": 464.81179888658,
+ "vbus_end": 464.1112043921852,
+ "byp_peak": 56.278457822570836,
+ "t_over_ms": null,
+ "shed_needed": true,
+ "gate_timeout": false,
+ "fault_path_peak": 53.87737370839537,
+ "fault_bridge_peak": 53.87736144294202,
+ "fault_bus_min": 380.5356569311901,
+ "brk_energy_J": 6.582549536361931,
+ "brk_peak_kW": 3.3353455002587,
+ "dab_sec_peak": 63.749795330595575,
+ "dab_prim_peak": 13.858651158825126,
+ "dab_peak_ms": 4.61,
+ "dab_peak_state": "HB_COLLAPSE",
+ "dab_rated_sec_peak": 45.82809454192978,
+ "dab_peak_ratio": 1.3910636252237933,
+ "soft_entry": {
+  "why": "timeout",
+  "ms": 13.015,
+  "vl": 0.6258422012197591,
+  "vs": -4.640314102089003,
+  "ip": 14.288703582354202
+ },
+ "soft_timeout": false,
+ "soft_energy_J": 0.025378852642677516,
+ "soft_ms": 1.005,
+ "hold": "match",
+ "curtail": true,
+ "dmod": "eps",
+ "soft_fail": true,
+ "dab_peak_hold": 57.499805278635435,
+ "dab_peak_collapse": 63.749795330595575,
+ "dab_peak_limit": 63.563567129656604,
+ "close_ms": 13.015,
+ "vs_at_close": -4.640314102089003,
+ "byp_pulse_A": 33.992134320411154,
+ "byp_pulse_mJ": 25.388616903023475,
+ "path_close_peak": 32.244662689451474,
+ "checks": {
+  "current_100A": true,
+  "series_120V": true,
+  "link_120V": true,
+  "bypass_current": true,
+  "bus_ge_260": true,
+  "degraded_reached": true,
+  "class_upper_while_400V_loads": true
+ },
+ "pass_": true,
+ "stageC": {
+  "vo_min": 47.99212051116862,
+  "vo_max": 48.01241395666413,
+  "vo_end": 48.00000925398375,
+  "ix_avg100_max": 102.31396556737991,
+  "ix_dev_peak": 80.60238147428304,
+  "pin_min": 4966.248609732226,
+  "pin_max": 5028.669592126434,
+  "p48": 4904.811471494191
+ }
+}
