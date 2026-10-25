@@ -40,8 +40,9 @@
 ■ 판정 기준(degrade)
   48 V ±2 %(고장 0.2 ms 전부터 끝까지), Stage C 전류(base (d)와 같음), E17 고장 판정 통과. 정보: E1 Stage A ZCS ≤ 5 %(2위상)
 
-■ 실행   python E23_r2_integrated.py base zbus degrade figures   (약 2분, E22 design zvs both dcx와 E21 table 결과가 있어야 함)
-■ 결과   results/E23/base.json, zbus.json, degrade.json, E23_r2_integrated.png, E23_degrade.png
+  light  : Stage A 경부하 영전류 스위칭. 출력전류 3–30 A × 배터리 540·1008 V × 2위상·위상 하나(E1)의 턴오프 전류/피크.
+■ 실행   python E23_r2_integrated.py base zbus degrade light figures   (약 5분, E22 design zvs both dcx와 E21 table 결과가 있어야 함)
+■ 결과   results/E23/base.json, zbus.json, degrade.json, light.json, E23_r2_integrated.png, E23_degrade.png
 """
 import json
 import math
@@ -340,7 +341,26 @@ def degrade():
     save_json(EID, "degrade", dict(cases=out, T_EV=T_EV_DEG, PC_IN=PC_IN, PKD=PKD))
 
 
-PARTS = dict(base=base, zbus=zbus, degrade=degrade, figures=figures)
+LIGHT_I = (3., 5., 7.5, 10., 15., 20., 30.)   # Stage A 모듈 출력전류 [A]
+LIGHT_V = (540., 1008.)
+
+
+def light():
+    """Stage A 경부하 영전류 스위칭: 출력전류별 턴오프 전류/피크(위상 최대), 2위상 대 위상 하나(E1 영교차 추종).
+    degrade에서 강등 뒤 1008 V 경부하(약 10 A)가 기준 5 %를 넘은 것의 범위와 위상 셰딩의 효과를 본다(docs/28 7절)."""
+    rows = []
+    for V in LIGHT_V:
+        for N in (2, 1):
+            z = [max(stage_a_ref(V, I, N=N)["zcs"]) for I in LIGHT_I]
+            rows.append(dict(vbat=V, phases=N, I=list(LIGHT_I), zcs=z))
+            print("  %4.0f V, %d위상: " % (V, N) + ", ".join("%.1f A %.2f %%" % (I, 100 * x) for I, x in zip(LIGHT_I, z)))
+    lim2 = {r["vbat"]: min(I for I, x in zip(r["I"], r["zcs"]) if x <= 0.05) for r in rows if r["phases"] == 2}
+    lim1 = {r["vbat"]: min(I for I, x in zip(r["I"], r["zcs"]) if x <= 0.05) for r in rows if r["phases"] == 1}
+    print("  ZCS ≤ 5 %%인 최소 출력전류(격자): 2위상 %s, 위상 하나 %s" % (lim2, lim1))
+    save_json(EID, "light", dict(rows=rows, min_I_2ph=lim2, min_I_1ph=lim1))
+
+
+PARTS = dict(base=base, zbus=zbus, degrade=degrade, light=light, figures=figures)
 
 if __name__ == "__main__":
     want = sys.argv[1:] or list(PARTS)

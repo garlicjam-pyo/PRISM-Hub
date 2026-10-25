@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## [1.22.0] - 2026-10-26
+
+### 추가
+- E23 R2 통합 회로(`E23_r2_integrated.py`): base(E22 평균모델에 버스 회로를 같이 푼 R2 기본형 3사례), zbus(C\_A·R\_A를 넣은 버스 임피던스 대 Stage C 입력 임피던스), degrade(R2-W460 H-브리지 개방 강등의 E17 버스 궤적에서 48 V), light(Stage A 경부하 턴오프 전류/피크, 2위상 대 위상 하나), figures. `run_all.py`에 E23을 더했다.
+- E22 `run_avg`에 `bus`(버스 회로: Stage A 정적 등가 → C\_A → 배선 → C\_b ∥ 감쇠기 ∥ 400 V 정전력 부하 ∥ Stage C)와 `start_eq`(전류 PI 적분 평형 시작)를 더했다. 주지 않으면 이전과 같다(E23 base 재계산 차 0).
+- TB16(`simulink/tb/TB16_R2_Base`): R2 기본형 통합 회로(Stage A 모듈 1 + 400 V 버스 + 조정형 Stage C) 3사례.
+- TB17(`simulink/tb/TB17_R2_Integrated`): R2-W460 통합 강등 회로(Stage A + TB13 창 조정 Stage B·상태기계 + 조정형 Stage C) 2사례, 점검 실행 `smoke_TB17`.
+- `lib/sl_probe_panel` 네 번째 열(저장 자료형: single·int8), `lib/build_stageC_reg` 선택 인자 `iLTag`(Stage B의 `iL` 태그와 분리), `ctrl/prism_stageC_reg_ctrl` prm(27)(전류 PI 적분 시작값).
+- docs/28 R2 통합 회로 문서, validation/2026-10-25-r2-integrated.
+
+### 발견
+- **R2 기본형은 통합 회로에서 성립한다.** TB16 3/3: 48 V가 평균모델과 최저·최고 0.18 V, 끝 0.000 V 안. 버스 변동 0.45–0.84 V, 끝 진동 ≤ 0.001 V. Middlebrook 여유 49.3 dB(C\_A 포함).
+- **R2-W460 강등 중 48 V 공급.** TB17 2/2: 버스 460 → 380–409 → 465–504 V 동안 48 V 47.995–48.011 V. 강등 순서·회로 한계는 이상 V\_A·정전력 등가(TB13)와 같았다(DAB 첨두 66.4·64.5 A, 전이 0.01 ms 안). 지금까지의 두 등가(Stage A = V\_bat/2 + 13.2 mΩ, Stage C = 정전력 부하)가 이 조건에서 맞는다.
+- **Stage A 경부하 영전류 스위칭.** 영교차 추종 2위상은 모듈 출력 10 A 이하에서 턴오프 전류/피크가 5 %를 넘는다(E1 light: 10 A 5.46–5.50 %, 15 A 3.8 %). 강등 뒤 1008 V에서 Stage C만 남으면 약 10 A다(E1 5.40–5.47 %, 회로 4.44 %로 통과). 위상 하나면 7.5 A까지 ≤ 3.27 %. 경부하 위상 셰딩을 Stage A 제어 요구로 두었다.
+- **회로도 설명 상자 잘림.** `sprintf`에 넣은 설명 글의 `%`(예: "±2 % 안")가 형식 지정자로 해석되어 그 뒤 글이 빠졌다. TB13 회로도의 설명 두 개가 잘려 있었다. `%%`로 고치고 TB13·TB17을 다시 빌드했다(회로·결과는 같음).
+
+### 변경
+- docs/20(요약, 검증 이력, 남은 쟁점, 8절 TB16·TB17, 이후 계획, 읽는 순서), README, simulink README(TB16·TB17), 검증 코드 README(E23).
+
 ## [1.21.0] - 2026-10-25
 
 ### 추가

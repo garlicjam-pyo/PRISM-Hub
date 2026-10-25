@@ -1,0 +1,48 @@
+TB17 case B_930V_hbopen (V_bat 930 V, 400 V load 20 kW + Stage C 4905 W at 48 V, event hb_open at 1.5 ms), dt 2.50 ns, wall 948 s
+(1) criteria:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    dab_peak_1p5x_rated            PASS
+    vo_contract                    PASS
+    stageC_current                 PASS
+    stageC_zvs                     PASS
+    dcx_gain_end                   PASS
+    stageA_pre                     PASS
+    stageA_final                   PASS
+    protection: |i_p| 56.8 A, |i_h| 54.5 A, |v_s| 83.8 V, v_link -2.0-100.1 V, |i_byp| 56.8 A; bus(5 us) 380.3-464.9 V (loaded max 464.5 V)
+    DAB link-side peak in states 9-11: n|i_L| 64.5 A (limit 1.5x 68.7 A)
+    soft bypass: entry 14.505 ms (v_link 0.74 V, v_s -4.73 V), duration 1.005 ms, device energy 0.0273 J, path peak 33.5 A
+    48 V (10 us mean, from 1.3 ms): 47.996-48.011 V, band 47.04-48.96 V; E23 47.992-48.012 V
+    Stage C: output 100 us mean max 102.7 A, secondary device peak 80.8 A; ZVS primary 0.11 V (8500 edges), secondary 0.00 V (0 edges); end DCX gain 0.9771
+    Stage C input power (10 us mean, after event): 5012-5117 W (E23 avg model 4966-5029 W)
+    Stage A pre  : ZCS 0.77 / 0.73 % (E1 1.15 / 1.15 %), Ipk 44.5 / 44.3 A, V_A 464.434 V (E1 464.531 V), sharing 0.48 %, i_A 54.39 A (E1 53.88 A)
+    Stage A final: ZCS 0.72 / 0.73 % (E1 1.16 / 1.15 %), Ipk 43.8 / 43.8 A, V_A 464.438 V (E1 464.531 V), sharing 0.14 %, i_A 54.00 A (E1 53.87 A)
+    (info) E1 at the final current with one phase only: ZCS 1.08 %
+    (info) Stage A after 1 ms (50 us windows): max half-cycle ZCS 35.96 % at 1.750 ms (i_A 2.6 A, window phase peak 5.5 A); max turn-off current 0.70 A; i_A range -6.4 to 56.2 A
+(2) comparison with E17 / E23 (info):
+    metric                                          Simscape   reference      diff    result
+    min period-mean v_bus after event [V]             380.33      380.54    -0.208        ok
+    max period-mean v_bus after event [V]             464.87      464.83   +0.0368        ok
+    max period-mean i_p [A]                           56.727      56.275    +0.451        ok
+    max period-mean i_h [A]                           52.481      54.297     -1.82        ok
+    max period-mean v_link [V]                        100.05      100.02   +0.0221        ok
+    min period-mean v_link [V]                            -2     -1.1618    -0.838        ok
+    final mean v_bus [V]                               464.1      464.11   -0.0131        ok
+    brake energy [J]                                   6.736      6.5839    +0.152      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      64.451       63.75    +0.701      info
+    soft-bypass device energy [J]                    0.02733    0.025379  +0.00195      info
+    48 V min (10 us mean, E23) [V]                    47.996      47.992  +0.00343        ok
+    48 V max (10 us mean, E23) [V]                    48.011      48.012  -0.00187        ok
+    48 V end (E23) [V]                                    48          48 -0.000418        ok
+    transition HB_HOLD [ms]                            1.505       1.505 +2.22e-16        ok
+    transition HB_COLLAPSE [ms]                        4.505        4.51    -0.005        ok
+    transition SOFT_BYP [ms]                          14.505      14.515     -0.01        ok
+    transition DEGRADED [ms]                           15.51       15.52     -0.01        ok
+    transition shed_done [ms]                          4.505      4.5051   -0.0001        ok
+    transition restore [ms]                            16.01       16.02     -0.01        ok
+    final state: DEGRADED
