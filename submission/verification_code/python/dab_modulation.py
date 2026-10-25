@@ -153,3 +153,104 @@ def eps_ilim(vb, vl, p, pk_max):
             break
         jl = -J[k]
     return jl * Ib
+
+
+# ---- 회로 지령 블록(simulink/ctrl/prism_dab_eps_map.m)과 같은 계산 ---------------------------------------------------------
+def circuit_tables(pk_key="pk"):
+    """회로가 쓰는 j ≤ 0 표: d, 등가 위상 φ = α + D1·π((−π, π]), 첨두(pk_key 열). j = 0 열(퇴화)은 j = −0.01 열로 채운다.
+    반환 dict(d, phi, pk, r0, dr, j0, dj)."""
+    T = eps_table()
+    J = np.asarray(T["j"]); keep = J <= 1e-9
+    d = np.array(T["d"])[:, keep]; a = np.array(T["a"])[:, keep]; pk = np.array(T[pk_key] if pk_key in T else T["pk"])[:, keep]
+    d[:, -1] = d[:, -2]; a[:, -1] = a[:, -2]; pk[:, -1] = pk[:, -2]
+    phi = np.vectorize(lambda aa, dd: math.remainder(aa + (1 - dd / np.pi) * np.pi, 2 * np.pi))(a, d)
+    R = np.asarray(T["r"])
+    return dict(d=d, phi=phi, pk=pk, r0=float(R[0]), dr=float(R[1] - R[0]), j0=float(J[keep][0]), dj=float(J[1] - J[0]))
+
+
+def _lim_row(row, tgt, j0, dj):
+    jl = 0.
+    for k in range(row.size - 1, -1, -1):
+        if row[k] > tgt:
+            break
+        jl = -(j0 + k * dj)
+    return jl
+
+
+def circuit_map(vb, vl, icmd, p, pk_max, tab):
+    """회로 블록과 같은 순서: 첨두 상한 탐색(같은 r에서 tK ≤ pk_max/I_b인 최대 |j|) → 지령 클립 → (d, φ) 쌍선형 보간 → D1 ≤ 0.95.
+    반환 (D1, φ, 지령 링크전류 [A], I_b [A])."""
+    d, ph, pk = tab["d"], tab["phi"], tab["pk"]
+    r0, dr, j0, dj = tab["r0"], tab["dr"], tab["j0"], tab["dj"]
+    nr, nj = d.shape
+    n, wl = p.turns, 2 * np.pi * p.fs * p.Ldab / p.turns ** 2
+    v1 = max(vb, 1.) / n; Ib = v1 / wl
+    r = min(max(vl / v1, r0), r0 + (nr - 1) * dr)
+    ir = min(int((r - r0) / dr), nr - 2); fr = (r - r0) / dr - ir
+    jl = _lim_row((1 - fr) * pk[ir] + fr * pk[ir + 1], pk_max / Ib, j0, dj)
+    jn = min(max(icmd / Ib, -jl), 0.); jn = max(jn, j0)
+    ij = min(int((jn - j0) / dj), nj - 2); fj = (jn - j0) / dj - ij
+    bil = lambda z: ((1 - fr) * (1 - fj) * z[ir, ij] + (1 - fr) * fj * z[ir, ij + 1] + fr * (1 - fj) * z[ir + 1, ij] + fr * fj * z[ir + 1, ij + 1])
+    D1 = min(max(1 - bil(d) / np.pi, 0.), 0.95)
+    return D1, float(bil(ph)), jn * Ib, Ib
+
+
+# ---- 스위칭 반영 표(E21: 데드타임·출력용량·역방향 도통, dab_switching.py) --------------------------------------------------
+_SW = {}
+
+
+def sw_table(p=None):
+    """스위칭 반영 표(results/E21/sw_table_n<권선비>.json, 없으면 dab_switching.build_sw_table로 만든다). 모듈마다(권선비·누설 L) 따로다.
+    pk_sw(첨두, 버스 380·440·500 V 가운데 최대)와 j_sw(실제 링크전류, 평균)는 회로 지령표와 같은 격자(r × j ≤ 0)이고,
+    칸마다 회로 블록이 내는 (D1, φ)를 그대로 쓴 값이다. p가 없으면 R2-W460."""
+    if p is None:
+        import E19_r2_window_module as E19
+        p, _ = E19.plant("W460_240s")
+    key = "n%.1f" % p.turns
+    if key not in _SW:
+        f = RESULTS / "E21" / ("sw_table_%s.json" % key)
+        if not f.exists():
+            import dab_switching as SW
+            T = SW.build_sw_table(p)
+            outdir("E21"); f.write_text(json.dumps(T), encoding="utf-8")
+        T = json.loads(f.read_text(encoding="utf-8"))
+        pk = np.array(T["pk_sw"]); js = np.array(T["j_sw"])
+        js[0] = js[1]                                     # r = 0(링크 0 V)은 평균전류를 전력/전압으로 구할 수 없어 r = 0.02 행으로
+        _SW[key] = dict(T, pk_sw=pk, j_sw=js)
+    return _SW[key]
+
+
+def _sw_rowcol(T, vb, vl, p):
+    n, wl = p.turns, 2 * np.pi * p.fs * p.Ldab / p.turns ** 2
+    v1 = max(vb, 1.) / n; Ib = v1 / wl
+    nr = T["pk_sw"].shape[0]
+    r = min(max(max(vl, 0.) / v1, T["r0"]), T["r0"] + (nr - 1) * T["dr"])
+    ir = min(int((r - T["r0"]) / T["dr"]), nr - 2); fr = (r - T["r0"]) / T["dr"] - ir
+    return Ib, ir, fr
+
+
+def _sw_bil(T, key, ir, fr, jn):
+    Z = T[key]; nj = Z.shape[1]
+    jn = min(max(jn, T["j0"]), 0.)
+    ij = min(int((jn - T["j0"]) / T["dj"]), nj - 2); fj = (jn - T["j0"]) / T["dj"] - ij
+    return float((1 - fr) * (1 - fj) * Z[ir, ij] + (1 - fr) * fj * Z[ir, ij + 1] + fr * (1 - fj) * Z[ir + 1, ij] + fr * fj * Z[ir + 1, ij + 1])
+
+
+def sw_ilim(vb, vl, p, pk_max):
+    """회로 블록과 같은 탐색을 스위칭 반영 첨두(pk_sw)로: 첨두 ≤ pk_max [A]인 최대 지령 전류 크기 [A]."""
+    T = sw_table(p); Ib, ir, fr = _sw_rowcol(T, vb, vl, p)
+    P = T["pk_sw"]; tgt = pk_max / Ib
+    jl = _lim_row((1 - fr) * P[ir] + fr * P[ir + 1], tgt, T["j0"], T["dj"])
+    return jl * Ib
+
+
+def sw_peak_A(vb, vl, icmd, p):
+    """지령 링크전류 icmd(≤ 0)에서 스위칭 반영 링크 쪽 첨두 [A]."""
+    T = sw_table(p); Ib, ir, fr = _sw_rowcol(T, vb, vl, p)
+    return _sw_bil(T, "pk_sw", ir, fr, icmd / Ib) * Ib
+
+
+def sw_current(vb, vl, icmd, p):
+    """지령 링크전류 icmd(≤ 0)에서 회로 DAB가 실제로 내는 링크 평균전류 [A](데드타임 영향)."""
+    T = sw_table(p); Ib, ir, fr = _sw_rowcol(T, vb, vl, p)
+    return _sw_bil(T, "j_sw", ir, fr, icmd / Ib) * Ib

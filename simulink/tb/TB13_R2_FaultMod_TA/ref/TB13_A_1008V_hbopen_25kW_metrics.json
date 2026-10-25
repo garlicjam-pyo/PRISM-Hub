@@ -1,0 +1,102 @@
+{
+ "case": "W460_240s",
+ "V": 1008.0,
+ "P": 25000.0,
+ "event": "hb_open",
+ "policy": "clamp_brk",
+ "prep": "-",
+ "t_prep_ms": 0.5,
+ "close": "-",
+ "start_share": false,
+ "tag": null,
+ "damper": true,
+ "vd": 2.0,
+ "t_soft_us": 1000.0,
+ "t_shed_ms": 3.0,
+ "wait_ms": 0.2,
+ "events": [
+  [
+   "shed_cmd",
+   0.505
+  ],
+  [
+   "HB_HOLD",
+   0.505
+  ],
+  [
+   "shed_done",
+   3.505
+  ],
+  [
+   "HB_COLLAPSE",
+   3.51
+  ],
+  [
+   "SOFT_BYP",
+   13.51
+  ],
+  [
+   "DEGRADED",
+   14.515
+  ]
+ ],
+ "det_src": "gate_driver_fault",
+ "det_ms": 0.005,
+ "final_state": "DEGRADED",
+ "path_peak": 55.96848104505159,
+ "bridge_peak": 56.06934620593903,
+ "series_peak": 93.86387986347661,
+ "vlink_max": 100.01093332180875,
+ "vlink_min": -0.14483904501035427,
+ "vbus_min": 409.49333354017466,
+ "vbus_max": 503.84658643298917,
+ "vbus_max_loaded": 459.99794202053636,
+ "vbus_end": 503.8362563254117,
+ "byp_peak": 43.66735581042168,
+ "t_over_ms": null,
+ "shed_needed": true,
+ "gate_timeout": false,
+ "fault_path_peak": 55.96848104505159,
+ "fault_bridge_peak": 56.06934620593903,
+ "fault_bus_min": 409.50033758203904,
+ "brk_energy_J": 8.062235611594266,
+ "brk_peak_kW": 3.333190264273848,
+ "dab_sec_peak": 63.67796299283886,
+ "dab_prim_peak": 13.84303543322584,
+ "dab_peak_ms": 3.835,
+ "dab_peak_state": "HB_COLLAPSE",
+ "dab_rated_sec_peak": 45.82809454192978,
+ "dab_peak_ratio": 1.3894961950595084,
+ "soft_entry": {
+  "why": "timeout",
+  "ms": 13.01,
+  "vl": 4.351251292986861,
+  "vs": -8.391090599872905,
+  "ip": 28.905962583596377
+ },
+ "soft_timeout": false,
+ "soft_energy_J": 0.048514676352376815,
+ "soft_ms": 1.005,
+ "hold": "match",
+ "curtail": true,
+ "dmod": "eps",
+ "soft_fail": true,
+ "dab_peak_hold": 57.54388187155851,
+ "dab_peak_collapse": 63.67796299283886,
+ "dab_peak_limit": 63.563567129656604,
+ "close_ms": 13.01,
+ "vs_at_close": -8.391090599872905,
+ "byp_pulse_A": 43.66735581042168,
+ "byp_pulse_mJ": 48.50426775300785,
+ "path_close_peak": 41.260209840706494,
+ "checks": {
+  "current_100A": true,
+  "series_120V": true,
+  "link_120V": true,
+  "bypass_current": true,
+  "bus_ge_260": true,
+  "degraded_reached": true,
+  "class_upper_while_400V_loads": true
+ },
+ "pass_": true
+}

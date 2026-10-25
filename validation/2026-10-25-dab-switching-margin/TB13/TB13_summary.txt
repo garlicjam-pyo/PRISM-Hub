@@ -1,0 +1,5 @@
+TB13 DAB fault-mode modulation with transient allowance (R2-W460): design limit 1.387x rated, criterion 1.5x rated
+run  case                         limits   failed
+A    A_1008V_hbopen_25kW          PASS     
+B    B_930V_hbopen_25kW           PASS     
+TB13 overall: PASS

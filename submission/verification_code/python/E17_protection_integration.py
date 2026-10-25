@@ -305,7 +305,8 @@ def r2_run(job):
          dab_lowv(감도: 링크전압이 이 값 아래면 DAB 전달전류를 v_link/dab_lowv배로 줄인다 — 회로에서 본 붕괴 정체 모사),
          hold('vw' | 'match', H-브리지 강등 유지의 링크 기준, E20), curtail(H-브리지 고장이면 V_A와 무관하게 400 V 부하 출력을
          줄이고 강등 뒤 V_A ≤ 상한이면 되돌림, E20), dmod('sps' | 'eps', 강등 상태 9–11의 DAB 변조. 'eps'면 첨두 ≤ PK_FAULT × 정격점 첨두가 되도록
-         지령 전류를 제한, E20. pk_fault로 배수를 바꿈), soft_fail(소프트 투입 시간 상한이면 주 스위치를 닫지 않고 FAILSAFE로, E20)."""
+         지령 전류를 제한, E20. pk_fault로 배수를 바꿈), pk_table('ideal' | 'sw', E21: 'sw'면 첨두 상한 탐색·첨두 지표·실제 링크전류를
+         데드타임·출력용량·역방향 도통을 넣은 스위칭 정상상태 표로), soft_fail(소프트 투입 시간 상한이면 주 스위치를 닫지 않고 FAILSAFE로, E20)."""
     case, V, P, event = job["case"], job["V"], job["P"], job["event"]
     pol = job.get("policy", {"dab": "brk_hold"}.get(event, "clamp_brk")); vd = job.get("vd", VD)
     t_soft = job.get("t_soft", T_SOFT); t_shed = job.get("t_shed", T_SHED)
@@ -336,6 +337,7 @@ def r2_run(job):
     curtail_only = False; dab_pk_hold = 0.; dab_pk_col = 0.
     pk_rated = dab_sps_peak(VW, 100., p.power_max / 100., p)          # 정격점(링크 100 V, 정격 전력) 첨두
     pkf = job.get("pk_fault", PK_FAULT)                               # 첨두 상한 배수(E20 감도: 회로 여유)
+    sw = job.get("pk_table", "ideal") == "sw" and job.get("dmod", "sps") == "eps"   # (E21) 스위칭 반영 첨두·전류표
     buf = np.tile(u, (lag + 1, 1)); tick = 0
     t_st = 0.; hw_since = sw_since = vb_since = None; t_det = None; det_src = None; t_gdf = None
     shed_cmd = None; loads400 = True; bridge_dead = False; dab_dead = False; Gb = 0.; steer = False
@@ -483,7 +485,10 @@ def r2_run(job):
             # SPS DAB 링크 쪽 전류 첨두(정보): DAB가 스위칭하는 상태에서
             if st in DAB_ON and not dab_dead:
                 fault_st = st in ("HB_HOLD", "HB_COLLAPSE", "SOFT_BYP")
-                pk = DM.peak_A(x[2], x[4], x[5], p, "eps" if (fault_st and dmod == "eps") else "sps")
+                if fault_st and sw:
+                    pk = DM.sw_peak_A(x[2], x[4], icmd_aux, p)       # 지령 칸의 스위칭 반영 첨두(E21)
+                else:
+                    pk = DM.peak_A(x[2], x[4], x[5], p, "eps" if (fault_st and dmod == "eps") else "sps")
                 if pk > dab_pk:
                     dab_pk, dab_pk_t, dab_pk_st = pk, t, st
                 if st == "HB_HOLD":
@@ -500,8 +505,11 @@ def r2_run(job):
             if st in ("HB_HOLD", "HB_COLLAPSE", "SOFT_BYP"):
                 icmd_aux, vl_aux_ref = aux.step(x, t, V)
                 if dmod == "eps":                                  # 첨두 상한을 지키는 전류만 지령(나머지는 제동 저항이 받음)
-                    lim_e = DM.eps_ilim(x[2], x[4], p, pkf * pk_rated)
-                    icmd_aux = float(np.clip(icmd_aux, -lim_e, lim_e))
+                    if sw:                                         # (E21) 회로 블록과 같이 링크 → 1차 쪽만, 스위칭 반영 첨두로 탐색
+                        icmd_aux = float(np.clip(icmd_aux, -DM.sw_ilim(x[2], x[4], p, pkf * pk_rated), 0.))
+                    else:
+                        lim_e = DM.eps_ilim(x[2], x[4], p, pkf * pk_rated)
+                        icmd_aux = float(np.clip(icmd_aux, -lim_e, lim_e))
             # 링크 제동 저항(선택): H-브리지 강등의 유지 중에는 링크 과전압 보호만(110 V 위에서 켬), 붕괴·소프트 투입 중에는
             # 링크 기준 + 5 V 위에서 켠다. DAB 고장에서는 110 V 위에서 켠다.
             # (2026-10-24 수정: 유지 중에도 기준 추종으로 켜면 링크가 너무 빨리 내려가 버스가 급히 올라 경로전류 첨두가 커졌다 —
@@ -535,7 +543,7 @@ def r2_run(job):
         if dab_dead:
             icmd = 0.
         elif st in ("HB_HOLD", "HB_COLLAPSE", "SOFT_BYP"):
-            icmd = icmd_aux
+            icmd = DM.sw_current(x[2], x[4], icmd_aux, p) if sw else icmd_aux   # (E21) 데드타임으로 바뀐 실제 링크전류
             if dab_lowv:
                 icmd *= min(1., max(x[4], 0.) / dab_lowv)
         elif st in ("WINDOW", "OFF_RAMP", "OFF_HOLD") and not bridge_dead:

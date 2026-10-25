@@ -26,7 +26,8 @@ function build_stageB_control(sys, posCtrl, posGate, T, opt)
 %     (ctrl/prism_r2_gate_b.m, 상수 T.prot_prm)를 넣어 게이트 14개(gByp, gBrk 포함)와 고장 신호 r2_flags를 낸다.
 
 if nargin < 5, opt = struct(); end
-r2c = isfield(opt, 'r2c') && opt.r2c;          % (TB10) r2b + DAB 고장 모드 변조(EPS) 게이트
+r2d = isfield(opt, 'r2d') && opt.r2d;          % (TB12) r2c + 직류 편류 없는 EPS 지령 전이(prism_gate_stageB_f.m)
+r2c = (isfield(opt, 'r2c') && opt.r2c) || r2d; % (TB10) r2b + DAB 고장 모드 변조(EPS) 게이트
 r2b = (isfield(opt, 'r2b') && opt.r2b) || r2c;  % (TB09) 측정 기반 보호 상태기계(시퀀서 대신)
 r2 = (isfield(opt, 'r2') && opt.r2) || r2b;
 % ======================= 제어기 ==========================================================
@@ -158,7 +159,11 @@ sl_add(gs, 'simulink/Sources/Constant', 'gate_prm',  [30 290 130 310], 'Value', 
 sl_add(gs, 'simulink/Sources/Constant', 'gate_init', [30 330 130 350], 'Value', [T '.gate_init']);
 sl_startup_guard(gs, 'Startup_guard', [190 125 220 215], [T '.gate_init(3)'], T, [60 190 160 210]);   % 링크전류 시작 표본 보호
 if r2c
-    sl_mfunc(gs, 'StageB_Gate', [260 60 400 280], 'prism_gate_stageB_e.m');   % SPS 생성기 + 1차 레그 2 지연(EPS)
+    if r2d
+        sl_mfunc(gs, 'StageB_Gate', [260 60 400 280], 'prism_gate_stageB_f.m');   % + 직류 편류 없는 EPS 전이
+    else
+        sl_mfunc(gs, 'StageB_Gate', [260 60 400 280], 'prism_gate_stageB_e.m');   % SPS 생성기 + 1차 레그 2 지연(EPS)
+    end
 else
     sl_mfunc(gs, 'StageB_Gate', [260 60 400 280], 'prism_gate_stageB.m');
 end
@@ -250,15 +255,15 @@ for s = 1:numel(gt)
 end
 sl_add(gs, 'simulink/Signal Routing/Goto', 'gate_aux', [460 420 + 100*r2b 560 440 + 100*r2b], 'GotoTag', 'gate_aux', 'TagVisibility', 'global');
 sl_line(gs, 'StageB_Gate/2', 'gate_aux/1');
-if r2c, gfile = 'prism_gate_stageB_e.m'; else, gfile = 'prism_gate_stageB.m'; end
+if r2d, gfile = 'prism_gate_stageB_f.m'; elseif r2c, gfile = 'prism_gate_stageB_e.m'; else, gfile = 'prism_gate_stageB.m'; end
 sl_note(gs, sprintf(['H-브리지: 유니폴라 PWM 200 kHz(반송파는 표본 시점에서 최댓값), 데드타임 50 ns.\n' ...
     'DAB: 반송파 반주기 중심에 대칭인 1·2차 에지(δ = φT/2π), 전이 반주기 평균 위상 갱신(직류 편류 방지), 데드타임 100 ns.\n' ...
     '링크전류 주기 평균을 표본 직전에 확정해 제어기의 ρ̂·ε̂ 추정에 넘긴다(aux). 코드: ctrl/%s(블록 안에 복사)'], gfile), ...
     [30 460 + 100*r2b + 260*r2c 800 520 + 100*r2b + 260*r2c], 'box');
 if r2c
-    sl_note(gs, sprintf(['DAB 고장 모드 변조(TB10, ctrl/prism_dab_eps_map.m → ctrl/prism_gate_stageB_e.m): H-브리지 강등(상태 9–11)에서 보조 링크전류 지령을\n' ...
+    sl_note(gs, sprintf(['DAB 고장 모드 변조(TB10–, ctrl/prism_dab_eps_map.m → ctrl/%s): H-브리지 강등(상태 9–11)에서 보조 링크전류 지령을\n' ...
         '1차 내부 위상천이(EPS) 지령 [φ; D1]으로 바꾼다(검증 코드 dab_modulation.py의 첨두 최소표, 첨두 ≤ 1.5 × 정격점). 레그 2를 D1·T/2 늦춰\n' ...
-        '1차 전압에 영구간을 넣는다. 그 밖의 상태에서는 SPS 생성기와 같다(eps = 0). 지령은 지역 태그 dab_eps로 생성기 입력 6에 간다']), ...
+        '1차 전압에 영구간을 넣는다. 그 밖의 상태에서는 SPS 생성기와 같다(eps = 0). 지령은 지역 태그 dab_eps로 생성기 입력 6에 간다'], gfile), ...
         [30 1010 800 1060], 'box');
 end
 if r2b

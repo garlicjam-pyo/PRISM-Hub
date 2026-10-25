@@ -1,0 +1,5 @@
+TB11 DAB fault-mode modulation with switching-aware peak table (R2-W460): design limit 1.455x rated, criterion 1.5x rated
+run  case                         limits   failed
+A    A_1008V_hbopen_25kW          FAIL     dab_peak_1p5x_rated
+B    B_930V_hbopen_25kW           FAIL     dab_peak_1p5x_rated
+TB11 overall: FAIL

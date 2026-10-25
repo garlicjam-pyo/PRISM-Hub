@@ -1,0 +1,338 @@
+[
+  {
+    "case": "A_1008V_hbopen_25kW",
+    "event": "hb_open",
+    "limits": {
+      "current_100A": true,
+      "series_120V": true,
+      "link_120V": true,
+      "bypass_current": true,
+      "bus_ge_260": true,
+      "degraded_reached": true,
+      "class_upper_while_400V_loads": true,
+      "dab_peak_1p5x_rated": false
+    },
+    "verdict": "FAIL",
+    "failed": [
+      "dab_peak_1p5x_rated"
+    ],
+    "transitions": [
+      {
+        "state": "HB_HOLD",
+        "ms": 0.505
+      },
+      {
+        "state": "HB_COLLAPSE",
+        "ms": 3.5050000000000003
+      },
+      {
+        "state": "SOFT_BYP",
+        "ms": 13.505
+      },
+      {
+        "state": "DEGRADED",
+        "ms": 14.51
+      },
+      {
+        "state": "shed_done",
+        "ms": 3.5050000000000003
+      }
+    ],
+    "final_state": "DEGRADED",
+    "clamp_err_V": -0.010075443823573896,
+    "dab": {
+      "sec_peak_A": 69.959498549045733,
+      "prim_peak_A": 15.208586641096899,
+      "ms": 5.2600000000000007,
+      "state": "HB_COLLAPSE"
+    },
+    "soft": {
+      "entry_ms": 13.505,
+      "vl_V": 1.0682562029366496,
+      "vs_V": -5.0658390834675826,
+      "ms": 1.004999999999999,
+      "energy_J": 0.027913824420781736,
+      "path_peak_A": 33.002031593398755
+    },
+    "peaks": {
+      "ip_A": 56.950583935810712,
+      "ih_A": 57.0812614470191,
+      "vs_V": 93.834102023239268,
+      "vlink_max_V": 100.02171284214238,
+      "vlink_min_V": -1.9999999973529266,
+      "ibyp_A": 34.88374157888294,
+      "bus_min_V": 409.51724583336005,
+      "bus_max_V": 503.84593113323882,
+      "bus_max_loaded_V": 460.11283126315004,
+      "brake_J": 7.5884534657163156
+    },
+    "wall_s": 672.7892053,
+    "dt_ns": 2.5,
+    "date": "2026-10-25 19:41:02",
+    "compare": [
+      {
+        "metric": "min period-mean v_bus after event [V]",
+        "simscape": 409.52303398933179,
+        "e17": 409.49739519999997,
+        "tol": 3
+      },
+      {
+        "metric": "max period-mean v_bus after event [V]",
+        "simscape": 503.84593113323882,
+        "e17": 503.8446112,
+        "tol": 3
+      },
+      {
+        "metric": "max period-mean i_p [A]",
+        "simscape": 56.945118500172363,
+        "e17": 55.96412022,
+        "tol": 5
+      },
+      {
+        "metric": "max period-mean i_h [A]",
+        "simscape": 57.077151032012694,
+        "e17": 56.067320140000007,
+        "tol": 5
+      },
+      {
+        "metric": "max period-mean v_link [V]",
+        "simscape": 100.01453742569231,
+        "e17": 100.00459414000001,
+        "tol": 2
+      },
+      {
+        "metric": "min period-mean v_link [V]",
+        "simscape": -1.9999659898926285,
+        "e17": -1.09417223,
+        "tol": 2
+      },
+      {
+        "metric": "final mean v_bus [V]",
+        "simscape": 503.83625615908966,
+        "e17": 503.83625599999988,
+        "tol": 1
+      },
+      {
+        "metric": "brake energy [J]",
+        "simscape": 7.5884534657163156,
+        "e17": 7.566320086709676,
+        "tol": null
+      },
+      {
+        "metric": "DAB link-side peak (circuit n|i_L|, E17 SPS) [A]",
+        "simscape": 69.959498549045733,
+        "e17": 66.782254473920517,
+        "tol": null
+      },
+      {
+        "metric": "soft-bypass device energy [J]",
+        "simscape": 0.027913824420781736,
+        "e17": 0.02693334104029842,
+        "tol": null
+      },
+      {
+        "metric": "transition HB_HOLD [ms]",
+        "simscape": 0.505,
+        "e17": 0.505,
+        "tol": 0.05
+      },
+      {
+        "metric": "transition HB_COLLAPSE [ms]",
+        "simscape": 3.5050000000000003,
+        "e17": 3.51,
+        "tol": 0.05
+      },
+      {
+        "metric": "transition SOFT_BYP [ms]",
+        "simscape": 13.505,
+        "e17": 13.51,
+        "tol": 0.05
+      },
+      {
+        "metric": "transition DEGRADED [ms]",
+        "simscape": 14.51,
+        "e17": 14.515,
+        "tol": 0.05
+      },
+      {
+        "metric": "transition shed_done [ms]",
+        "simscape": 3.5050000000000003,
+        "e17": 3.505,
+        "tol": 0.05
+      }
+    ],
+    "run": "A"
+  },
+  {
+    "case": "B_930V_hbopen_25kW",
+    "event": "hb_open",
+    "limits": {
+      "current_100A": true,
+      "series_120V": true,
+      "link_120V": true,
+      "bypass_current": true,
+      "bus_ge_260": true,
+      "degraded_reached": true,
+      "class_upper_while_400V_loads": true,
+      "dab_peak_1p5x_rated": true
+    },
+    "verdict": "PASS",
+    "failed": [],
+    "transitions": [
+      {
+        "state": "HB_HOLD",
+        "ms": 0.505
+      },
+      {
+        "state": "HB_COLLAPSE",
+        "ms": 3.5050000000000003
+      },
+      {
+        "state": "SOFT_BYP",
+        "ms": 12.97
+      },
+      {
+        "state": "DEGRADED",
+        "ms": 13.975000000000001
+      },
+      {
+        "state": "shed_done",
+        "ms": 3.5050000000000003
+      },
+      {
+        "state": "restore",
+        "ms": 14.475000000000001
+      }
+    ],
+    "final_state": "DEGRADED",
+    "clamp_err_V": -0.00974993613383182,
+    "dab": {
+      "sec_peak_A": 68.518179351261765,
+      "prim_peak_A": 14.895256380709082,
+      "ms": 5.295,
+      "state": "HB_COLLAPSE"
+    },
+    "soft": {
+      "entry_ms": 12.97,
+      "vl_V": 0.49423704146365549,
+      "vs_V": -4.4924055363168653,
+      "ms": 1.0050000000000008,
+      "energy_J": 0.025750734390199988,
+      "path_peak_A": 32.529392073680839
+    },
+    "peaks": {
+      "ip_A": 57.943153313204512,
+      "ih_A": 57.796764846114684,
+      "vs_V": 83.799392120641841,
+      "vlink_max_V": 100.06155327464297,
+      "vlink_min_V": -1.99999999745641,
+      "ibyp_A": 56.2781430375648,
+      "bus_min_V": 380.41081661001675,
+      "bus_max_V": 464.83204337121015,
+      "bus_max_loaded_V": 464.5755083052797,
+      "brake_J": 6.3302538392016441
+    },
+    "wall_s": 598.320512,
+    "dt_ns": 2.5,
+    "date": "2026-10-25 19:51:05",
+    "compare": [
+      {
+        "metric": "min period-mean v_bus after event [V]",
+        "simscape": 380.41407437619984,
+        "e17": 380.53606279999997,
+        "tol": 3
+      },
+      {
+        "metric": "max period-mean v_bus after event [V]",
+        "simscape": 464.83204337121015,
+        "e17": 464.8307866,
+        "tol": 3
+      },
+      {
+        "metric": "max period-mean i_p [A]",
+        "simscape": 57.216409254714158,
+        "e17": 56.274958960000006,
+        "tol": 5
+      },
+      {
+        "metric": "max period-mean i_h [A]",
+        "simscape": 52.248350908883261,
+        "e17": 54.29253378,
+        "tol": 5
+      },
+      {
+        "metric": "max period-mean v_link [V]",
+        "simscape": 100.05341552250759,
+        "e17": 100.02370900000001,
+        "tol": 2
+      },
+      {
+        "metric": "min period-mean v_link [V]",
+        "simscape": -1.9999676463764295,
+        "e17": -1.23208836,
+        "tol": 2
+      },
+      {
+        "metric": "final mean v_bus [V]",
+        "simscape": 464.11120423921977,
+        "e17": 464.11120400000038,
+        "tol": 1
+      },
+      {
+        "metric": "brake energy [J]",
+        "simscape": 6.3302538392016441,
+        "e17": 6.2055073998641506,
+        "tol": null
+      },
+      {
+        "metric": "DAB link-side peak (circuit n|i_L|, E17 SPS) [A]",
+        "simscape": 68.518179351261765,
+        "e17": 66.79745173714349,
+        "tol": null
+      },
+      {
+        "metric": "soft-bypass device energy [J]",
+        "simscape": 0.025750734390199988,
+        "e17": 0.024483179435620846,
+        "tol": null
+      },
+      {
+        "metric": "transition HB_HOLD [ms]",
+        "simscape": 0.505,
+        "e17": 0.505,
+        "tol": 0.05
+      },
+      {
+        "metric": "transition HB_COLLAPSE [ms]",
+        "simscape": 3.5050000000000003,
+        "e17": 3.51,
+        "tol": 0.05
+      },
+      {
+        "metric": "transition SOFT_BYP [ms]",
+        "simscape": 12.97,
+        "e17": 12.92,
+        "tol": 0.05
+      },
+      {
+        "metric": "transition DEGRADED [ms]",
+        "simscape": 13.975000000000001,
+        "e17": 13.925,
+        "tol": 0.05
+      },
+      {
+        "metric": "transition shed_done [ms]",
+        "simscape": 3.5050000000000003,
+        "e17": 3.505,
+        "tol": 0.05
+      },
+      {
+        "metric": "transition restore [ms]",
+        "simscape": 14.475000000000001,
+        "e17": 14.4251,
+        "tol": 0.05
+      }
+    ],
+    "run": "B"
+  }
+]

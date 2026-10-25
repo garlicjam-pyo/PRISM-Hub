@@ -31,6 +31,7 @@ STEPS = [
     ("E19", ["E19_r2_window_module.py"]),
     ("E17", ["E17_protection_integration.py"]),  # E12·E14·E19 모델을 쓰므로 마지막에(monitor·r2·figures)
     ("E20", ["E20_dab_fault_modulation.py"]),    # E17 상태기계를 쓴다(table·compare·figures, 약 10분)
+    ("E21", ["E21_dab_switching_margin.py"]),    # 스위칭 표(모듈당 약 2분) + E17 상태기계(table·compare·figures)
 ]
 
 if __name__ == "__main__":

@@ -1,0 +1,82 @@
+[prism_run] run_TB11 start 2026-10-25 19:06:18
+TB11 case A_1008V_hbopen_25kW (V_bat 1008 V, 25 kW, event hb_open), dt 2.50 ns, wall 710 s
+(1) circuit limits:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    dab_peak_1p5x_rated            FAIL
+    instantaneous: |i_p| 57.2 A, |i_h| 57.3 A, |v_s| 93.8 V, v_link -2.0-100.0 V, |i_byp| 34.9 A; bus(5 us) 409.6-503.8 V (loaded max 460.1 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = -0.010 V
+    DAB stress (info): link-side peak n|i_L| 88.5 A (primary 19.2 A) at 5.215 ms in HB_COLLAPSE; rated-point link-side peak (E17 SPS) 45.8 A
+    DAB peak in state 9 (HB_HOLD): n|i_L| 58.5 A (design 1.455x 66.7 A, limit 1.5x 68.7 A)
+    DAB peak in state 10 (HB_COLLAPSE): n|i_L| 88.5 A (design 1.455x 66.7 A, limit 1.5x 68.7 A)
+    DAB peak in state 11 (SOFT_BYP): n|i_L| 22.1 A (design 1.455x 66.7 A, limit 1.5x 68.7 A)
+    soft bypass (info): entry 13.505 ms (v_link 1.06 V, v_s -5.06 V), duration 1.005 ms, device energy 0.0279 J, path instantaneous peak 33.0 A
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]             409.57       409.5    +0.073        ok
+    max period-mean v_bus after event [V]             503.85      503.84  +0.00132        ok
+    max period-mean i_p [A]                           57.178      55.964     +1.21        ok
+    max period-mean i_h [A]                           57.277      56.067     +1.21        ok
+    max period-mean v_link [V]                        100.01         100  +0.00994        ok
+    min period-mean v_link [V]                            -2     -1.0942    -0.906        ok
+    final mean v_bus [V]                              503.84      503.84 +1.59e-07        ok
+    brake energy [J]                                  7.5728      7.5663  +0.00649      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      88.505      66.782     +21.7      info
+    soft-bypass device energy [J]                   0.027895    0.026933 +0.000962      info
+    transition HB_HOLD [ms]                            0.505       0.505        +0        ok
+    transition HB_COLLAPSE [ms]                        3.505        3.51    -0.005        ok
+    transition SOFT_BYP [ms]                          13.505       13.51    -0.005        ok
+    transition DEGRADED [ms]                           14.51      14.515    -0.005        ok
+    transition shed_done [ms]                          3.505       3.505 +4.44e-16        ok
+    final state: DEGRADED
+VERDICT A_1008V_hbopen_25kW: FAIL
+A done (710 s): FAIL
+TB11 case B_930V_hbopen_25kW (V_bat 930 V, 25 kW, event hb_open), dt 2.50 ns, wall 648 s
+(1) circuit limits:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    dab_peak_1p5x_rated            FAIL
+    instantaneous: |i_p| 57.9 A, |i_h| 57.8 A, |v_s| 83.5 V, v_link -2.0-100.1 V, |i_byp| 56.3 A; bus(5 us) 380.6-464.8 V (loaded max 464.6 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = -0.010 V
+    DAB stress (info): link-side peak n|i_L| 68.9 A (primary 15.0 A) at 5.280 ms in HB_COLLAPSE; rated-point link-side peak (E17 SPS) 45.8 A
+    DAB peak in state 9 (HB_HOLD): n|i_L| 62.7 A (design 1.455x 66.7 A, limit 1.5x 68.7 A)
+    DAB peak in state 10 (HB_COLLAPSE): n|i_L| 68.9 A (design 1.455x 66.7 A, limit 1.5x 68.7 A)
+    DAB peak in state 11 (SOFT_BYP): n|i_L| 17.6 A (design 1.455x 66.7 A, limit 1.5x 68.7 A)
+    soft bypass (info): entry 12.940 ms (v_link 0.49 V, v_s -4.49 V), duration 1.005 ms, device energy 0.0258 J, path instantaneous peak 32.5 A
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]              380.6      380.54   +0.0678        ok
+    max period-mean v_bus after event [V]             464.83      464.83  +0.00126        ok
+    max period-mean i_p [A]                           57.216      56.275    +0.941        ok
+    max period-mean i_h [A]                           55.693      54.293      +1.4        ok
+    max period-mean v_link [V]                        100.05      100.02   +0.0297        ok
+    min period-mean v_link [V]                            -2     -1.2321    -0.768        ok
+    final mean v_bus [V]                              464.11      464.11 +2.39e-07        ok
+    brake energy [J]                                  6.2092      6.2055  +0.00371      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      68.939      66.797     +2.14      info
+    soft-bypass device energy [J]                   0.025765    0.024483  +0.00128      info
+    transition HB_HOLD [ms]                            0.505       0.505        +0        ok
+    transition HB_COLLAPSE [ms]                        3.505        3.51    -0.005        ok
+    transition SOFT_BYP [ms]                           12.94       12.92     +0.02        ok
+    transition DEGRADED [ms]                          13.945      13.925     +0.02        ok
+    transition shed_done [ms]                          3.505       3.505 +4.44e-16        ok
+    transition restore [ms]                           14.445      14.425   +0.0199        ok
+    final state: DEGRADED
+VERDICT B_930V_hbopen_25kW: FAIL
+B done (648 s): FAIL
+TB11 DAB fault-mode modulation with switching-aware peak table (R2-W460): design limit 1.455x rated, criterion 1.5x rated
+run  case                         limits   failed
+A    A_1008V_hbopen_25kW          FAIL     dab_peak_1p5x_rated
+B    B_930V_hbopen_25kW           FAIL     dab_peak_1p5x_rated
+TB11 overall: FAIL
+[prism_run] run_TB11 finished (1380.5 s)
