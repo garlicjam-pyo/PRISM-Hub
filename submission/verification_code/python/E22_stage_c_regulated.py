@@ -466,13 +466,15 @@ def dcx():
 # zvs: 레그 출력용량을 넣은 DCX로 L_m·데드타임 정하기(TB14 1차 실행에서 ZVS가 깨져 추가)
 # ---------------------------------------------------------------------------------------------
 @njit(cache=True)
-def _dcx_legs(VI, Vo, n, Lr, Cr, Lm, R1, R2, fs, td, Cp, Cs, vf, ndt, ncyc, nlast, mode):
+def _dcx_legs(VI, Vo, n, Lr, Cr, Lm, R1, R2, fs, td, Cp, Cs, vf, ndt, ncyc, nlast, mode, drv=0, tdr=0.):
     """CLLC DCX + 레그 노드 4개(1차 A·B, 2차 a·b)의 출력용량과 다이오드 클램프(TB14 회로와 같은 구성).
     탱크는 1차 환산 [v_C1, i_m, i_2', v_C2](i_1 = i_m + i_2'), 반암시적 오일러(전류 먼저, 전압은 새 전류로), 간격 T/ndt.
     보내는 쪽 브리지만 게이트(데드타임 td), 받는 쪽은 모두 꺼짐(출력용량 + 역병렬 다이오드 Vf = 이상 동기정류 근사).
     꺼진 노드는 들어오는 전류로 C(레그 = 소자 2개 × 병렬)를 충방전하고 레일 ± Vf에서 묶인다.
-    반환: [P_in, P_out(1차 → 2차 +), 보내는 쪽 켜짐 직전 V_ds 최대, 켜짐 횟수, i_1 실효](마지막 nlast주기)"""
-    T = 1. / fs; dt = T / ndt; nd = int(round(td / dt)); half = ndt // 2
+    drv = 1이면 받는 쪽 브리지도 같은 위상으로 구동한다(데드타임 tdr, 대책 점검용).
+    반환: [P_in, P_out(1차 → 2차 +), 보내는 쪽 켜짐 직전 V_ds 최대, 켜짐 횟수, i_1 실효,
+           받는 쪽 켜짐 직전 V_ds 최대(drv = 1일 때)](마지막 nlast주기)"""
+    T = 1. / fs; dt = T / ndt; nd = int(round(td / dt)); half = ndt // 2; ndr = int(round(tdr / dt))
     L1 = Lr; L2 = Lr; C1 = Cr; C2 = Cr
     ginv = 1. / (1. / L1 + 1. / Lm + 1. / L2)
     vc1 = 0.; vc2 = 0.; im = -VI / (4. * Lm * fs); i2 = 0.
@@ -480,7 +482,7 @@ def _dcx_legs(VI, Vo, n, Lr, Cr, Lm, R1, R2, fs, td, Cp, Cs, vf, ndt, ncyc, nlas
     v = np.zeros(4)
     v[0] = VI; v[1] = 0.; v[2] = Vo; v[3] = 0.
     rail = np.array([VI, VI, Vo, Vo]); cap = np.array([Cp, Cp, Cs, Cs])
-    pin = 0.; pout = 0.; vmax = 0.; ne = 0; i1sq = 0.
+    pin = 0.; pout = 0.; vmax = 0.; ne = 0; i1sq = 0.; vmaxr = 0.
     prev_on = np.array([1, 0, 1, 0])          # 각 레그 상측 켬(1)·하측 켬(0)·둘 다 꺼짐(-1)
     for k in range(ncyc * ndt):
         m = k % ndt
@@ -501,15 +503,35 @@ def _dcx_legs(VI, Vo, n, Lr, Cr, Lm, R1, R2, fs, td, Cp, Cs, vf, ndt, ncyc, nlas
             else:
                 st[2] = 1 if sp > 0 else 0
                 st[3] = 0 if sp > 0 else 1
+        if drv == 1:                               # 받는 쪽 같은 위상 구동(데드타임 tdr)
+            if m < ndr:
+                sr = 0
+            elif m < half:
+                sr = 1
+            elif m < half + ndr:
+                sr = 0
+            else:
+                sr = -1
+            if sr != 0:
+                if mode > 0:
+                    st[2] = 1 if sr > 0 else 0
+                    st[3] = 0 if sr > 0 else 1
+                else:
+                    st[0] = 1 if sr > 0 else 0
+                    st[1] = 0 if sr > 0 else 1
         last = k >= (ncyc - nlast) * ndt
         # 켜짐 직전 V_ds
         if last:
             for j in range(4):
                 if st[j] != -1 and prev_on[j] == -1:
                     vds = rail[j] - v[j] if st[j] == 1 else v[j]
-                    if abs(vds) > vmax:
-                        vmax = abs(vds)
-                    ne += 1
+                    send = (j < 2 and mode > 0) or (j >= 2 and mode < 0)
+                    if send:
+                        if abs(vds) > vmax:
+                            vmax = abs(vds)
+                        ne += 1
+                    elif abs(vds) > vmaxr:
+                        vmaxr = abs(vds)
         for j in range(4):
             prev_on[j] = st[j]
         for j in range(4):
@@ -539,27 +561,56 @@ def _dcx_legs(VI, Vo, n, Lr, Cr, Lm, R1, R2, fs, td, Cp, Cs, vf, ndt, ncyc, nlas
             pout += vs * i2 * dt
             i1sq += i1 * i1 * dt
     Tl = nlast * T
-    return np.array([pin / Tl, pout / Tl, vmax, ne, math.sqrt(i1sq / Tl)])
+    return np.array([pin / Tl, pout / Tl, vmax, ne, math.sqrt(i1sq / Tl), vmaxr])
 
 
-def legs_solve(c, Lm, td, Po, Vo, cscale=1., ndt=4000, ncyc=300, nlast=10):
-    """레그 모델에서 P_out = Po가 되는 V_I(할선법). cscale: 출력용량 배율(공차 점검). 반환: (V_I, 결과 배열).
-    경부하 역방향(−200 W)은 P(V_I)가 평평해 할선법이 목표 근처에서 멈출 수 있어, 실제 P_out을 함께 기록한다."""
-    Cp = cscale * 2 * c["np"] * DEV["GaN650"]["Ctr"]; Cs = cscale * 2 * c["ns"] * DEV["GaN150"]["Ctr"]
+def legs_point(c, Lm, td, VI, Vo, mode, cscale=1., ndt=4000, ncyc=300, nlast=10, cpscale=1., drv=0, tdr=0.):
+    """레그 모델 한 점(V_I·V_o 고정): [P_in, P_out, 보내는 쪽 V_ds 최대, 켜짐 횟수, i_1 실효, 받는 쪽 V_ds 최대].
+    cpscale: 1차 레그 용량만 곱함(원인 점검), drv·tdr: 받는 쪽 구동(대책 점검)."""
+    Cp = cpscale * cscale * 2 * c["np"] * DEV["GaN650"]["Ctr"]; Cs = cscale * 2 * c["ns"] * DEV["GaN150"]["Ctr"]
+    return _dcx_legs(VI, Vo, c["n"], c["Lr"], c["Cr"], Lm, c["R1"], c["R2"], c["fr"], td, Cp, Cs, 0.05, ndt, ncyc, nlast, mode,
+                     drv, tdr)
+
+
+LEGS_BRACKET = {1: (0.97, 1.06), -1: (0.94, 1.15)}      # V_I / (n·V_o) 탐색 구간(보내는 쪽별)
+
+
+def legs_solve(c, Lm, td, Po, Vo, cscale=1.):
+    """레그 모델에서 P_out = Po가 되는 V_I. P_out은 V_I에 대해 단조 증가이므로 구간을 묶은 할선법(Illinois)으로 푼다.
+    목표가 구간 밖이면(역방향 경부하: 받는 쪽 1차 레그 용량 때문에 이득이 올라 V_I를 크게 올려도 전력이 줄지 않음)
+    가까운 구간 끝을 운전점으로 쓰고 reached = False로 표시한다.
+    반환: (V_I, 결과 배열, reached). 처음 판은 묶지 않은 할선법이라 역방향 −200 W(출력용량 ×0.8)에서 V_I가 1만 V대로 발산했다."""
     mode = 1 if Po >= 0 else -1
-    f = lambda VI: _dcx_legs(VI, Vo, c["n"], c["Lr"], c["Cr"], Lm, c["R1"], c["R2"], c["fr"], td, Cp, Cs, 0.05, ndt, ncyc, nlast, mode)
     V0 = c["n"] * Vo
-    a, b = V0 * (1 + 0.004 * np.sign(Po)), V0 * (1 + 0.03 * np.sign(Po))
+    f = lambda VI: legs_point(c, Lm, td, VI, Vo, mode, cscale)
+    a, b = V0 * LEGS_BRACKET[mode][0], V0 * LEGS_BRACKET[mode][1]
     ra, rb = f(a), f(b)
-    for _ in range(25):
-        if abs(rb[1] - Po) < max(5., 0.003 * abs(Po)) or abs(b - a) < 1e-4:
+    ga, gb = ra[1] - Po, rb[1] - Po
+    if ga > 0:
+        return a, ra, False
+    if gb < 0:
+        return b, rb, False
+    tol = max(5., 0.003 * abs(Po)); side = 0
+    x, rx = a, ra
+    for _ in range(40):
+        x = b - gb * (b - a) / (gb - ga)
+        rx = f(x); gx = rx[1] - Po
+        if abs(gx) < tol or abs(b - a) < 1e-3:
             break
-        a, b, ra = b, b - (rb[1] - Po) * (b - a) / (rb[1] - ra[1]), rb
-        rb = f(b)
-    return b, rb
+        if gx * gb > 0:
+            b, gb = x, gx
+            if side == 1:
+                ga *= 0.5
+            side = 1
+        else:
+            a, ga = x, gx
+            if side == -1:
+                gb *= 0.5
+            side = -1
+    return x, rx, True
 
 
-ZVS_LM = (62.2e-6, 50e-6, 42e-6, 36e-6, 30e-6)
+ZVS_LM = (62.2e-6, 50e-6, 42e-6, 36e-6, 33e-6, 30e-6)
 ZVS_TDP = (100e-9, 150e-9, 200e-9)                 # 1차가 보낼 때 데드타임 후보(성긴 격자)
 ZVS_TDS = (30e-9, 40e-9, 50e-9, 70e-9, 100e-9)     # 2차가 보낼 때 데드타임 후보(성긴 격자)
 ZVS_TDP_FINE = tuple(x * 1e-9 for x in range(40, 161, 10))   # 고른 L_m에서 촘촘한 격자: 통과 창의 가운데를 고른다
@@ -568,16 +619,16 @@ ZVS_CTOL = (0.8, 1.2)                              # 출력용량 공차(온도�
 ZVS_LIM = 5.                                       # 판정: 켜짐 직전 V_ds ≤ 레일의 5 %
 FWD_PTS = [(VO_NOM, P) for P in (100., 1500., 3000., PO_MAX)] + [(VO_CV[0], 100.), (VO_CV[0], IO_MAX * VO_CV[0]),
                                                                   (VO_CV[1], 100.), (VO_CV[1], PO_MAX)]
-REV_PTS = [(VO_NOM, P) for P in (-200., -1500., PO_REV)] + [(VO_CV[0], PO_REV), (VO_CV[1], PO_REV)]
+REV_PTS = [(VO_NOM, P) for P in (-500., -1500., PO_REV)] + [(VO_CV[0], PO_REV), (VO_CV[1], PO_REV)]   # 경부하 −0.5 kW(gain 파트 참고)
 
 
 def _td_case(c, Lm, td, d, cscale=1.):
     """한 (L_m, 데드타임, 방향)의 모든 점 계산. d = 'fwd'(1차가 보냄, 기준 V_I) 또는 'rev'(2차가 보냄, 기준 V_o)."""
     w = 0.; rows = []
     for Vo, Po in (FWD_PTS if d == "fwd" else REV_PTS):
-        VI, r = legs_solve(c, Lm, td, Po, Vo, cscale)
+        VI, r, ok = legs_solve(c, Lm, td, Po, Vo, cscale)
         ref = VI if d == "fwd" else Vo
-        rows.append(dict(Vo=Vo, Po=Po, VI=VI, Pout=r[1], vds=r[2], vds_pct=100 * r[2] / ref, i1=r[4]))
+        rows.append(dict(Vo=Vo, Po=Po, VI=VI, Pout=r[1], vds=r[2], vds_pct=100 * r[2] / ref, i1=r[4], reached=ok))
         w = max(w, 100 * r[2] / ref)
     return dict(dir=d, Lm=Lm, td=td, cscale=cscale, worst_pct=w, rows=rows)
 
@@ -619,9 +670,11 @@ def _window(entries, td0):
 def zvs():
     """레그 출력용량을 넣은 DCX로 L_m과 보내는 쪽별 데드타임을 정한다.
     1) 성긴 격자(L_m 5개 × 데드타임): 두 방향 모두 V_ds ≤ 5 %인 데드타임이 있는 가장 큰 L_m(순환전류·손실 최소)
-    2) 그 L_m에서 촘촘한 격자를 출력용량 ×1·×0.8·×1.2로 계산해, 세 경우 모두 통과하는 구간(공차 창)의 가운데 데드타임.
-       공차 창이 없으면 공칭 창의 가운데를 쓰고 공차 불통과로 기록한다.
-    처음 1차 실행(공칭 창 가운데 90·35 ns)은 공차 점검에서 −200 W(×0.8)·36 V 3.78 kW(×1.2)가 깨져 2)를 공차 창으로 바꿨다."""
+    2) 그 L_m부터 작은 쪽으로 촘촘한 격자를 출력용량 ×1·×0.8·×1.2로 계산해, 두 방향 모두 세 경우를 통과하는 구간
+       (공차 창)이 생기는 가장 큰 L_m과 그 창의 가운데 데드타임을 고른다. 어디에도 없으면 가장 큰 L_m의 공칭 창 가운데.
+    처음 판(공칭 창 가운데, L_m 36 µH·90·35 ns)은 공차 점검에서 36 V 3.78 kW(×1.2)가 7.7 %였고, 역방향 −200 W(×0.8)는
+    할선법이 발산했다(V_I 1만 V대). 그래서 2)를 공차 창으로, 풀이를 구간을 묶은 할선법으로 바꿨다. 역방향 경부하 점은
+    −0.5 kW로 두었다(−0.2 kW는 받는 쪽 1차 레그 용량 때문에 이득이 올라 V_I를 n·V_o의 1.15배까지 올려도 닿지 않음, gain 파트)."""
     c = selected(apply_zvs=False)
     print("  레그 모델 점검(처음 설계 L_m %.1f µH, 데드타임 100 ns): TB14 1차 실행은 1차 V_ds 51.8–68.5 V, 2차 48.0 V(−3 kW)" % (c["Lm"] * 1e6))
     jobs = [(Lm, td, "fwd", 1.) for Lm in ZVS_LM for td in ZVS_TDP] + [(Lm, td, "rev", 1.) for Lm in ZVS_LM for td in ZVS_TDS]
@@ -629,41 +682,50 @@ def zvs():
     for e in sweep:
         print("  %s: L_m %4.1f µH, t_d %3.0f ns → V_ds 최대 %5.1f %%" % ("1차 → 2차" if e["dir"] == "fwd" else "2차 → 1차",
                                                                    e["Lm"] * 1e6, e["td"] * 1e9, e["worst_pct"]))
-    coarse = None
+    passing = []                                      # 성긴 격자에서 두 방향 모두 통과하는 L_m(큰 것부터)
     for Lm in ZVS_LM:
         f = [x for x in sweep if x["dir"] == "fwd" and x["Lm"] == Lm and x["worst_pct"] <= ZVS_LIM]
         r = [x for x in sweep if x["dir"] == "rev" and x["Lm"] == Lm and x["worst_pct"] <= ZVS_LIM]
         if f and r:
-            coarse = dict(Lm=Lm, td_p=min(f, key=lambda x: x["td"])["td"], td_s=min(r, key=lambda x: x["worst_pct"])["td"])
-            break
-    choice = None; fine = []
-    if coarse:
-        Lm = coarse["Lm"]
-        print("  성긴 격자 선택: L_m %.1f µH(1차 %.0f ns, 2차 %.0f ns 통과) → 촘촘한 격자 × 출력용량 ×1·×0.8·×1.2"
-              % (Lm * 1e6, coarse["td_p"] * 1e9, coarse["td_s"] * 1e9))
+            passing.append(dict(Lm=Lm, td_p=min(f, key=lambda x: x["td"])["td"], td_s=min(r, key=lambda x: x["worst_pct"])["td"]))
+    coarse = passing[0] if passing else None
+    choice = None; fine = []; tried = []
+    fmt = lambda w: ("%.0f–%.0f ns" % (w[0] * 1e9, w[1] * 1e9)) if w else "없음"
+    for cand in passing:                              # 공차 창이 생기는 가장 큰 L_m까지 내려간다
+        Lm = cand["Lm"]
+        print("  L_m %.1f µH(성긴 격자 1차 %.0f ns, 2차 %.0f ns 통과) → 촘촘한 격자 × 출력용량 ×1·×0.8·×1.2"
+              % (Lm * 1e6, cand["td_p"] * 1e9, cand["td_s"] * 1e9))
         jobs = [(Lm, td, "fwd", k) for k in (1.,) + ZVS_CTOL for td in ZVS_TDP_FINE] + \
                [(Lm, td, "rev", k) for k in (1.,) + ZVS_CTOL for td in ZVS_TDS_FINE]
-        fine = _run_cases(c, jobs)
+        fl = _run_cases(c, jobs); fine += fl
         for d, grid in (("fwd", ZVS_TDP_FINE), ("rev", ZVS_TDS_FINE)):
             for td in grid:
-                v = [x["worst_pct"] for k in (1.,) + ZVS_CTOL for x in fine if x["dir"] == d and x["td"] == td and x["cscale"] == k]
+                v = [x["worst_pct"] for k in (1.,) + ZVS_CTOL for x in fl if x["dir"] == d and x["td"] == td and x["cscale"] == k]
                 print("    %s t_d %3.0f ns → V_ds 최대 %5.1f %%(×1), %5.1f %%(×0.8), %5.1f %%(×1.2)"
                       % ("1차 → 2차" if d == "fwd" else "2차 → 1차", td * 1e9, v[0], v[1], v[2]))
-        nom = {d: _window([x for x in fine if x["dir"] == d and x["cscale"] == 1.], coarse["td_p" if d == "fwd" else "td_s"])
+        nom = {d: _window([x for x in fl if x["dir"] == d and x["cscale"] == 1.], cand["td_p" if d == "fwd" else "td_s"])
                for d in ("fwd", "rev")}
-        rob = {d: _window([x for x in fine if x["dir"] == d], coarse["td_p" if d == "fwd" else "td_s"]) for d in ("fwd", "rev")}
-        if nom["fwd"] and nom["rev"]:
-            use = {d: (rob[d] or nom[d]) for d in ("fwd", "rev")}
-            choice = dict(Lm=Lm, td_p=use["fwd"]["td"], td_s=use["rev"]["td"],
-                          window_p=[nom["fwd"]["lo"], nom["fwd"]["hi"]], window_s=[nom["rev"]["lo"], nom["rev"]["hi"]],
-                          robust_p=[rob["fwd"]["lo"], rob["fwd"]["hi"]] if rob["fwd"] else None,
-                          robust_s=[rob["rev"]["lo"], rob["rev"]["hi"]] if rob["rev"] else None,
-                          worst_fwd_pct=use["fwd"]["worst_pct"], worst_rev_pct=use["rev"]["worst_pct"],
-                          robust=bool(rob["fwd"] and rob["rev"]))
-            fmt = lambda w: ("%.0f–%.0f ns" % (w[0] * 1e9, w[1] * 1e9)) if w else "없음"
-            print("  통과 창(공칭): 1차 %s, 2차 %s / 공차 창(×0.8·×1·×1.2 모두): 1차 %s, 2차 %s → t_d 1차 %.0f ns, 2차 %.0f ns"
-                  % (fmt(choice["window_p"]), fmt(choice["window_s"]), fmt(choice["robust_p"]), fmt(choice["robust_s"]),
-                     choice["td_p"] * 1e9, choice["td_s"] * 1e9))
+        rob = {d: _window([x for x in fl if x["dir"] == d], cand["td_p" if d == "fwd" else "td_s"]) for d in ("fwd", "rev")}
+        if not (nom["fwd"] and nom["rev"]):
+            continue
+        use = {d: (rob[d] or nom[d]) for d in ("fwd", "rev")}
+        ch = dict(Lm=Lm, td_p=use["fwd"]["td"], td_s=use["rev"]["td"],
+                  window_p=[nom["fwd"]["lo"], nom["fwd"]["hi"]], window_s=[nom["rev"]["lo"], nom["rev"]["hi"]],
+                  robust_p=[rob["fwd"]["lo"], rob["fwd"]["hi"]] if rob["fwd"] else None,
+                  robust_s=[rob["rev"]["lo"], rob["rev"]["hi"]] if rob["rev"] else None,
+                  worst_fwd_pct=use["fwd"]["worst_pct"], worst_rev_pct=use["rev"]["worst_pct"],
+                  robust=bool(rob["fwd"] and rob["rev"]))
+        tried.append(ch)
+        print("  통과 창(공칭): 1차 %s, 2차 %s / 공차 창(×0.8·×1·×1.2 모두): 1차 %s, 2차 %s"
+              % (fmt(ch["window_p"]), fmt(ch["window_s"]), fmt(ch["robust_p"]), fmt(ch["robust_s"])))
+        if ch["robust"]:
+            choice = ch
+            break
+    if choice is None and tried:
+        choice = tried[0]                              # 공차 창이 어디에도 없으면 가장 큰 L_m의 공칭 창 가운데
+    if choice:
+        print("  선택: L_m %.1f µH, t_d 1차 %.0f ns, 2차 %.0f ns(공차 창 %s)"
+              % (choice["Lm"] * 1e6, choice["td_p"] * 1e9, choice["td_s"] * 1e9, "있음" if choice["robust"] else "없음"))
     verdict("(zvs) 두 방향 모두 V_ds ≤ 5 %인 L_m·데드타임 존재(공칭 출력용량)", choice is not None,
             ("L_m %.1f µH, t_d 1차 %.0f ns·2차 %.0f ns" % (choice["Lm"] * 1e6, choice["td_p"] * 1e9, choice["td_s"] * 1e9)) if choice else "없음")
     if choice:
@@ -675,8 +737,148 @@ def zvs():
         loss = {str(P): dcx_loss(c2, P, VO_NOM, c["np"], c["ns"])[0]["total"] - dcx_loss(c, P, VO_NOM, c["np"], c["ns"])[0]["total"]
                 for P in (1500., PO_MAX)}
         print("  L_m 변경에 따른 DCX 손실 증가: 1.5 kW %+.1f W, 5 kW %+.1f W" % (loss["1500.0"], loss["5000.0"]))
-    save_json(EID, "zvs", dict(sweep=sweep, coarse=coarse, fine=fine, choice=choice, loss_delta=loss, Lm0=c["Lm"],
+    save_json(EID, "zvs", dict(sweep=sweep, coarse=coarse, fine=fine, tried=tried, choice=choice, loss_delta=loss, Lm0=c["Lm"],
                                Cp=2 * c["np"] * DEV["GaN650"]["Ctr"], Cs=2 * c["ns"] * DEV["GaN150"]["Ctr"], vf=0.05, lim_pct=ZVS_LIM))
+
+
+# ---------------------------------------------------------------------------------------------
+# gain: 레그 모델의 DCX 이득(경부하). zvs 파트에서 역방향 −0.2 kW가 풀리지 않아 추가
+# ---------------------------------------------------------------------------------------------
+GAIN_K_REV = (0.98, 0.99, 1.0, 1.01, 1.02, 1.03, 1.05, 1.08, 1.12, 1.15)   # V_I / (n·V_o)
+GAIN_K_FWD = (0.94, 0.97, 0.99, 1.0, 1.01, 1.02)
+
+
+def _p_at_k(rows, k):
+    """P(k) 선형 보간(rows: (k, P) 오름차순)."""
+    ks = [r[0] for r in rows]; ps = [r[1] for r in rows]
+    return float(np.interp(k, ks, ps))
+
+
+def gain():
+    """선택한 설계(zvs 반영)에서 V_I를 고정하고 전력을 본다(레그 모델, 공칭 출력용량).
+    역방향: 받는 쪽 1차 레그 용량 때문에 경부하에서 V_I를 n·V_o보다 올려도 전력이 0으로 가지 않는다(이득 상승).
+    (1) 원인 점검: 1차 레그 용량을 1/100로 줄인 경우. (2) 이득 1 ± 3 %(V_I ≤ 1.03·n·V_o)가 되는 최소 역방향 전력.
+    (3) 270 V 버스에서 벅이 V_I를 받을 수 있는 한계(V_I ≤ D_max·270 V)에서의 최소 역방향 전력.
+    (4) 대책 후보 점검: 받는 쪽(1차)도 같은 위상으로 구동하면 이득은 1로 돌아오지만 보내는 쪽 ZVS가 깨진다(손실 추정)."""
+    c = selected()
+    Lm, tds, tdp = c["Lm"], c["td_s"], c["td_p"]
+    print("  설계: L_m %.1f µH, t_d 1차 %.0f ns·2차 %.0f ns" % (Lm * 1e6, tdp * 1e9, tds * 1e9))
+    out = dict(rev={}, fwd={}, cause={}, drive={})
+    for Vo in (VO_CV[0], VO_NOM, VO_CV[1]):
+        V0 = c["n"] * Vo
+        rows = [(k, float(legs_point(c, Lm, tds, k * V0, Vo, -1)[1])) for k in GAIN_K_REV]
+        out["rev"][str(Vo)] = rows
+        kmax = DMAX * VBUS[0] / V0
+        out["rev"][str(Vo) + "_knee"] = dict(P_k103=_p_at_k(rows, 1.03), kmax_270=kmax, P_kmax_270=_p_at_k(rows, min(kmax, GAIN_K_REV[-1])))
+        print("  역방향 V_o %4.1f V: " % Vo + ", ".join("%.2f→%.0f W" % (k, p) for k, p in rows))
+        print("      이득 0.97(V_I = 1.03·n·V_o)에서 %.0f W, 270 V 버스 벅 한계 V_I/(n·V_o) = %.3f에서 %.0f W"
+              % (out["rev"][str(Vo) + "_knee"]["P_k103"], kmax, out["rev"][str(Vo) + "_knee"]["P_kmax_270"]))
+    V0 = c["n"] * VO_NOM
+    out["fwd"] = [(k, float(legs_point(c, Lm, tdp, k * V0, VO_NOM, 1)[1])) for k in GAIN_K_FWD]
+    print("  정방향 V_o 48 V: " + ", ".join("%.2f→%.0f W" % (k, p) for k, p in out["fwd"]))
+    out["cause"] = [(k, float(legs_point(c, Lm, tds, k * V0, VO_NOM, -1, cpscale=0.01)[1])) for k in (1.0, 1.03, 1.06)]
+    print("  원인 점검(1차 레그 용량 × 0.01): " + ", ".join("%.2f→%.0f W" % (k, p) for k, p in out["cause"]))
+    Cs = 2 * c["ns"] * DEV["GaN150"]["Ctr"]
+    drv = []
+    for k in (0.995, 1.0, 1.005):
+        r = legs_point(c, Lm, tds, k * V0, VO_NOM, -1, drv=1, tdr=tdp)
+        phs = 4 * c["fr"] * 0.5 * Cs * r[2] ** 2              # 보내는 쪽 레그 2개 × 전이 2번 × ½·C·V²
+        drv.append(dict(k=k, P=float(r[1]), vds_send=float(r[2]), vds_recv=float(r[5]), P_hard=phs))
+    out["drive"] = drv
+    print("  대책 후보(받는 쪽 1차도 구동, t_d %.0f ns): " % (tdp * 1e9) +
+          ", ".join("%.3f→%.0f W(2차 V_ds %.1f V, 1차 %.1f V, 경스위칭 약 %.1f W)" % (x["k"], x["P"], x["vds_send"], x["vds_recv"], x["P_hard"])
+                    for x in drv))
+    pk = out["rev"]["48.0_knee"]["P_k103"]
+    verdict("(gain) 레그 모델에서 DCX 이득 1 ± 3 %(역방향 경부하 포함, dcx와 같은 기준)", abs(pk) <= 200.,
+            "48 V에서 이득 0.97이 되는 역방향 전력 %.0f W(이보다 가벼우면 V_I가 n·V_o의 1.03배를 넘음)" % pk)
+    save_json(EID, "gain", dict(Lm=Lm, td_p=tdp, td_s=tds, **out))
+
+
+def _spice_net(c, k, Vo, cpscale=1., ncyc=300):
+    """ngspice 넷리스트(역방향 DCX): 2차 풀브리지 구동(스위치 + 다이오드 + 출력용량), 1차 다이오드 브리지 + 출력용량,
+    1차 환산 탱크와 이상 변압기(전압·전류 종속원). 레그 모델과 독립인 회로 해석기로 이득 상승을 확인한다."""
+    n = c["n"]; T = 1. / c["fr"]; VI = k * n * Vo
+    Cp = cpscale * DEV["GaN650"]["Ctr"] * c["np"]; Cs = DEV["GaN150"]["Ctr"] * c["ns"]
+    rp = DEV["GaN650"]["Ron"] / c["np"]; rs = DEV["GaN150"]["Ron"] / c["ns"]; td = c["td_s"]; pw = T / 2 - td - 2e-9
+    return f"""* E22 reverse DCX k={k} Vo={Vo}
+VI VIp 0 DC {VI}
+DPAH PA VIp DP
+DPAL 0 PA DP
+CPAH PA VIp {Cp}
+CPAL 0 PA {Cp}
+DPBH PB VIp DP
+DPBL 0 PB DP
+CPBH PB VIp {Cp}
+CPBL 0 PB {Cp}
+.model DP D(IS=0.1 N=1 RS={rp})
+RT1 PA n1 {c["R1"]}
+LT1 n1 n2 {c["Lr"]}
+CT1 n2 P1 {c["Cr"]}
+LMAG P1 PB {c["Lm"]}
+EXF P1 X S1 S2 {n}
+VSEN X PB 0
+FXF S1 S2 VSEN {-n}
+CT2 S1 m1 {c["Cr"] * n * n}
+LT2 m1 m2 {c["Lr"] / n / n}
+RT2 m2 SA {c["R2"] / n / n}
+RSB S2 SB 1e-6
+VO VO 0 DC {Vo}
+SAH VO SA GAH 0 SWM
+SAL SA 0 GAL 0 SWM
+SBH VO SB GBH 0 SWM
+SBL SB 0 GBL 0 SWM
+DSAH SA VO DS
+DSAL 0 SA DS
+DSBH SB VO DS
+DSBL 0 SB DS
+CSAH SA VO {Cs}
+CSAL 0 SA {Cs}
+CSBH SB VO {Cs}
+CSBL 0 SB {Cs}
+.model DS D(IS=0.1 N=1 RS={rs})
+.model SWM SW(VT=0.5 VH=0.1 RON={rs} ROFF=1e7)
+VGAH GAH 0 PULSE(0 1 {td} 1n 1n {pw} {T})
+VGBL GBL 0 PULSE(0 1 {td} 1n 1n {pw} {T})
+VGAL GAL 0 PULSE(0 1 {T / 2 + td} 1n 1n {pw} {T})
+VGBH GBH 0 PULSE(0 1 {T / 2 + td} 1n 1n {pw} {T})
+.options method=trap reltol=1e-3 abstol=1e-9 vntol=1e-5
+.tran 2n {ncyc * T} {(ncyc - 20) * T} 2n uic
+.control
+run
+let pvi = v(VIp)*i(VI)
+meas tran pvi_avg AVG pvi from={(ncyc - 20) * T} to={ncyc * T}
+let po = v(VO)*i(VO)
+meas tran po_avg AVG po from={(ncyc - 20) * T} to={ncyc * T}
+print pvi_avg po_avg > spice_out.txt
+.endc
+.end
+"""
+
+
+def spice():
+    """독립 점검: ngspice(있으면)로 역방향 DCX의 V_I별 전력을 계산해 레그 모델(gain)과 비교한다.
+    V_o 48 V, V_I/(n·V_o) = 1.0·1.03·1.06·1.10, 그리고 1차 레그 용량 × 0.01(1.06)."""
+    import shutil, subprocess, tempfile, os
+    if shutil.which("ngspice") is None:
+        print("  ngspice 없음: 건너뜀(apt install ngspice)")
+        return
+    c = selected()
+    rows = []
+    for k, cp in ((1.0, 1.), (1.03, 1.), (1.06, 1.), (1.10, 1.), (1.06, 0.01)):
+        with tempfile.TemporaryDirectory() as d:
+            f = os.path.join(d, "dcx.cir")
+            open(f, "w").write(_spice_net(c, k, VO_NOM, cp))
+            subprocess.run(["ngspice", "-b", f], cwd=d, capture_output=True, timeout=900)
+            txt = open(os.path.join(d, "spice_out.txt")).read()
+        val = {ln.split("=")[0].strip(): float(ln.split("=")[1]) for ln in txt.splitlines() if "=" in ln}
+        p_sp = -val["po_avg"]                                  # 48 V 원이 내는 전력 = 1차로 보낸 전력(+)
+        p_lg = -float(legs_point(c, c["Lm"], c["td_s"], k * c["n"] * VO_NOM, VO_NOM, -1, cpscale=cp)[1])
+        rows.append(dict(k=k, cpscale=cp, P_spice=p_sp, P_legs=p_lg, P_into_VI_spice=val["pvi_avg"]))
+        print("  V_I/(n·V_o) %.2f, 1차 용량 ×%g: 48 V 쪽이 내는 전력 ngspice %.0f W, 레그 모델 %.0f W" % (k, cp, p_sp, p_lg))
+    ok = all(abs(r["P_spice"] - r["P_legs"]) <= max(50., 0.1 * abs(r["P_legs"])) for r in rows)
+    verdict("(spice) ngspice와 레그 모델의 역방향 전력 차 ≤ max(50 W, 10 %)", ok,
+            "최대 차 %.0f W" % max(abs(r["P_spice"] - r["P_legs"]) for r in rows))
+    save_json(EID, "spice", dict(rows=rows, note="ngspice 다이오드 IS 0.1 A, N 1(순방향 약 0.1 V), 스위치 RON = R_on/병렬"))
 
 
 # ---------------------------------------------------------------------------------------------
@@ -1038,7 +1240,7 @@ def figures():
     print("  figures saved")
 
 
-PARTS = dict(design=design, zvs=zvs, dcx=dcx, control=control, figures=figures)
+PARTS = dict(design=design, zvs=zvs, gain=gain, spice=spice, dcx=dcx, control=control, figures=figures)
 
 if __name__ == "__main__":
     want = sys.argv[1:] or list(PARTS)

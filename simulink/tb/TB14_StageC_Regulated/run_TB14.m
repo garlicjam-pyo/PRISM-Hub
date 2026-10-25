@@ -1,13 +1,16 @@
 function run_TB14(runList)
 %RUN_TB14  TB14(조정형 Stage C 5 kW)를 사례별로 실행하고 판정한다(기준: 검증 코드 E22 평균모델, ref/make_ref_TB14.py).
 %
-%   run_TB14          % 사례 1–5
+%   run_TB14          % 사례 1–7
 %   사례(시험 전에 고정, 1.5 ms 정상상태 뒤 사건)
 %     1 A_400V_ramp  입력 400 V, 배터리 없음, 0.1 → 5 kW(4 kW/ms)             판정 48 V ±2 %
 %     2 B_270V_step  입력 270 V, 배터리 없음, 0.1 → 5 kW 계단               판정 36–52 V
 %     3 C_504V_rev   입력 504 V, 배터리 없음, 5 → −3 kW 계단(회생)          판정 36–52 V
 %     4 D_bus_step   3 kW, 배터리 없음, 버스 454 → 504 V(10 µs)            판정 48 V ±2 %
 %     5 E_400V_bat   입력 400 V, 배터리(OCV 47 V), 0.1 → 5 kW 계단         판정 36–52 V, 사건 2.5 ms 뒤 출력 ≤ 105 A × 1.05
+%     6 F_400V_rev_light  입력 400 V, 배터리 없음, −3 → −0.3 kW 계단(역방향 경부하)   판정 36–52 V
+%     7 G_270V_rev_light  입력 270 V, 배터리 없음, −3 → −0.1 kW 계단(역방향 경부하, 벅 V_I 한계 근처)   판정 36–52 V
+%     (6·7은 E22 gain 파트가 역방향 경부하의 이득 상승을 찾은 뒤 더했다. 정보: 끝 0.2 ms DCX 이득, 사건 뒤 듀티 최대·보내는 쪽 전환 수)
 %   공통 판정
 %     (a) 전압: 위 사례별 범위(사건 0.2 ms 전부터 끝까지, 10 µs 평균)
 %     (b) 전류: 출력전류 100 µs 이동평균 ≤ 130 A × 1.05, 2차 소자 순간 전류 max|i_r2|/2 ≤ 329 A(EPC2305 펄스 정격)
@@ -21,8 +24,8 @@ mdl  = 'TB14_StageC_Regulated';
 refDir = fullfile(here, 'ref');
 resDir = fullfile(here, 'results');
 if ~exist(resDir, 'dir'), mkdir(resDir); end
-R = {'A_400V_ramp', 'B_270V_step', 'C_504V_rev', 'D_bus_step', 'E_400V_bat'};
-if nargin < 1 || isempty(runList), runList = 1:5; end
+R = {'A_400V_ramp', 'B_270V_step', 'C_504V_rev', 'D_bus_step', 'E_400V_bat', 'F_400V_rev_light', 'G_270V_rev_light'};
+if nargin < 1 || isempty(runList), runList = 1:7; end
 load_system(fullfile(here, [mdl '.slx']));
 res = {};
 for r = runList
@@ -56,7 +59,7 @@ function S = evaluate(out, TB, refDir, cn, resDir, wall)
 t = out.t(:); vb = out.vbus(:); iin = out.iin(:); iL = out.iL(:); vI = out.vI(:); vo = out.vo(:); ix = out.ix(:);
 ib = out.ibat(:); il = out.iload(:); ir1 = out.ir1(:); im = out.im(:); ir2 = out.ir2(:);
 vl1 = out.vleg1(:); vls1 = out.vlegs1(:); gq1 = out.gq1(:); gq2 = out.gq2(:); gs1 = out.gs1(:); gs2 = out.gs2(:);
-uc = squeeze(out.uc); if size(uc, 1) == 4 && size(uc, 2) ~= 4, uc = uc.'; end   %#ok<NASGU> 벡터 신호는 4×1×N으로 저장된다
+uc = squeeze(out.uc); if size(uc, 1) == 4 && size(uc, 2) ~= 4, uc = uc.'; end   % 벡터 신호는 4×1×N으로 저장된다([d mode iref sel])
 X = [vb iin iL vI vo ix ib il]; X(1, :) = X(2, :);
 dts = t(2) - t(1);
 Ts = 10e-6; np = round(Ts/dts);
@@ -121,12 +124,16 @@ L.e22_iL_end = abs(d_iL) <= max(0.03*abs(iLr), 0.3);
 fn = fieldnames(L); pass = all(cellfun(@(f) L.(f), fn));
 failed = fn(~cellfun(@(f) L.(f), fn))';
 % ---- 정보 ---------------------------------------------------------------------------------------------------
+gain_end = TB.C.n*mean(A10(qe, 6))/mean(A10(qe, 5));             % 끝 0.2 ms DCX 이득(역방향 경부하 이득 상승 확인)
+tu = (0:size(uc, 1)-1)'*(t(end)/max(size(uc, 1)-1, 1));          % 제어 출력 시각(10 µs 간격 근사)
+qu = tu > te;
+d_max_post = max(uc(qu, 1)); flips_post = sum(abs(diff(uc(qu, 2))) > 0.5);
 qs2 = tq > te - 0.5e-3 & tq < te;
 pin = mean(A10(qs2, 2).*A10(qs2, 3)); pout = mean(A10(qs2, 6).*(A10(qs2, 7)));
 eff = NaN; if abs(pin) > 50, eff = pout/pin; if pin < 0, eff = pin/pout; end, end
 S = struct('case', cn, 'verdict', ternary(pass, 'PASS', 'FAIL'), 'failed', {failed}, 'limits', L, 'wall_s', wall, ...
     'vo_min', vmin, 'vo_max', vmax, 'band', band, 'ix_avg100_max', ix_avg_max, 'dev_peak_A', dev_pk, 'ix_late', ix_late, ...
-    'zvs', zvs, 'dcx_gain', gain, 'eff_pre_event', eff, 'vo_end_diff', d_vend, 'iL_end', [iLc iLr], ...
+    'zvs', zvs, 'dcx_gain', gain, 'dcx_gain_end', gain_end, 'd_max_post', d_max_post, 'mode_flips_post', flips_post, 'eff_pre_event', eff, 'vo_end_diff', d_vend, 'iL_end', [iLc iLr], ...
     'ref', struct('vo_min', M.vo_min, 'vo_max', M.vo_max, 'ix_avg100_max', M.ix_avg100_max), ...
     'ir1_rms_pre', sqrt(mean(ir1(t > te - 0.2e-3 & t < te).^2)), 'im_pk_pre', max(abs(im(t > te - 0.2e-3 & t < te))));
 fid = fopen(fullfile(resDir, ['TB14_' cn '_summary.txt']), 'w');
@@ -137,7 +144,8 @@ o2(fid, '    v_o (10 us mean) %.3f-%.3f V, band %.2f-%.2f V; E22 %.3f-%.3f V\n',
 o2(fid, '    output current 100 us mean max %.1f A (E22 %.1f A), secondary device peak %.1f A (rating 329 A), late %.1f A\n', ...
     ix_avg_max, M.ix_avg100_max, dev_pk, ix_late);
 o2(fid, '    ZVS (V_ds before turn-on): primary %.2f V (%d edges), secondary %.2f V (%d edges)\n', zp, np1, zs, ns1);
-o2(fid, '    DCX gain n*v_o/v_I before event %.4f\n', gain);
+o2(fid, '    DCX gain n*v_o/v_I before event %.4f, last 0.2 ms %.4f\n', gain, gain_end);
+o2(fid, '    after event: duty max %.3f, sending-side changes %d\n', d_max_post, flips_post);
 o2(fid, '    end of run: v_o circuit - E22 %+.3f V, i_L circuit %.2f A / E22 %.2f A\n', d_vend, iLc, iLr);
 o2(fid, '(2) info: efficiency before event (circuit, input->48 V incl. buck and DCX) %.4f, ir1 rms %.2f A, im peak %.2f A\n', ...
     eff, S.ir1_rms_pre, S.im_pk_pre);
