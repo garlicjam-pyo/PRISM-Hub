@@ -76,10 +76,23 @@ def draw_tolerance(N, tol, rs):
 
 def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, tol=None, rs=None,
               R_in=0.0, C_in=100e-6, ncyc=60, Nstep=340, vC0=None, Vbus0=None, en=None,
-              td_det=20e-9, i_thr=0.5):
+              td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False):
     """N위상 Stage A 어레이를 ncyc 주기 동안 적분한다.
 
     Iload     : 버스 부하전류 [A]. 음수면 역방향(버스 → 배터리) 전력.
+                (E24) 구간 선형 프로파일 (tt, II)도 받는다(시각 [s], 전류 [A]).
+    shed      : (E24) 경부하 위상 셰딩. None이면 쓰지 않는다(이전과 같음). dict 키:
+                keep, sh(남는 위상·멈추는 위상 번호, 0부터), I_off·I_on(필터한 모듈 출력전류 크기 문턱 [A]),
+                Ipk_on(남는 위상의 순시 전류 크기가 넘으면 바로 복귀 [A]), tau(출력전류 1차 필터 [s]),
+                t_dwell(I_off 아래가 이어져야 하는 시간 [s]), off_frac(복귀 때 인터리빙 지연, 주기 비율, 기본 0.25).
+                논리는 회로 게이트 ctrl/prism_gate_stageA_zcps.m과 같다(shed_step 참고).
+    dead_fix  : (E24) 데드타임 전류 소멸 처리. 데드타임(구간 0)의 다이오드 환류 기울기는 ±V_bat/2/L(약 3.5 A/ns)라서
+                적분 간격(약 20 ns) 안에 68 A까지 0이 된다. RK4는 이 부호 의존 기울기를 단계 안에서 평균해 전류가 0으로
+                가지 않고 남거나(멈춘 위상에서는) 진동한다. True면 간격 시작에 그 간격 안에 0을 지나는 데드타임 전류를 0으로
+                둔다(소멸). False(기본)는 E1–E23과 같다(이전 결과 재현용).
+    bus       : (E24) V_A 노드 뒤의 400 V 버스. None이면 없음(이전과 같음). dict 키: Rw, Lw(배선), Cb(버스 커패시터),
+                Rd, Cd(RC 감쇠기), P(정전력 부하 전력 프로파일 (tt, PP) [W]), vmin(정전력 부하 전압 하한), RA(초기값용
+                Stage A 출력저항 추정). 이때 Iload는 V_A 노드에 바로 걸리는 전류(충전기 등, 음수 = 주입)다.
     mode      : 'fixed'(고정 타이밍) 또는 'zcp'(자기발진 영교차 추종)
     fratio    : 스위칭 주파수 / 공칭 공진주파수 (zcp에서는 적분 간격을 정하는 기준 주기로만 쓴다)
     tol, rs   : 부품 공차 {'C','L','R'}와 난수 생성기(matlab_rng)
@@ -110,21 +123,57 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
 
     log_i = np.zeros((n, N), np.float32); log_v = np.zeros((n, N), np.float32)
     log_vb = np.zeros(n, np.float32); log_st = np.zeros((n, N), np.int8); log_io = np.zeros((n, N), np.float32)
+    busen = bus is not None                                      # (E24) 버스: 상태 [i_w, v_b, v_d]
+    if busen:
+        Rw, Lw, Cb, Rd, Cd = bus["Rw"], bus["Lw"], bus["Cb"], bus["Rd"], bus["Cd"]
+        tt_p, PP_p = np.asarray(bus["P"][0], float), np.asarray(bus["P"][1], float)
+        vmin_b = bus.get("vmin", 200.)
+    prof = isinstance(Iload, (tuple, list))                      # (E24) 구간 선형 부하 프로파일
+    if prof:
+        tt_l, II_l = np.asarray(Iload[0], float), np.asarray(Iload[1], float)
+    IL = float(np.interp(0., tt_l, II_l)) if prof else float(Iload)
+    PL = float(np.interp(0., tt_p, PP_p)) if busen else 0.
+    xb = np.zeros(3)
+    if busen:                                                    # 버스 평형 근처에서 시작(V_A = V_bat/2 − R_A·I)
+        iw = PL / (Vo0 - 0.0132 * PL / Vo0)
+        for _ in range(5):
+            vA = Vo0 - bus.get("RA", 10.2e-3) * (iw + IL); vbb = vA - Rw * iw; iw = PL / max(vbb, vmin_b)
+        xb = np.array([iw, vbb, vbb]); Vb = vA if Vbus0 is None else Vb
+        log_vbus = np.zeros(n, np.float32); log_iw = np.zeros(n, np.float32)
+    if shed is not None:                                         # (E24) 셰딩 상태: 모드 2 둘 다, 3 멈추는 중, 1 하나, 4 복귀 대기
+        sh = dict(shed); sh.setdefault("off_frac", 0.25)
+        S = dict(mode=2, If=IL, tlow=0, blocked=False,
+                 ndwell=int(mround(sh["t_dwell"] / dt)), noff=int(mround(sh["off_frac"] * Nstep)), a=dt / sh["tau"])
+        log_sm = np.zeros(n, np.int8); log_if = np.zeros(n, np.float32); log_ig = np.zeros((n, N), np.float32)
 
-    def deriv(iC, vC, Vb, s, Vin):
-        """구간 s(0 데드, 1 충전, 2 방전)에 따른 상태 미분과 출력·입력 전류."""
+    def deriv(iC, vC, Vb, s, Vin, xb):
+        """구간 s(0 데드, 1 충전, 2 방전)에 따른 상태 미분과 출력·입력 전류. xb = 버스 상태(버스가 없으면 쓰지 않음)."""
         di = np.where(s == 1, (Vin - Vb - vC - iC * R) / L,
              np.where(s == 2, (Vb - vC - iC * R) / L,
              np.where(iC > 1e-3, (-vC - iC * R - 2 * Vf) / L,            # 데드타임 다이오드 환류(정방향 전류)
              np.where(iC < -1e-3, (Vin - vC - iC * R + 2 * Vf) / L, 0.0))))   # 데드타임 회생(역방향 전류)
         io = np.where(s == 1, iC, np.where(s == 2, -iC, 0.0))               # 버스로 나가는 전류
         iin = np.where(s == 1, iC, np.where((s == 0) & (iC < -1e-3), iC, 0.0))   # 입력에서 들어오는 전류
-        return di, iC / C, (io.sum() - Iload) / Cbus, io, iin
+        if busen:                                                # V_A → 배선 → C_b ∥ 감쇠기 ∥ 정전력 부하
+            idm = (xb[1] - xb[2]) / Rd
+            dxb = np.array([(Vb - xb[1] - Rw * xb[0]) / Lw, (xb[0] - idm - PL / max(xb[1], vmin_b)) / Cb, idm / Cd])
+            return di, iC / C, (io.sum() - IL - xb[0]) / Cbus, io, iin, dxb
+        return di, iC / C, (io.sum() - IL) / Cbus, io, iin, xb
 
     for k in range(n):
+        if prof:
+            IL = float(np.interp(k * dt, tt_l, II_l))
+        if busen:
+            PL = float(np.interp(k * dt, tt_p, PP_p))
+        if mode == "zcp" and shed is not None:
+            log_ig[k] = iC                                       # 게이트가 본 전류(데드타임 소멸 처리 전, 회로 게이트 대조용)
+            shed_step(S, sh, iC, st, tmr, ndead, en)
+            log_sm[k] = S["mode"]; log_if[k] = S["If"]
         if mode == "zcp":
             # 데드타임이 끝난 위상은 다음 구간(1↔2 교대)을 시작한다.
             start = (st == 0) & (tmr >= ndead)
+            if shed is not None and S["blocked"]:
+                start[sh["sh"]] = False                              # 셰딩된 위상은 시작하지 않는다
             st = np.where(start, nxt, st); nxt = np.where(start, 3 - nxt, nxt)
             armed = np.where(start, False, armed); det = np.where(start, 0, det)
             oncnt = np.where(start, 0, oncnt); tmr = np.where(start, 0, tmr)
@@ -144,12 +193,19 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
             s = np.where(m < half, np.where(m >= ndead, 1, 0), np.where((m - half) >= ndead, 2, 0))
         s = np.where(en, s, 0)
 
+        if dead_fix:                                     # (E24) 데드타임 전류가 이 간격 안에 0을 지나면 소멸
+            vdrv = np.where(iC > 0, vC + 2 * Vf, Vin - vC + 2 * Vf)    # 환류 경로가 거스르는 전압
+            ext = (s == 0) & (np.abs(iC) * L <= np.maximum(vdrv, 1e-9) * dt)
+            iC = np.where(ext, 0.0, iC)
         # RK4 한 단계 (입력 커패시터 전압 V_in은 단계 안에서 고정)
-        k1 = deriv(iC, vC, Vb, s, Vin)
-        k2 = deriv(iC + .5 * dt * k1[0], vC + .5 * dt * k1[1], Vb + .5 * dt * k1[2], s, Vin)
-        k3 = deriv(iC + .5 * dt * k2[0], vC + .5 * dt * k2[1], Vb + .5 * dt * k2[2], s, Vin)
-        k4 = deriv(iC + dt * k3[0], vC + dt * k3[1], Vb + dt * k3[2], s, Vin)
+        k1 = deriv(iC, vC, Vb, s, Vin, xb)
+        k2 = deriv(iC + .5 * dt * k1[0], vC + .5 * dt * k1[1], Vb + .5 * dt * k1[2], s, Vin, xb + .5 * dt * k1[5])
+        k3 = deriv(iC + .5 * dt * k2[0], vC + .5 * dt * k2[1], Vb + .5 * dt * k2[2], s, Vin, xb + .5 * dt * k2[5])
+        k4 = deriv(iC + dt * k3[0], vC + dt * k3[1], Vb + dt * k3[2], s, Vin, xb + dt * k3[5])
         log_i[k] = iC; log_v[k] = vC; log_vb[k] = Vb; log_st[k] = s; log_io[k] = k1[3]
+        if busen:
+            log_vbus[k] = xb[1]; log_iw[k] = xb[0]
+            xb = xb + dt / 6 * (k1[5] + 2 * k2[5] + 2 * k3[5] + k4[5])
         iCn = iC + dt / 6 * (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0])
         vC = vC + dt / 6 * (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1])
         Vb = Vb + dt / 6 * (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2])
@@ -159,8 +215,52 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
             Vin = Vin + dt * ((Vbat - Vin) / R_in - k1[4].sum()) / C_in
 
     t = np.arange(n) * dt
-    return dict(t=t, i=log_i, v=log_v, vb=log_vb, st=log_st, io=log_io,
-                fs=fs, T=T, dt=dt, C=C, L=L, R=R, N=N)
+    out = dict(t=t, i=log_i, v=log_v, vb=log_vb, st=log_st, io=log_io,
+               fs=fs, T=T, dt=dt, C=C, L=L, R=R, N=N)
+    if shed is not None:
+        out.update(sm=log_sm, If=log_if, ig=log_ig)
+    if busen:
+        out.update(vbus=log_vbus, iw=log_iw)
+    return out
+
+
+def shed_step(S, sh, iC, st, tmr, ndead, en):
+    """(E24) 경부하 위상 셰딩 상태기계, 적분 간격마다 영교차 추종 갱신 직전에 한 번 부른다.
+    회로 게이트 ctrl/prism_gate_stageA_zcps.m과 같은 순서·조건이다.
+      입력 st·tmr는 직전 간격의 구간·데드타임 타이머(이 함수가 tmr[sh]를 고칠 수 있다).
+      1) 모듈 출력전류 i_o = Σ(구간 1이면 +i, 구간 2이면 −i)를 1차 필터(시정수 tau)로 거른다(If).
+      2) 모드 2(두 위상): |If| < I_off가 t_dwell 동안 이어지면 모드 3(멈추는 중).
+      3) 모드 3: 복귀 조건이면 모드 2로 취소. 멈출 위상이 구간을 끝내 데드타임(구간 0)이면 막고(blocked) 모드 1.
+         → 도통 중인 구간을 자르지 않으므로 끄는 순간도 영전류다.
+      4) 모드 1(위상 하나): 복귀 조건(|If| > I_on 또는 남는 위상 |i| > I_pk,on)이면 모드 4.
+      5) 모드 4: 남는 위상이 이번 간격에 구간을 시작하면(구간 0이고 타이머 ≥ n_dead) 멈춘 위상의 타이머를
+         n_dead − n_off로 두고 막음을 푼다 → n_off 간격(T/4) 뒤에 시작해 인터리빙이 돌아온다. 모드 2.
+         멈춘 위상은 멈추기 전 구간의 다음 구간(충전·방전 교대)부터 시작한다."""
+    kp, ks = sh["keep"], sh["sh"]
+    io = 0.
+    for j in range(len(st)):
+        if en[j]:
+            io += iC[j] if st[j] == 1 else (-iC[j] if st[j] == 2 else 0.)
+    S["If"] += (io - S["If"]) * S["a"]
+    ret = abs(S["If"]) > sh["I_on"] or abs(iC[kp]) > sh["Ipk_on"]
+    m = S["mode"]
+    if m == 2:
+        S["tlow"] = S["tlow"] + 1 if abs(S["If"]) < sh["I_off"] else 0
+        if S["tlow"] >= S["ndwell"]:
+            S["mode"] = 3
+    elif m == 3:
+        if ret:
+            S["mode"] = 2; S["tlow"] = 0
+        elif st[ks] == 0:
+            S["blocked"] = True; S["mode"] = 1
+    elif m == 1:
+        if ret and S["noff"] < 0:                     # off_frac < 0: 기다리지 않고 바로 다시 시작(인터리빙은 맞추지 않음)
+            S["blocked"] = False; S["mode"] = 2; S["tlow"] = 0
+        elif ret:
+            S["mode"] = 4
+    elif m == 4:
+        if st[kp] == 0 and tmr[kp] >= ndead:
+            tmr[ks] = ndead - S["noff"]; S["blocked"] = False; S["mode"] = 2; S["tlow"] = 0
 
 
 def analyze(r, ncyc_last=10):
