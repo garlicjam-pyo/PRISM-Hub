@@ -31,6 +31,14 @@
             보내는 쪽 전환 순간 전류(ZVS), 실효·첨두 전류, 공진 커패시터 첨두를 본다.
             처음 안(두 브리지를 같은 위상으로 구동, 방향 자동)은 자화 전류가 두 브리지로 나뉘고 받는 쪽이 부하 전류를
             반대 방향으로 끊어 ZVS가 깨졌다(1차 여유 −0.70, 2차 −6.17). 그래서 받는 쪽을 동기정류로 바꿨다.
+  zvs     : (TB14 1차 회로 실행 뒤 추가) 위 dcx ODE에는 레그 노드가 없어, 데드타임 동안 브리지 전압을 다이오드가 즉시 정한다.
+            TB14 회로에서는 보내는 쪽 레그 전이가 끝나지 않거나(1차, 받는 쪽 2차 레그 전환이 데드타임 중 탱크 전류를
+            가져가 5.3 → 1.5 A) 전이 뒤 되돌아가(2차, 노드가 약 40 ns에 전이하고 데드타임 100 ns 안에 공진전류가 반전)
+            켜짐 직전 V_ds가 1차 51.8–68.5 V, 2차 48 V였다. 그래서 레그 노드 4개(1차 A·B, 2차 a·b)의 출력용량과
+            다이오드 클램프를 넣은 DCX(반암시적 오일러, 1 ns)로 L_m(62.2–30 µH)과 보내는 쪽별 데드타임(1차 100–200 ns,
+            2차 30–100 ns)을 훑었다. 두 방향 모두 V_ds ≤ 5 %인 가장 큰 L_m을 고르고, 그 L_m에서 촘촘한 격자(1차 40–160 ns,
+            2차 10–80 ns)로 통과 구간의 가운데 데드타임을 고른 뒤, 출력용량 ±20 %에서 다시 확인한다.
+            선택 값은 zvs.json에 저장되고 selected()가 읽어 dcx·control·TB14가 같은 값을 쓴다.
   control : 전단 벅 + DCX 평균모델(벅 인덕터, C_I, DCX 등가 L_x·R_x(dcx 계단 응답에서), C_o, 48 V 배터리·정전력 부하)과
             디지털 제어(100 kHz 표본, 계산 지연 1주기): 인덕터 전류 PI(교차 5 kHz, 입력전압 앞먹임) ← 출력전류 지령 =
             min(48 V 전압 PI(교차 1 kHz, 부하전류 앞먹임), 배터리 충전전류 PI(부하전류 + 충전 제한 앞먹임), 전류 제한).
@@ -59,8 +67,12 @@
 
 ■ 판정 기준(dcx)
   이득 n·V_o/V_I = 1 ± 3 %(−3–5 kW, V_o 36·48·52 V, TB05와 같은 허용폭). 보내는 쪽 브리지가 모든 점에서 전환 순간 전류가
-  ZVS 방향이고 크기 ≥ ZVS 전류(데드타임 100 ns 안에 레그 출력용량 충방전). 받는 쪽 전환 순간 전류(동기정류 꺼짐)와
+  ZVS 방향이고 크기 ≥ ZVS 전류(보내는 쪽 데드타임 안에 레그 출력용량 충방전, 전하 기준. 전이 완료 여부는 zvs가 본다). 받는 쪽 전환 순간 전류(동기정류 꺼짐)와
   공진 커패시터 첨두는 기록.
+
+■ 판정 기준(zvs)
+  보내는 쪽 레그가 켜지기 직전 V_ds ≤ 레일의 5 %(1차 V_I, 2차 V_o): 1차가 보낼 때 48 V 0.1·1.5·3·5 kW, 36 V 0.1·3.78 kW,
+  52 V 0.1·5 kW, 2차가 보낼 때 48 V −0.2·−1.5·−3 kW, 36·52 V −3 kW. 출력용량 ×0.8·×1.2에서도 같은 기준.
 
 ■ 판정 기준(control)
   T1 정상 오차 ≤ 0.1 %. T2·T4·T6 48 V ±2 %(47.04–48.96 V). T3(배터리 없음, 0.1 ↔ 5 kW·−3 ↔ +5 kW 계단)·T5(배터리 연결,
@@ -69,8 +81,8 @@
   모든 시험에서
   듀티 포화가 0.5 ms를 넘지 않음. T7 |Z_bus| ≤ |Z_in|/2(6 dB, 10 Hz–20 kHz, 5 kW·입력 270·504 V).
 
-■ 실행   python E22_stage_c_regulated.py design dcx control figures   (약 6분)
-■ 결과   results/E22/design.json, dcx.json, control.json, E22_stage_c_regulated.png
+■ 실행   python E22_stage_c_regulated.py design zvs dcx control figures   (약 15분, 그중 zvs 약 8분)
+■ 결과   results/E22/design.json, zvs.json, dcx.json, control.json, E22_stage_c_regulated.png
 """
 import json
 import math
@@ -278,8 +290,10 @@ def design():
 # ---------------------------------------------------------------------------------------------
 # dcx: 공진점 CLLC DCX 스위칭 ODE
 # ---------------------------------------------------------------------------------------------
-def selected():
-    """design.json의 선택 구조와 부품 값(없으면 design을 먼저 실행)."""
+def selected(apply_zvs=True):
+    """design.json의 선택 구조와 부품 값(없으면 design을 먼저 실행).
+    apply_zvs: zvs.json(레그 모델로 정한 L_m·데드타임)이 있으면 L_m을 바꾸고 데드타임 td_p(1차가 보낼 때)·td_s(2차가 보낼 때)를 넣는다.
+    zvs 파트 자신은 처음 설계(apply_zvs=False)에서 출발한다."""
     f = outdir(EID) / "design.json"
     if not f.exists():
         design()
@@ -287,6 +301,13 @@ def selected():
     sel = D["selected"]
     r = D["candidates"]["%s_%d%d%d" % (sel["choice"], sel["nsw"], sel["np"], sel["ns"])]
     c = dict(r["params"]); c.update(nsw=sel["nsw"], np=sel["np"], ns=sel["ns"], L=r["front"]["L"], front=r["params"]["front"])
+    c.update(td_p=TD, td_s=TD, Lm0=c["Lm"], zvs_applied=False)
+    fz = outdir(EID) / "zvs.json"
+    if apply_zvs and fz.exists():
+        ch = json.loads(fz.read_text(encoding="utf-8")).get("choice")
+        if ch:
+            c.update(Lm=ch["Lm"], td_p=ch["td_p"], td_s=ch["td_s"], zvs_applied=True)
+            c["im_pk"] = c["n"] * VO_CV[1] / (4 * c["fr"] * c["Lm"]); c["m"] = c["Lm"] / c["Lr"]
     # 직렬 저항(1차 환산): 1차 브리지 2소자 + 권선 절반, 2차 브리지 2소자 + 권선 절반
     Ip_r = math.sqrt((math.pi * (PO_MAX / VO_NOM) / (2 * c["n"])) ** 2 / 2 + c["im_pk"] ** 2 / 3)
     Rw = K["mag_tr_cu"] * PO_MAX / Ip_r ** 2
@@ -381,7 +402,8 @@ def _dcx(VI, Vo, n, L1, C1, Lm, L2, C2, R1, R2, fs, td, ncyc, nstep, nlast, mode
 
 def dcx_point(c, VI, Vo, mode=1, both=0, ncyc=400, nstep=400, nlast=20):
     L1 = c["Lr"]; C1 = c["Cr"]; L2 = c["Lr"]; C2 = c["Cr"]           # 대칭 공진망(1차 환산)
-    r = _dcx(VI, Vo, c["n"], L1, C1, c["Lm"], L2, C2, c["R1"], c["R2"], c["fr"], TD, ncyc, nstep, nlast, mode, both)
+    td = c.get("td_p", TD) if mode > 0 else c.get("td_s", TD)          # 보내는 쪽에 따른 데드타임(zvs 파트)
+    r = _dcx(VI, Vo, c["n"], L1, C1, c["Lm"], L2, C2, c["R1"], c["R2"], c["fr"], td, ncyc, nstep, nlast, mode, both)
     return dict(VI=VI, Vo=Vo, Pin=r[0], Pout=r[1], I1=r[2], I2=r[3], Im_pk=r[4], I1_pk=r[5], I2_pk=r[6],
                 isw1=r[7], isw2=r[8], vc1_pk=r[9], vc2_pk=r[10], im_mean=r[11])
 
@@ -407,8 +429,11 @@ def dcx():
     c = selected()
     print("  DCX: n %.2f, L_r %.2f µH, C_r %.1f nF, L_m %.1f µH, f_r %.0f kHz, R1 %.1f mΩ, R2' %.1f mΩ(1차 환산)"
           % (c["n"], c["Lr"] * 1e6, c["Cr"] * 1e9, c["Lm"] * 1e6, c["fr"] / 1e3, c["R1"] * 1e3, c["R2"] * 1e3))
-    izp = lambda VI: zvs_current(VI, c["np"])
-    izs = lambda Vo: 2 * c["ns"] * DEV["GaN150"]["Ctr"] * Vo / TD / c["n"]          # 2차 ZVS 전류(1차 환산)
+    izp = lambda VI: zvs_current(VI, c["np"], c["td_p"])
+    izs = lambda Vo: 2 * c["ns"] * DEV["GaN150"]["Ctr"] * Vo / c["td_s"] / c["n"]   # 2차 ZVS 전류(1차 환산)
+    if c["zvs_applied"]:
+        print("  (zvs 파트 반영) L_m %.1f → %.1f µH, 데드타임 1차가 보낼 때 %.0f ns, 2차가 보낼 때 %.0f ns"
+              % (c["Lm0"] * 1e6, c["Lm"] * 1e6, c["td_p"] * 1e9, c["td_s"] * 1e9))
     # 처음 안(두 브리지 같은 위상 구동)의 대표 점: ZVS가 깨지는 근거로 남긴다
     first = []
     for Po in (PO_REV, 0., PO_MAX):
@@ -435,6 +460,204 @@ def dcx():
     z = min(r["zvs_send"] for r in rows)
     verdict("(dcx) 보내는 쪽 브리지 ZVS 여유 ≥ 1(모든 점)", z >= 1., "최소 %.2f" % z)
     save_json(EID, "dcx", dict(params=c, rows=rows, gain_range=[min(g), max(g)], zvs_min=z, first_try=first))
+
+
+# ---------------------------------------------------------------------------------------------
+# zvs: 레그 출력용량을 넣은 DCX로 L_m·데드타임 정하기(TB14 1차 실행에서 ZVS가 깨져 추가)
+# ---------------------------------------------------------------------------------------------
+@njit(cache=True)
+def _dcx_legs(VI, Vo, n, Lr, Cr, Lm, R1, R2, fs, td, Cp, Cs, vf, ndt, ncyc, nlast, mode):
+    """CLLC DCX + 레그 노드 4개(1차 A·B, 2차 a·b)의 출력용량과 다이오드 클램프(TB14 회로와 같은 구성).
+    탱크는 1차 환산 [v_C1, i_m, i_2', v_C2](i_1 = i_m + i_2'), 반암시적 오일러(전류 먼저, 전압은 새 전류로), 간격 T/ndt.
+    보내는 쪽 브리지만 게이트(데드타임 td), 받는 쪽은 모두 꺼짐(출력용량 + 역병렬 다이오드 Vf = 이상 동기정류 근사).
+    꺼진 노드는 들어오는 전류로 C(레그 = 소자 2개 × 병렬)를 충방전하고 레일 ± Vf에서 묶인다.
+    반환: [P_in, P_out(1차 → 2차 +), 보내는 쪽 켜짐 직전 V_ds 최대, 켜짐 횟수, i_1 실효](마지막 nlast주기)"""
+    T = 1. / fs; dt = T / ndt; nd = int(round(td / dt)); half = ndt // 2
+    L1 = Lr; L2 = Lr; C1 = Cr; C2 = Cr
+    ginv = 1. / (1. / L1 + 1. / Lm + 1. / L2)
+    vc1 = 0.; vc2 = 0.; im = -VI / (4. * Lm * fs); i2 = 0.
+    # 노드: 0 A, 1 B(1차), 2 a, 3 b(2차)
+    v = np.zeros(4)
+    v[0] = VI; v[1] = 0.; v[2] = Vo; v[3] = 0.
+    rail = np.array([VI, VI, Vo, Vo]); cap = np.array([Cp, Cp, Cs, Cs])
+    pin = 0.; pout = 0.; vmax = 0.; ne = 0; i1sq = 0.
+    prev_on = np.array([1, 0, 1, 0])          # 각 레그 상측 켬(1)·하측 켬(0)·둘 다 꺼짐(-1)
+    for k in range(ncyc * ndt):
+        m = k % ndt
+        if m < nd:
+            sp = 0
+        elif m < half:
+            sp = 1
+        elif m < half + nd:
+            sp = 0
+        else:
+            sp = -1
+        # 레그 상태
+        st = np.full(4, -1)
+        if sp != 0:
+            if mode > 0:
+                st[0] = 1 if sp > 0 else 0
+                st[1] = 0 if sp > 0 else 1
+            else:
+                st[2] = 1 if sp > 0 else 0
+                st[3] = 0 if sp > 0 else 1
+        last = k >= (ncyc - nlast) * ndt
+        # 켜짐 직전 V_ds
+        if last:
+            for j in range(4):
+                if st[j] != -1 and prev_on[j] == -1:
+                    vds = rail[j] - v[j] if st[j] == 1 else v[j]
+                    if abs(vds) > vmax:
+                        vmax = abs(vds)
+                    ne += 1
+        for j in range(4):
+            prev_on[j] = st[j]
+        for j in range(4):
+            if st[j] == 1:
+                v[j] = rail[j]
+            elif st[j] == 0:
+                v[j] = 0.
+        vp = v[0] - v[1]; vs = n * (v[2] - v[3])
+        i1 = im + i2
+        vm = ((vp - vc1 - R1 * i1) / L1 + (vc2 + R2 * i2 + vs) / L2) * ginv
+        im += vm / Lm * dt
+        i2 += (vm - vc2 - R2 * i2 - vs) / L2 * dt
+        i1 = im + i2
+        vc1 += i1 / C1 * dt
+        vc2 += i2 / C2 * dt
+        # 꺼진 노드: 전류로 충방전, 다이오드 클램프
+        iin = (-i1, i1, n * i2, -n * i2)
+        for j in range(4):
+            if st[j] == -1:
+                v[j] += iin[j] / cap[j] * dt
+                if v[j] > rail[j] + vf:
+                    v[j] = rail[j] + vf
+                elif v[j] < -vf:
+                    v[j] = -vf
+        if last:
+            pin += vp * i1 * dt
+            pout += vs * i2 * dt
+            i1sq += i1 * i1 * dt
+    Tl = nlast * T
+    return np.array([pin / Tl, pout / Tl, vmax, ne, math.sqrt(i1sq / Tl)])
+
+
+def legs_solve(c, Lm, td, Po, Vo, cscale=1., ndt=4000, ncyc=300, nlast=10):
+    """레그 모델에서 P_out = Po가 되는 V_I(할선법). cscale: 출력용량 배율(공차 점검). 반환: (V_I, 결과 배열).
+    경부하 역방향(−200 W)은 P(V_I)가 평평해 할선법이 목표 근처에서 멈출 수 있어, 실제 P_out을 함께 기록한다."""
+    Cp = cscale * 2 * c["np"] * DEV["GaN650"]["Ctr"]; Cs = cscale * 2 * c["ns"] * DEV["GaN150"]["Ctr"]
+    mode = 1 if Po >= 0 else -1
+    f = lambda VI: _dcx_legs(VI, Vo, c["n"], c["Lr"], c["Cr"], Lm, c["R1"], c["R2"], c["fr"], td, Cp, Cs, 0.05, ndt, ncyc, nlast, mode)
+    V0 = c["n"] * Vo
+    a, b = V0 * (1 + 0.004 * np.sign(Po)), V0 * (1 + 0.03 * np.sign(Po))
+    ra, rb = f(a), f(b)
+    for _ in range(25):
+        if abs(rb[1] - Po) < max(5., 0.003 * abs(Po)) or abs(b - a) < 1e-4:
+            break
+        a, b, ra = b, b - (rb[1] - Po) * (b - a) / (rb[1] - ra[1]), rb
+        rb = f(b)
+    return b, rb
+
+
+ZVS_LM = (62.2e-6, 50e-6, 42e-6, 36e-6, 30e-6)
+ZVS_TDP = (100e-9, 150e-9, 200e-9)                 # 1차가 보낼 때 데드타임 후보(성긴 격자)
+ZVS_TDS = (30e-9, 40e-9, 50e-9, 70e-9, 100e-9)     # 2차가 보낼 때 데드타임 후보(성긴 격자)
+ZVS_TDP_FINE = tuple(x * 1e-9 for x in range(40, 161, 10))   # 고른 L_m에서 촘촘한 격자: 통과 창의 가운데를 고른다
+ZVS_TDS_FINE = tuple(x * 1e-9 for x in range(10, 81, 5))
+ZVS_CTOL = (0.8, 1.2)                              # 출력용량 공차(온도·소자 편차) 점검 배율
+ZVS_LIM = 5.                                       # 판정: 켜짐 직전 V_ds ≤ 레일의 5 %
+FWD_PTS = [(VO_NOM, P) for P in (100., 1500., 3000., PO_MAX)] + [(VO_CV[0], 100.), (VO_CV[0], IO_MAX * VO_CV[0]),
+                                                                  (VO_CV[1], 100.), (VO_CV[1], PO_MAX)]
+REV_PTS = [(VO_NOM, P) for P in (-200., -1500., PO_REV)] + [(VO_CV[0], PO_REV), (VO_CV[1], PO_REV)]
+
+
+def _td_case(c, Lm, td, d, cscale=1.):
+    """한 (L_m, 데드타임, 방향)의 모든 점 계산. d = 'fwd'(1차가 보냄, 기준 V_I) 또는 'rev'(2차가 보냄, 기준 V_o)."""
+    w = 0.; rows = []
+    for Vo, Po in (FWD_PTS if d == "fwd" else REV_PTS):
+        VI, r = legs_solve(c, Lm, td, Po, Vo, cscale)
+        ref = VI if d == "fwd" else Vo
+        rows.append(dict(Vo=Vo, Po=Po, VI=VI, Pout=r[1], vds=r[2], vds_pct=100 * r[2] / ref, i1=r[4]))
+        w = max(w, 100 * r[2] / ref)
+    return dict(dir=d, Lm=Lm, td=td, cscale=cscale, worst_pct=w, rows=rows)
+
+
+def _window(entries, td0):
+    """td0을 포함하는 연속 통과 구간 [lo, hi]와 그 가운데에 가장 가까운 격자 값."""
+    e = sorted(entries, key=lambda x: x["td"])
+    tds = [x["td"] for x in e]; ok = [x["worst_pct"] <= ZVS_LIM for x in e]
+    k = min(range(len(tds)), key=lambda j: abs(tds[j] - td0))
+    if not ok[k]:
+        cand = [j for j in range(len(tds)) if ok[j]]
+        if not cand:
+            return None
+        k = min(cand, key=lambda j: abs(tds[j] - td0))
+    lo = k
+    while lo > 0 and ok[lo - 1]:
+        lo -= 1
+    hi = k
+    while hi < len(tds) - 1 and ok[hi + 1]:
+        hi += 1
+    mid = 0.5 * (tds[lo] + tds[hi])
+    j = min(range(lo, hi + 1), key=lambda q: abs(tds[q] - mid))
+    return dict(lo=tds[lo], hi=tds[hi], td=tds[j], worst_pct=e[j]["worst_pct"])
+
+
+def zvs():
+    """레그 출력용량을 넣은 DCX로 L_m과 보내는 쪽별 데드타임을 정한다.
+    1) 성긴 격자(L_m 5개 × 데드타임): 두 방향 모두 V_ds ≤ 5 %인 데드타임이 있는 가장 큰 L_m(순환전류·손실 최소)
+    2) 그 L_m에서 촘촘한 격자: 통과 구간의 가운데 데드타임(게이트 구동 지연·공차에 여유)
+    3) 고른 점에서 출력용량 ±20 % 공차 점검"""
+    c = selected(apply_zvs=False)
+    print("  레그 모델 점검(처음 설계 L_m %.1f µH, 데드타임 100 ns): TB14 1차 실행은 1차 V_ds 51.8 V(3 kW), 2차 48.0 V(−3 kW)" % (c["Lm"] * 1e6))
+    sweep = []
+    for Lm in ZVS_LM:
+        for td in ZVS_TDP:
+            e = _td_case(c, Lm, td, "fwd"); sweep.append(e)
+            print("  1차 → 2차: L_m %4.1f µH, t_d %3.0f ns → V_ds 최대 %5.1f %% V_I" % (Lm * 1e6, td * 1e9, e["worst_pct"]))
+        for td in ZVS_TDS:
+            e = _td_case(c, Lm, td, "rev"); sweep.append(e)
+            print("  2차 → 1차: L_m %4.1f µH, t_d %3.0f ns → V_ds 최대 %5.1f %% V_o" % (Lm * 1e6, td * 1e9, e["worst_pct"]))
+    coarse = None
+    for Lm in ZVS_LM:
+        f = [x for x in sweep if x["dir"] == "fwd" and x["Lm"] == Lm and x["worst_pct"] <= ZVS_LIM]
+        r = [x for x in sweep if x["dir"] == "rev" and x["Lm"] == Lm and x["worst_pct"] <= ZVS_LIM]
+        if f and r:
+            coarse = dict(Lm=Lm, td_p=min(f, key=lambda x: x["td"])["td"], td_s=min(r, key=lambda x: x["worst_pct"])["td"])
+            break
+    choice = None; fine = []; tol = []
+    if coarse:
+        Lm = coarse["Lm"]
+        print("  성긴 격자 선택: L_m %.1f µH(1차 %.0f ns, 2차 %.0f ns 통과) → 촘촘한 격자" % (Lm * 1e6, coarse["td_p"] * 1e9, coarse["td_s"] * 1e9))
+        for td in ZVS_TDP_FINE:
+            e = _td_case(c, Lm, td, "fwd"); fine.append(e)
+            print("    1차 → 2차 t_d %3.0f ns → %5.1f %%" % (td * 1e9, e["worst_pct"]))
+        for td in ZVS_TDS_FINE:
+            e = _td_case(c, Lm, td, "rev"); fine.append(e)
+            print("    2차 → 1차 t_d %3.0f ns → %5.1f %%" % (td * 1e9, e["worst_pct"]))
+        wp = _window([x for x in fine if x["dir"] == "fwd"], coarse["td_p"])
+        ws = _window([x for x in fine if x["dir"] == "rev"], coarse["td_s"])
+        if wp and ws:
+            choice = dict(Lm=Lm, td_p=wp["td"], td_s=ws["td"], window_p=[wp["lo"], wp["hi"]], window_s=[ws["lo"], ws["hi"]],
+                          worst_fwd_pct=wp["worst_pct"], worst_rev_pct=ws["worst_pct"])
+            for k in ZVS_CTOL:
+                tol.append(_td_case(c, Lm, choice["td_p"], "fwd", k)); tol.append(_td_case(c, Lm, choice["td_s"], "rev", k))
+            choice["tol_worst_pct"] = max(x["worst_pct"] for x in tol)
+            print("  통과 창: 1차 %.0f–%.0f ns → %.0f ns, 2차 %.0f–%.0f ns → %.0f ns; 출력용량 ×0.8·×1.2에서 최대 %.1f %%"
+                  % (wp["lo"] * 1e9, wp["hi"] * 1e9, wp["td"] * 1e9, ws["lo"] * 1e9, ws["hi"] * 1e9, ws["td"] * 1e9, choice["tol_worst_pct"]))
+    verdict("(zvs) 두 방향 모두 V_ds ≤ 5 %인 L_m·데드타임 존재(통과 창 가운데)", choice is not None,
+            ("L_m %.1f µH, t_d 1차 %.0f ns·2차 %.0f ns(최대 %.1f·%.1f %%)" % (choice["Lm"] * 1e6, choice["td_p"] * 1e9, choice["td_s"] * 1e9,
+                                                                    choice["worst_fwd_pct"], choice["worst_rev_pct"])) if choice else "없음")
+    if choice:
+        verdict("(zvs) 출력용량 ±20 %에서도 V_ds ≤ 5 %", choice["tol_worst_pct"] <= ZVS_LIM, "최대 %.1f %%" % choice["tol_worst_pct"])
+    loss = None
+    if choice:
+        c2 = dict(c, Lm=choice["Lm"])
+        loss = {str(P): dcx_loss(c2, P, VO_NOM, c["np"], c["ns"])[0]["total"] - dcx_loss(c, P, VO_NOM, c["np"], c["ns"])[0]["total"]
+                for P in (1500., PO_MAX)}
+        print("  L_m 변경에 따른 DCX 손실 증가: 1.5 kW %+.1f W, 5 kW %+.1f W" % (loss["1500.0"], loss["5000.0"]))
+    save_json(EID, "zvs", dict(sweep=sweep, coarse=coarse, fine=fine, tol=tol, choice=choice, loss_delta=loss, Lm0=c["Lm"],
+                               Cp=2 * c["np"] * DEV["GaN650"]["Ctr"], Cs=2 * c["ns"] * DEV["GaN150"]["Ctr"], vf=0.05, lim_pct=ZVS_LIM))
 
 
 # ---------------------------------------------------------------------------------------------
@@ -796,7 +1019,7 @@ def figures():
     print("  figures saved")
 
 
-PARTS = dict(design=design, dcx=dcx, control=control, figures=figures)
+PARTS = dict(design=design, zvs=zvs, dcx=dcx, control=control, figures=figures)
 
 if __name__ == "__main__":
     want = sys.argv[1:] or list(PARTS)
