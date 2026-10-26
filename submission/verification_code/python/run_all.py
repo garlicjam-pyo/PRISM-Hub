@@ -35,6 +35,7 @@ STEPS = [
     ("E22", ["E22_stage_c_regulated.py"]),       # 조정형 Stage C(design zvs gain spice both dcx control figures, 2코어 약 15분)
     ("E23", ["E23_r2_integrated.py"]),           # R2 통합(E21·E22 결과를 읽는다. base zbus degrade figures, 약 2분)
     ("E24", ["E24_stage_a_shedding.py"]),        # Stage A 경부하 위상 셰딩(design static transient deadfix figures, 2코어 약 10분)
+    ("E25", ["E25_motor_boost_comparison.py"]),  # 모터 승압·800 V 부품 구조 비교(E15 결과 필요, 처음 약 2분)
 ]
 
 if __name__ == "__main__":
