@@ -1,0 +1,18 @@
+TB20 case D_800V_charger_ramp, V_bat 800 V, event 1.50 ms, dt 2.50 ns, wall 152 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           FAIL
+    C6_charger_ramp      PASS
+    V_A 1 us max 401.11 V (E26 400.86), bus 401.04 V (E26 400.93); instantaneous V_A 401.13 V, bus 401.05 V (limit 470 V)
+    clamp: energy 0.0 J (E26 0.0 J), on 0.000 ms (E26 0.000 ms), peak 0 kW, turn-ons 0
+    48 V (10 us mean, from 1 ms) 47.997-48.013 V (E22 47.998-48.002, band 47.04-48.96); Stage C 100 us max 102.6 A, secondary peak 80.6 A
+    Stage C ZVS: primary 0.11 V (1500 edges), secondary 0.00 V (0 edges)
+    Stage A pre: ZCS max 5.02 % (ref 5.51 %), Ipk max 7.7 A (ref 7.5 A), sharing 1.48 %, V_A 399.903 V (ref 399.905 V), i_A 37.7 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 7027, violations 1, worst 1.01 A; phase peak 71.9 A (limit 114.6 A)
+      violation: 1.5126 ms, phase 1, i_off -1.010 A, half-cycle peak 2.44 A
+    Stage A after event: ZCS max 1.20 % (ref 0.46 %), Ipk max 68.8 A (ref 68.9 A), sharing 0.25 %

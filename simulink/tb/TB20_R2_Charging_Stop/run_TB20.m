@@ -142,7 +142,7 @@ else
     L.C4_stageA_pre = max(zz) <= 0.05 && sh <= 0.05 && abs(vAm - SA.pre.vA_mean) <= 0.3;
 end
 % (C5) 모든 턴오프(사건 순간 강제 차단 제외)
-T1n = 0; T1bad = 0; T1worst = 0; cut = zeros(1, 8);
+T1n = 0; T1bad = 0; T1worst = 0; cut = zeros(1, 8); badlist = zeros(0, 4);   % 위반 [시각 ms, 위상, i_off, 반주기 첨두]
 for p = 1:8
     ii = double(I(:, p)); ss = double(Sg(:, p));
     off = find(ss(1:end-1) ~= 0 & ss(2:end) == 0); on = find(ss(1:end-1) == 0 & ss(2:end) ~= 0) + 1;
@@ -154,7 +154,9 @@ for p = 1:8
         k0 = on(find(on <= o, 1, 'last')); if isempty(k0), continue; end
         pkh = max(abs(ii(k0:o))); T1n = T1n + 1;
         T1worst = max(T1worst, abs(ii(o)));
-        if abs(ii(o)) > max(0.05*pkh, TB.i_abs), T1bad = T1bad + 1; end
+        if abs(ii(o)) > max(0.05*pkh, TB.i_abs)
+            T1bad = T1bad + 1; badlist(end+1, :) = [1e3*tA(o), p, ii(o), pkh]; %#ok<AGROW>
+        end
     end
 end
 L.C5_turnoff = T1bad == 0;
@@ -187,7 +189,7 @@ S = struct('case', cn, 'verdict', ternary(pass, 'PASS', 'FAIL'), 'failed', {fail
     'E_clamp_J', E_cl, 't_clamp_on_ms', 1e3*t_on, 'P_clamp_pk_W', P_cl_pk, 'clamp_on_count', n_sw, ...
     'vo_min', vo_min, 'vo_max', vo_max, 'ix_avg100_max', ix_avg_max, 'dev_peak_A', dev_pk, ...
     'zvs', struct('primary_max_V', zp, 'primary_n', np1, 'secondary_max_V', zs, 'secondary_n', ns1), ...
-    'stageA_pre', SAc.pre, 'stageA_post', post, 'turnoffs', struct('n', T1n, 'bad', T1bad, 'worst_A', T1worst), ...
+    'stageA_pre', SAc.pre, 'stageA_post', post, 'turnoffs', struct('n', T1n, 'bad', T1bad, 'worst_A', T1worst, 'violations', badlist), ...
     'phase_peak_A', pkA, 'cut_A', cut, ...
     'ref', struct('vA_max', M.vA_max, 'vb_max', M.vb_max, 'E_clamp_J', M.E_clamp_J, 't_clamp_on_ms', M.t_clamp_on_ms, ...
                   'vo_min', M.vo_min, 'vo_max', M.vo_max));
@@ -207,6 +209,9 @@ o2(fid, '    Stage A pre: ZCS max %.2f %% (ref %.2f %%), Ipk max %.1f A (ref %.1
     100*max(a.zcs), 100*a.zcs_ref, max(a.Ipk), a.Ipk_ref, 100*a.sharing, a.vA_mean, a.vA_ref, a.iAo_mean);
 o2(fid, '    Stage A turn-offs after 1 ms (excluding forced cuts): %d, violations %d, worst %.2f A; phase peak %.1f A (limit %.1f A)\n', ...
     T1n, T1bad, T1worst, pkA, TB.pk_lim);
+for q = 1:size(badlist, 1)
+    o2(fid, '      violation: %.4f ms, phase %d, i_off %.3f A, half-cycle peak %.2f A\n', badlist(q, :));
+end
 if isFault || isRamp
     o2(fid, '    Stage A after event: ZCS max %.2f %% (ref %.2f %%), Ipk max %.1f A (ref %.1f A), sharing %.2f %%\n', ...
         100*max(post.zcs), 100*post.zcs_ref, max(post.Ipk), post.Ipk_ref, 100*post.sharing);

@@ -1,0 +1,79 @@
+[prism_run] run_TB20 start 2026-10-26 11:54:25
+TB20 case A_920V_pathloss, V_bat 920 V, event 1.50 ms, dt 2.50 ns, wall 249 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           PASS
+    V_A 1 us max 468.69 V (E26 469.13), bus 466.88 V (E26 466.83); instantaneous V_A 468.81 V, bus 466.88 V (limit 470 V)
+    clamp: energy 443.2 J (E26 444.0 J), on 2.046 ms (E26 2.047 ms), peak 220 kW, turn-ons 124
+    48 V (10 us mean, from 1 ms) 47.994-48.018 V (E22 47.989-48.012, band 47.04-48.96); Stage C 100 us max 102.6 A, secondary peak 80.9 A
+    Stage C ZVS: primary 0.11 V (2250 edges), secondary 0.00 V (0 edges)
+    Stage A pre: ZCS max 1.15 % (ref 0.46 %), Ipk max 65.2 A (ref 65.5 A), sharing 0.49 %, V_A 460.835 V (ref 460.819 V), i_A -320.6 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 1158, violations 0, worst 0.75 A; phase peak 65.2 A (limit 114.6 A)
+    Stage A forced cut currents [53.4 35.9 11.8 9.8 32.7 51.4 62.8 64.8] A, phase max 50 us after cut 0.00 A
+A_920V_pathloss done (249 s): PASS
+TB20 case B_640V_pathloss_ramp, V_bat 640 V, event 1.50 ms, dt 2.50 ns, wall 206 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           PASS
+    V_A 1 us max 468.17 V (E26 468.40), bus 468.02 V (E26 467.99); instantaneous V_A 468.28 V, bus 468.03 V (limit 470 V)
+    clamp: energy 21.5 J (E26 22.9 J), on 0.100 ms (E26 0.106 ms), peak 219 kW, turn-ons 16
+    48 V (10 us mean, from 1 ms) 47.988-48.065 V (E22 47.987-48.061, band 47.04-48.96); Stage C 100 us max 103.5 A, secondary peak 82.6 A
+    Stage C ZVS: primary 0.11 V (2250 edges), secondary 0.00 V (0 edges)
+    Stage A pre: ZCS max 1.09 % (ref 0.46 %), Ipk max 60.3 A (ref 60.6 A), sharing 0.37 %, V_A 320.773 V (ref 320.758 V), i_A -296.8 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 1159, violations 0, worst 0.66 A; phase peak 60.3 A (limit 114.6 A)
+    Stage A forced cut currents [59.6 58.6 47.7 30.7 5.7 15.5 34.6 48.5] A, phase max 50 us after cut 0.00 A
+B_640V_pathloss_ramp done (206 s): PASS
+TB20 case C_800V_module_fault, V_bat 800 V, event 1.50 ms, dt 2.50 ns, wall 134 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           PASS
+    C2_module_fault      PASS
+    V_A 1 us max 401.88 V (E26 401.06), bus 401.03 V (E26 400.94); instantaneous V_A 401.91 V, bus 401.04 V (limit 470 V)
+    clamp: energy 0.0 J (E26 0.0 J), on 0.000 ms (E26 0.000 ms), peak 0 kW, turn-ons 0
+    48 V (10 us mean, from 1 ms) 48.000-48.014 V (E22 48.000-48.001, band 47.04-48.96); Stage C 100 us max 102.6 A, secondary peak 80.5 A
+    Stage C ZVS: primary 0.11 V (1250 edges), secondary 0.00 V (0 edges)
+    Stage A pre: ZCS max 1.13 % (ref 0.46 %), Ipk max 63.5 A (ref 63.8 A), sharing 0.32 %, V_A 400.814 V (ref 400.798 V), i_A -312.5 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 4633, violations 0, worst 1.42 A; phase peak 98.0 A (limit 114.6 A)
+    Stage A after event: ZCS max 1.34 % (ref 0.46 %), Ipk max 85.6 A (ref 85.1 A), sharing 0.14 %
+C_800V_module_fault done (134 s): PASS
+TB20 case D_800V_charger_ramp, V_bat 800 V, event 1.50 ms, dt 2.50 ns, wall 153 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           FAIL
+    C6_charger_ramp      PASS
+    V_A 1 us max 401.11 V (E26 400.86), bus 401.04 V (E26 400.93); instantaneous V_A 401.13 V, bus 401.05 V (limit 470 V)
+    clamp: energy 0.0 J (E26 0.0 J), on 0.000 ms (E26 0.000 ms), peak 0 kW, turn-ons 0
+    48 V (10 us mean, from 1 ms) 47.997-48.013 V (E22 47.998-48.002, band 47.04-48.96); Stage C 100 us max 102.6 A, secondary peak 80.6 A
+    Stage C ZVS: primary 0.11 V (1500 edges), secondary 0.00 V (0 edges)
+    Stage A pre: ZCS max 5.02 % (ref 5.51 %), Ipk max 7.7 A (ref 7.5 A), sharing 1.48 %, V_A 399.903 V (ref 399.905 V), i_A 37.7 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 7027, violations 1, worst 1.01 A; phase peak 71.9 A (limit 114.6 A)
+    Stage A after event: ZCS max 1.20 % (ref 0.46 %), Ipk max 68.8 A (ref 68.9 A), sharing 0.25 %
+D_800V_charger_ramp done (153 s): FAIL
+TB20 R2 base while charging (Stage A 4 modules + charger + bus + regulated Stage C + V_A clamp), reference E26 / E22 / E1
+case                   result vA_max    ref       E_cl[J]   ref       vo_min    failed
+A_920V_pathloss        PASS   468.69    469.13    443.2     444.0     47.994    
+B_640V_pathloss_ramp   PASS   468.17    468.40    21.5      22.9      47.988    
+C_800V_module_fault    PASS   401.88    401.06    0.0       0.0       48.000    
+D_800V_charger_ramp    FAIL   401.11    400.86    0.0       0.0       47.997    C5_turnoff
+TB20 overall: FAIL
+[prism_run] run_TB20 finished (764.4 s)
