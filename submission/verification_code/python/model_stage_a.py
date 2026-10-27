@@ -76,7 +76,7 @@ def draw_tolerance(N, tol, rs):
 
 def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, tol=None, rs=None,
               R_in=0.0, C_in=100e-6, ncyc=60, Nstep=340, vC0=None, Vbus0=None, en=None,
-              td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False, unarmed_stop="max"):
+              td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False, unarmed_stop="max", mgr=None, chg=None):
     """N위상 Stage A 어레이를 ncyc 주기 동안 적분한다.
 
     Iload     : 버스 부하전류 [A]. 음수면 역방향(버스 → 배터리) 전력.
@@ -97,7 +97,20 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
                 'max'(기본, E1–E26과 같음): 최대 도통시간(공칭의 1.12배)에서 끈다.
                 'nom': 공칭 도통시간 t_on에서 끈다. 첨두가 무장 문턱보다 작은 반주기는 영교차를 검출할 수 없으므로,
                        전류가 거의 0인 공칭 시각에 끈다(최대 도통시간까지 두면 전류가 반대 방향으로 자란다, TB20 D).
-                무장한 반주기는 두 경우 모두 같다(영교차 검출 또는 최대 도통시간).
+                'mag'(E28): 무장하지 못한 반주기는 부호 없이 |i| < i_thr가 검출 지연만큼 이어지면 블랭킹(최소 도통시간) 뒤 끈다
+                       (아니면 최대 도통시간). 공진주파수가 낮은 위상(공차)이나 모듈 재시작 직후의 비대칭 펄스는 공칭 도통시간에
+                       아직 1 A 넘게 흐를 수 있어(E28 transient 1차), 실제 영교차 근처에서 끈다.
+                무장한 반주기는 세 경우 모두 같다(영교차 검출 또는 최대 도통시간).
+    mgr       : (E28) 모듈 관리기 + 모듈별 경부하 위상 셰딩. None이면 쓰지 않는다(이전과 같음). N은 짝수(모듈 = 위상 2개,
+                모듈 m의 위상 2m·2m+1). dict 키: 위상 셰딩 I_off·I_on·Ipk_on·tau·t_dwell(shed와 같은 뜻, 모듈마다 따로),
+                모듈 문턱 Im_up(모듈당 [A]: |필터한 전체 출력전류| > 동작 모듈 수 × Im_up이면 모듈 추가),
+                Im_dn(모듈당 [A]: 필요 모듈 수 = ceil(|I|/Im_dn)가 동작 수보다 작은 상태가 t_dwell_m 이어지면 그 수로 줄임),
+                Ipk_m(동작 위상 하나라도 순시 |i| > Ipk_m이면 모듈 추가), t_dwell_m, tau_m(모듈 수 판단용 전체 전류 필터 시정수,
+                없으면 tau: 2 µs 필터는 위상 펄스 리플이 커서 60 A 평균에서 50–75 A로 흔들린다, E28 static 2차), t_lock(모듈을 더한 뒤 다음 추가를 막는 시간:
+                새 모듈이 분담을 받기 전 같은 첨두로 연달아 더하지 않도록), t_hold(Stage A 시작 뒤 모듈 수를 바꾸지 않는 시간:
+                시작 과도의 전류 넘침으로 모듈을 더하지 않도록, 없으면 0), n0(시작 동작 모듈 수, 없으면 부하로 정함).
+                논리는 mgr_step과 회로 게이트 ctrl/prism_gate_stageA_zcpm.m이 같다.
+    chg       : (E28) 충전 요청 구간 (t_start, t_end). 이 구간에서는 모든 모듈을 동작시킨다(충전기 전류 증가 전 사전 기동).
     mode      : 'fixed'(고정 타이밍) 또는 'zcp'(자기발진 영교차 추종)
     fratio    : 스위칭 주파수 / 공칭 공진주파수 (zcp에서는 적분 간격을 정하는 기준 주기로만 쓴다)
     tol, rs   : 부품 공차 {'C','L','R'}와 난수 생성기(matlab_rng)
@@ -116,7 +129,7 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     # 초기조건: 정상상태 근처(v_C = V_bus = V_bat/2). 프리차지 시험은 0 V에서 시작.
     Vo0 = Vbat / 2
     iC = np.zeros(N)
-    vC = np.full(N, Vo0 if vC0 is None else float(vC0))
+    vC = np.full(N, Vo0) if vC0 is None else np.array(np.broadcast_to(np.asarray(vC0, float), (N,)), float)   # (E28) 위상별 초기값 허용
     Vb = Vo0 if Vbus0 is None else float(Vbus0)
     Vin = float(Vbat) if R_in == 0 else 0.0
 
@@ -152,6 +165,11 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
         S = dict(mode=2, If=IL, tlow=0, blocked=False,
                  ndwell=int(mround(sh["t_dwell"] / dt)), noff=int(mround(sh["off_frac"] * Nstep)), a=dt / sh["tau"])
         log_sm = np.zeros(n, np.int8); log_if = np.zeros(n, np.float32); log_ig = np.zeros((n, N), np.float32)
+    if mgr is not None:                                          # (E28) 모듈 관리기
+        chg_on = (lambda tk: chg is not None and chg[0] <= tk < chg[1])
+        M = mgr_init(mgr, N, IL, dt, chg_on(0.))
+        log_na = np.zeros(n, np.int8); log_mm = np.zeros((n, N // 2), np.int8); log_if = np.zeros(n, np.float32)
+        log_ig = np.zeros((n, N), np.float32); log_chg = np.zeros(n, np.int8)
 
     def deriv(iC, vC, Vb, s, Vin, xb):
         """구간 s(0 데드, 1 충전, 2 방전)에 따른 상태 미분과 출력·입력 전류. xb = 버스 상태(버스가 없으면 쓰지 않음)."""
@@ -176,11 +194,18 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
             log_ig[k] = iC                                       # 게이트가 본 전류(데드타임 소멸 처리 전, 회로 게이트 대조용)
             shed_step(S, sh, iC, st, tmr, ndead, en)
             log_sm[k] = S["mode"]; log_if[k] = S["If"]
+        if mode == "zcp" and mgr is not None:
+            log_ig[k] = iC
+            cg = chg_on(k * dt)
+            mgr_step(M, iC, st, cg)
+            log_na[k] = M["nact"]; log_mm[k] = M["mmode"]; log_if[k] = M["If"]; log_chg[k] = cg
         if mode == "zcp":
             # 데드타임이 끝난 위상은 다음 구간(1↔2 교대)을 시작한다.
             start = (st == 0) & (tmr >= ndead)
             if shed is not None and S["blocked"]:
                 start[sh["sh"]] = False                              # 셰딩된 위상은 시작하지 않는다
+            if mgr is not None:
+                start &= ~M["blk"]                                   # (E28) 멈춘 모듈·셰딩된 위상은 시작하지 않는다
             st = np.where(start, nxt, st); nxt = np.where(start, 3 - nxt, nxt)
             armed = np.where(start, False, armed); det = np.where(start, 0, det)
             oncnt = np.where(start, 0, oncnt); tmr = np.where(start, 0, tmr)
@@ -188,7 +213,10 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
             new_arm = (st != 0) & (~armed) & (np.abs(iC) > i_thr * 5)
             pulse_sign[new_arm] = np.sign(iC[new_arm]); armed |= new_arm
             # 펄스 부호 기준으로 전류가 i_thr 아래로 돌아오면 영교차. 검출 지연(ndet 단계) 뒤 턴오프.
-            cross = (st != 0) & armed & (pulse_sign * iC < i_thr)
+            if unarmed_stop == "mag":                    # (E28) 무장 전에는 부호 없는 영교차(|i| < i_thr)
+                cross = (st != 0) & np.where(armed, pulse_sign * iC < i_thr, np.abs(iC) < i_thr)
+            else:
+                cross = (st != 0) & armed & (pulse_sign * iC < i_thr)
             det = np.where(cross, det + 1, 0); oncnt = np.where(st != 0, oncnt + 1, oncnt)
             stop = (st != 0) & (((oncnt >= min_on) & cross & (det > ndet)) | (oncnt >= max_on)
                                 | ((~armed) & (oncnt >= nom_on)))
@@ -229,6 +257,8 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
                fs=fs, T=T, dt=dt, C=C, L=L, R=R, N=N)
     if shed is not None:
         out.update(sm=log_sm, If=log_if, ig=log_ig)
+    if mgr is not None:
+        out.update(nact=log_na, mm=log_mm, If=log_if, ig=log_ig, chg=log_chg, n_mcancel=M["mcancel"], n_pcancel=M["pcancel"])
     if busen:
         out.update(vbus=log_vbus, iw=log_iw)
     return out
@@ -271,6 +301,105 @@ def shed_step(S, sh, iC, st, tmr, ndead, en):
     elif m == 4:
         if st[kp] == 0 and tmr[kp] >= ndead:
             tmr[ks] = ndead - S["noff"]; S["blocked"] = False; S["mode"] = 2; S["tlow"] = 0
+
+
+def mgr_init(cfg, N, IL, dt, chg0):
+    """(E28) 모듈 관리기 상태. 모듈 모드: 0 정지, 2 두 위상, 3 위상 하나 멈추는 중, 1 위상 하나, 5 모듈 멈추는 중."""
+    nm = N // 2
+    if cfg.get("n0"):
+        n0 = int(cfg["n0"])
+    elif chg0:
+        n0 = nm
+    else:
+        n0 = max(1, min(nm, int(np.ceil(abs(IL) / cfg["Im_up"]))))
+    blk = np.zeros(N, bool)
+    for m in range(n0, nm):
+        blk[2 * m] = blk[2 * m + 1] = True
+    return dict(cfg=cfg, nm=nm, nact=n0, If=float(IL), Ifm=np.array([IL / n0 if m < n0 else 0. for m in range(nm)]),
+                tdn=0, mmode=np.array([2 if m < n0 else 0 for m in range(nm)], int), tlow=np.zeros(nm, int), blk=blk,
+                a=dt / cfg["tau"], a_m=dt / cfg.get("tau_m", cfg["tau"]), ndwell=int(mround(cfg["t_dwell"] / dt)), ndwell_m=int(mround(cfg["t_dwell_m"] / dt)),
+                nlock=int(mround(cfg["t_lock"] / dt)), tlock=0, nhold=int(mround(cfg.get("t_hold", 0.) / dt)), kstep=0,
+                mcancel=0, pcancel=0)
+
+
+def mgr_step(M, iC, st, chg):
+    """(E28) 모듈 관리기와 모듈별 위상 셰딩, 적분 간격마다 영교차 추종 갱신 직전에 한 번 부른다(직전 간격의 구간 st로 판단).
+    회로 게이트 ctrl/prism_gate_stageA_zcpm.m과 같은 순서·조건이다.
+      1) 위상 출력전류(구간 1이면 +i, 2이면 −i)로 모듈 출력전류와 전체 출력전류를 만들고 1차 필터로 거른다
+         (모듈 전류는 위상 셰딩용 계수 a, 전체 전류는 모듈 수 판단용 계수 a_m).
+      2) 모듈 추가(바로): 충전 요청이거나, 추가 뒤 막는 시간(n_lock)이 지났고 |If| > 동작 수 × Im_up이거나 동작 위상의
+         순시 |i| > Ipk_m이면, 충전 요청이면 모든 모듈, 아니면 max(동작 수 + 1, ceil(|If|/Im_up))개로 늘린다.
+         멈추는 중이던 모듈은 취소(mcancel).
+      (시작 유지) 시작 뒤 n_hold 간격 동안은 2)·3)을 하지 않는다.
+      3) 모듈 줄임(지속 뒤): 충전 요청이 없고 ceil(|If|/Im_dn) < 동작 수인 상태가 n_dwell_m 이어지면 그 수로 줄인다.
+         줄인 모듈은 모드 5(멈추는 중): 위상마다 지금 구간을 자연 턴오프로 끝낸 뒤(구간 0) 막는다 → 끄는 순간도 영전류.
+         남는 모듈은 두 위상으로 되돌린다(위상 셰딩은 지속 조건이 다시 차면 다시 한다).
+      4) 동작 모듈마다 E24와 같은 위상 셰딩(모듈 출력전류 Ifm, 남는 위상 2m, 멈추는 위상 2m+1, 복귀는 바로).
+    반환하지 않고 M['blk'](위상별 시작 금지)를 고친다."""
+    c = M["cfg"]; nm = M["nm"]; blk = M["blk"]; mm = M["mmode"]
+    io = 0.; iom = np.zeros(nm)
+    for k in range(2 * nm):
+        x = iC[k] if st[k] == 1 else (-iC[k] if st[k] == 2 else 0.)
+        io += x; iom[k // 2] += x
+    M["If"] += (io - M["If"]) * M["a_m"]                # 모듈 수 판단용(느린 필터)
+    M["Ifm"] += (iom - M["Ifm"]) * M["a"]
+    nact = M["nact"]
+    pk = 0.
+    for k in range(2 * nm):
+        if mm[k // 2] != 0 and abs(iC[k]) > pk:
+            pk = abs(iC[k])
+    If = abs(M["If"])
+    hold = M["kstep"] < M["nhold"]                     # 시작 유지 구간: 모듈 수를 바꾸지 않는다
+    if hold:
+        M["kstep"] += 1
+    if M["tlock"] > 0:
+        M["tlock"] -= 1
+    up = chg or (M["tlock"] == 0 and (If > nact * c["Im_up"] or pk > c["Ipk_m"]))
+    if hold:
+        M["tdn"] = 0
+    elif nact < nm and up:
+        new = nm if chg else min(nm, max(nact + 1, int(np.ceil(If / c["Im_up"]))))
+        for m in range(nact, new):
+            if mm[m] == 5:
+                M["mcancel"] += 1
+            mm[m] = 2; M["tlow"][m] = 0; blk[2 * m] = False; blk[2 * m + 1] = False
+        M["nact"] = nact = new; M["tdn"] = 0; M["tlock"] = M["nlock"]
+    elif (not chg) and nact > 1:
+        ndn = max(1, int(np.ceil(If / c["Im_dn"])))
+        M["tdn"] = M["tdn"] + 1 if ndn < nact else 0
+        if M["tdn"] >= M["ndwell_m"]:
+            for m in range(ndn, nact):
+                mm[m] = 5
+            for m in range(ndn):                         # 남는 모듈은 두 위상으로(줄인 모듈의 전류를 위상 하나가 받지 않도록)
+                if mm[m] in (1, 3):
+                    mm[m] = 2; blk[2 * m + 1] = False
+                M["tlow"][m] = 0
+            M["nact"] = nact = ndn; M["tdn"] = 0
+    else:
+        M["tdn"] = 0
+    for m in range(nm):
+        kp, ks = 2 * m, 2 * m + 1
+        if m < nact:                                     # 동작 모듈: 위상 셰딩(E24 shed_step, 복귀는 바로)
+            ret = abs(M["Ifm"][m]) > c["I_on"] or abs(iC[kp]) > c["Ipk_on"]
+            if mm[m] == 2:
+                M["tlow"][m] = M["tlow"][m] + 1 if abs(M["Ifm"][m]) < c["I_off"] else 0
+                if M["tlow"][m] >= M["ndwell"]:
+                    mm[m] = 3
+            elif mm[m] == 3:
+                if ret:
+                    mm[m] = 2; M["tlow"][m] = 0; M["pcancel"] += 1
+                elif st[ks] == 0:
+                    blk[ks] = True; mm[m] = 1
+            elif mm[m] == 1:
+                if ret:
+                    blk[ks] = False; mm[m] = 2; M["tlow"][m] = 0
+        elif mm[m] == 5:                                 # 멈추는 모듈: 구간을 끝낸 위상부터 막는다
+            if st[kp] == 0:
+                blk[kp] = True
+            if st[ks] == 0:
+                blk[ks] = True
+            if blk[kp] and blk[ks]:
+                mm[m] = 0
 
 
 def analyze(r, ncyc_last=10):

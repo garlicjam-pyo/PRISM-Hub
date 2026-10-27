@@ -1,0 +1,88 @@
+{
+  "case": "MC_800V_charge_prestart",
+  "verdict": "PASS",
+  "failed": [],
+  "limits": {
+    "T1_turnoff": true,
+    "T2_phase_peak": true,
+    "T3_vA_vs_allon": true,
+    "T4_modules": true
+  },
+  "n_turnoff": 3902,
+  "n_bad": 0,
+  "ioff_max": 0.94564253091812134,
+  "phase_peak": 74.011848449707031,
+  "phase_peak_ref": 69.578994750976562,
+  "vA": [
+    399.28401251817735,
+    401.18266368978
+  ],
+  "vA_ref": [
+    399.81774990989231,
+    401.05668483285177
+  ],
+  "events_ms": [
+    [
+      0.4,
+      4
+    ],
+    [
+      2.4499999999999997,
+      1
+    ]
+  ],
+  "n_add": 1,
+  "n_rem": 1,
+  "n_end": 1,
+  "n_cancel": 0,
+  "wall_s": [
+    118.9309202,
+    121.2435654
+  ],
+  "dt_ns": 2.5,
+  "date": "2026-10-28 03:06:13",
+  "compare": [
+    {
+      "metric": "module change 1 time [ms] (-> 4)",
+      "simscape": 0.4,
+      "e28": 0.4,
+      "tol": 0.02
+    },
+    {
+      "metric": "module change 2 time [ms] (-> 1)",
+      "simscape": 2.4499999999999997,
+      "e28": 2.45,
+      "tol": 0.02
+    },
+    {
+      "metric": "phase peak [A]",
+      "simscape": 74.011848449707031,
+      "e28": 70.740158081054688,
+      "tol": 7.0740158081054689
+    },
+    {
+      "metric": "phase peak, all on [A]",
+      "simscape": 69.578994750976562,
+      "e28": 70.509971618652344,
+      "tol": 7.0509971618652347
+    },
+    {
+      "metric": "V_A min [V]",
+      "simscape": 399.28401251817735,
+      "e28": 399.30657958984375,
+      "tol": 0.3
+    },
+    {
+      "metric": "V_A max [V]",
+      "simscape": 401.18266368978,
+      "e28": 401.11343383789062,
+      "tol": 0.3
+    },
+    {
+      "metric": "max turn-off current [A]",
+      "simscape": 0.94564253091812134,
+      "e28": 0.6741187572479248,
+      "tol": null
+    }
+  ]
+}

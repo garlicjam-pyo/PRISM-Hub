@@ -1,0 +1,20 @@
+TB22 case MF_800V_charge_no_prestart (V_bat 800 V), dt 2.50 ns, wall 122 s (manager) + 121 s (all on)
+(1) criteria (t >= 0.3 ms):
+    T1_turnoff           FAIL
+    T2_phase_peak        FAIL
+    T3_vA_vs_allon       PASS
+    T4_modules           PASS
+    turn-offs 3592, violations 1 (worst |i_off| 1.14 A); phase peak 83.2 A (all on 69.6 A, P_rated 76.5 A)
+    V_A 399.285-401.592 V (all on 399.818-401.057 V); module changes: [0.5402 2;0.5608 3;0.5813 4;2.3645 1]
+    added 3, removed 1, end 1, stop-cancel 0 (limits +3/-1, end 1)
+(2) comparison with E28 (info):
+    metric                                  Simscape         E28      diff    result
+    module change 1 time [ms] (-> 2)         0.54017      0.5404  -0.00023        ok
+    module change 2 time [ms] (-> 3)         0.56083      0.5611  -0.00027        ok
+    module change 3 time [ms] (-> 4)         0.58128      0.5816  -0.00032        ok
+    module change 4 time [ms] (-> 1)          2.3645      2.3647  -0.00018        ok
+    phase peak [A]                            83.202      84.208     -1.01        ok
+    phase peak, all on [A]                    69.579       70.51    -0.931        ok
+    V_A min [V]                               399.28      399.29  -0.00847        ok
+    V_A max [V]                               401.59      401.59  +0.00197        ok
+    max turn-off current [A]                   1.139     0.85599    +0.283      info

@@ -1,0 +1,7 @@
+TB22 Stage A 4 modules (module manager + per-module phase shedding + reversal handling), R2 bus, reference E28
+case                         result peak[A]   all-on    vA[V]           vA all-on       modules        failed
+MA_540V_bus_5_25_5kW         PASS   56.4      24.4      269.01 -269.99  269.60 -270.01  +1/-1 end 1 
+MB_800V_bus_ramp_2_36_2kW    PASS   54.5      18.7      399.27 -399.98  399.67 -399.99  +1/-1 end 1 
+MC_800V_charge_prestart      PASS   74.0      69.6      399.28 -401.18  399.82 -401.06  +1/-1 end 1 
+MF_800V_charge_no_prestart   FAIL   79.7      69.6      399.30 -401.51  399.82 -401.06  +3/-1 end 1 T1_turnoff, T2_phase_peak
+TB22 overall: FAIL

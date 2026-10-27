@@ -13,9 +13,13 @@ function build_stageA_gate_zcp(sys, pos, T, phases, opt)
 %   opt.enTag(선택, TB20): 위상 동작 여부 en(8×1)을 상수 T.gateA_en 대신 이 태그의 신호로 받는다(사건 중 게이트 차단).
 %   opt.gateFile(선택, TB21): 셰딩 없는 게이트 함수 파일(기본 prism_gate_stageA_zcp.m). 방향 반전 처리판은
 %            prism_gate_stageA_zcp_r.m(파라미터 7개, 마지막 = 공칭 도통시간 n_nom).
+%   opt.mgr(선택, TB22): true면 4모듈 게이트 ctrl/prism_gate_stageA_zcpm.m(모듈 관리기 + 모듈별 위상 셰딩 + 방향 반전 처리)를
+%            쓴다. 파라미터는 T.gateA_zcpm_prm(21개), 충전 요청은 태그 opt.chgTag(기본 'chg_req')로 받고, 셋째 출력
+%            [동작 모듈 수; 모듈 모드 4; 필터한 전체 출력전류; 취소 수]는 태그 stA_mgr로 내보낸다.
 
 if nargin < 5, opt = struct(); end
 shed = isfield(opt, 'shed') && opt.shed;
+mgr = isfield(opt, 'mgr') && opt.mgr;
 gs = [sys '/Gate_StageA'];
 add_block('built-in/Subsystem', gs, 'Position', pos, 'BackgroundColor', 'yellow');
 sl_add(gs, 'simulink/Sources/Digital Clock', 'Clock', [30 20 80 50], 'SampleTime', [T '.dt']);
@@ -37,7 +41,11 @@ sl_line(gs, 'iC_mux/1', 'iC_z1/1');
 sl_startup_guard(gs, 'Startup_guard', [290 90 320 160], 'zeros(8,1)', T, [190 250 280 270]);
 sl_line(gs, 'iC_z1/1', 'Startup_guard/1');
 sl_line(gs, 'Clock/1', 'Startup_guard/2');
-if shed
+if mgr
+    sl_add(gs, 'simulink/Sources/Constant', 'zcp_prm', [230 300 330 320], 'Value', [T '.gateA_zcpm_prm']);
+    ct = 'chg_req'; if isfield(opt, 'chgTag') && ~isempty(opt.chgTag), ct = opt.chgTag; end
+    sl_add(gs, 'simulink/Signal Routing/From', 'chg_req', [230 420 330 440], 'GotoTag', ct);
+elseif shed
     sl_add(gs, 'simulink/Sources/Constant', 'zcp_prm', [230 300 330 320], 'Value', [T '.gateA_zcps_prm']);
 else
     sl_add(gs, 'simulink/Sources/Constant', 'zcp_prm', [230 300 330 320], 'Value', [T '.gateA_zcp_prm']);
@@ -48,7 +56,11 @@ else
     sl_add(gs, 'simulink/Sources/Constant', 'phase_en', [230 340 330 360], 'Value', [T '.gateA_en']);
 end
 sl_add(gs, 'simulink/Sources/Constant', 'phase_off', [230 380 330 400], 'Value', [T '.gateA_off']);
-if shed
+if mgr
+    sl_mfunc(gs, 'StageA_ZCP_Gate', [380 60 540 460], 'prism_gate_stageA_zcpm.m');
+    sl_add(gs, 'simulink/Signal Routing/Goto', 'stA_mgr', [580 480 680 500], 'GotoTag', 'stA_mgr', 'TagVisibility', 'global');
+    sl_line(gs, 'StageA_ZCP_Gate/3', 'stA_mgr/1');
+elseif shed
     sl_mfunc(gs, 'StageA_ZCP_Gate', [380 60 540 420], 'prism_gate_stageA_zcps.m');
     sl_add(gs, 'simulink/Signal Routing/Goto', 'stA_shed', [580 440 680 460], 'GotoTag', 'stA_shed', 'TagVisibility', 'global');
     sl_line(gs, 'StageA_ZCP_Gate/3', 'stA_shed/1');
@@ -60,8 +72,14 @@ end
 sl_line(gs, 'Clock/1', 'StageA_ZCP_Gate/1');
 sl_line(gs, 'Startup_guard/1', 'StageA_ZCP_Gate/2');
 sl_line(gs, 'zcp_prm/1', 'StageA_ZCP_Gate/3');
-sl_line(gs, 'phase_en/1', 'StageA_ZCP_Gate/4');
-sl_line(gs, 'phase_off/1', 'StageA_ZCP_Gate/5');
+if mgr                                              % (t, iC, prm, chg, en, off)
+    sl_line(gs, 'chg_req/1', 'StageA_ZCP_Gate/4');
+    sl_line(gs, 'phase_en/1', 'StageA_ZCP_Gate/5');
+    sl_line(gs, 'phase_off/1', 'StageA_ZCP_Gate/6');
+else
+    sl_line(gs, 'phase_en/1', 'StageA_ZCP_Gate/4');
+    sl_line(gs, 'phase_off/1', 'StageA_ZCP_Gate/5');
+end
 % 게이트 32개 → 동작 위상의 태그(앞뒤 정지 위상 묶음은 종단). 동작 위상은 연속 번호라고 가정한다(모듈 단위).
 p1 = phases(1); assert(isequal(phases(:)', p1:p1 + np - 1), 'phases must be contiguous');
 gsz = [4*(p1 - 1), ones(1, 4*np), 4*(8 - p1 - np + 1)];
@@ -99,7 +117,12 @@ for e = si(2:end)
     sl_add(gs, 'simulink/Sinks/Terminator', nm, [660 ys+30*np 680 ys+20+30*np]);
     sl_line(gs, sprintf('state_demux/%d', e), [nm '/1']);
 end
-if shed
+if mgr
+    sl_note(gs, sprintf(['모듈 관리기(TB22): 필터한 전체 출력전류 |I| > 동작 수 × Im_up(또는 위상 |i| > Ipk_m, 충전 요청)이면 모듈을 바로 더하고,\n' ...
+        '필요 수 ceil(|I|/Im_dn)이 동작 수보다 작은 상태가 지속되면 줄인다(위상은 자연 턴오프 뒤 멈춤). 동작 모듈마다 경부하 위상 셰딩.\n' ...
+        '코드: ctrl/prism_gate_stageA_zcpm.m(검증 코드 E28 model_stage_a.mgr_step과 같은 논리, 방향 반전 처리 포함)']), ...
+        [30 ys+30*numel(ssz)+100 820 ys+30*numel(ssz)+150], 'box');
+elseif shed
     sl_note(gs, sprintf(['경부하 위상 셰딩(TB18): 필터한 모듈 출력전류 |I| < I_off가 지속 시간 이어지면 위상 하나가 자연 턴오프 뒤 멈추고,\n' ...
         '|I| > I_on 또는 남는 위상 |i| > I_pk,on이면 다시 시작한다. 코드: ctrl/prism_gate_stageA_zcps.m(검증 코드 E24와 같은 논리)']), ...
         [30 ys+30*numel(ssz)+100 820 ys+30*numel(ssz)+130], 'box');

@@ -1,0 +1,111 @@
+{
+  "case": "MF_800V_charge_no_prestart",
+  "verdict": "FAIL",
+  "failed": [
+    "T1_turnoff",
+    "T2_phase_peak"
+  ],
+  "limits": {
+    "T1_turnoff": false,
+    "T2_phase_peak": false,
+    "T3_vA_vs_allon": true,
+    "T4_modules": true
+  },
+  "n_turnoff": 3592,
+  "n_bad": 1,
+  "ioff_max": 1.1390429735183716,
+  "phase_peak": 83.202186584472656,
+  "phase_peak_ref": 69.578994750976562,
+  "vA": [
+    399.28468563162176,
+    401.59184843745049
+  ],
+  "vA_ref": [
+    399.81774990989231,
+    401.05668483285177
+  ],
+  "events_ms": [
+    [
+      0.54016999999999993,
+      2
+    ],
+    [
+      0.56083,
+      3
+    ],
+    [
+      0.58128,
+      4
+    ],
+    [
+      2.36452,
+      1
+    ]
+  ],
+  "n_add": 3,
+  "n_rem": 1,
+  "n_end": 1,
+  "n_cancel": 0,
+  "wall_s": [
+    122.4557161,
+    121.2416473
+  ],
+  "dt_ns": 2.5,
+  "date": "2026-10-28 03:10:20",
+  "compare": [
+    {
+      "metric": "module change 1 time [ms] (-> 2)",
+      "simscape": 0.54016999999999993,
+      "e28": 0.5404,
+      "tol": 0.02
+    },
+    {
+      "metric": "module change 2 time [ms] (-> 3)",
+      "simscape": 0.56083,
+      "e28": 0.5611,
+      "tol": 0.02
+    },
+    {
+      "metric": "module change 3 time [ms] (-> 4)",
+      "simscape": 0.58128,
+      "e28": 0.5816,
+      "tol": 0.02
+    },
+    {
+      "metric": "module change 4 time [ms] (-> 1)",
+      "simscape": 2.36452,
+      "e28": 2.3647,
+      "tol": 0.02
+    },
+    {
+      "metric": "phase peak [A]",
+      "simscape": 83.202186584472656,
+      "e28": 84.207817077636719,
+      "tol": 8.4207817077636715
+    },
+    {
+      "metric": "phase peak, all on [A]",
+      "simscape": 69.578994750976562,
+      "e28": 70.509971618652344,
+      "tol": 7.0509971618652347
+    },
+    {
+      "metric": "V_A min [V]",
+      "simscape": 399.28468563162176,
+      "e28": 399.29315185546875,
+      "tol": 0.3
+    },
+    {
+      "metric": "V_A max [V]",
+      "simscape": 401.59184843745049,
+      "e28": 401.58987426757812,
+      "tol": 0.3
+    },
+    {
+      "metric": "max turn-off current [A]",
+      "simscape": 1.1390429735183716,
+      "e28": 0.8559882640838623,
+      "tol": null
+    }
+  ]
+}

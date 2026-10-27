@@ -1,0 +1,18 @@
+TB22 case MA_540V_bus_5_25_5kW (V_bat 540 V), dt 2.50 ns, wall 123 s (manager) + 125 s (all on)
+(1) criteria (t >= 0.3 ms):
+    T1_turnoff           PASS
+    T2_phase_peak        PASS
+    T3_vA_vs_allon       PASS
+    T4_modules           PASS
+    turn-offs 2169, violations 0 (worst |i_off| 0.72 A); phase peak 67.4 A (all on 24.4 A, P_rated 76.5 A)
+    V_A 268.958-269.993 V (all on 269.595-270.012 V); module changes: [0.5615 2;2.5515 1]
+    added 1, removed 1, end 1, stop-cancel 0 (limits +1/-1, end 1)
+(2) comparison with E28 (info):
+    metric                                  Simscape         E28      diff    result
+    module change 1 time [ms] (-> 2)         0.56146      0.5618  -0.00034        ok
+    module change 2 time [ms] (-> 1)          2.5515      2.5513   +0.0002        ok
+    phase peak [A]                            67.419      67.984    -0.565        ok
+    phase peak, all on [A]                    24.376      25.292    -0.915        ok
+    V_A min [V]                               268.96      268.96  -0.00691        ok
+    V_A max [V]                               269.99         270  -0.00557        ok
+    max turn-off current [A]                 0.71862     0.53791    +0.181      info

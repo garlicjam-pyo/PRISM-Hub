@@ -1,0 +1,88 @@
+{
+  "case": "MB_800V_bus_ramp_2_36_2kW",
+  "verdict": "PASS",
+  "failed": [],
+  "limits": {
+    "T1_turnoff": true,
+    "T2_phase_peak": true,
+    "T3_vA_vs_allon": true,
+    "T4_modules": true
+  },
+  "n_turnoff": 2701,
+  "n_bad": 0,
+  "ioff_max": 0.59593665599823,
+  "phase_peak": 58.316120147705078,
+  "phase_peak_ref": 18.716432571411133,
+  "vA": [
+    399.22306669855686,
+    399.98420566138759
+  ],
+  "vA_ref": [
+    399.67001503954447,
+    399.98801331822955
+  ],
+  "events_ms": [
+    [
+      1.1091499999999999,
+      2
+    ],
+    [
+      3.19375,
+      1
+    ]
+  ],
+  "n_add": 1,
+  "n_rem": 1,
+  "n_end": 1,
+  "n_cancel": 0,
+  "wall_s": [
+    170.0910487,
+    152.8859102
+  ],
+  "dt_ns": 2.5,
+  "date": "2026-10-28 03:02:09",
+  "compare": [
+    {
+      "metric": "module change 1 time [ms] (-> 2)",
+      "simscape": 1.1091499999999999,
+      "e28": 1.1107,
+      "tol": 0.02
+    },
+    {
+      "metric": "module change 2 time [ms] (-> 1)",
+      "simscape": 3.19375,
+      "e28": 3.1919,
+      "tol": 0.02
+    },
+    {
+      "metric": "phase peak [A]",
+      "simscape": 58.316120147705078,
+      "e28": 58.465591430664062,
+      "tol": 5.8465591430664068
+    },
+    {
+      "metric": "phase peak, all on [A]",
+      "simscape": 18.716432571411133,
+      "e28": 18.706111907958984,
+      "tol": 1.8706111907958984
+    },
+    {
+      "metric": "V_A min [V]",
+      "simscape": 399.22306669855686,
+      "e28": 399.23529052734375,
+      "tol": 0.3
+    },
+    {
+      "metric": "V_A max [V]",
+      "simscape": 399.98420566138759,
+      "e28": 399.98626708984375,
+      "tol": 0.3
+    },
+    {
+      "metric": "max turn-off current [A]",
+      "simscape": 0.59593665599823,
+      "e28": 0.4999331533908844,
+      "tol": null
+    }
+  ]
+}
