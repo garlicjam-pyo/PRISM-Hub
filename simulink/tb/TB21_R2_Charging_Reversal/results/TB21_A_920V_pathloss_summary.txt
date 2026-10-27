@@ -1,0 +1,16 @@
+TB21 case A_920V_pathloss, V_bat 920 V, event 1.50 ms, dt 2.50 ns, wall 253 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           PASS
+    V_A 1 us max 468.69 V (E26 469.13), bus 466.88 V (E26 466.83); instantaneous V_A 468.81 V, bus 466.88 V (limit 470 V)
+    clamp: energy 443.2 J (E26 444.0 J), on 2.046 ms (E26 2.047 ms), peak 220 kW, turn-ons 124
+    48 V (10 us mean, from 1 ms) 47.994-48.018 V (E22 47.989-48.012, band 47.04-48.96); Stage C 100 us max 102.6 A, secondary peak 80.9 A
+    Stage C ZVS: primary 0.11 V (2250 edges), secondary 0.00 V (0 edges)
+    Stage A pre: ZCS max 1.15 % (ref 0.46 %), Ipk max 65.2 A (ref 65.5 A), sharing 0.49 %, V_A 460.835 V (ref 460.819 V), i_A -320.6 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 1158, violations 0, worst 0.75 A; phase peak 65.2 A (limit 114.6 A)
+    Stage A forced cut currents [53.4 35.9 11.8 9.8 32.7 51.4 62.8 64.8] A, phase max 50 us after cut 0.00 A

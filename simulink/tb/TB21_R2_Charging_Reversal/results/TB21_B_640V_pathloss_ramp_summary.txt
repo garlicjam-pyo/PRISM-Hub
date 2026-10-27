@@ -1,0 +1,16 @@
+TB21 case B_640V_pathloss_ramp, V_bat 640 V, event 1.50 ms, dt 2.50 ns, wall 264 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           PASS
+    V_A 1 us max 468.17 V (E26 468.40), bus 468.02 V (E26 467.99); instantaneous V_A 468.28 V, bus 468.03 V (limit 470 V)
+    clamp: energy 21.5 J (E26 22.9 J), on 0.100 ms (E26 0.106 ms), peak 219 kW, turn-ons 16
+    48 V (10 us mean, from 1 ms) 47.988-48.065 V (E22 47.987-48.061, band 47.04-48.96); Stage C 100 us max 103.5 A, secondary peak 82.6 A
+    Stage C ZVS: primary 0.11 V (2250 edges), secondary 0.00 V (0 edges)
+    Stage A pre: ZCS max 1.09 % (ref 0.46 %), Ipk max 60.3 A (ref 60.6 A), sharing 0.37 %, V_A 320.773 V (ref 320.758 V), i_A -296.8 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 1159, violations 0, worst 0.66 A; phase peak 60.3 A (limit 114.6 A)
+    Stage A forced cut currents [59.6 58.6 47.7 30.7 5.7 15.5 34.6 48.5] A, phase max 50 us after cut 0.00 A

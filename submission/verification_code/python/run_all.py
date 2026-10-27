@@ -37,6 +37,7 @@ STEPS = [
     ("E24", ["E24_stage_a_shedding.py"]),        # Stage A 경부하 위상 셰딩(design static transient deadfix figures, 2코어 약 10분)
     ("E25", ["E25_motor_boost_comparison.py"]),  # 모터 승압·800 V 부품 구조 비교(E15 결과 필요, 처음 약 2분)
     ("E26", ["E26_charging_stop.py"]),           # 충전 중 Stage A 정지·충전기 차단 협조(overload event figures, 2코어 약 2분)
+    ("E27", ["E27_zcp_reversal.py"]),            # Stage A 영교차 게이트 방향 반전 처리(repro stress regress figures, 2코어 약 15분)
 ]
 
 if __name__ == "__main__":

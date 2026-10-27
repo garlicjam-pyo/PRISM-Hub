@@ -1,0 +1,7 @@
+TB21 = TB20 circuit + Stage A ZCP gate with direction-reversal handling (unarmed half-cycle ends at nominal on-time, E27), reference E26 / E22 / E1
+case                   result vA_max    ref       E_cl[J]   ref       vo_min    failed
+A_920V_pathloss        PASS   468.69    469.13    443.2     444.0     47.994    
+B_640V_pathloss_ramp   PASS   468.17    468.40    21.5      22.9      47.988    
+C_800V_module_fault    PASS   401.88    401.06    0.0       0.0       48.000    
+D_800V_charger_ramp    PASS   401.03    400.86    0.0       0.0       47.997    
+TB21 overall: PASS

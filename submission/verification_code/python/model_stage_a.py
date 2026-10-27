@@ -76,7 +76,7 @@ def draw_tolerance(N, tol, rs):
 
 def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, tol=None, rs=None,
               R_in=0.0, C_in=100e-6, ncyc=60, Nstep=340, vC0=None, Vbus0=None, en=None,
-              td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False):
+              td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False, unarmed_stop="max"):
     """N위상 Stage A 어레이를 ncyc 주기 동안 적분한다.
 
     Iload     : 버스 부하전류 [A]. 음수면 역방향(버스 → 배터리) 전력.
@@ -93,6 +93,11 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     bus       : (E24) V_A 노드 뒤의 400 V 버스. None이면 없음(이전과 같음). dict 키: Rw, Lw(배선), Cb(버스 커패시터),
                 Rd, Cd(RC 감쇠기), P(정전력 부하 전력 프로파일 (tt, PP) [W]), vmin(정전력 부하 전압 하한), RA(초기값용
                 Stage A 출력저항 추정). 이때 Iload는 V_A 노드에 바로 걸리는 전류(충전기 등, 음수 = 주입)다.
+    unarmed_stop: (E27) 무장하지 못한 반주기(도통 중 |i|가 5·i_thr를 한 번도 넘지 않음)를 끝내는 시점.
+                'max'(기본, E1–E26과 같음): 최대 도통시간(공칭의 1.12배)에서 끈다.
+                'nom': 공칭 도통시간 t_on에서 끈다. 첨두가 무장 문턱보다 작은 반주기는 영교차를 검출할 수 없으므로,
+                       전류가 거의 0인 공칭 시각에 끈다(최대 도통시간까지 두면 전류가 반대 방향으로 자란다, TB20 D).
+                무장한 반주기는 두 경우 모두 같다(영교차 검출 또는 최대 도통시간).
     mode      : 'fixed'(고정 타이밍) 또는 'zcp'(자기발진 영교차 추종)
     fratio    : 스위칭 주파수 / 공칭 공진주파수 (zcp에서는 적분 간격을 정하는 기준 주기로만 쓴다)
     tol, rs   : 부품 공차 {'C','L','R'}와 난수 생성기(matlab_rng)
@@ -120,9 +125,11 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     armed = np.zeros(N, bool); det = np.zeros(N, int); pulse_sign = np.zeros(N)
     t_on = 0.5 / FR0 * (1 - 2 * td * FR0)                         # 공칭 도통시간
     min_on = int(mround(0.80 * t_on / dt)); max_on = int(mround(1.12 * t_on / dt))   # 블랭킹·보호 창
+    nom_on = int(mround(t_on / dt)) if unarmed_stop == "nom" else max_on              # (E27) 무장 못 한 반주기의 끝
 
     log_i = np.zeros((n, N), np.float32); log_v = np.zeros((n, N), np.float32)
     log_vb = np.zeros(n, np.float32); log_st = np.zeros((n, N), np.int8); log_io = np.zeros((n, N), np.float32)
+    log_arm = np.zeros((n, N), np.int8)                          # (E27) 무장 여부(zcp, 턴오프 분류용)
     busen = bus is not None                                      # (E24) 버스: 상태 [i_w, v_b, v_d]
     if busen:
         Rw, Lw, Cb, Rd, Cd = bus["Rw"], bus["Lw"], bus["Cb"], bus["Rd"], bus["Cd"]
@@ -183,7 +190,8 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
             # 펄스 부호 기준으로 전류가 i_thr 아래로 돌아오면 영교차. 검출 지연(ndet 단계) 뒤 턴오프.
             cross = (st != 0) & armed & (pulse_sign * iC < i_thr)
             det = np.where(cross, det + 1, 0); oncnt = np.where(st != 0, oncnt + 1, oncnt)
-            stop = (st != 0) & (((oncnt >= min_on) & cross & (det > ndet)) | (oncnt >= max_on))
+            stop = (st != 0) & (((oncnt >= min_on) & cross & (det > ndet)) | (oncnt >= max_on)
+                                | ((~armed) & (oncnt >= nom_on)))
             st = np.where(stop, 0, st); tmr = np.where(stop, 0, tmr)
             tmr = np.where(st == 0, tmr + 1, tmr)
             s = st.copy()
@@ -203,6 +211,8 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
         k3 = deriv(iC + .5 * dt * k2[0], vC + .5 * dt * k2[1], Vb + .5 * dt * k2[2], s, Vin, xb + .5 * dt * k2[5])
         k4 = deriv(iC + dt * k3[0], vC + dt * k3[1], Vb + dt * k3[2], s, Vin, xb + dt * k3[5])
         log_i[k] = iC; log_v[k] = vC; log_vb[k] = Vb; log_st[k] = s; log_io[k] = k1[3]
+        if mode == "zcp":
+            log_arm[k] = armed
         if busen:
             log_vbus[k] = xb[1]; log_iw[k] = xb[0]
             xb = xb + dt / 6 * (k1[5] + 2 * k2[5] + 2 * k3[5] + k4[5])
@@ -215,7 +225,7 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
             Vin = Vin + dt * ((Vbat - Vin) / R_in - k1[4].sum()) / C_in
 
     t = np.arange(n) * dt
-    out = dict(t=t, i=log_i, v=log_v, vb=log_vb, st=log_st, io=log_io,
+    out = dict(t=t, i=log_i, v=log_v, vb=log_vb, st=log_st, io=log_io, arm=log_arm,
                fs=fs, T=T, dt=dt, C=C, L=L, R=R, N=N)
     if shed is not None:
         out.update(sm=log_sm, If=log_if, ig=log_ig)

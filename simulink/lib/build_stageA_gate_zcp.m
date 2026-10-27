@@ -11,6 +11,8 @@ function build_stageA_gate_zcp(sys, pos, T, phases, opt)
 %   opt.shed(선택, TB18): true면 경부하 위상 셰딩 게이트 ctrl/prism_gate_stageA_zcps.m을 쓴다. 파라미터는 T.gateA_zcps_prm,
 %            셋째 출력 [셰딩 모드; 필터한 모듈 출력전류]는 태그 stA_shed로 내보낸다.
 %   opt.enTag(선택, TB20): 위상 동작 여부 en(8×1)을 상수 T.gateA_en 대신 이 태그의 신호로 받는다(사건 중 게이트 차단).
+%   opt.gateFile(선택, TB21): 셰딩 없는 게이트 함수 파일(기본 prism_gate_stageA_zcp.m). 방향 반전 처리판은
+%            prism_gate_stageA_zcp_r.m(파라미터 7개, 마지막 = 공칭 도통시간 n_nom).
 
 if nargin < 5, opt = struct(); end
 shed = isfield(opt, 'shed') && opt.shed;
@@ -51,7 +53,9 @@ if shed
     sl_add(gs, 'simulink/Signal Routing/Goto', 'stA_shed', [580 440 680 460], 'GotoTag', 'stA_shed', 'TagVisibility', 'global');
     sl_line(gs, 'StageA_ZCP_Gate/3', 'stA_shed/1');
 else
-    sl_mfunc(gs, 'StageA_ZCP_Gate', [380 60 540 420], 'prism_gate_stageA_zcp.m');
+    gf = 'prism_gate_stageA_zcp.m';
+    if isfield(opt, 'gateFile') && ~isempty(opt.gateFile), gf = opt.gateFile; end
+    sl_mfunc(gs, 'StageA_ZCP_Gate', [380 60 540 420], gf);
 end
 sl_line(gs, 'Clock/1', 'StageA_ZCP_Gate/1');
 sl_line(gs, 'Startup_guard/1', 'StageA_ZCP_Gate/2');
