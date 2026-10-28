@@ -1,0 +1,71 @@
+{
+ "part": "FF2MR12KM1P",
+ "maker": "Infineon",
+ "title": "FF2MR12KM1P 62 mm C-Series CoolSiC Trench MOSFET half-bridge module (pre-applied TIM), datasheet V2.0, 2020-05-11, marked Preliminary Data",
+ "url": "https://www.farnell.com/datasheets/3097847.pdf",
+ "accessed": "2026-10-29",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Distributor-hosted (Farnell) copy of the Infineon PDF; cross-checked against the Mouser-hosted Japanese edition of the same V2.0 (https://mouser.com/datasheet/2/196/Infineon_FF2MR12KM1P_DataSheet_v02_00_JA-3162513.pdf): R_DS(on), E_on/E_off, R_thJH and r_i/tau_i match. This is a PRELIMINARY datasheet; a later final revision was not fetched (infineon.com product page/asset requests were blocked). Text extraction drops column labels: R_DS(on) '2,13 2,94 3,25' and V_SD '4,60 4,35 4,30 5,65' are mapped to Tvj 25/125/150 C by order (V_SD 5.65 V read as the 25 C max); no R_DS(on) max is printed. Only R_thJH (with Infineon pre-applied TIM) is given; R_thJC and R_thCH not stated. zth_foster is the Z_thJH (junction-to-heatsink) r_i/tau_i table printed with the MOSFET Z_th figure (sum r_i = 0.104 K/W = R_thJH); no separate body-diode table.",
+ "mosfet": {
+  "V_DSS_V": 1200,
+  "I_D_A": 500,
+  "I_D_note": "I_D nom, DC, Tvj = 175 C, V_GS 15 V, T_H 60 C",
+  "I_DM_A": 1000,
+  "I_DM_note": "I_D pulse (I_DRM), verified by design, t_p limited by Tvj max",
+  "R_DSon_mohm": {
+   "25": 2.13,
+   "125": 2.94,
+   "150": 3.25
+  },
+  "R_DSon_I_A": 500,
+  "R_DSon_cond": "V_GS 15 V, I_D 500 A (typ, mapped by order)",
+  "E_on_mJ": {
+   "25": 26.4,
+   "125": 22.9,
+   "150": 22.9
+  },
+  "E_off_mJ": {
+   "25": 19.6,
+   "125": 20.3,
+   "150": 20.3
+  },
+  "E_cond": "V_DS 600 V, I_D 500 A, V_GS -5/15 V, R_Gon 4.30 ohm, R_Goff 3.30 ohm, L_sigma 10 nH, di/dt 7.83 kA/us and du/dt 7.13 kV/us at Tvj 150 C (inductive)",
+  "R_G_int_ohm": 0.8,
+  "V_SD_V": {
+   "25": 4.6,
+   "125": 4.35,
+   "150": 4.3
+  },
+  "V_SD_25C_max_V": 5.65,
+  "V_SD_cond": "body diode, I_SD 500 A, V_GS -5 V",
+  "L_sCE_nH": 20,
+  "R_thJC_KperW": null,
+  "R_thCH_KperW": null,
+  "R_thJH_KperW": 0.104,
+  "R_thJH_note": "per MOSFET, valid with IFX pre-applied thermal interface material",
+  "T_vj_op_max_C": 150,
+  "zth_foster": [
+   [
+    0.017,
+    0.011
+   ],
+   [
+    0.0513,
+    0.0548
+   ],
+   [
+    0.0268,
+    0.322
+   ],
+   [
+    0.0089,
+    2.11
+   ]
+  ],
+  "zth_foster_basis": "Z_thJH, MOSFET, r_i [K/W], tau_i [s]",
+  "E_cond_num": {
+   "V": 600,
+   "I": 500,
+   "note": "E_cond 문자열의 시험 전압·전류를 숫자로 옮김(E37)"
+  }
+ }
+}

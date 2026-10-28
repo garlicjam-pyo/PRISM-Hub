@@ -1,0 +1,53 @@
+{
+ "part": "SKM500MB120SC",
+ "maker": "Semikron Danfoss",
+ "title": "SKM500MB120SC SiC MOSFET Module (SEMITRANS 3, full SiC half-bridge) datasheet, Rev. 1.0, 14.08.2020",
+ "url": "https://assets.danfoss.com/documents/latest/516899/AI498340515663en-000102.pdf",
+ "accessed": "2026-10-29",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). R_DS(on) and V_SD are chip-level values at I_D 264 A, V_GS 18 V (not at rated current). Switching energies are given ONLY at Tj 150 C and I_D 150 A (no 25 C values, no stray inductance stated) and are not comparable 1:1 with the other parts' rated-current values. I_DM is printed as 'IDM 1920 A' with no t_p condition; 'IDRM 1356 A' also printed without condition. R_thJH not stated (R_thJC 0.08 + R_thCH 0.025 per MOSFET would give 0.105 K/W, derived only). Z_th given only as a graph (Fig. 14); no Foster r_i/tau_i in the text. Tj range -40...175 C (abs. max); recommended Tjop -40...+150 C.",
+ "mosfet": {
+  "V_DSS_V": 1200,
+  "I_D_A": 386,
+  "I_D_note": "Tj = 175 C, T_c 80 C; 485 A at T_c 25 C",
+  "I_D_25C_A": 485,
+  "I_DM_A": 1920,
+  "I_DM_note": "no pulse-width condition printed",
+  "I_DRM_A": 1356,
+  "R_DSon_mohm": {
+   "25": 3.8,
+   "150": 6.3
+  },
+  "R_DSon_25C_max_mohm": 4.7,
+  "R_DSon_I_A": 264,
+  "R_DSon_cond": "V_GS 18 V, I_D 264 A, chip level",
+  "E_on_mJ": {
+   "150": 2.51
+  },
+  "E_off_mJ": {
+   "150": 1.37
+  },
+  "E_cond": "V_DD 600 V, I_D 150 A, V_GS -5...20 V, R_Gon 0.7 ohm, R_Goff 0.7 ohm, di/dt_on 9.8 kA/us, di/dt_off 2.7 kA/us, dv/dt_off 19.4 kV/us, Tj 150 C (inductive not stated explicitly)",
+  "E_rr_mJ": {
+   "150": 3.2
+  },
+  "E_rr_cond": "V_DD 600 V, -I_D 150 A, di/dt_off 8.4 kA/us, V_GS -5 V, R_Gon 0.7 ohm",
+  "R_G_int_ohm": 0.4,
+  "V_SD_V": {
+   "25": 4.1,
+   "150": 3.9
+  },
+  "V_SD_cond": "inverse diode V_F = V_SD, -I_D 264 A, V_GS 0 V, chip level",
+  "R_thJC_KperW": 0.08,
+  "R_thCH_KperW": 0.025,
+  "R_thCH_note": "per MOSFET, lambda_grease 0.81 W/(m*K); per module 0.013 (no coupling) / 0.014 (with coupling) K/W",
+  "R_thJH_KperW": null,
+  "T_vj_op_max_C": 150,
+  "T_j_max_C": 175,
+  "zth_foster": null,
+  "E_cond_num": {
+   "V": 600,
+   "I": 150,
+   "note": "E_cond 문자열의 시험 전압·전류를 숫자로 옮김(E37)"
+  }
+ }
+}
