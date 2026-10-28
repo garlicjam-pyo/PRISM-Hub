@@ -45,6 +45,38 @@ BASE = dict(
 )
 FR0 = 1 / (2 * np.pi * np.sqrt(BASE["Lr"] * BASE["Cfly"]))   # 공칭 공진주파수 [Hz]
 
+# (E32) 설계 묶음. 'R1_150k'는 위 BASE(E1–E31, 150 kHz)이고, 'A25'는 E31·docs/37의 수정안 (나)다.
+#   A25: 위치당 C4MS008075U2 2병렬(R_ds 125 °C 10.53 mΩ/2), f_r 25 kHz(√(L/C) 유지: L_r·C_fly 6배),
+#        출력용량 손실은 E_oss 대신 하드 스위칭 전이 손실 4·Q_oss,위치(V/2)·V/2·f_s(analyze, coss 키),
+#        게이트 에너지 2 × 278 nC × 22 V, 바디 다이오드 V_SD 4.5 V(데이터시트 175 °C, V_GS −4 V),
+#        적분 간격을 150 kHz와 같은 약 20 ns로(Nstep 2040: 25 kHz에서 340단계는 120 ns라 데드타임·영교차가 거칠다, TB25 진단).
+#   set_design(name)이 BASE를 그 값으로 바꾸고 FR0를 다시 계산한다(모듈 전역 T = 1/FR0를 쓰는 스크립트는 다시 계산해야 한다).
+DESIGNS = {
+    "R1_150k": dict(BASE, Nstep=340, coss=None),
+    "A25": dict(Cfly=7.8125e-6 * 6, Lr=1.441e-7 * 6, Rds=(8.0 + (11.8 - 8.0) * 100 / 150) * 1e-3 / 2, ESR=1.5e-3, RL=1e-3, Rmisc=1.5e-3, Vf=4.5,
+                Eoss=0.0, Qg_E=2 * 278e-9 * 22., tdead=100e-9, Nstep=2040,
+                coss=dict(Ctr=828e-12, Cer=510e-12, Vs=500., npar=2, device="C4MS008075U2")),
+}
+DESIGN = "R1_150k"
+
+
+def set_design(name):
+    """Stage A 설계 묶음을 바꾼다(BASE를 제자리에서 바꾸므로 BASE를 참조하는 다른 모듈에도 적용된다)."""
+    global FR0, DESIGN
+    BASE.clear(); BASE.update(DESIGNS[name])
+    FR0 = 1 / (2 * np.pi * np.sqrt(BASE["Lr"] * BASE["Cfly"]))
+    DESIGN = name
+    return FR0
+
+
+def qoss_pos(V):
+    """(E32) 위치당 출력 전하 Q_oss(V) [C]: C_o(tr)·C_o(er) 거듭제곱 근사(E31과 같음). coss가 없으면 None."""
+    c = BASE.get("coss")
+    if not c:
+        return None
+    r = c["Cer"] / (2 * c["Ctr"]); m = r / (1 - r)
+    return c["npar"] * c["Ctr"] * c["Vs"] * (V / c["Vs"]) ** m
+
 
 def mround(x):
     """MATLAB round()와 같은 반올림(0.5는 0에서 먼 쪽). numpy·파이썬 round는 짝수 쪽으로 반올림하므로
@@ -75,8 +107,9 @@ def draw_tolerance(N, tol, rs):
 
 
 def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, tol=None, rs=None,
-              R_in=0.0, C_in=100e-6, ncyc=60, Nstep=340, vC0=None, Vbus0=None, en=None,
-              td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False, unarmed_stop="max", mgr=None, chg=None):
+              R_in=0.0, C_in=100e-6, ncyc=60, Nstep=None, vC0=None, Vbus0=None, en=None,
+              td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False, unarmed_stop="max", mgr=None, chg=None, fault=None,
+              idle=0.0):
     """N위상 Stage A 어레이를 ncyc 주기 동안 적분한다.
 
     Iload     : 버스 부하전류 [A]. 음수면 역방향(버스 → 배터리) 전력.
@@ -111,6 +144,11 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
                 시작 과도의 전류 넘침으로 모듈을 더하지 않도록, 없으면 0), n0(시작 동작 모듈 수, 없으면 부하로 정함).
                 논리는 mgr_step과 회로 게이트 ctrl/prism_gate_stageA_zcpm.m이 같다.
     chg       : (E28) 충전 요청 구간 (t_start, t_end). 이 구간에서는 모든 모듈을 동작시킨다(충전기 전류 증가 전 사전 기동).
+    fault     : (E30) 모듈 고장 [(t_f, m), ...]. 간격 k·dt ≥ t_f(간격 번호 round(t_f/dt))에서 모듈 m(0부터)의 위상을 바로
+                멈추고(구간 0, 남은 전류는 다이오드로 소멸) 관리기 후보에서 영구히 뺀다(mgr_fault). mgr가 있어야 한다.
+                None이면 이전과 같다.
+    idle      : (E31) 휴지 시간 [s]. zcp에서 턴오프 뒤 데드타임에 이 시간을 더 기다린 다음 반주기를 시작한다(경부하 스위칭
+                주파수 저감 참고 계산용). 0(기본)이면 이전과 같다.
     mode      : 'fixed'(고정 타이밍) 또는 'zcp'(자기발진 영교차 추종)
     fratio    : 스위칭 주파수 / 공칭 공진주파수 (zcp에서는 적분 간격을 정하는 기준 주기로만 쓴다)
     tol, rs   : 부품 공차 {'C','L','R'}와 난수 생성기(matlab_rng)
@@ -122,8 +160,10 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     C, L, R = draw_tolerance(N, tol, rs)
     en = np.ones(N, bool) if en is None else np.array(en, bool)
     Vf = BASE["Vf"]; td = BASE["tdead"]
+    Nstep = int(Nstep or BASE.get("Nstep", 340))                   # (E32) 설계 묶음의 기본 단계 수(R1 340)
     fs = fratio * FR0; T = 1 / fs; dt = T / Nstep; n = ncyc * Nstep
     ndead = int(mround(td / dt)); half = Nstep // 2; ndet = int(mround(td_det / dt))
+    nwait = ndead + int(mround(idle / dt))                         # (E31) 휴지 시간 포함 대기(idle = 0이면 ndead)
     off = mround(np.arange(N) * (Nstep / 2) / N).astype(int)       # 인터리빙 오프셋 T/(2N)
 
     # 초기조건: 정상상태 근처(v_C = V_bus = V_bat/2). 프리차지 시험은 0 V에서 시작.
@@ -168,6 +208,9 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     if mgr is not None:                                          # (E28) 모듈 관리기
         chg_on = (lambda tk: chg is not None and chg[0] <= tk < chg[1])
         M = mgr_init(mgr, N, IL, dt, chg_on(0.))
+        align = bool(mgr.get("align_start"))                      # (E35) 새로 켜지는 위상을 동작 위상의 인터리빙 자리에 맞춰 시작
+        fresh = M["blk"].copy(); lastk = np.full(N, -1); hp = np.full(N, half)
+        flt_steps = [(int(mround(tf / dt)), int(fm)) for tf, fm in (fault or [])]
         log_na = np.zeros(n, np.int8); log_mm = np.zeros((n, N // 2), np.int8); log_if = np.zeros(n, np.float32)
         log_ig = np.zeros((n, N), np.float32); log_chg = np.zeros(n, np.int8)
 
@@ -194,6 +237,12 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
             log_ig[k] = iC                                       # 게이트가 본 전류(데드타임 소멸 처리 전, 회로 게이트 대조용)
             shed_step(S, sh, iC, st, tmr, ndead, en)
             log_sm[k] = S["mode"]; log_if[k] = S["If"]
+        if mode == "zcp" and mgr is not None and fault:
+            for nf, fm in flt_steps:                     # (E30) 모듈 고장: 위상을 바로 멈추고 관리기 후보에서 뺀다
+                if k == nf:
+                    mgr_fault(M, fm)
+                    for kq in (2 * fm, 2 * fm + 1):
+                        st[kq] = 0; tmr[kq] = 0; armed[kq] = False; det[kq] = 0; oncnt[kq] = 0
         if mode == "zcp" and mgr is not None:
             log_ig[k] = iC
             cg = chg_on(k * dt)
@@ -201,11 +250,26 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
             log_na[k] = M["nact"]; log_mm[k] = M["mmode"]; log_if[k] = M["If"]; log_chg[k] = cg
         if mode == "zcp":
             # 데드타임이 끝난 위상은 다음 구간(1↔2 교대)을 시작한다.
-            start = (st == 0) & (tmr >= ndead)
+            start = (st == 0) & (tmr >= nwait)
             if shed is not None and S["blocked"]:
                 start[sh["sh"]] = False                              # 셰딩된 위상은 시작하지 않는다
             if mgr is not None:
                 start &= ~M["blk"]                                   # (E28) 멈춘 모듈·셰딩된 위상은 시작하지 않는다
+                if align:                                            # (E35) 막혔다 풀린 위상의 첫 시작: 기준 위상(가장 낮은 번호의
+                    fresh |= M["blk"]                                #   동작 위상)의 마지막 시작 + 인터리빙 차(off) 자리에서만
+                    run = np.flatnonzero((~fresh) & (~M["blk"]) & (lastk >= 0))
+                    if len(run):
+                        p0 = run[0]
+                        for q in np.flatnonzero(start & fresh):
+                            d = int((off[q] - off[p0]) % hp[p0])
+                            if (k - lastk[p0] - d) % hp[p0] != 0:
+                                start[q] = False
+                if True:
+                    for q in np.flatnonzero(start):
+                        if lastk[q] >= 0 and k - lastk[q] < 1.5 * half:
+                            hp[q] = k - lastk[q]
+                        lastk[q] = k
+                    fresh &= ~start
             st = np.where(start, nxt, st); nxt = np.where(start, 3 - nxt, nxt)
             armed = np.where(start, False, armed); det = np.where(start, 0, det)
             oncnt = np.where(start, 0, oncnt); tmr = np.where(start, 0, tmr)
@@ -258,7 +322,8 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     if shed is not None:
         out.update(sm=log_sm, If=log_if, ig=log_ig)
     if mgr is not None:
-        out.update(nact=log_na, mm=log_mm, If=log_if, ig=log_ig, chg=log_chg, n_mcancel=M["mcancel"], n_pcancel=M["pcancel"])
+        out.update(nact=log_na, mm=log_mm, If=log_if, ig=log_ig, chg=log_chg, n_mcancel=M["mcancel"], n_pcancel=M["pcancel"],
+                   flt=M["flt"].copy())
     if busen:
         out.update(vbus=log_vbus, iw=log_iw)
     return out
@@ -319,7 +384,31 @@ def mgr_init(cfg, N, IL, dt, chg0):
                 tdn=0, mmode=np.array([2 if m < n0 else 0 for m in range(nm)], int), tlow=np.zeros(nm, int), blk=blk,
                 a=dt / cfg["tau"], a_m=dt / cfg.get("tau_m", cfg["tau"]), ndwell=int(mround(cfg["t_dwell"] / dt)), ndwell_m=int(mround(cfg["t_dwell_m"] / dt)),
                 nlock=int(mround(cfg["t_lock"] / dt)), tlock=0, nhold=int(mround(cfg.get("t_hold", 0.) / dt)), kstep=0,
-                mcancel=0, pcancel=0)
+                mcancel=0, pcancel=0,
+                hl=list(range(nm)), rank=np.arange(nm), flt=np.zeros(nm, bool))   # (E30) 건전 모듈(번호 순), 모듈별 순위, 고장
+
+
+def mgr_fault(M, m):
+    """(E30) 모듈 m 고장: 관리기 후보(건전 모듈 목록 hl)에서 빼고 위상을 막는다. 동작 중이었으면 동작 수를 줄이고,
+    동작 모듈이 하나도 남지 않으면 다음 건전 모듈을 바로 두 위상으로 시작한다(추가 막는 시간 n_lock을 건다).
+    더 필요한 모듈은 mgr_step의 추가 규칙(충전 요청이면 건전 모듈 전부, 아니면 전류 문턱)이 정한다.
+    회로 게이트 ctrl/prism_gate_stageA_zcpf.m과 같은 순서다."""
+    if M["flt"][m]:
+        return
+    was = M["rank"][m] < M["nact"]
+    M["flt"][m] = True
+    M["hl"] = [x for x in M["hl"] if x != m]
+    M["rank"] = np.full(M["nm"], 99)
+    for j, x in enumerate(M["hl"]):
+        M["rank"][x] = j
+    if was:
+        M["nact"] -= 1
+    M["mmode"][m] = 0; M["tlow"][m] = 0
+    M["blk"][2 * m] = True; M["blk"][2 * m + 1] = True
+    if M["nact"] == 0 and len(M["hl"]) > 0:
+        x = M["hl"][0]
+        M["mmode"][x] = 2; M["tlow"][x] = 0; M["blk"][2 * x] = False; M["blk"][2 * x + 1] = False
+        M["nact"] = 1; M["tdn"] = 0; M["tlock"] = M["nlock"]
 
 
 def mgr_step(M, iC, st, chg):
@@ -337,6 +426,7 @@ def mgr_step(M, iC, st, chg):
       4) 동작 모듈마다 E24와 같은 위상 셰딩(모듈 출력전류 Ifm, 남는 위상 2m, 멈추는 위상 2m+1, 복귀는 바로).
     반환하지 않고 M['blk'](위상별 시작 금지)를 고친다."""
     c = M["cfg"]; nm = M["nm"]; blk = M["blk"]; mm = M["mmode"]
+    hl = M["hl"]; nh = len(hl); rk = M["rank"]          # (E30) 건전 모듈(번호 순)과 순위. 고장이 없으면 hl = 0..nm−1
     io = 0.; iom = np.zeros(nm)
     for k in range(2 * nm):
         x = iC[k] if st[k] == 1 else (-iC[k] if st[k] == 2 else 0.)
@@ -357,9 +447,9 @@ def mgr_step(M, iC, st, chg):
     up = chg or (M["tlock"] == 0 and (If > nact * c["Im_up"] or pk > c["Ipk_m"]))
     if hold:
         M["tdn"] = 0
-    elif nact < nm and up:
-        new = nm if chg else min(nm, max(nact + 1, int(np.ceil(If / c["Im_up"]))))
-        for m in range(nact, new):
+    elif nact < nh and up:
+        new = nh if chg else min(nh, max(nact + 1, int(np.ceil(If / c["Im_up"]))))
+        for m in hl[nact:new]:
             if mm[m] == 5:
                 M["mcancel"] += 1
             mm[m] = 2; M["tlow"][m] = 0; blk[2 * m] = False; blk[2 * m + 1] = False
@@ -368,19 +458,23 @@ def mgr_step(M, iC, st, chg):
         ndn = max(1, int(np.ceil(If / c["Im_dn"])))
         M["tdn"] = M["tdn"] + 1 if ndn < nact else 0
         if M["tdn"] >= M["ndwell_m"]:
-            for m in range(ndn, nact):
+            for m in hl[ndn:nact]:
                 mm[m] = 5
-            for m in range(ndn):                         # 남는 모듈은 두 위상으로(줄인 모듈의 전류를 위상 하나가 받지 않도록)
+            for m in hl[:ndn]:                           # 남는 모듈은 두 위상으로(줄인 모듈의 전류를 위상 하나가 받지 않도록)
                 if mm[m] in (1, 3):
                     mm[m] = 2; blk[2 * m + 1] = False
                 M["tlow"][m] = 0
             M["nact"] = nact = ndn; M["tdn"] = 0
     else:
         M["tdn"] = 0
+    noshed = bool(c.get("chg_noshed")) and chg               # (E35) 충전 요청 중에는 위상 셰딩을 하지 않는다(멈춘 위상은 바로 복귀)
     for m in range(nm):
         kp, ks = 2 * m, 2 * m + 1
-        if m < nact:                                     # 동작 모듈: 위상 셰딩(E24 shed_step, 복귀는 바로)
-            ret = abs(M["Ifm"][m]) > c["I_on"] or abs(iC[kp]) > c["Ipk_on"]
+        if rk[m] < nact:                                 # 동작 모듈: 위상 셰딩(E24 shed_step, 복귀는 바로)
+            ret = noshed or abs(M["Ifm"][m]) > c["I_on"] or abs(iC[kp]) > c["Ipk_on"]
+            if noshed and mm[m] == 2:
+                M["tlow"][m] = 0
+                continue
             if mm[m] == 2:
                 M["tlow"][m] = M["tlow"][m] + 1 if abs(M["Ifm"][m]) < c["I_off"] else 0
                 if M["tlow"][m] >= M["ndwell"]:
@@ -419,7 +513,10 @@ def analyze(r, ncyc_last=10):
         fsk = 1 / (np.mean(np.diff(onk)) * r["dt"]) if len(onk) > 2 else r["fs"]
         Pcond = np.mean(ik ** 2) * r["R"][k]
         Pdiode = np.mean((sk == 0) * 2 * BASE["Vf"] * np.abs(ik))
-        Psw = 4 * BASE["Eoss"] * fsk + 4 * BASE["Qg_E"] * fsk
+        if BASE.get("coss"):                                 # (E32) 하드 스위칭 출력용량 손실(노드 전압 = 버스 평균)
+            Vh = float(np.mean(Lb)); Psw = 4 * qoss_pos(Vh) * Vh * fsk + 4 * BASE["Qg_E"] * fsk
+        else:
+            Psw = 4 * BASE["Eoss"] * fsk + 4 * BASE["Qg_E"] * fsk
         ph.append(dict(zcs=ioff / max(Ipk, 1e-6), Ipk=Ipk, Iavg=float(np.mean(Lio[:, k])),
                        fs=fsk, fr_ratio=fsk * 2 * np.pi * np.sqrt(r["L"][k] * r["C"][k]),
                        Ploss=Pcond + Pdiode + Psw))

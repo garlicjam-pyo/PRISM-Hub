@@ -1,4 +1,4 @@
-function h = build_stageA_phase(sys, name, pos, k, A)
+function h = build_stageA_phase(sys, name, pos, k, A, coss)
 %BUILD_STAGEA_PHASE  Stage A 한 위상(2:1 공진 스위치드 커패시터) 서브시스템을 만든다.
 %
 %   h = build_stageA_phase(sys, 'StageA_Phase1', [x1 y1 x2 y2], 1, 'TB.A')
@@ -13,7 +13,9 @@ function h = build_stageA_phase(sys, name, pos, k, A)
 %
 %   k : 위상 번호(1–8). 게이트 태그 gA_P<k>_S<n>, 계측 태그 iA_P<k>(공진전류), vCf_P<k>(C_fly 전압).
 %   A : 파라미터 구조체 이름(문자열, 예 'TB.A'). 필드 Rds Goff Vf Rd Goffd Lr RL Cfly ESR Rmisc vC0.
+%   coss : (TB25, 선택) 스위치 셀 출력용량 식(문자열, 예 'TB.A.Coss'). 없거나 빈 값이면 출력용량 없음(TB01–TB24와 같음).
 
+if nargin < 6, coss = ''; end
 ph = [sys '/' name];
 h = add_block('built-in/Subsystem', ph, 'Position', pos);
 
@@ -23,7 +25,7 @@ add_block('nesl_utility/Connection Port', [ph '/GND'],  'Position', [30 520 60 5
 add_block('nesl_utility/Connection Port', [ph '/VOUT'], 'Position', [700 310 730 330], 'Side', 'Right', 'Port', '3');
 
 % ---- 스위치 셀 4개 ------------------------------------------------------------------------
-c = struct('Ron', [A '.Rds'], 'Goff', [A '.Goff'], 'Vf', [A '.Vf'], 'Rd', [A '.Rd'], 'Goffd', [A '.Goffd'], 'Coss', '');
+c = struct('Ron', [A '.Rds'], 'Goff', [A '.Goff'], 'Vf', [A '.Vf'], 'Rd', [A '.Rd'], 'Goffd', [A '.Goffd'], 'Coss', coss);
 c.tag = sprintf('gA_P%d_S1', k); c.label = 'S1'; c.orient = 'right';
 sl_switch_cell(ph, 'S1_VIN_A',  [130 80 250 140], c);
 c.tag = sprintf('gA_P%d_S2', k); c.label = 'S2'; c.orient = 'right';

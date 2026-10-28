@@ -1,0 +1,34 @@
+{
+ "part": "IXTH44N25L2",
+ "maker": "IXYS (Littelfuse)",
+ "title": "IXTT44N25L2HV / IXTH44N25L2 N-Channel Enhancement Mode Linear L2 Power MOSFET w/ Extended FBSOA, 250 V, 44 A, 75 mOhm, DS100920B(11/19)",
+ "url": "https://www.littelfuse.com/~/media/electronics/datasheets/discrete_mosfets/littelfuse_discrete_mosfets_n-channel_linear_ixt_44n25l2_datasheet.pdf.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Official Littelfuse PDF, no Advance/Preliminary marking. I_D at T_C = 100 C is not tabulated (Fig. 7 curve only) -> null. R_DS(on) 75 mOhm at V_GS = 10 V, I_D = 0.5 I_D25 (the Ohm glyph and min/typ/max column are lost in the extracted text). The R_thJC column (typ/max) could not be confirmed; R_thCS 0.21 C/W is for TO-247 only. FBSOA Figs. 13/14 (T_C = 25/75 C; 25 us ... 100 ms, DC lines) and the Z_thJC Fig. 15 are graph-only and were not read. Check: 75 C + 240 W x 0.31 C/W = 149.4 C = T_JM.",
+ "ratings": {
+  "V_DSS_V": 250,
+  "I_D_A": {
+   "25": 44,
+   "100": null
+  },
+  "I_DM_A": 120,
+  "R_DSon_mohm": 75,
+  "R_DSon_note": "V_GS = 10 V, I_D = 0.5 I_D25, pulse test; column not confirmed",
+  "P_D_W": 400,
+  "R_thJC_KperW": 0.31,
+  "R_thCS_KperW": 0.21,
+  "T_J_max_C": 150,
+  "package": "TO-247 (IXTH44N25L2); TO-268HV (IXTT44N25L2HV)"
+ },
+ "soa_points": [
+  {
+   "V_DS_V": 250,
+   "I_D_A": 0.96,
+   "t_s": 2,
+   "T_C_C": 75,
+   "note": "Characteristics-table row 'SOA V_DS = 250 V, I_D = 0.96 A, T_C = 75 C, Tp = 2 s: 240 W'"
+  }
+ ],
+ "zth": null,
+ "zth_foster": null
+}

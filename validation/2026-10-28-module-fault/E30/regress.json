@@ -1,0 +1,13 @@
+{
+ "rows": [
+  {
+   "case": "MA_540V_bus_5_25_5kW",
+   "diff": {}
+  },
+  {
+   "case": "MC_800V_charge_prestart",
+   "diff": {}
+  }
+ ],
+ "passed": true
+}

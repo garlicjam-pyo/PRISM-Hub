@@ -316,6 +316,8 @@ def r2_run(job):
                  끝내고, t_cur_max 안에 안 되면 접촉기 분리로 넘어간다. 강등 T_RESTORE 뒤 SALS 되돌림(접촉기를 연 경우는 없음).
          event2: 두 번째 고장(H-브리지 비교기 차단) 시각 [s]. DAB 고장 강등 중이면 이중 고장(FAILSAFE)
          astop : dict(delay, C_A). 이중 고장이면 delay 뒤 Stage A를 멈춘다(V_A 노드 = C_A가 경로전류로 방전)
+                 (E37, 선택) R_dis·dv_on·dv_off: Stage A 정지 뒤 V_A 노드 방전 저항. V_A > v_bus − dv_on(기본 60 V)이면 켬,
+                 V_A < v_bus − dv_off(기본 65 V)이면 끔. 없으면 이전과 같다
          fs_brake: 이중 고장에서도 링크 제동 저항의 과전압 보호(110 V 켬·105 V 끔)를 유지"""
     case, V, P, event = job["case"], job["V"], job["P"], job["event"]
     pol = job.get("policy", {"dab": "brk_hold"}.get(event, "clamp_brk")); vd = job.get("vd", VD)
@@ -328,6 +330,7 @@ def r2_run(job):
         i_col, t_conf, t_cur_max = sals["i_col"], sals["t_conf"], sals["t_cur_max"]
         assert abs(SL.power(0.) - P) < 1e-6, "부하 구성의 합이 P와 다르다"
     t_cont = None; low_since = None; restored = False; ev2 = job.get("event2"); astop = job.get("astop"); t_as = None
+    dis_on = False; E_dis = 0.; P_dis_pk = 0.; I_dis_pk = 0.; n_dis = 0                     # (E37) V_A 노드 방전 저항
     fs_brake = bool(job.get("fs_brake", False))
     t_wait = job.get("wait", T_WAIT); t_prep = job.get("t_prep", T_PREP)
     prep, close = job.get("prep", "zero"), job.get("close", "zero")
@@ -619,7 +622,16 @@ def r2_run(job):
         ih0 = x[3]
         vsrc = VA
         if t_as is not None and t >= t_as:                         # (E29) Stage A 정지: V_A 노드 = C_A, 경로전류로 방전
-            vA = max(vA - x[0] * DT / astop["C_A"], 0.); vsrc = vA
+            i_dis = 0.
+            if astop.get("R_dis"):                                 # (E37) 방전 저항(V_A와 버스를 재서 켜고 끔)
+                if not dis_on and vA > x[2] - astop.get("dv_on", 60.):
+                    dis_on = True; n_dis += 1
+                elif dis_on and vA < x[2] - astop.get("dv_off", 65.):
+                    dis_on = False
+                if dis_on:
+                    i_dis = vA / astop["R_dis"]
+                    E_dis += vA * i_dis * DT; P_dis_pk = max(P_dis_pk, vA * i_dis); I_dis_pk = max(I_dis_pk, i_dis)
+            vA = max(vA - (x[0] + i_dis) * DT / astop["C_A"], 0.); vsrc = vA
         d1 = deriv_r2(x, applied[0], bridge, icmd, G, vsrc, Pl, p, dz, vd, Gb)
         x = x + DT * deriv_r2(x + .5 * DT * d1, applied[0], bridge, icmd, G, vsrc, Pl, p, dz, vd, Gb)
         if bridge == "off" and (ih0 == 0. or ih0 * x[3] < 0.) and not abs(x[1]) > x[4] + 2 * vd:
@@ -659,6 +671,8 @@ def r2_run(job):
         m.update(sals=None if SL is None else SL.describe(), t_cont_ms=None if t_cont is None else round((t_cont - T_EV) * 1e3, 4),
                  restored=restored, t_astop_ms=None if t_as is None else round((t_as - T_EV) * 1e3, 4),
                  vA_end=None if t_as is None else float(vA), fs_brake=fs_brake)
+        if astop is not None and astop.get("R_dis"):
+            m.update(dis_E_J=E_dis, dis_P_pk_W=P_dis_pk, dis_I_pk_A=I_dis_pk, dis_n_on=n_dis)
     if t_close is not None:                                        # 바이패스 투입 순간(소프트 투입 포함) + 50 µs
         w = (tt >= t_close) & (tt <= (t_deg if t_deg is not None else t_close) + 50e-6)
         m.update(close_ms=round((t_close - T_EV) * 1e3, 4), vs_at_close=float(log[np.searchsorted(tt, t_close), 1]),

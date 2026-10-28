@@ -1,0 +1,60 @@
+{
+ "part": "CAB530M12BM3",
+ "maker": "Wolfspeed",
+ "title": "CAB530M12BM3 / CAB530M12BM3T 1200 V, 530 A all-SiC half-bridge module (62 mm BM3) data sheet, Rev. 5, August 2026",
+ "url": "https://assets.wolfspeed.com/uploads/2024/01/Wolfspeed_CAB530M12BM3_data_sheet.pdf",
+ "accessed": "2026-10-29",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). R_DS(on) is the 'Devices Only' value; typ/max column assignment of '2.67 3.55' (25 C) inferred from column order (Min/Typ/Max header); no max given at 150 C and no 175 C value. Switching energies stated at 25/125/150 C only. R_thJC is a single (typ) value 0.065 C/W, no max; no case-to-heatsink resistance stated. T_VJ(op): -40 to 150 C operation, 175 C 'intermittent with reduced life'. Z_thJC given only as a graph (Fig. 17); no Foster/Cauer r_i/tau_i in the datasheet text (Wolfspeed distributes Cauer parameters separately, not fetched).",
+ "mosfet": {
+  "V_DSS_V": 1200,
+  "I_D_A": 541,
+  "I_D_note": "V_GS 15 V, T_C 90 C, T_VJ <= 175 C (Note 2: I_D(max) = sqrt(P_D / R_DS(typ)(T_VJmax, I_Dmax))); 719 A at T_C 25 C",
+  "I_D_25C_A": 719,
+  "I_DM_A": 1060,
+  "I_DM_note": "t_P max limited by T_VJmax, V_GS 15 V, T_C 25 C",
+  "R_DSon_mohm": {
+   "25": 2.67,
+   "150": 3.96
+  },
+  "R_DSon_25C_max_mohm": 3.55,
+  "R_DSon_mohm_VGS18": {
+   "25": 2.3,
+   "150": 3.8
+  },
+  "R_DSon_I_A": 530,
+  "R_DSon_cond": "V_GS 15 V (and 18 V), I_D 530 A, devices only",
+  "E_on_mJ": {
+   "25": 16.8,
+   "125": 15.6,
+   "150": 16.1
+  },
+  "E_off_mJ": {
+   "25": 15.5,
+   "125": 14.9,
+   "150": 14.9
+  },
+  "E_cond": "V_DS 600 V, I_D 530 A, V_GS -4/+15 V, R_G(ext) 1.5 ohm, L_sigma 15.6 nH (inductive; conditions printed once for the E_on/E_off block)",
+  "E_rr_mJ": {
+   "25": 0.52,
+   "125": 1.75,
+   "150": 2.37
+  },
+  "V_SD_V": {
+   "25": 5.7,
+   "150": 5.0
+  },
+  "V_SD_cond": "body diode V_F, V_GS -4 V, I_F 530 A",
+  "P_D_W": 2308,
+  "R_thJC_KperW": 0.065,
+  "R_thCH_KperW": null,
+  "R_thJH_KperW": null,
+  "T_vj_op_max_C": 150,
+  "T_vj_intermittent_max_C": 175,
+  "zth_foster": null,
+  "E_cond_num": {
+   "V": 600,
+   "I": 530,
+   "note": "E_cond 문자열의 시험 전압·전류를 숫자로 옮김(E37)"
+  }
+ }
+}

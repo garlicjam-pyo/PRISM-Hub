@@ -1,0 +1,44 @@
+{
+ "part": "FF450R12ME4P",
+ "maker": "Infineon",
+ "title": "FF450R12ME4P EconoDUAL 3 module datasheet, Rev. 1.10, 2025-09-02",
+ "url": "https://www.infineon.com/assets/row/public/documents/60/49/infineon-ff450r12me4p-datasheet-en.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet/product page text with a fetch tool (no curve digitized). Values not stated in text are null. Z_th(t) is given only as a graph; no r_i/tau_i in text.",
+ "igbt": {
+  "V_CES_V": 1200,
+  "I_CDC_A": 450,
+  "I_CDC_note": "T_vj max 175 C, T_H 55 C",
+  "I_CRM_A": 900,
+  "V_CEsat_450A_V": {
+   "25": 1.75,
+   "125": 2.0,
+   "150": 2.05
+  },
+  "E_on_mJ": {
+   "25": 15,
+   "125": 26,
+   "150": 28.5
+  },
+  "E_off_mJ": {
+   "25": 38,
+   "125": 55.5,
+   "150": 61.5
+  },
+  "E_cond": "V_CC 600 V, I_C 450 A, R_G 1.3 ohm, L_s 35 nH (inductive)",
+  "R_thJH_KperW": 0.104,
+  "T_vj_op_max_C": 150
+ },
+ "diode": {
+  "V_F_450A_V": {
+   "25": 1.65,
+   "125": 1.65
+  },
+  "E_rec_mJ": {
+   "25": 26.5,
+   "125": 48.5,
+   "150": 55
+  },
+  "R_thJH_KperW": 0.149
+ }
+}

@@ -1,0 +1,27 @@
+{
+ "part": "AEVA1251",
+ "maker": "Panasonic",
+ "title": "Automotive Relays EV-A RELAYS (DC contactors), catalog ASCTB418E 201904",
+ "url": "https://www.farnell.com/datasheets/3204505.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet/product page text with a fetch tool (no curve digitized). Distributor-hosted (Farnell) copy of the Panasonic catalog sheet; values cross-checked with the manufacturer part page https://industry.panasonic.com/kr/ko/products/control/relay/vehicle/number/aeva1251 (same numbers). The spec table has no electrical-life row at rated or partial load and no separate max switching voltage row; only switch-off life (1,800 A 500 V DC, min. 1 op, 'No polarity', with varistor across coil and L/R <= 1 ms) and inrush (capacitor) 140 A 20 V DC min. 70,000 ops are given. Load side has no polarity; coil is polarized. Status is not shown on the manufacturer part page; the Panasonic global EV-relay page marks the AEV*/AEVS* series (not EV-A/AEVA) 'Not Recommended for New Design'.",
+ "status": "Not stated on manufacturer part page",
+ "ratings": {
+  "V_rated_V": 500,
+  "V_rated_note": "Rated switching capacity (resistive) 250 A 500 V DC",
+  "I_carry_A": 250,
+  "I_carry_note": "Max. carrying current 250 A continuous (50 mm2 wire)",
+  "electrical_life": [
+   {"V": 20, "I_A": 140, "ops": 70000, "note": "inrush resistance current (capacitor load), min.; not a break rating at bus voltage"}
+  ],
+  "break_max": [
+   {"V": 500, "I_A": 1800, "ops": 1, "note": "switch-off life, min. 1 operation, no polarity"}
+  ],
+  "short_circuit_carry": "8,000 A (max. 5 ms), no smoke and no ignition",
+  "mech_life_ops": 200000,
+  "t_operate_ms_max": 50,
+  "t_release_ms_max": 30,
+  "coil": "12 V DC (0.5 A, 24 ohm, 6.0 W; max 16 V DC; coil polarized)",
+  "polarized": false
+ }
+}

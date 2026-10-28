@@ -1,0 +1,7 @@
+TB28 = charging stop / V_A clamp circuit (TB21) with Stage A design A25R (25 kHz, C_oss, C_A 2.4 mF, module manager gate), reference E26 / E22 / E35 model
+case                   result vA_max    ref       E_cl[J]   ref       vo_min    failed
+A28_920V_pathloss      PASS   468.12    468.20    440.2     441.5     47.994    
+B28_640V_pathloss_ramp PASS   407.17    407.27    0.0       0.0       47.994    
+C28_800V_module_fault  PASS   401.66    400.94    0.0       0.0       47.997    
+D28_800V_charge_slow   PASS   401.08    400.76    0.0       0.0       47.998    
+TB28 overall: PASS

@@ -1,0 +1,24 @@
+{
+ "part": "LTO 150H",
+ "maker": "Vishay",
+ "title": "LTO 150H new product information (2025-04)",
+ "url": "https://www.vishay.com/files/new-products/doc/250409%20-%20NPI%20-%20LTO%20150H.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet/product page text with a fetch tool (no curve digitized). Values not stated in text are null. The resistance range unit symbols are garbled in the text (read as 1 ohm to 2.2 kohm; verify). Pulse energy versus duration is not given as numbers.",
+ "ratings": {
+  "P_rated_W": 150,
+  "P_rated_cond": "T_case 45 C",
+  "E_pulse_J": 75,
+  "E_pulse_duration_s": 0.1,
+  "R_th_KperW": 0.87,
+  "T_op_C": [
+   -55,
+   175
+  ],
+  "R_range_ohm": [
+   1.0,
+   2200.0
+  ],
+  "AEC_Q200": true
+ }
+}

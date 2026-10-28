@@ -1,0 +1,60 @@
+{
+ "rows": [
+  {
+   "no": "Q1",
+   "item": "C_fly 46.9 µF(P2 2차)",
+   "cand": "CC7.5u1300d...",
+   "stress": "실효 60.9 A, 518.1 V",
+   "value": "6개, 180.0 A, 위상당 None cm³",
+   "verdict": "통과"
+  },
+  {
+   "no": "Q2",
+   "item": "V_A 클램프(P5 2차)",
+   "cand": "FF450R12ME4P, R1.2_off463",
+   "stress": "E26 사건 32개, C_A 2.4 mF",
+   "value": "전류 390 A, T_vj 149 °C",
+   "verdict": "통과(설계 변경)"
+  },
+  {
+   "no": "Q3",
+   "item": "이중 고장 C_A 방전(F2·P7)",
+   "cand": "R_dis 10.0 Ω 0/4, 3.0 Ω 0/4, 1.0 Ω 2/4",
+   "stress": "E29 F2 4사례",
+   "value": "선택 None",
+   "verdict": "불통과"
+  },
+  {
+   "no": "Q4",
+   "item": "소프트 투입 전용 선형 소자(P6 2차)",
+   "cand": "-",
+   "stress": "1119 W, 1.75 ms",
+   "value": "통과 0/5",
+   "verdict": "불통과"
+  },
+  {
+   "no": "Q5",
+   "item": "W460 접촉기(P9 2차)",
+   "cand": "ECK100B, G9EK-1 (G9EK-1-U / G9EK-1-UTU)",
+   "stress": "470 V, 52.7 A",
+   "value": "통과 2/4",
+   "verdict": "통과"
+  },
+  {
+   "no": "Q6",
+   "item": "C_A 2.4 mF",
+   "cand": "B32778Z5606",
+   "stress": "실효 50.6 A",
+   "value": "40개, 820 A, 3105 cm³",
+   "verdict": "통과"
+  },
+  {
+   "no": "Q7",
+   "item": "L_r 864.6 nH(공심 추정)",
+   "cand": "원통 공심 + Litz",
+   "stress": "실효 60.9 A, 첨두 169.3 A",
+   "value": "3.6회·25 mm, 3.1–4.2 W",
+   "verdict": "요구"
+  }
+ ]
+}

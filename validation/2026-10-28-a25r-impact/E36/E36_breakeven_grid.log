@@ -1,0 +1,4 @@
+640V: Stage A 519.8 W, 격자 손익분기 A25R 3.93 mΩ, 150 kHz(497 W) 3.45 mΩ, 5 mΩ 격자 최소 571.5 W {'L0': 0.0004, 'f': 10000.0, 'n': 6}
+800V: Stage A 585.8 W, 격자 손익분기 A25R 4.57 mΩ, 150 kHz(497 W) 2.75 mΩ, 5 mΩ 격자 최소 606.7 W {'L0': 0.0004, 'f': 10000.0, 'n': 6}
+920V: Stage A 639.2 W, 격자 손익분기 A25R 5.12 mΩ, 150 kHz(497 W) 2.24 mΩ, 5 mΩ 격자 최소 633.3 W {'L0': 0.0004, 'f': 10000.0, 'n': 6}
+saved /home/claude/PRISM-Hub/validation/2026-10-28-a25r-impact/E36/e25_breakeven_grid.json

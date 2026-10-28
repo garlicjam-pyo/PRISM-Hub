@@ -1,0 +1,34 @@
+{
+ "part": "IXTK90N25L2",
+ "maker": "IXYS (Littelfuse)",
+ "title": "IXTK90N25L2 / IXTX90N25L2 Linear L2 Power MOSFET w/ Extended FBSOA, 250 V, 90 A, <36 mOhm, DS100080A(4/16)",
+ "url": "https://static.chipdip.ru/lib/014/DOC046014580.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Distributor-hosted copy of the IXYS PDF (Chip and Dip; pages stamped 'Downloaded from Arrow.com'); no Advance/Preliminary marking. The official littelfuse.com product page renders by script and gave no datasheet link to the fetch tool. I_D at T_C = 100 C is not tabulated (Fig. 6 curve only) -> null. R_DS(on) = 36 mOhm at V_GS = 10 V, I_D = 0.5 I_D25 (header '< 36 mOhm', so a maximum). The min/typ/max column of R_thJC and of the SOA row could not be confirmed from the extracted text. FBSOA Fig. 13 (T_C = 25 C) and Fig. 14 (T_C = 75 C) with 25 us, 100 us, 1 ms, 10 ms, 100 ms and DC lines and the Z_thJC Fig. 12 are graph-only and were not read. Check: 75 C + 575 W x 0.13 C/W = 149.8 C = T_JM, so the 5 s point is the steady-state limit. An older preliminary copy (DS100080(11/08), https://static.chipdip.ru/lib/700/DOC011700854.pdf) states 33 mOhm and the same SOA row.",
+ "ratings": {
+  "V_DSS_V": 250,
+  "I_D_A": {
+   "25": 90,
+   "100": null
+  },
+  "I_DM_A": 360,
+  "R_DSon_mohm": 36,
+  "R_DSon_note": "max, V_GS = 10 V, I_D = 0.5 I_D25, pulse test",
+  "P_D_W": 960,
+  "R_thJC_KperW": 0.13,
+  "R_thCS_KperW": 0.15,
+  "T_J_max_C": 150,
+  "package": "TO-264 (IXTK90N25L2); PLUS247 (IXTX90N25L2)"
+ },
+ "soa_points": [
+  {
+   "V_DS_V": 250,
+   "I_D_A": 2.3,
+   "t_s": 5,
+   "T_C_C": 75,
+   "note": "Characteristics-table row 'SOA V_DS = 250 V, I_D = 2.3 A, T_C = 75 C, Tp = 5 s: 575 W'"
+  }
+ ],
+ "zth": null,
+ "zth_foster": null
+}

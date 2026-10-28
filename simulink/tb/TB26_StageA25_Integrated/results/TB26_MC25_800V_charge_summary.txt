@@ -1,0 +1,19 @@
+TB26 case MC25_800V_charge (V_bat 800 V, charge_startstop, fault module 0 at 0.00 ms; model MC_800V_charge_prestart), dt 2.50 ns, wall 141 s
+(1) criteria (t >= 0.90 ms):
+    C1_turnoff           FAIL
+    C2_phase_peak        FAIL
+    C3_vA                PASS
+    C4_modules           PASS
+    C5_loss              FAIL
+    turn-offs 829, violations 24 (worst |i_off| 5.34 A); phase peak 101.4 A (limit 74.5 A, P_rated 74.5 A)
+    V_A 397.778-403.656 V (pre-fault NaN); module changes: [1 4;3.05 1]; end 1, restart 0, cancel 0; loss 382.5 W (model 161.3 W, P_bat 15015 W)
+(2) comparison with E33 model (info):
+    metric                                  Simscape         E33      diff    result
+    module change 1 time [ms] (-> 4)               1           1        +0        ok
+    module change 2 time [ms] (-> 1)            3.05        3.05 +4.44e-16        ok
+    replacement start [us]                       NaN         NaN       NaN        ok
+    phase peak [A]                             101.4      103.01     -1.61        ok
+    V_A min [V]                               397.78      397.88    -0.103        ok
+    V_A max [V]                               403.66      403.83    -0.176        ok
+    Stage A loss, last 10 periods [W]         382.49      161.29      +221      over
+    max turn-off current [A]                  5.3352      3.7814     +1.55      info

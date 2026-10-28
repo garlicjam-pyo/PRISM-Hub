@@ -1,0 +1,5 @@
+[prism_run] check_gate_parity_TB24 start 2026-10-28 15:56:21
+gate parity (case FA_800V_drive_15kW_m1, 76500 steps, fault module 1 at step 25500): mismatch phases [0  0  0  0  0  0  0  0], active modules 0, module modes [0  0  0  0] -> PASS
+gate parity (case FF_800V_charge_m1, 76500 steps, fault module 1 at step 25500): mismatch phases [0  0  0  0  0  0  0  0], active modules 0, module modes [0  0  0  0] -> PASS
+gate parity overall: PASS
+[prism_run] check_gate_parity_TB24 finished (7.1 s)

@@ -1,0 +1,4 @@
+TB26 Stage A 25 kHz design (A25) 4 modules + switch C_oss, module manager/shedding/fault, R2 bus, reference E33
+case                     result peak[A]   limit     vA [V]                     modules  loss sim/model [W] failed
+FF25_800V_charge_m1      FAIL   109.7     111.8     399.11 -403.46  (401.01 ) end 3    455.1 /   522.3   C5_loss
+TB26 overall: FAIL

@@ -1,0 +1,65 @@
+{
+ "part": "800 & 1000 Series (SP, AS, BA)",
+ "maker": "Ohmite",
+ "title": "800 and 1000 Series Tubular High Energy Bulk Ceramic Resistors (rev 7/25-1)",
+ "url": "https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/7182/800-and-1000-series.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet/product page text with a fetch tool (no curve digitized). Values not stated in text are null.",
+ "notes": [
+  "Energy ratings are based on pulses < 10 ms.",
+  "Allowable peak energy and voltage depend on resistance value; consult the factory.",
+  "For Type SP, ratings can be substantially greater for longer pulses; consult the factory."
+ ],
+ "rows": [
+  [
+   "889SP",
+   305,
+   25.4,
+   1.0,
+   680,
+   275,
+   3200,
+   10000
+  ],
+  [
+   "890SP",
+   457,
+   25.4,
+   1.0,
+   1000,
+   375,
+   4200,
+   16000
+  ],
+  [
+   "891SP",
+   457,
+   50.8,
+   1.0,
+   450,
+   750,
+   15000,
+   16000
+  ],
+  [
+   "892SP",
+   610,
+   50.8,
+   1.0,
+   600,
+   1000,
+   17500,
+   22000
+  ]
+ ],
+ "row_fields": [
+  "part",
+  "length_mm",
+  "dia_mm",
+  "R_min_ohm",
+  "R_max_ohm",
+  "P_avg_40C_W",
+  "E_peak_J",
+  "V_peak_V"
+ ]
+}

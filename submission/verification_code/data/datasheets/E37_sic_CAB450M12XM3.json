@@ -1,0 +1,55 @@
+{
+ "part": "CAB450M12XM3",
+ "maker": "Wolfspeed",
+ "title": "CAB450M12XM3 1200 V, 450 A all-SiC conduction-optimized half-bridge module (XM3) data sheet, Rev. A, 2019-06-01",
+ "url": "https://www.farnell.com/datasheets/2819810.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Distributor-hosted (Farnell) copy of the Wolfspeed PDF; the newer Wolfspeed-hosted revision (assets.wolfspeed.com/uploads/2024/01/Wolfspeed_CAB450M12XM3_data_sheet.pdf) could not be fetched (request blocked), so values are from Rev. A and may differ from the current revision. Z_th(t) is given only as a graph (Fig. 17); no Foster/Cauer r_i/tau_i in the datasheet text. Wolfspeed distributes 4th-order Cauer parameters separately (Cauer_Network_Parameters.xlsx in the SPICE RC thermal model zip, per PRD-09035 Rev. 1), not fetched. R_thCH not stated. T_vj op max taken from 'TVJ op ... -40 175 C (maximum virtual junction temperature under switching conditions)'.",
+ "mosfet": {
+  "V_DSS_V": 1200,
+  "I_D_A": 409,
+  "I_D_note": "V_GS 15 V, T_C 90 C, T_VJ <= 175 C (Note 2: computed from R_thJC 0.11 C/W and R_DS(on) 4.6 mOhm); 450 A at T_C 25 C",
+  "I_D_25C_A": 450,
+  "I_DM_A": 900,
+  "I_DM_note": "I_DS(pulsed), t_P max limited by T_J max; I_SD(pulsed) 900 A at V_GS 15 V, T_C 25 C",
+  "R_DSon_mohm": {
+   "25": 2.6,
+   "175": 4.6
+  },
+  "R_DSon_25C_max_mohm": 3.7,
+  "R_DSon_I_A": 450,
+  "R_DSon_cond": "V_GS 15 V, I_D 450 A (devices); 25 C typ 2.6 / max 3.7, 175 C typ 4.6",
+  "E_on_mJ": {
+   "25": 11.0,
+   "125": 11.7,
+   "175": 13.0
+  },
+  "E_off_mJ": {
+   "25": 10.1,
+   "125": 11.3,
+   "175": 12.1
+  },
+  "E_cond": "V_DS 600 V, I_D 450 A, V_GS -4/15 V, R_G(ext) 0.0 ohm (R_G(int) 2.5 ohm), L 13.6 uH (inductive clamped load)",
+  "E_rr_mJ": {
+   "25": 0.2,
+   "125": 1.1,
+   "175": 1.9
+  },
+  "V_SD_V": {
+   "25": 4.7,
+   "175": 4.2
+  },
+  "V_SD_cond": "body diode, V_GS -4 V, I_SD 450 A",
+  "R_thJC_KperW": 0.11,
+  "R_thJC_max_KperW": 0.13,
+  "R_thCH_KperW": null,
+  "R_thJH_KperW": null,
+  "T_vj_op_max_C": 175,
+  "zth_foster": null,
+  "E_cond_num": {
+   "V": 600,
+   "I": 450,
+   "note": "E_cond 문자열의 시험 전압·전류를 숫자로 옮김(E37)"
+  }
+ }
+}

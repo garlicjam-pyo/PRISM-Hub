@@ -1,0 +1,55 @@
+{
+ "part": "C4MS008075U2",
+ "maker": "Wolfspeed",
+ "title": "C4MS008075U2 750 V, 8 mOhm silicon carbide MOSFET data sheet (Rev. 1)",
+ "url": "https://assets.wolfspeed.com/uploads/2026/05/Wolfspeed_C4MS008075U2_data_sheet.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet text (electrical characteristics and maximum ratings tables). No curve was digitized. Values the datasheet does not state are marked null; derived values are in 'derived'.",
+ "ratings": {
+  "V_DS_V": 750,
+  "I_D_25C_A": 278,
+  "I_D_100C_A": 200,
+  "I_D_note": "V_GS = 18 V, T_J <= 175 C",
+  "I_DM_A": 619,
+  "I_DM_note": "T_C = 25 C, t_p limited by T_J max",
+  "T_J_max_C": 175
+ },
+ "electrical": {
+  "R_DSon_25C_typ_mOhm": 8.0,
+  "R_DSon_25C_max_mOhm": 10.4,
+  "R_DSon_175C_typ_mOhm": 11.8,
+  "R_DSon_125C_mOhm": null,
+  "R_DSon_cond": "V_GS = 18 V, I_D = 88.4 A",
+  "C_iss_pF": 6862,
+  "C_oss_pF": 396,
+  "C_rss_pF": 16,
+  "C_cond": "V_GS = 0 V, V_DS = 500 V, f = 100 kHz",
+  "C_o_er_pF": 510,
+  "C_o_tr_pF": 828,
+  "C_o_range_V": [
+   0,
+   500
+  ],
+  "E_oss_uJ": 64,
+  "E_oss_note": "Fig. 16 value; equals 0.5 x C_o(er) x 500 V^2 = 63.8 uJ, i.e. at 500 V",
+  "Q_G_nC": 278,
+  "Q_GS_nC": 76,
+  "Q_GD_nC": 66,
+  "Q_G_cond": "V_DS = 500 V, V_GS = -4/18 V, I_D = 88.4 A",
+  "V_GS_on_V": [
+   15,
+   18
+  ],
+  "V_GS_off_V": [
+   -5,
+   0
+  ],
+  "V_SD_V": 5.1,
+  "V_SD_cond": "V_GS = -4 V, I_SD = 44.2 A, 25 C",
+  "Q_rr_nC": 876,
+  "Q_rr_cond": "T_J = 175 C, V_DS = 500 V, I_S = 88.4 A"
+ },
+ "thermal": {
+  "R_thJC_CperW": 0.16
+ }
+}

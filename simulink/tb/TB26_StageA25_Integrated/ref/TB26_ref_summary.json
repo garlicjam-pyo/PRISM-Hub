@@ -1,0 +1,74 @@
+{
+ "FA25_800V_drive_15kW_m1": {
+  "passed": true,
+  "limits": {
+   "F1": true,
+   "F2": true,
+   "F3": true,
+   "F4": true
+  },
+  "events": [],
+  "phase_peak": 35.1200065612793,
+  "vA_pre": 399.6620178222656,
+  "vA": [
+   399.2127685546875,
+   400.3233947753906
+  ],
+  "ioff_max": 0.49946069717407227,
+  "n_turnoff": 120,
+  "t_rep_us": 0.0,
+  "n_end": 1,
+  "loss_ng_W": 73.80299407772924,
+  "model": "FA_800V_drive_15kW_m1"
+ },
+ "FF25_800V_charge_m1": {
+  "passed": true,
+  "limits": {
+   "F1": true,
+   "F2": true,
+   "F3": true,
+   "F4": true
+  },
+  "events": [
+   [
+    1.1,
+    3
+   ]
+  ],
+  "phase_peak": 109.67003631591797,
+  "vA_pre": 400.9768371582031,
+  "vA": [
+   398.9454345703125,
+   403.3398742675781
+  ],
+  "ioff_max": 0.4986814856529236,
+  "n_turnoff": 371,
+  "t_rep_us": null,
+  "n_end": 3,
+  "loss_ng_W": 522.2893147418056,
+  "model": "FF_800V_charge_m1"
+ },
+ "MC25_800V_charge": {
+  "events": [
+   [
+    1.0,
+    4
+   ],
+   [
+    3.05,
+    1
+   ]
+  ],
+  "phase_peak": 103.01028442382812,
+  "vA": [
+   397.8807067871094,
+   403.8319396972656
+  ],
+  "ioff_max": 3.781388759613037,
+  "n_turnoff": 826,
+  "n_end": 1,
+  "n_bad": 37,
+  "loss_ng_W": 161.28907968582297,
+  "model": "MC_800V_charge_prestart"
+ }
+}

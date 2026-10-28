@@ -1,0 +1,204 @@
+{
+ "rows": [
+  {
+   "file": "E37_ctc_AEVA1251",
+   "part": "AEVA1251",
+   "status": "Not stated on manufacturer part page",
+   "V_rated": 500,
+   "I_carry": 250,
+   "cases": {
+    "W460_240s": {
+     "V_upper": 470.0,
+     "i_break": 52.659923861936754,
+     "ok_V": true,
+     "rows": [
+      {
+       "V": 500,
+       "I_A": 1800,
+       "ops": 1,
+       "note": "switch-off life, min. 1 operation, no polarity"
+      }
+     ],
+     "ok": true
+    },
+    "W410_spec": {
+     "V_upper": 420.0,
+     "i_break": 70.74247978540012,
+     "ok_V": true,
+     "rows": [
+      {
+       "V": 500,
+       "I_A": 1800,
+       "ops": 1,
+       "note": "switch-off life, min. 1 operation, no polarity"
+      }
+     ],
+     "ok": true
+    }
+   }
+  },
+  {
+   "file": "E37_ctc_ECK100B",
+   "part": "ECK100B",
+   "status": "Not stated (datasheet (c)2024, 11/24; TE listing page status not retrievable)",
+   "V_rated": 1000,
+   "I_carry": 100,
+   "cases": {
+    "W460_240s": {
+     "V_upper": 470.0,
+     "i_break": 52.659923861936754,
+     "ok_V": true,
+     "rows": [
+      {
+       "V": 800,
+       "I_A": 100,
+       "ops": 1000,
+       "note": "make/break, resistive"
+      },
+      {
+       "V": 1000,
+       "I_A": 100,
+       "ops": 1000,
+       "note": "make/break, resistive"
+      },
+      {
+       "V": 1000,
+       "I_A": 150,
+       "ops": 100,
+       "note": "make/break, resistive"
+      },
+      {
+       "V": 500,
+       "I_A": 300,
+       "ops": 5,
+       "note": "make/break, resistive"
+      }
+     ],
+     "ok": true
+    },
+    "W410_spec": {
+     "V_upper": 420.0,
+     "i_break": 70.74247978540012,
+     "ok_V": true,
+     "rows": [
+      {
+       "V": 450,
+       "I_A": 100,
+       "ops": 6000,
+       "note": "make/break, resistive; direction not specified per row (series bi-directional)"
+      },
+      {
+       "V": 800,
+       "I_A": 100,
+       "ops": 1000,
+       "note": "make/break, resistive"
+      },
+      {
+       "V": 1000,
+       "I_A": 100,
+       "ops": 1000,
+       "note": "make/break, resistive"
+      },
+      {
+       "V": 1000,
+       "I_A": 150,
+       "ops": 100,
+       "note": "make/break, resistive"
+      },
+      {
+       "V": 500,
+       "I_A": 300,
+       "ops": 5,
+       "note": "make/break, resistive"
+      }
+     ],
+     "ok": true
+    }
+   }
+  },
+  {
+   "file": "E37_ctc_G9EK-1",
+   "part": "G9EK-1 (G9EK-1-U / G9EK-1-UTU)",
+   "status": "Not stated (manufacturer product page not reachable)",
+   "V_rated": 500,
+   "I_carry": 120,
+   "cases": {
+    "W460_240s": {
+     "V_upper": 470.0,
+     "i_break": 52.659923861936754,
+     "ok_V": true,
+     "rows": [
+      {
+       "V": 500,
+       "I_A": 120,
+       "ops": 1000,
+       "note": "resistive, min.; direction not specified (bidirectional per datasheet)"
+      },
+      {
+       "V": 500,
+       "I_A": 60,
+       "ops": 6000,
+       "note": "resistive, min.; direction not specified (bidirectional per datasheet)"
+      }
+     ],
+     "ok": true
+    },
+    "W410_spec": {
+     "V_upper": 420.0,
+     "i_break": 70.74247978540012,
+     "ok_V": true,
+     "rows": [
+      {
+       "V": 500,
+       "I_A": 120,
+       "ops": 1000,
+       "note": "resistive, min.; direction not specified (bidirectional per datasheet)"
+      }
+     ],
+     "ok": true
+    }
+   }
+  },
+  {
+   "file": "E37_ctc_LEV100",
+   "part": "LEV100",
+   "status": "Active (TE product pages for 4-1618391-0 / -1)",
+   "V_rated": 900,
+   "I_carry": 100,
+   "cases": {
+    "W460_240s": {
+     "V_upper": 470.0,
+     "i_break": 52.659923861936754,
+     "ok_V": true,
+     "rows": [],
+     "ok": false
+    },
+    "W410_spec": {
+     "V_upper": 420.0,
+     "i_break": 70.74247978540012,
+     "ok_V": true,
+     "rows": [],
+     "ok": false
+    }
+   }
+  }
+ ],
+ "P9_input": {
+  "W460_240s": {
+   "i_break_max": 52.659923861936754,
+   "n": 25,
+   "V_bus_upper": 470.0,
+   "V_rating": 450,
+   "I_rating": 80,
+   "ok": false
+  },
+  "W410_spec": {
+   "i_break_max": 70.74247978540012,
+   "n": 24,
+   "V_bus_upper": 420.0,
+   "V_rating": 450,
+   "I_rating": 80,
+   "ok": true
+  }
+ }
+}

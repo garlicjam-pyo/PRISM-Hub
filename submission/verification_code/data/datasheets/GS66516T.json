@@ -1,0 +1,46 @@
+{
+ "part": "GS66516T",
+ "maker": "GaN Systems (now Infineon)",
+ "title": "GS66516T 650 V enhancement-mode GaN transistor, top-side cooled (DS Rev 210727)",
+ "url": "https://www.mouser.com/datasheet/3/70/1/GS66516T-DS-Rev-210727.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet text (electrical characteristics and maximum ratings tables). No curve was digitized. Values the datasheet does not state are marked null; derived values are in 'derived'.",
+ "ratings": {
+  "V_DS_V": 650,
+  "V_DS_transient_V": 750,
+  "V_DS_transient_note": "< 1 us",
+  "I_D_25C_A": 60,
+  "I_D_100C_A": 47,
+  "I_DM_A": 120,
+  "I_DM_note": "50 us pulse, V_GS = 6 V",
+  "T_J_max_C": 150
+ },
+ "electrical": {
+  "R_DSon_25C_typ_mOhm": 25.0,
+  "R_DSon_25C_max_mOhm": 32.0,
+  "R_DSon_150C_mOhm": 65.0,
+  "R_DSon_150C_note": "typ/max label not shown in the extracted table",
+  "R_DSon_cond": "V_GS = 6 V, I_DS = 18 A",
+  "C_iss_pF": 518,
+  "C_oss_pF": 126,
+  "C_rss_pF": 5.9,
+  "C_cond": "V_DS = 400 V, V_GS = 0 V, f = 100 kHz",
+  "C_o_er_pF": 207,
+  "C_o_tr_pF": 335,
+  "C_o_range_V": [
+   0,
+   400
+  ],
+  "Q_OSS_nC": 134,
+  "Q_OSS_cond": "V_DS = 400 V",
+  "E_oss_uJ": 17,
+  "E_oss_note": "V_DS = 400 V",
+  "Q_G_nC": 14.2,
+  "Q_G_cond": "V_GS = 0 to 6 V, V_DS = 400 V",
+  "Q_rr_nC": 0
+ },
+ "thermal": {
+  "R_thJC_CperW": 0.27,
+  "R_thJC_note": "junction to case, top side"
+ }
+}

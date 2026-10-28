@@ -1,0 +1,17 @@
+TB26 case FA25_800V_drive_15kW_m1 (V_bat 800 V, drive, fault module 1 at 1.10 ms; model FA_800V_drive_15kW_m1), dt 2.50 ns, wall 100 s
+(1) criteria (t >= 0.90 ms):
+    C1_turnoff           PASS
+    C2_phase_peak        PASS
+    C3_vA                PASS
+    C4_modules           PASS
+    C5_loss              FAIL
+    turn-offs 123, violations 0 (worst |i_off| 0.43 A); phase peak 36.2 A (limit 74.5 A, P_rated 74.5 A)
+    V_A 399.306-400.218 V (pre-fault 399.661); module changes: zeros(0,2); end 1, restart 0, cancel 0; loss 88.8 W (model 73.8 W, P_bat 14936 W)
+(2) comparison with E33 model (info):
+    metric                                  Simscape         E33      diff    result
+    replacement start [us]                         0           0        +0        ok
+    phase peak [A]                            36.233       35.12     +1.11        ok
+    V_A min [V]                               399.31      399.21   +0.0928        ok
+    V_A max [V]                               400.22      400.32    -0.106        ok
+    Stage A loss, last 10 periods [W]         88.799      73.803       +15      over
+    max turn-off current [A]                 0.42517     0.49946   -0.0743      info

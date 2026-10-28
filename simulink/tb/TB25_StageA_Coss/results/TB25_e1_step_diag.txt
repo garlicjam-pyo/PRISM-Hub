@@ -1,0 +1,5 @@
+TB25 T3 reference diagnostic (E1 fixed timing, 46.875 A, no C_oss): loss [W] vs integration step
+des    Simulink   E1 Nstep 340    E1 dt~20 ns   dt~20 ns+fix  ripple_pp V
+O         45.31          44.36          44.36          44.34         0.09
+A         98.70         103.26         103.31         101.87         0.18
+B         41.23          44.35          41.23          40.93         0.55

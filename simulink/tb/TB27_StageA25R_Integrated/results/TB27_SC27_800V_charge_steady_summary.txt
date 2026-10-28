@@ -1,0 +1,17 @@
+TB27 case SC27_800V_charge_steady (V_bat 800 V, charge_steady, fault module 0 at 0.00 ms; model SC_800V_charge_steady), dt 2.50 ns, wall 165 s
+(1) criteria (t >= 3.00 ms):
+    C1_turnoff           PASS
+    C2_phase_peak        PASS
+    C3_vA                PASS
+    C4_modules           PASS
+    C5_loss              PASS
+    turn-offs 399, violations 0 (worst |i_off| 0.31 A); phase peak 66.6 A (limit 74.5 A, P_rated 74.5 A)
+    V_A 400.751-400.770 V (pre-fault NaN); module changes: zeros(0,2); end 4, restart 0, cancel 0; loss 510.5 W (model 495.8 W, P_bat -134761 W)
+(2) comparison with E35 model (info):
+    metric                                  Simscape         E35      diff    result
+    replacement start [us]                       NaN         NaN       NaN        ok
+    phase peak [A]                            66.612      66.718    -0.106        ok
+    V_A min [V]                               400.75      400.75  -0.00344        ok
+    V_A max [V]                               400.77      400.77  +0.00317        ok
+    Stage A loss, last 20 periods [W]          510.5      495.81     +14.7        ok
+    max turn-off current [A]                 0.30906     0.49995    -0.191      info

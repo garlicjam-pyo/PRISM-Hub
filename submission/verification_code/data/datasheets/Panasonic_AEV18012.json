@@ -1,0 +1,27 @@
+{
+ "part": "AEV18012",
+ "maker": "Panasonic",
+ "title": "AEV18012 EV relay (DC contactor) product page",
+ "url": "https://industry.panasonic.com/global/en/products/control/relay/vehicle/number/aev18012",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet/product page text with a fetch tool (no curve digitized). Values not stated in text are null.",
+ "status": "Not recommended for new designs",
+ "ratings": {
+  "rated_switching": "80 A 450 V DC (carry)",
+  "I_carry_A": 80,
+  "continuity": [
+   "120 A 15 min",
+   "180 A 20 min"
+  ],
+  "switch_off_life": [
+   "800 A 300 V DC min. 1 op",
+   "120 A 450 V DC min. 50 ops",
+   "-120 A 200 V DC min. 50 ops (reverse)"
+  ],
+  "electrical_life": "80 A 450 V DC min. 1,000 ops",
+  "V_rated_V": 450,
+  "t_operate_ms_max": 50,
+  "t_release_ms_max": 30,
+  "coil": "12 V DC"
+ }
+}

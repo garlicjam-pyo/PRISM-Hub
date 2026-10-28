@@ -1,0 +1,16 @@
+TB24 case FA_800V_drive_15kW_m1 (V_bat 800 V, drive, module 1 fault at 0.50 ms), dt 2.50 ns, wall 88 s
+(1) criteria (t >= 0.3 ms):
+    F1_turnoff           PASS
+    F2_phase_peak        PASS
+    F3_vA                PASS
+    F4_modules           PASS
+    turn-offs 698, violations 0 (worst |i_off| 0.14 A); phase peak 36.1 A (limit 76.5 A, P_rated 76.5 A)
+    V_A before 399.609 V, after 399.500-399.778 V; module changes: zeros(0,2); end 1, restart 0, cancel 0, replacement 0.00 us
+(2) comparison with E30 (info):
+    metric                                  Simscape         E30      diff    result
+    replacement start [us]                         0           0        +0        ok
+    phase peak [A]                            36.109      36.214    -0.105        ok
+    V_A before fault [V]                      399.61      399.62  -0.00766        ok
+    V_A min after fault [V]                    399.5      399.51   -0.0102        ok
+    V_A max after fault [V]                   399.78      399.78 -0.000674        ok
+    max turn-off current [A]                 0.14272     0.43692    -0.294      info

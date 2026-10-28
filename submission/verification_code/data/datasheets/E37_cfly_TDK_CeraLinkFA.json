@@ -1,0 +1,286 @@
+{
+ "part": "CeraLink FA (B58035U*)",
+ "maker": "TDK Electronics",
+ "title": "CeraLink capacitor for fast-switching power electronic circuits, Flex Assembly (FA), B58035U*, version 6.6, 2025-04-04",
+ "url": "https://www.tdk-electronics.tdk.com/inf/20/10/ds/B58035_FA.pdf",
+ "url_dims": "https://www.tdk-electronics.tdk.com/ja/1090736/products/product-catalog/ceramic-capacitors/ceralink-capacitors/search-results-ceralink-capacitors",
+ "accessed": "2026-10-29",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Values not stated numerically in text/tables are null. volume_cm3 and A_per_uF are derived here (box l*w*h or cylinder pi/4*D^2*L from the stated max dimensions; A_per_uF = I_rms_A / C_uF), not datasheet values. Ratings from the TDK datasheet; dimensions (7.4 x 30 x 9.1 mm FA10, 7.4 x 9 x 9.1 FA3, 7.4 x 6 x 9.1 FA2) from the TDK product-catalog page (the datasheet text gives only unlabelled 6.0/9.0/30.0 and 0.85 mm). C_uF = C_nom,typ ('@ V_op, quasistatic, 25 C', large signal; product page shows '>' value). C_bias_uF holds only the two numeric small-signal points: C0 '@ 0 VDC, 0.5 Vrms, 1 kHz, 25 C' (+-20 %) and C_eff,typ '@ V_op, 0.5 Vrms, 1 kHz, 25 C' (+-20 %). Capacitance vs DC bias (incl. 320 V and 504 V) is graph-only -> C_at_320V_uF / C_at_504V_uF = null. I_rms = I_op 'normal operating current without forced cooling', 100 kHz, column headers T_amb 85 C / 105 C, footnote 'at T_device = +150 C' (inconsistent wording in source); higher values permitted at reduced lifetime. I_op vs frequency is graph-only (no 25 kHz value). ESR typical at 0 VDC, 0.5 Vrms, 25 C (1 kHz and 1 MHz only). A_per_uF uses C_nom; A_per_uF_Ceff / _C0 use the small-signal values. V_R in V_R_DC is V_R,Tmax (rated voltage at T_max = 150 C); V_pk,max is for <5 % of lifetime, not continuous.",
+ "family": "ceralink",
+ "conditions": {
+  "I_rms": "I_op, 100 kHz, T_amb 85 C (105 C in I_rms_105C_A), no forced cooling, T_device 150 C",
+  "C0": "0 VDC, 0.5 Vrms, 1 kHz, 25 C",
+  "C_eff": "V_op, 0.5 Vrms, 1 kHz, 25 C",
+  "C_nom": "V_op, quasistatic, 25 C",
+  "T_device_C": [
+   -40,
+   150
+  ],
+  "tan_delta": "< 0.02",
+  "aging": "about 2.5 % per log decade of hours"
+ },
+ "items": [
+  {
+   "pn": "B58035U7505M001",
+   "C_uF": 5,
+   "tol_pct": 20,
+   "V_R_DC": 700,
+   "V_R_AC": null,
+   "I_rms_A": 39,
+   "I_rms_f_kHz": 100,
+   "I_rms_T_C": 85,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    30,
+    7.4,
+    9.1
+   ],
+   "volume_cm3": 2.02,
+   "T_max_C": 150,
+   "C_bias_uF": [
+    [
+     0,
+     1.4
+    ],
+    [
+     600,
+     2.5
+    ]
+   ],
+   "A_per_uF": 7.8,
+   "type": "FA10",
+   "V_pk_max": 1000,
+   "V_op": 600,
+   "C_nom_typ_uF": 5,
+   "C_eff_typ_uF": 2.5,
+   "C0_uF": 1.4,
+   "C_at_320V_uF": null,
+   "C_at_504V_uF": null,
+   "I_rms_105C_A": 30,
+   "ESR_points_kHz_mohm": [
+    [
+     1,
+     1000
+    ],
+    [
+     1000,
+     5
+    ]
+   ],
+   "weight_g": 11.5,
+   "A_per_uF_Ceff": 15.6,
+   "A_per_uF_C0": 27.86
+  },
+  {
+   "pn": "B58035U7155M062",
+   "C_uF": 1.5,
+   "tol_pct": 20,
+   "V_R_DC": 700,
+   "V_R_AC": null,
+   "I_rms_A": 16,
+   "I_rms_f_kHz": 100,
+   "I_rms_T_C": 85,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    9,
+    7.4,
+    9.1
+   ],
+   "volume_cm3": 0.61,
+   "T_max_C": 150,
+   "C_bias_uF": [
+    [
+     0,
+     0.42
+    ],
+    [
+     600,
+     0.75
+    ]
+   ],
+   "A_per_uF": 10.667,
+   "type": "FA3",
+   "V_pk_max": 1000,
+   "V_op": 600,
+   "C_nom_typ_uF": 1.5,
+   "C_eff_typ_uF": 0.75,
+   "C0_uF": 0.42,
+   "C_at_320V_uF": null,
+   "C_at_504V_uF": null,
+   "I_rms_105C_A": 13,
+   "ESR_points_kHz_mohm": [
+    [
+     1,
+     4000
+    ],
+    [
+     1000,
+     12
+    ]
+   ],
+   "weight_g": 3.5,
+   "A_per_uF_Ceff": 21.33,
+   "A_per_uF_C0": 38.1
+  },
+  {
+   "pn": "B58035U7105M062",
+   "C_uF": 1,
+   "tol_pct": 20,
+   "V_R_DC": 700,
+   "V_R_AC": null,
+   "I_rms_A": 12,
+   "I_rms_f_kHz": 100,
+   "I_rms_T_C": 85,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    6,
+    7.4,
+    9.1
+   ],
+   "volume_cm3": 0.4,
+   "T_max_C": 150,
+   "C_bias_uF": [
+    [
+     0,
+     0.28
+    ],
+    [
+     600,
+     0.5
+    ]
+   ],
+   "A_per_uF": 12.0,
+   "type": "FA2",
+   "V_pk_max": 1000,
+   "V_op": 600,
+   "C_nom_typ_uF": 1,
+   "C_eff_typ_uF": 0.5,
+   "C0_uF": 0.28,
+   "C_at_320V_uF": null,
+   "C_at_504V_uF": null,
+   "I_rms_105C_A": 11,
+   "ESR_points_kHz_mohm": [
+    [
+     1,
+     6000
+    ],
+    [
+     1000,
+     17
+    ]
+   ],
+   "weight_g": 2.3,
+   "A_per_uF_Ceff": 24.0,
+   "A_per_uF_C0": 42.86
+  },
+  {
+   "pn": "B58035U5106M001",
+   "C_uF": 10,
+   "tol_pct": 20,
+   "V_R_DC": 500,
+   "V_R_AC": null,
+   "I_rms_A": 47,
+   "I_rms_f_kHz": 100,
+   "I_rms_T_C": 85,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    30,
+    7.4,
+    9.1
+   ],
+   "volume_cm3": 2.02,
+   "T_max_C": 150,
+   "C_bias_uF": [
+    [
+     0,
+     3.5
+    ],
+    [
+     400,
+     6.0
+    ]
+   ],
+   "A_per_uF": 4.7,
+   "type": "FA10",
+   "V_pk_max": 650,
+   "V_op": 400,
+   "C_nom_typ_uF": 10,
+   "C_eff_typ_uF": 6.0,
+   "C0_uF": 3.5,
+   "C_at_320V_uF": null,
+   "C_at_504V_uF": null,
+   "I_rms_105C_A": 38,
+   "ESR_points_kHz_mohm": [
+    [
+     1,
+     1000
+    ],
+    [
+     1000,
+     3
+    ]
+   ],
+   "weight_g": 11.5,
+   "A_per_uF_Ceff": 7.83,
+   "A_per_uF_C0": 13.43,
+   "note": "V_R,Tmax = 500 V < 518 V required"
+  },
+  {
+   "pn": "B58035U9255M001",
+   "C_uF": 2.5,
+   "tol_pct": 20,
+   "V_R_DC": 900,
+   "V_R_AC": null,
+   "I_rms_A": 32,
+   "I_rms_f_kHz": 100,
+   "I_rms_T_C": 85,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    30,
+    7.4,
+    9.1
+   ],
+   "volume_cm3": 2.02,
+   "T_max_C": 150,
+   "C_bias_uF": [
+    [
+     0,
+     0.7
+    ],
+    [
+     800,
+     1.3
+    ]
+   ],
+   "A_per_uF": 12.8,
+   "type": "FA10",
+   "V_pk_max": 1300,
+   "V_op": 800,
+   "C_nom_typ_uF": 2.5,
+   "C_eff_typ_uF": 1.3,
+   "C0_uF": 0.7,
+   "C_at_320V_uF": null,
+   "C_at_504V_uF": null,
+   "I_rms_105C_A": 23,
+   "ESR_points_kHz_mohm": [
+    [
+     1,
+     2000
+    ],
+    [
+     1000,
+     7
+    ]
+   ],
+   "weight_g": 11.5,
+   "A_per_uF_Ceff": 24.62,
+   "A_per_uF_C0": 45.71,
+   "note": "dual-use regulated (export approval needed)"
+  }
+ ]
+}

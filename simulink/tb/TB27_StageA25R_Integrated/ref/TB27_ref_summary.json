@@ -1,0 +1,84 @@
+{
+ "FF27_800V_charge_m1": {
+  "passed": true,
+  "limits": {
+   "F1": true,
+   "F2": true,
+   "F3": true,
+   "F4": true
+  },
+  "events": [
+   [
+    1.1,
+    3
+   ]
+  ],
+  "phase_peak": 99.48812866210938,
+  "vA_pre": 400.7558898925781,
+  "vA": [
+   400.5816650390625,
+   401.8204650878906
+  ],
+  "ioff_max": 0.4988846182823181,
+  "n_turnoff": 372,
+  "t_rep_us": null,
+  "n_end": 3,
+  "loss_ng_W": 521.8564579856977,
+  "loss_ncyc": 10,
+  "model": "FF_800V_charge_m1"
+ },
+ "MC27_800V_charge_slow": {
+  "events": [
+   [
+    1.0,
+    4
+   ],
+   [
+    4.65,
+    1
+   ]
+  ],
+  "phase_peak": 70.15043640136719,
+  "vA": [
+   399.4140930175781,
+   401.0194091796875
+  ],
+  "ioff_max": 0.4998719394207001,
+  "n_turnoff": 1356,
+  "n_end": 1,
+  "n_bad": 0,
+  "loss_ng_W": 161.05085163118807,
+  "loss_ncyc": 10,
+  "model": "MC_800V_charge_slow"
+ },
+ "MA27_540V_bus_5_15_5kW": {
+  "events": [],
+  "phase_peak": 55.58409118652344,
+  "vA": [
+   268.97705078125,
+   270.3168640136719
+  ],
+  "ioff_max": 0.49996161460876465,
+  "n_turnoff": 258,
+  "n_end": 1,
+  "n_bad": 0,
+  "loss_ng_W": 37.306776603564856,
+  "loss_ncyc": 10,
+  "model": "MA10_540V_bus_5_15_5kW"
+ },
+ "SC27_800V_charge_steady": {
+  "events": [],
+  "phase_peak": 66.71813201904297,
+  "vA": [
+   400.75445556640625,
+   400.7669982910156
+  ],
+  "ioff_max": 0.4999532997608185,
+  "n_turnoff": 398,
+  "n_end": 4,
+  "n_bad": 0,
+  "loss_ng_W": 495.80848902289154,
+  "loss_ncyc": 20,
+  "model": "SC_800V_charge_steady"
+ }
+}

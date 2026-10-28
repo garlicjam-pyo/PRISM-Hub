@@ -1,0 +1,50 @@
+{
+ "part": "UG4SC075011K4S",
+ "maker": "onsemi (formerly Qorvo/UnitedSiC)",
+ "title": "UG4SC075011K4S 750 V, 11 mOhm SiC FET (SiC JFET + Si MOSFET cascode), TO-247-4",
+ "url": "https://www.onsemi.com/pdf/datasheet/ug4sc075011k4s-d.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet text (electrical characteristics and maximum ratings tables). No curve was digitized. Values the datasheet does not state are marked null; derived values are in 'derived'.",
+ "ratings": {
+  "V_DS_V": 750,
+  "I_D_25C_A": 104,
+  "I_D_100C_A": 75,
+  "I_DM_A": 300,
+  "I_DM_note": "T_C = 25 C, pulse width limited by T_J max",
+  "T_J_max_C": 175
+ },
+ "electrical": {
+  "R_DSon_25C_typ_mOhm": 11.0,
+  "R_DSon_25C_max_mOhm": 14.2,
+  "R_DSon_125C_typ_mOhm": 18.4,
+  "R_DSon_175C_typ_mOhm": 24.2,
+  "R_DSon_cond": "V_GS = 12 V, I_D = 60 A",
+  "C_iss_pF": 3245,
+  "C_oss_pF": 178,
+  "C_rss_pF": 1.2,
+  "C_cond": "V_DS = 400 V, V_GS = 0 V, f = 100 kHz",
+  "C_o_er_pF": 225,
+  "C_o_tr_pF": 470,
+  "C_o_range_V": [
+   0,
+   400
+  ],
+  "E_oss_uJ": 18,
+  "E_oss_note": "V_DS = 400 V",
+  "Q_G_nC": 75,
+  "Q_GD_nC": 13,
+  "Q_G_cond": "V_DS = 400 V, I_D = 60 A, V_GS = 0 to 15 V",
+  "V_GS_drive_V": [
+   0,
+   15
+  ],
+  "V_FSD_V": 1.1,
+  "V_FSD_cond": "I_S = 30 A, 25 C (typ; 1.24 V max)",
+  "Q_rr_nC": 242,
+  "Q_rr_cond": "25 C, V_DS = 400 V, I_S = 60 A (280 nC at 150 C)"
+ },
+ "thermal": {
+  "R_thJC_CperW": 0.33,
+  "R_thJC_max_CperW": 0.42
+ }
+}

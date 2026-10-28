@@ -1,0 +1,228 @@
+{
+ "part": "CeraLink LP (B58031*)",
+ "maker": "TDK Electronics",
+ "title": "CeraLink capacitor for fast-switching power electronic circuits, Low profile (LP), B58031*, version 6.4, 2025-04-24",
+ "url": "https://www.tdk-electronics.tdk.com/inf/20/10/ds/B58031_LP.pdf",
+ "url_dims": "https://www.tdk-electronics.tdk.com/ja/1090736/products/product-catalog/ceramic-capacitors/ceralink-capacitors/search-results-ceralink-capacitors",
+ "accessed": "2026-10-29",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Values not stated numerically in text/tables are null. volume_cm3 and A_per_uF are derived here (box l*w*h or cylinder pi/4*D^2*L from the stated max dimensions; A_per_uF = I_rms_A / C_uF), not datasheet values. Same definitions as the FA file (C_nom @ V_op quasistatic; C_eff @ V_op and C0 @ 0 V, both 0.5 Vrms 1 kHz 25 C, +-20 %). Dimensions from the TDK product-catalog page (L-style 7.85 x 10.84 x 4, J-style 7.85 x 7.14 x 4 mm); the datasheet gives drawings only. C vs DC bias, ESR vs f and I_op vs f are graph-only. I_op at 100 kHz, T_amb 85/105 C, T_device 150 C, without forced cooling. Weight approx. 1.3 g.",
+ "family": "ceralink",
+ "conditions": {
+  "I_rms": "I_op, 100 kHz, T_amb 85 C (105 C in I_rms_105C_A)",
+  "T_device_C": [
+   -40,
+   150
+  ]
+ },
+ "items": [
+  {
+   "pn": "B58031U7504M062",
+   "C_uF": 0.5,
+   "tol_pct": 20,
+   "V_R_DC": 700,
+   "V_R_AC": null,
+   "I_rms_A": 7,
+   "I_rms_f_kHz": 100,
+   "I_rms_T_C": 85,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    7.85,
+    7.14,
+    4
+   ],
+   "volume_cm3": 0.22,
+   "T_max_C": 150,
+   "C_bias_uF": [
+    [
+     0,
+     0.14
+    ],
+    [
+     600,
+     0.25
+    ]
+   ],
+   "A_per_uF": 14.0,
+   "type": "LP J-style",
+   "V_pk_max": 1000,
+   "V_op": 600,
+   "C_nom_typ_uF": 0.5,
+   "C_eff_typ_uF": 0.25,
+   "C0_uF": 0.14,
+   "C_at_320V_uF": null,
+   "C_at_504V_uF": null,
+   "I_rms_105C_A": 6,
+   "ESR_points_kHz_mohm": [
+    [
+     1,
+     6000
+    ],
+    [
+     1000,
+     24
+    ]
+   ],
+   "weight_g": 1.3,
+   "A_per_uF_Ceff": 28.0,
+   "A_per_uF_C0": 50.0
+  },
+  {
+   "pn": "B58031I7504M062",
+   "C_uF": 0.5,
+   "tol_pct": 20,
+   "V_R_DC": 700,
+   "V_R_AC": null,
+   "I_rms_A": 7,
+   "I_rms_f_kHz": 100,
+   "I_rms_T_C": 85,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    7.85,
+    10.84,
+    4
+   ],
+   "volume_cm3": 0.34,
+   "T_max_C": 150,
+   "C_bias_uF": [
+    [
+     0,
+     0.14
+    ],
+    [
+     600,
+     0.25
+    ]
+   ],
+   "A_per_uF": 14.0,
+   "type": "LP L-style",
+   "V_pk_max": 1000,
+   "V_op": 600,
+   "C_nom_typ_uF": 0.5,
+   "C_eff_typ_uF": 0.25,
+   "C0_uF": 0.14,
+   "C_at_320V_uF": null,
+   "C_at_504V_uF": null,
+   "I_rms_105C_A": 6,
+   "ESR_points_kHz_mohm": [
+    [
+     1,
+     6000
+    ],
+    [
+     1000,
+     24
+    ]
+   ],
+   "weight_g": 1.3,
+   "A_per_uF_Ceff": 28.0,
+   "A_per_uF_C0": 50.0
+  },
+  {
+   "pn": "B58031U5105M062",
+   "C_uF": 1,
+   "tol_pct": 20,
+   "V_R_DC": 500,
+   "V_R_AC": null,
+   "I_rms_A": 11,
+   "I_rms_f_kHz": 100,
+   "I_rms_T_C": 85,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    7.85,
+    7.14,
+    4
+   ],
+   "volume_cm3": 0.22,
+   "T_max_C": 150,
+   "C_bias_uF": [
+    [
+     0,
+     0.35
+    ],
+    [
+     400,
+     0.6
+    ]
+   ],
+   "A_per_uF": 11.0,
+   "type": "LP J-style",
+   "V_pk_max": 650,
+   "V_op": 400,
+   "C_nom_typ_uF": 1,
+   "C_eff_typ_uF": 0.6,
+   "C0_uF": 0.35,
+   "C_at_320V_uF": null,
+   "C_at_504V_uF": null,
+   "I_rms_105C_A": 10,
+   "ESR_points_kHz_mohm": [
+    [
+     1,
+     3000
+    ],
+    [
+     1000,
+     12
+    ]
+   ],
+   "weight_g": 1.3,
+   "A_per_uF_Ceff": 18.33,
+   "A_per_uF_C0": 31.43,
+   "note": "V_R,Tmax = 500 V < 518 V required"
+  },
+  {
+   "pn": "B58031U9254M062",
+   "C_uF": 0.25,
+   "tol_pct": 20,
+   "V_R_DC": 900,
+   "V_R_AC": null,
+   "I_rms_A": 5,
+   "I_rms_f_kHz": 100,
+   "I_rms_T_C": 85,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    7.85,
+    7.14,
+    4
+   ],
+   "volume_cm3": 0.22,
+   "T_max_C": 150,
+   "C_bias_uF": [
+    [
+     0,
+     0.07
+    ],
+    [
+     800,
+     0.13
+    ]
+   ],
+   "A_per_uF": 20.0,
+   "type": "LP J-style",
+   "V_pk_max": 1300,
+   "V_op": 800,
+   "C_nom_typ_uF": 0.25,
+   "C_eff_typ_uF": 0.13,
+   "C0_uF": 0.07,
+   "C_at_320V_uF": null,
+   "C_at_504V_uF": null,
+   "I_rms_105C_A": 5,
+   "ESR_points_kHz_mohm": [
+    [
+     1,
+     14000
+    ],
+    [
+     1000,
+     45
+    ]
+   ],
+   "weight_g": 1.3,
+   "A_per_uF_Ceff": 38.46,
+   "A_per_uF_C0": 71.43
+  }
+ ]
+}
