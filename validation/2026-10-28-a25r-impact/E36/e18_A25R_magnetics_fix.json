@@ -1,0 +1,377 @@
+{
+ "rule": "8 x 0.5 x L_r x I_pk^2 (E18.magnetics와 같음), L_r 144 nH -> 864.6 nH",
+ "scale": 6.004166666666667,
+ "packs": {
+  "180s": {
+   "1": {
+    "total_old_mJ": 3825.22,
+    "total_new_mJ": 3825.22,
+    "parts_new_mJ": {
+     "승압기(6위상, 150 kW)": 3306.25,
+     "보조 강압기(2위상, 25 kW)": 518.97
+    }
+   },
+   "2": {
+    "total_old_mJ": 364.71,
+    "total_new_mJ": 380.47,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "전전력 조정기(25 kW)": 361.56
+    }
+   },
+   "3": {
+    "total_old_mJ": 33.15,
+    "total_new_mJ": 48.91,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 5.0
+    }
+   },
+   "W410": {
+    "total_old_mJ": 27.01,
+    "total_new_mJ": 42.78,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 23.86
+    }
+   },
+   "W460": {
+    "total_old_mJ": 27.01,
+    "total_new_mJ": 42.78,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 23.86
+    }
+   },
+   "4": {
+    "total_old_mJ": 27.01,
+    "total_new_mJ": 42.78,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 23.86
+    }
+   }
+  },
+  "192s": {
+   "1": {
+    "total_old_mJ": 3861.67,
+    "total_new_mJ": 3861.67,
+    "parts_new_mJ": {
+     "승압기(6위상, 150 kW)": 3306.25,
+     "보조 강압기(2위상, 25 kW)": 555.42
+    }
+   },
+   "2": {
+    "total_old_mJ": 314.9,
+    "total_new_mJ": 330.67,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "전전력 조정기(25 kW)": 311.75
+    }
+   },
+   "3": {
+    "total_old_mJ": 33.15,
+    "total_new_mJ": 48.91,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 5.0
+    }
+   },
+   "W410": {
+    "total_old_mJ": 23.73,
+    "total_new_mJ": 39.49,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 20.58
+    }
+   },
+   "W460": {
+    "total_old_mJ": 23.73,
+    "total_new_mJ": 39.49,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 20.58
+    }
+   },
+   "4": {
+    "total_old_mJ": 23.73,
+    "total_new_mJ": 39.49,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 20.58
+    }
+   }
+  },
+  "200s": {
+   "1": {
+    "total_old_mJ": 3883.53,
+    "total_new_mJ": 3883.53,
+    "parts_new_mJ": {
+     "승압기(6위상, 150 kW)": 3306.25,
+     "보조 강압기(2위상, 25 kW)": 577.28
+    }
+   },
+   "2": {
+    "total_old_mJ": 281.71,
+    "total_new_mJ": 297.48,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "전전력 조정기(25 kW)": 278.56
+    }
+   },
+   "3": {
+    "total_old_mJ": 33.15,
+    "total_new_mJ": 48.91,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 5.0
+    }
+   },
+   "W410": {
+    "total_old_mJ": 46.57,
+    "total_new_mJ": 62.34,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 0.04,
+     "조정형 Stage C 전단(3.3 kW)": 18.39
+    }
+   },
+   "W460": {
+    "total_old_mJ": 21.54,
+    "total_new_mJ": 37.3,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 18.39
+    }
+   },
+   "4": {
+    "total_old_mJ": 21.54,
+    "total_new_mJ": 37.3,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 18.39
+    }
+   }
+  },
+  "216s": {
+   "1": {
+    "total_old_mJ": 3922.41,
+    "total_new_mJ": 3922.41,
+    "parts_new_mJ": {
+     "승압기(6위상, 150 kW)": 3306.25,
+     "보조 강압기(2위상, 25 kW)": 616.16
+    }
+   },
+   "2": {
+    "total_old_mJ": 215.36,
+    "total_new_mJ": 231.12,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "전전력 조정기(25 kW)": 212.21
+    }
+   },
+   "3": {
+    "total_old_mJ": 33.15,
+    "total_new_mJ": 48.91,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 5.0
+    }
+   },
+   "W410": {
+    "total_old_mJ": 43.12,
+    "total_new_mJ": 58.89,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 0.97,
+     "조정형 Stage C 전단(3.3 kW)": 14.01
+    }
+   },
+   "W460": {
+    "total_old_mJ": 17.16,
+    "total_new_mJ": 32.92,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 14.01
+    }
+   },
+   "4": {
+    "total_old_mJ": 17.16,
+    "total_new_mJ": 32.92,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 14.01
+    }
+   }
+  },
+  "224s": {
+   "1": {
+    "total_old_mJ": 3939.76,
+    "total_new_mJ": 3939.76,
+    "parts_new_mJ": {
+     "승압기(6위상, 150 kW)": 3306.25,
+     "보조 강압기(2위상, 25 kW)": 633.51
+    }
+   },
+   "2": {
+    "total_old_mJ": 200.3,
+    "total_new_mJ": 216.06,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "전전력 조정기(25 kW)": 197.15
+    }
+   },
+   "3": {
+    "total_old_mJ": 33.15,
+    "total_new_mJ": 48.91,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 5.0
+    }
+   },
+   "W410": {
+    "total_old_mJ": 41.98,
+    "total_new_mJ": 57.75,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 2.01,
+     "조정형 Stage C 전단(3.3 kW)": 11.82
+    }
+   },
+   "W460": {
+    "total_old_mJ": 40.01,
+    "total_new_mJ": 55.77,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 0.04,
+     "조정형 Stage C 전단(3.3 kW)": 11.82
+    }
+   },
+   "4": {
+    "total_old_mJ": 16.16,
+    "total_new_mJ": 31.92,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 13.01
+    }
+   }
+  },
+  "240s": {
+   "1": {
+    "total_old_mJ": 3971.0,
+    "total_new_mJ": 3971.0,
+    "parts_new_mJ": {
+     "승압기(6위상, 150 kW)": 3306.25,
+     "보조 강압기(2위상, 25 kW)": 664.75
+    }
+   },
+   "2": {
+    "total_old_mJ": 256.64,
+    "total_new_mJ": 272.4,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "전전력 조정기(25 kW)": 253.49
+    }
+   },
+   "3": {
+    "total_old_mJ": 33.15,
+    "total_new_mJ": 48.91,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 5.0
+    }
+   },
+   "W410": {
+    "total_old_mJ": 42.15,
+    "total_new_mJ": 57.91,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 6.56,
+     "조정형 Stage C 전단(3.3 kW)": 7.44
+    }
+   },
+   "W460": {
+    "total_old_mJ": 39.45,
+    "total_new_mJ": 55.21,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 0.73,
+     "조정형 Stage C 전단(3.3 kW)": 10.57
+    }
+   },
+   "4": {
+    "total_old_mJ": 19.88,
+    "total_new_mJ": 35.64,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 16.73
+    }
+   }
+  },
+  "spec": {
+   "1": {
+    "total_old_mJ": 3929.17,
+    "total_new_mJ": 3929.17,
+    "parts_new_mJ": {
+     "승압기(6위상, 150 kW)": 3306.25,
+     "보조 강압기(2위상, 25 kW)": 622.92
+    }
+   },
+   "2": {
+    "total_old_mJ": 226.42,
+    "total_new_mJ": 242.18,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "전전력 조정기(25 kW)": 223.27
+    }
+   },
+   "3": {
+    "total_old_mJ": 33.15,
+    "total_new_mJ": 48.91,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 5.0
+    }
+   },
+   "W410": {
+    "total_old_mJ": 44.13,
+    "total_new_mJ": 59.9,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "Stage B 필터 L_h": 25.0,
+     "Stage B DAB 누설 L": 1.25,
+     "조정형 Stage C 전단(3.3 kW)": 14.74
+    }
+   },
+   "W460": {
+    "total_old_mJ": 17.89,
+    "total_new_mJ": 33.65,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 14.74
+    }
+   },
+   "4": {
+    "total_old_mJ": 17.89,
+    "total_new_mJ": 33.65,
+    "parts_new_mJ": {
+     "Stage A 공진 L(8위상)": 18.91,
+     "조정형 Stage C 전단(3.3 kW)": 14.74
+    }
+   }
+  }
+ }
+}
