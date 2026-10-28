@@ -1,0 +1,34 @@
+{
+ "part": "IXTH58N25L2",
+ "maker": "IXYS (Littelfuse)",
+ "title": "IXTH58N25L2 N-Channel Enhancement Mode Linear L2 Power MOSFET w/ Extended FBSOA, 250 V, 58 A, 64 mOhm, DS100890A(2/18), ADVANCE TECHNICAL INFORMATION",
+ "url": "https://www.littelfuse.com/~/media/electronics/datasheets/discrete_mosfets/littelfuse_discrete_mosfets_n-channel_linear_ixth58n25_datasheet.pdf.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Official Littelfuse PDF; marked 'Advance Technical Information - product under development', so the values may change. I_D at T_C = 100 C is not tabulated (Fig. 7 curve only) -> null. R_DS(on) 64 mOhm at V_GS = 10 V, I_D = 0.5 I_D25 (the Ohm glyph and min/typ/max column are lost in the extracted text; IXYS normally lists this value as a maximum). The R_thJC column (typ/max) could not be confirmed. The SOA row prints 326 W although 250 V x 1.3 A = 325 W. FBSOA Figs. 13/14 (T_C = 25/75 C; 25 us ... 100 ms, DC lines) and the Z_thJC Fig. 15 are graph-only and were not read. Check: 75 C + 325 W x 0.23 C/W = 149.8 C = T_JM.",
+ "ratings": {
+  "V_DSS_V": 250,
+  "I_D_A": {
+   "25": 58,
+   "100": null
+  },
+  "I_DM_A": 180,
+  "R_DSon_mohm": 64,
+  "R_DSon_note": "V_GS = 10 V, I_D = 0.5 I_D25, pulse test; column not confirmed",
+  "P_D_W": 540,
+  "R_thJC_KperW": 0.23,
+  "R_thCS_KperW": 0.21,
+  "T_J_max_C": 150,
+  "package": "TO-247 (IXTH)"
+ },
+ "soa_points": [
+  {
+   "V_DS_V": 250,
+   "I_D_A": 1.3,
+   "t_s": 2,
+   "T_C_C": 75,
+   "note": "Characteristics-table row 'SOA V_DS = 250 V, I_D = 1.3 A, T_C = 75 C, Tp = 2 s: 326 W'"
+  }
+ ],
+ "zth": null,
+ "zth_foster": null
+}

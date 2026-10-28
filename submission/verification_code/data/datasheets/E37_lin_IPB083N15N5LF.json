@@ -1,0 +1,34 @@
+{
+ "part": "IPB083N15N5LF",
+ "maker": "Infineon Technologies",
+ "title": "IPB083N15N5LF OptiMOS 5 Linear FET, 150 V, Final Data Sheet Rev. 2.0, 2017-04-04",
+ "url": "https://www.farnell.com/datasheets/2718766.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Distributor-hosted (Farnell) copy of the Infineon PDF. R_DS(on) 8.3 mOhm max (6.9 typ) at V_GS = 10 V, I_D = 100 A. R_thJC 0.7 K/W max (0.45 typ). The only numeric linear-mode figure is the Table 1 key parameter 'I_pulse (V_DS = 56 V, t_p = 10 ms) 5.6 A'; no T_C is printed in that row (Diagram 3 SOA is labelled T_C = 25 C, D = 0). The SOA (Diagram 3) and Z_thJC (Diagram 4) are graph-only and were not read. Other ratings: I_D,pulse 420 A; E_AS 10 mJ; R_thJA 40 K/W on 6 cm2. Values re-checked on 2026-10-29.",
+ "ratings": {
+  "V_DSS_V": 150,
+  "I_D_A": {
+   "25": 105,
+   "100": 66
+  },
+  "I_DM_A": 420,
+  "R_DSon_mohm": 8.3,
+  "R_DSon_note": "max, V_GS = 10 V, I_D = 100 A (typ 6.9)",
+  "P_D_W": 179,
+  "R_thJC_KperW": 0.7,
+  "R_thJC_note": "max (typ 0.45)",
+  "T_J_max_C": 150,
+  "package": "PG-TO263-3 (D2PAK)"
+ },
+ "soa_points": [
+  {
+   "V_DS_V": 56,
+   "I_D_A": 5.6,
+   "t_s": 0.01,
+   "T_C_C": null,
+   "note": "Table 1 'I_pulse (V_DS = 56 V, t_p = 10 ms) 5.6 A' (314 W); T_C not printed in the row"
+  }
+ ],
+ "zth": null,
+ "zth_foster": null
+}
