@@ -1,6 +1,6 @@
 # PRISM-Hub 검증 코드
 
-800 V 전기자동차용 통합 직류 전력 허브(PRISM-Hub) 중간보고서의 **부록 C 검증 근거(E1–E10)** 와, 보고서 이후 진행한 **추가 검증(E11 채택 제어기 MATLAB 교차검증, E12 Stage B 스위칭 모델 검증, E13 기준 구조 ③′·④ 평균모델 비교, E14 Stage B 보호·기동, E15 기준 구조 손실·정격 비교, E16 충전 중 보조버스, E17 보호 상태기계 결합, E18 팩 등급별 가치 지도, E19 R2 창 조정 모듈, E20 DAB 고장 모드 변조, E21 고장 모드 변조의 회로 여유, E22 조정형 Stage C 5 kW, E23 R2 기본형 통합, E24 Stage A 경부하 위상 셰딩, E25 모터 승압·800 V 부품 구조 비교, E26 충전 중 Stage A 정지 협조, E27 Stage A 영교차 게이트 방향 반전 처리, E28 Stage A 4모듈 경부하 운전)** 을 계산한 MATLAB·Python 코드다. 근거 번호별로 스크립트를 하나씩 두었고, 각 스크립트 머리말에 **목적 · 왜 필요한가 · 방법 · 판정 기준 · 실행 방법 · 결과 파일 · 보고서 수치**를 한글로 적었다. 본문 주석도 한글이다.
+800 V 전기자동차용 통합 직류 전력 허브(PRISM-Hub) 중간보고서의 **부록 C 검증 근거(E1–E10)** 와, 보고서 이후 진행한 **추가 검증(E11 채택 제어기 MATLAB 교차검증, E12 Stage B 스위칭 모델 검증, E13 기준 구조 ③′·④ 평균모델 비교, E14 Stage B 보호·기동, E15 기준 구조 손실·정격 비교, E16 충전 중 보조버스, E17 보호 상태기계 결합, E18 팩 등급별 가치 지도, E19 R2 창 조정 모듈, E20 DAB 고장 모드 변조, E21 고장 모드 변조의 회로 여유, E22 조정형 Stage C 5 kW, E23 R2 기본형 통합, E24 Stage A 경부하 위상 셰딩, E25 모터 승압·800 V 부품 구조 비교, E26 충전 중 Stage A 정지 협조, E27 Stage A 영교차 게이트 방향 반전 처리, E28 Stage A 4모듈 경부하 운전, E29 보호 상태기계–SALS 연동)** 을 계산한 MATLAB·Python 코드다. 근거 번호별로 스크립트를 하나씩 두었고, 각 스크립트 머리말에 **목적 · 왜 필요한가 · 방법 · 판정 기준 · 실행 방법 · 결과 파일 · 보고서 수치**를 한글로 적었다. 본문 주석도 한글이다.
 
 모든 결과는 **시뮬레이션**(스위칭 ODE 모델, 스위칭 주기 평균모델, 1 ms 축약 부하 모델)이며 하드웨어 측정이 아니다.
 
@@ -53,6 +53,8 @@ PRISM-Hub_verification_code/
 │  │  ├─ E26_charging_stop.py         [E26] 충전 중 Stage A 정지와 충전기 전류 차단의 협조: 모듈 과부하, V_A 클램프(보고서 이후)
 │  │  ├─ E27_zcp_reversal.py          [E27] Stage A 영교차 게이트의 방향 반전 처리: 무장 못 한 반주기를 공칭 도통시간에 끔(보고서 이후)
 │  │  ├─ E28_stage_a_modules.py       [E28] Stage A 4모듈 경부하 운전: 모듈 관리기 + 모듈별 위상 셰딩 + 부품 공차(보고서 이후)
+│  │  ├─ E29_sals_degradation.py      [E29] 보호 상태기계–SALS 연동: 400 V 부하 분리·감발의 지연·손실·계약 응답, 이중 고장 Stage A 정지(보고서 이후)
+│  │  ├─ sals_loads.py                (공용) 400 V 부하 등급별 계약 응답(SALS 메시지 지연·손실·워치독, E29)
 │  │  └─ run_all.py                   전체 실행
 ├─ matlab/
 │  ├─ prism_sim_array.m          Stage A 어레이 스위칭 ODE(Python model_stage_a.py와 같은 알고리즘)
@@ -81,7 +83,7 @@ PRISM-Hub_verification_code/
 
 ```bash
 cd python
-python run_all.py                 # E1–E28 전체(2코어 기준 약 9시간, 그중 E12 약 3시간, E17 약 1.5시간, E28 약 75분, E20·E21·E24 각 약 10분, E22·E27 각 약 15분, E23 약 2분)
+python run_all.py                 # E1–E29 전체(2코어 기준 약 10시간, 그중 E12 약 3시간, E17 약 1.5시간, E28 약 75분, E29 약 60분, E20·E21·E24 각 약 10분, E22·E27 각 약 15분, E23 약 2분)
 python E3_steady_state.py         # 개별 실행 예
 python E5_E7_controller.py grid --design reference   # 제어기 파트·설계 선택
 ```
@@ -131,6 +133,7 @@ E11_controller_crosscheck % [E11]  python/E11_controller_crosscheck.py export �
 | **E26** | 충전 중 Stage A 정지 협조(보고서 이후) | R2에서 충전기는 V\_A 노드에 붙는다. 충전 중 Stage A가 멈추면 충전기 전류가 V\_A로 들어가 400 V급 부품 상한(470 V)을 수 µs–ms 안에 넘는다. 충전기는 정지 신호 뒤 30 ms 안에 5 A 이하면 된다(IEEE 2030.1.1) | overload: Stage A 스위칭 ODE(dead\_fix), 모듈 하나가 375/4·375/3·375/2 A. event: V\_A 노드 평균모델(R2 기본형 버스·R2-W C\_A만), Stage A 정지·모듈 고장, 충전기 30 ms 유지·선형 감소, 통신 지연 0·10 ms, V\_A 클램프 468/463 V·1 Ω·1 µs | (C1) V\_A·버스 ≤ 470 V, (C2) 모듈 1개 고장: 위상 첨두 ≤ 114.6 A·ZCS ≤ 5 %, (C3) 클램프 에너지·첨두 전력(요구 도출) | `E26_charging_stop.py` | `results/E26` |
 | **E27** | Stage A 영교차 게이트 방향 반전 처리(보고서 이후) | TB20 사례 D(충전기 0 → 375 A)에서 모듈 전류가 0을 지나는 반주기의 첨두(2.44 A)가 무장 문턱(2.5 A)보다 작아 최대 도통시간(1.12·t\_on)에 꺼졌고, 턴오프 전류가 1.010 A로 기준 1.0 A를 넘었다 | Stage A 스위칭 ODE(dead\_fix)에 무장 못 한 반주기를 공칭 도통시간 t\_on에 끄는 선택(`unarmed_stop`). repro: TB20 사례 D 조건(4모듈 8위상 + R2 버스, 램프 시작 6가지 + 공차). stress: 모듈 하나 방향 반전 48사례(배터리 3 × 램프 2 × 방향 2 × 공차 4). regress: E1 공차 표본, E24 정상·과도 | (G1) 새 게이트의 모든 턴오프 ≤ max(5 %·첨두, 1 A), (G2) 회귀: E1 차 ≤ 1e-6, E24 판정 같음·턴오프 비율 ≤ 0.1 %p·위상 첨두 ±0.5 A·V\_A ±0.05 V | `E27_zcp_reversal.py` | `results/E27` |
 | **E28** | Stage A 4모듈 경부하 운전(보고서 이후) | Stage A는 모듈 4개다. E24는 모듈 하나만 다뤘고, 주행 경부하에서 모듈 넷을 돌리면 ZCS·고정 손실이 나빠진다. 모듈을 줄이면 부하 증가·충전 시작·모듈 재시작 과도가 생기고, 부품 공차의 영향도 확인하지 않았다 | Stage A 스위칭 ODE 4모듈 8위상에 모듈 관리기(`mgr`, 충전 요청 `chg`), 무장 전 부호 없는 영교차 검출(`unarmed_stop='mag'`). design(모듈 수별 손실·첨두), rated(공차 표본별 정격점 첨두), static 144번, transient 7사례 × 공칭·공차 3(전부 켬 비교), restart(플라잉 커패시터 전압 오차), regress | static (S1)–(S4), transient (T1) 턴오프 ≤ max(5 %·첨두, 1 A), (T2) 첨두 ≤ 같은 표본의 정격점 첨두, (T3) V\_A 전부 켬과 1 V 안, (T4) 모듈 수 전환. regress (G)·(G2)·(G3) | `E28_stage_a_modules.py` | `results/E28` |
+| **E29** | 보호 상태기계–SALS 연동(보고서 이후) | 강등 순서(E17·E20·E21)는 "400 V 부하가 20 ms 뒤 5 kW로 준다"고 가정했다. 실제 감발은 SALS 메시지(지연·손실·워치독)와 부하 계약(0.5 kW/ms, M0는 줄지 않음)을 거치고, 48 V 회생과 이중 고장(Stage A 협조 정지)은 모델 밖이었다 | E17 `r2_run`에 `sals`(등급별 부하 `sals_loads.SalsLoads`, 부하전류 추정 유지 종료, 접촉기 대체, 되돌림), `p_c`, `event2`, `astop`, `fs_brake`. contract(몬테카를로), resid(남는 부하 문턱 → I\_COL), seq 74사례, regen·regen\_sens, failsafe(F0·F1·F2), regress | E17 고장 판정 + DAB 첨두 ≤ 1.5배 + 제동 ≤ 64 J. failsafe: 링크·직렬 ≤ 120 V, 경로 ≤ 100 A, 제동 ≤ 64 J, Stage A 정지 뒤 5 ms 안에 \|i\_p\| ≤ 1 A. contract: 손실 없는 최대 ≤ 19 ms. regress: 저장 결과와 차 0 | `E29_sals_degradation.py` | `results/E29` |
 | **E10** | Stage C CLLC 3 kW | Stage C를 고정이득으로 둘 수 있어야 400 V 정밀 조정(파생 요구)의 가치가 성립한다 | 스위칭 ODE(1차 환산 6상태), 0.3–3 kW × f_s/f_r 0.9–1.1 이득과 FHA 비교, 입력 ±2 %, ZVS 여유 | 공진점 이득 1 ± 3 %, ZVS 여유 > 1 | `E10_stage_c_cllc.py`, `E10_stage_c_cllc.m` | `results/E10` |
 
 ## 5. 공통 모델 요약
@@ -249,6 +252,9 @@ E11_controller_crosscheck % [E11]  python/E11_controller_crosscheck.py export �
 | E28 | design / rated | 손실 교차 77·134·189 A, 추가 문턱 70 A/모듈 위상 첨두 57.1 A / P\_rated 공칭 76.5 A, 공차 84.3–85.5 A(위상 전류 불균형 최대 8.5 %) |
 | E28 | static / transient | 1차 21/36·4/7, 2차 27/36·(중단), 최종 33/36(S4 −375 A만, 시작 과도)·6/7(MF 사전 기동 없음 84.2 A), 공차 99/108·21/21 |
 | E28 | restart / regress | ΔvC −10–0 V 통과(+2 V 77.1 A, −15 V 106.9 A) / (G) 차 0, (G2) E27 55사례 위반 0, (G3) E24 36 판정 같음 |
+| E29 | contract / resid | 손실 없는 최대 18.98 ms(≤ 19 ms), T\_CUR\_MAX 초과 손실 5 % 0.34 %·20 % 6.9 % / 남는 부하 문턱 R2-W460 13 kW(15.1 kW 이중 고장)·R2-W410 15.1 kW → I\_COL 22.22·28.9 A, 소프트 투입 9.1 kW 0.77 J |
+| E29 | seq / regen | 74/74(접촉기 대체 11사례, 제동 ≤ 53.3 J, 소프트 투입 ≤ 0.749 J) / 회생 차단 없음 R1 4/4 불통과(480.6–527.0 V), 차단 있음 12/12, 허용 지연 1.0·0.5 ms |
+| E29 | failsafe / regress | F0·F1 불통과(링크 138–252 V), F2 1/4(링크 ≤ 110.1 V, 경로전류 소멸 4.7–7.3 ms > 5 ms), 1차(설정 오류) F2 2/4 / E21·E20 차 0, E17 6.4e-14(변경 전 코드와 차 0) → 엄밀 불통과 기록 |
 
 참고 사항
 - **E1 난수**: 공차 표본은 MATLAB의 Mersenne Twister(`rng(0)`, `rng(3)`)와 같은 난수열로 뽑으므로 Python과 MATLAB이 같은 표본을 쓴다. GNU Octave의 `rng`는 초기화 방식이 달라 공차 표본이 다르게 뽑힌다(Octave 실행 시 고정 타이밍 17/20·최대 37.3 %). 난수를 쓰지 않는 셰딩·프리차지와 8위상 공칭 사례는 Octave에서도 같은 값이 나온다.

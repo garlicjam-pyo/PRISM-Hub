@@ -29,6 +29,17 @@ function s = prism_r2_supervisor(t, y, fl, prm)
 %   prm(60) T_RESTORE [s]
 %   DAB 변조(EPS)와 첨두 상한은 게이트 쪽 ctrl/prism_dab_eps_map.m이 맡는다(상태 9–11, DAB 모드 1).
 %
+%  (2026-10-28 TB23, 검증 코드 E29: prm이 69개면 SALS 연동 모드. 60개 이하면 이전과 같다.)
+%   prm(61) SALS 모드(1): 고장 검출 때 SALS 감발 + Stage C 회생 차단을 내고, V_A > 상한 − 2 V면 접촉기 분리도 바로 명령한다.
+%           감발 전용(V_A ≤ 상한 − 2 V)이면 유지(9)를 부하전류 추정 i_load = i_p − C_tot·dv_bus/dt(τ_il 필터)가 |i_load| ≤ I_COL로
+%           T_CONF 이어질 때 끝내고, T_CUR_MAX 안에 안 되면 접촉기 분리로 넘어간다. 강등 T_RESTORE 뒤 SALS 되돌림(접촉기를 연 경우는 없음).
+%           (고장 직후 다이오드가 막힌 동안은 버스 커패시터가 부하를 대므로 경로전류만으로는 판단할 수 없다.)
+%           이중 고장(13)이면 접촉기 분리 + SALS 감발, ASTOP 뒤 Stage A 정지, (FS_BRAKE) 링크 제동 저항 과전압 보호 유지.
+%   prm(62) I_COL [A], prm(63) T_CONF [s], prm(64) T_CUR_MAX [s], prm(65) FS_BRAKE(1), prm(66) ASTOP [s](< 0이면 Stage A 정지 없음),
+%   prm(67) C_tot = C_b + C_dmp [F], prm(68) τ_il [s], prm(69) 부하전류 추정 시작값 [A]
+%   SALS 모드의 s(10)은 비트 명령이다: 1 접촉기 열림(분리 끝), 2 SALS 감발, 4 SALS 되돌림, 8 Stage C 회생 차단, 16 Stage A 정지
+%   (부하 블록 ctrl/prism_sals_loads.m, Stage A 정지 스위치가 읽는다).
+%
 %  입력  t    시각 [s]
 %        y    측정 [i_p v_s v_bus i_h v_link]
 %        fl   [게이트 구동기 고장 신호(H-브리지 개방), 하드웨어 비교기 차단 래치]
@@ -38,7 +49,7 @@ function s = prism_r2_supervisor(t, y, fl, prm)
 %             제동 저항 게이트(1/0); 400 V 부하 분리(1/0); 상태 번호; 고장 검출(0 없음, 1 구동기, 2 비교기, 3 링크 창, 4 버스 창)]
 
 persistent st t_st t_det det shed_cmd shed sw_since vb_since rv0 rv1 rt1 rtype qb amode vl0 t0 tsoft0 Rs main brk mst gsince ip_s0 stall_t stall_v ...
-           curt_only restored
+           curt_only restored t_cont low_since cutb restb blkb t_as il_f vb_prev
 VW = prm(1); upper = prm(2); H = prm(3); R = prm(4); Rh = prm(5); Cs = prm(6); Lh = prm(7); itau = prm(8);
 Clink = prm(9); VD = prm(10); t_ev = prm(11); ev = prm(12); pol = prm(13); prep = prm(14); cls = prm(15);
 t_prep = prm(16); t_wait = prm(17); RAMP = prm(18); HOLD = prm(19); ZERO = prm(20); t_shed = prm(21);
@@ -53,6 +64,11 @@ HOLD_MATCH = 0; CURTAIL = 0; SOFT_FAIL = 0; T_RESTORE = 0.5e-3;
 if numel(prm) >= 60
     HOLD_MATCH = prm(57); CURTAIL = prm(58); SOFT_FAIL = prm(59); T_RESTORE = prm(60);
 end
+SALS = 0; I_COL = 0; T_CONF = 0; T_CUR_MAX = 0; FS_BRAKE = 0; ASTOP = -1; C_TOT = 0; TAU_IL = 1; IL0 = 0;
+if numel(prm) >= 69
+    SALS = prm(61); I_COL = prm(62); T_CONF = prm(63); T_CUR_MAX = prm(64); FS_BRAKE = prm(65); ASTOP = prm(66);
+    C_TOT = prm(67); TAU_IL = prm(68); IL0 = prm(69);
+end
 
 ip = y(1); vs = y(2); vb = y(3); ih = y(4); vl = y(5);
 if isempty(st)
@@ -60,6 +76,7 @@ if isempty(st)
     rv0 = VW; rv1 = VW; rt1 = 0; rtype = 0; qb = 0; amode = 0; vl0 = 100; t0 = 0; tsoft0 = 0;
     if st0 == 3, Rs = R_OPEN; main = 0; else, Rs = R_OPEN; main = 1; end
     brk = 0; mst = 0; gsince = -1; ip_s0 = 0; stall_t = -1; stall_v = 0; curt_only = 0; restored = 0;
+    t_cont = -1; low_since = -1; cutb = 0; restb = 0; blkb = 0; t_as = -1; il_f = IL0; vb_prev = vb;
 end
 va_m = vbat/2 - R*ip;                                  % V_A 추정(배터리 전압 센서 − 경로 강하)
 gwin = (st == 5 && t - t_st >= HOLD - 1e-12) || (st == 8 && t - t_st >= RAMP + HOLD - 1e-12);
@@ -96,12 +113,49 @@ hb_det = det == 1 || det == 2 || det == 4;
 if t_det >= 0 && shed_cmd < 0 && st ~= 0 && (va_m > upper - 2 || (CURTAIL > 0.5 && hb_det))
     shed_cmd = t;
     curt_only = double(va_m <= upper - 2);              % 상한 안이면 일시 감발(강등 뒤 되돌림)
+    if SALS > 0.5                                       % (E29) SALS 감발은 항상, 접촉기 분리는 상한을 넘는 팩만 바로
+        cutb = 1;
+        if curt_only < 0.5, t_cont = t; end
+    end
 end
-if shed_cmd >= 0 && t - shed_cmd >= t_shed - 1e-12 && restored < 0.5
-    shed = 1;
+if SALS > 0.5
+    if t_det >= 0, blkb = 1; end                        % Stage C 회생 차단(허브 내부 명령)
+    if st == 13 && t_cont < 0
+        cutb = 1; t_cont = t;                           % 이중 고장: 접촉기 분리 + SALS 감발
+    end
+    if st == 13 && ASTOP >= 0 && t_as < 0
+        t_as = t + ASTOP;                               % 이중 고장: Stage A 정지
+    end
 end
-if curt_only > 0.5 && st == 12 && restored < 0.5 && t - t_st >= T_RESTORE - 1e-12
-    shed = 0; restored = 1;                             % 버스 = V_A ≤ 상한: 400 V 부하 출력 되돌림
+if SALS > 0.5                                           % (E29) 부하전류 추정(경로전류 − 버스 커패시터 전류)
+    il_f = il_f + ((ip - C_TOT*(vb - vb_prev)/Ts) - il_f)*Ts/TAU_IL; vb_prev = vb;
+end
+cur_ok = false;                                         % (E29) 감발 전용: 부하전류 추정으로 유지(9) 끝, 시간 상한이면 접촉기 분리
+if SALS > 0.5 && st == 9 && curt_only > 0.5 && t_cont < 0
+    if abs(il_f) <= I_COL
+        if low_since < 0, low_since = t; end
+        cur_ok = t - low_since >= T_CONF - 1e-12;
+    else
+        low_since = -1;
+    end
+    if ~cur_ok && t - shed_cmd >= T_CUR_MAX - 1e-12
+        t_cont = t;
+    end
+end
+if SALS > 0.5
+    if t_cont >= 0 && t - t_cont >= t_shed - 1e-12
+        shed = 1;                                       % 접촉기 열림(분리 끝)
+    end
+    if curt_only > 0.5 && t_cont < 0 && st == 12 && restored < 0.5 && t - t_st >= T_RESTORE - 1e-12
+        restored = 1; restb = 1;                        % SALS 되돌림
+    end
+else
+    if shed_cmd >= 0 && t - shed_cmd >= t_shed - 1e-12 && restored < 0.5
+        shed = 1;
+    end
+    if curt_only > 0.5 && st == 12 && restored < 0.5 && t - t_st >= T_RESTORE - 1e-12
+        shed = 0; restored = 1;                         % 버스 = V_A ≤ 상한: 400 V 부하 출력 되돌림
+    end
 end
 % ---- 강등 경로 선택 ----------------------------------------------------------------------------
 if (det == 1 || det == 2 || det == 4) && sw_states && st ~= 13
@@ -150,7 +204,7 @@ elseif st == 6 && t - t_st >= ZERO - 1e-12
     main = 1; Rs = R_OPEN;
     if t_det >= 0, st = 12; else, st = 0; end
     t_st = t;
-elseif st == 9 && (shed_cmd < 0 || shed > 0.5)
+elseif st == 9 && (shed_cmd < 0 || shed > 0.5 || cur_ok)
     amode = 1; t0 = t; vl0 = vl; st = 10; t_st = t;
 elseif st == 10 && (vl <= VL_SOFT || stalled || t - t_st >= T_COL_MAX - 1e-12)
     if pol == 5
@@ -226,10 +280,16 @@ elseif (pol == 4 || pol == 5) && st >= 10 && st <= 11
     if vl > vlr + 5, brk = 1; elseif vl < vlr + 2, brk = 0; end
 elseif pol == 2 && det == 3 && (st == 7 || st == 8 || st == 6)
     if vl > 110, brk = 1; elseif vl < 105, brk = 0; end
+elseif st == 13 && FS_BRAKE > 0.5                        % (E29) 이중 고장에서도 링크 과전압 보호
+    if vl > 110, brk = 1; elseif vl < 105, brk = 0; end
 else
     brk = 0;
 end
-s = [vref; rst; bmode; mst; dmode; icmd_aux; Rs; main; brk; shed; st; det];
+shed_out = shed;
+if SALS > 0.5                                            % 비트 명령(부하 블록·Stage A 정지 스위치)
+    shed_out = shed + 2*cutb + 4*restb + 8*blkb + 16*double(t_as >= 0 && t >= t_as - 1e-12);
+end
+s = [vref; rst; bmode; mst; dmode; icmd_aux; Rs; main; brk; shed_out; st; det];
 end
 
 function v = vref_at(t, rtype, v0, v1, t1, RAMP, VW, va_m)

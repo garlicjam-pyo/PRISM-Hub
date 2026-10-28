@@ -1,0 +1,38 @@
+TB23 case A_930V_MX_S5 (V_bat 930 V, 25 kW, event hb_open), dt 2.50 ns, wall 699 s
+(1) circuit limits:
+    current_100A                   PASS
+    series_120V                    PASS
+    link_120V                      PASS
+    bypass_current                 PASS
+    bus_ge_260                     PASS
+    degraded_reached               PASS
+    class_upper_while_400V_loads   PASS
+    dab_peak_1p5x_rated            PASS
+    brake_64J                      PASS
+    instantaneous: |i_p| 60.4 A, |i_h| 58.3 A, |v_s| 70.8 V, v_link 0.4-100.1 V, |i_byp| 59.5 A; bus(5 us) 394.0-464.7 V (loaded max 464.7 V)
+    diode-clamp check during H-bridge off: mean(v_s + (v_link + 2V_D + R_h|i_h|)·sign(i_h)) = -0.020 V
+    DAB stress (info): link-side peak n|i_L| 64.3 A (primary 14.0 A) at 5.085 ms in HB_COLLAPSE; rated-point link-side peak (E17 SPS) 45.8 A
+    DAB peak in state 9 (HB_HOLD): n|i_L| 57.4 A (design 1.387x 63.6 A, limit 1.5x 68.7 A)
+    DAB peak in state 10 (HB_COLLAPSE): n|i_L| 64.3 A (design 1.387x 63.6 A, limit 1.5x 68.7 A)
+    DAB peak in state 11 (SOFT_BYP): n|i_L| 63.8 A (design 1.387x 63.6 A, limit 1.5x 68.7 A)
+    soft bypass (info): entry 13.690 ms (v_link 17.55 V, v_s -21.57 V), duration 1.730 ms, device energy 0.4759 J, path instantaneous peak 60.4 A
+(2) comparison with E17 (info):
+    metric                                          Simscape         E17      diff    result
+    min period-mean v_bus after event [V]             393.97      394.06   -0.0913        ok
+    max period-mean v_bus after event [V]             464.69      464.69  -0.00177        ok
+    max period-mean i_p [A]                           60.224      59.767    +0.458        ok
+    max period-mean i_h [A]                           48.819      49.504    -0.685        ok
+    max period-mean v_link [V]                        100.05      100.02   +0.0312        ok
+    min period-mean v_link [V]                        0.3872     0.43802   -0.0508        ok
+    final mean v_bus [V]                              464.66      464.66  -0.00216        ok
+    brake energy [J]                                  7.5315      7.4617   +0.0698      info
+    load energy after event [J]                       177.42      177.39   +0.0323      info
+    DAB link-side peak (circuit n|i_L|, E17 SPS) [A]      64.302      63.662     +0.64      info
+    soft-bypass device energy [J]                    0.47585     0.47096  +0.00489      info
+    transition HB_HOLD [ms]                            0.505       0.505        +0        ok
+    transition HB_COLLAPSE [ms]                         3.69       3.685    +0.005        ok
+    transition SOFT_BYP [ms]                           13.69       13.69 +1.78e-15        ok
+    transition DEGRADED [ms]                           15.42       15.42 +1.78e-15        ok
+    transition shed_cmd [ms]                           0.505       0.505        +0        ok
+    transition restore [ms]                            15.92       15.92        +0        ok
+    final state: DEGRADED; brake energy 7.53 J; path current |i_p| <= 1 A after Stage A stop: NaN ms

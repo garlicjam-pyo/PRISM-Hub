@@ -1,0 +1,55 @@
+{
+ "rows": [
+  {
+   "src": "E21",
+   "case": "W460_240s",
+   "V": 930.0,
+   "event": "hb_open",
+   "n_keys": 42,
+   "max_abs_diff": 0.0,
+   "same_events": true,
+   "same_pass": true
+  },
+  {
+   "src": "E21",
+   "case": "W410_spec",
+   "V": 920.0,
+   "event": "hb_open",
+   "n_keys": 42,
+   "max_abs_diff": 0.0,
+   "same_events": true,
+   "same_pass": true
+  },
+  {
+   "src": "E20",
+   "case": "W460_240s",
+   "V": 1008.0,
+   "event": "hb_open",
+   "n_keys": 42,
+   "max_abs_diff": 0.0,
+   "same_events": true,
+   "same_pass": false
+  },
+  {
+   "src": "E17",
+   "case": "W460_240s",
+   "V": 1008.0,
+   "event": "dab",
+   "n_keys": 34,
+   "max_abs_diff": 6.394884621840902e-14,
+   "same_events": true,
+   "same_pass": true
+  },
+  {
+   "src": "E17",
+   "case": "W460_240s",
+   "V": 930.0,
+   "event": "enable",
+   "n_keys": 29,
+   "max_abs_diff": 9.769962616701378e-15,
+   "same_events": true,
+   "same_pass": true
+  }
+ ],
+ "pass_": false
+}

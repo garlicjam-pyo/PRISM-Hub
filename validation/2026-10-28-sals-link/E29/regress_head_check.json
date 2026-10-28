@@ -1,0 +1,23 @@
+{
+ "note": "E29 변경 전 코드(git HEAD의 E17_protection_integration.py)와 현재 코드를 같은 작업으로 실행한 비교. 저장된 E17 r2.json(2026-10-24)과의 1e-14 수준 차는 변경 전 코드에도 있다.",
+ "rows": [
+  {
+   "event": "dab",
+   "case": "W460_240s",
+   "V": 1008.0,
+   "n_keys": 37,
+   "max_abs_diff_current_vs_head": 0.0,
+   "same_events": true,
+   "max_abs_diff_current_vs_stored_E17": 6.394884621840902e-14
+  },
+  {
+   "event": "enable",
+   "case": "W460_240s",
+   "V": 930.0,
+   "n_keys": 32,
+   "max_abs_diff_current_vs_head": 0.0,
+   "same_events": true,
+   "max_abs_diff_current_vs_stored_E17": 9.769962616701378e-15
+  }
+ ]
+}

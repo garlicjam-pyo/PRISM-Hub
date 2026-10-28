@@ -306,10 +306,29 @@ def r2_run(job):
          hold('vw' | 'match', H-브리지 강등 유지의 링크 기준, E20), curtail(H-브리지 고장이면 V_A와 무관하게 400 V 부하 출력을
          줄이고 강등 뒤 V_A ≤ 상한이면 되돌림, E20), dmod('sps' | 'eps', 강등 상태 9–11의 DAB 변조. 'eps'면 첨두 ≤ PK_FAULT × 정격점 첨두가 되도록
          지령 전류를 제한, E20. pk_fault로 배수를 바꿈), pk_table('ideal' | 'sw', E21: 'sw'면 첨두 상한 탐색·첨두 지표·실제 링크전류를
-         데드타임·출력용량·역방향 도통을 넣은 스위칭 정상상태 표로), soft_fail(소프트 투입 시간 상한이면 주 스위치를 닫지 않고 FAILSAFE로, E20)."""
+         데드타임·출력용량·역방향 도통을 넣은 스위칭 정상상태 표로), soft_fail(소프트 투입 시간 상한이면 주 스위치를 닫지 않고 FAILSAFE로, E20).
+    (E29, 모두 선택이고 없으면 이전과 같다)
+         p_c   : 분리·감발 뒤 남는 부하 [W](기본 P_C 5 kW, 잔여부하 문턱 탐색용)
+         sals  : dict(loads=sals_loads.SalsLoads 인자, i_col, t_conf, t_cur_max). 주면 400 V 부하를 등급별 계약 응답으로 바꾼다.
+                 고장 검출 때 SALS 감발(+ Stage C 회생 차단)을 보내고, V_A가 상한을 넘는 팩만 접촉기 분리를 바로 명령한다.
+                 감발 전용(V_A ≤ 상한)이면 H-브리지 고장 유지(9)를 시간이 아니라 부하전류 추정(i_p − (C_b + C_dmp)dv_bus/dt,
+                 tau_il 0.2 ms 필터) |i_load| ≤ i_col이 t_conf 이어질 때
+                 끝내고, t_cur_max 안에 안 되면 접촉기 분리로 넘어간다. 강등 T_RESTORE 뒤 SALS 되돌림(접촉기를 연 경우는 없음).
+         event2: 두 번째 고장(H-브리지 비교기 차단) 시각 [s]. DAB 고장 강등 중이면 이중 고장(FAILSAFE)
+         astop : dict(delay, C_A). 이중 고장이면 delay 뒤 Stage A를 멈춘다(V_A 노드 = C_A가 경로전류로 방전)
+         fs_brake: 이중 고장에서도 링크 제동 저항의 과전압 보호(110 V 켬·105 V 끔)를 유지"""
     case, V, P, event = job["case"], job["V"], job["P"], job["event"]
     pol = job.get("policy", {"dab": "brk_hold"}.get(event, "clamp_brk")); vd = job.get("vd", VD)
     t_soft = job.get("t_soft", T_SOFT); t_shed = job.get("t_shed", T_SHED)
+    p_c = job.get("p_c", P_C)
+    sals = job.get("sals"); SL = None; Pl_s = None
+    if sals is not None:
+        from sals_loads import SalsLoads
+        SL = SalsLoads(**sals["loads"])
+        i_col, t_conf, t_cur_max = sals["i_col"], sals["t_conf"], sals["t_cur_max"]
+        assert abs(SL.power(0.) - P) < 1e-6, "부하 구성의 합이 P와 다르다"
+    t_cont = None; low_since = None; restored = False; ev2 = job.get("event2"); astop = job.get("astop"); t_as = None
+    fs_brake = bool(job.get("fs_brake", False))
     t_wait = job.get("wait", T_WAIT); t_prep = job.get("t_prep", T_PREP)
     prep, close = job.get("prep", "zero"), job.get("close", "zero")
     brk = pol in ("clamp_brk", "clamp_brk_hard", "brk_hold")
@@ -339,6 +358,8 @@ def r2_run(job):
     pkf = job.get("pk_fault", PK_FAULT)                               # 첨두 상한 배수(E20 감도: 회로 여유)
     sw = job.get("pk_table", "ideal") == "sw" and job.get("dmod", "sps") == "eps"   # (E21) 스위칭 반영 첨두·전류표
     buf = np.tile(u, (lag + 1, 1)); tick = 0
+    if SL is not None:                                                # (E29) 부하전류 추정 = 경로전류 − 버스 커패시터 전류(필터)
+        c_tot = p.Cb + (C_DMP if damper else 0.); tau_il = sals.get("tau_il", .2e-3); il_f = P / x[2]; vb_prev = x[2]
     t_st = 0.; hw_since = sw_since = vb_since = None; t_det = None; det_src = None; t_gdf = None
     shed_cmd = None; loads400 = True; bridge_dead = False; dab_dead = False; Gb = 0.; steer = False
     t_over = None; t_soft0 = None; t_close = None; events = []; icmd_aux = 0.; vl_aux_ref = 100.
@@ -387,6 +408,10 @@ def r2_run(job):
                 dab_dead = True
             if event == "hb_open" and not bridge_dead:
                 bridge_dead = True; t_gdf = t + T_GDF
+        if ev2 is not None and t >= ev2 and not bridge_dead:     # (E29) 두 번째 고장: H-브리지 비교기 차단으로 기록
+            bridge_dead = True; events.append(("hw_trip", round(t * 1e3, 4)))
+            if t_det is None:                                      # 비교기 차단은 검출이다(하드웨어 비교기와 같게)
+                t_det, det_src = t, "hw"
         # ---- 하드웨어 비교기(연속, 브리지가 동작하는 동안): 차단 래치 -----------------------------------------
         if st in SWITCHING and not bridge_dead:
             cond = (abs(x[0]) > I_HW or abs(x[3]) > I_HW or x[4] > VL_HW or abs(x[1]) > VS_HW
@@ -423,6 +448,30 @@ def r2_run(job):
                     va_m > upper - 2 or (curtail and bridge_dead and det_src != "link_window")):
                 shed_cmd = t; events.append(("shed_cmd", round(t * 1e3, 4)))
                 curtail_only = va_m <= upper - 2                  # 상한 안이면 일시 감발(강등 뒤 되돌림)
+                if SL is not None:                                 # (E29) SALS 감발은 항상, 접촉기 분리는 상한을 넘는 팩만 바로
+                    SL.curtail(t)
+                    if not curtail_only:
+                        t_cont = t
+            if SL is not None and t_det is not None:
+                SL.block_regen(t)                                   # (E29) Stage C 회생 차단(허브 내부 명령)
+            if st == "FAILSAFE" and SL is not None and t_cont is None:
+                SL.curtail(t); t_cont = t                           # (E29) 이중 고장: 접촉기 분리 + SALS 감발
+            if st == "FAILSAFE" and astop is not None and t_as is None:
+                t_as = t + astop["delay"]; vA = V / 2; events.append(("stageA_stop", round(t_as * 1e3, 4)))
+            # (E29) 감발 전용: 부하전류 추정으로 유지(9) 끝을 정하고, 시간 상한이면 접촉기 분리로.
+            # 고장 직후 다이오드가 막힌 동안(직렬 커패시터 충전, 수 ms)은 경로전류가 작아도 부하를 버스 커패시터가 대고 있으므로
+            # 경로전류만으로는 판단할 수 없다(시험 전 점검에서 확인) → i_load ≈ i_p − (C_b + C_dmp)·dv_bus/dt를 0.2 ms로 거른다.
+            if SL is not None:
+                il_f += ((x[0] - c_tot * (x[2] - vb_prev) / p.Ts) - il_f) * p.Ts / tau_il; vb_prev = x[2]
+            cur_ok = False
+            if SL is not None and st == "HB_HOLD" and curtail_only and t_cont is None:
+                if abs(il_f) <= i_col:
+                    low_since = t if low_since is None else low_since
+                    cur_ok = t - low_since >= t_conf
+                else:
+                    low_since = None
+                if not cur_ok and t - shed_cmd >= t_cur_max:
+                    t_cont = t; events.append(("fallback_sep", round(t * 1e3, 4)))
             if bridge_dead and t_det is not None and det_src != "link_window" and st in SWITCHING:
                 hb_path(t, x)                                      # 검출된 뒤에만 반응(물리적 차단 ≠ 검출)
             elif bridge_dead and det_src == "link_window" and st in SWITCHING and any(e[0] == "hw_trip" for e in events):
@@ -462,7 +511,7 @@ def r2_run(job):
                 gate_timeout = gate_timeout or not gate_ok(t); go("ZERO", t)
             elif st == "ZERO" and t - t_st >= ZERO:
                 G = 1. / R_BYP; t_close = t; go("DEGRADED" if t_det is not None else "BYPASS", t)
-            elif st == "HB_HOLD" and (shed_cmd is None or not loads400):   # 분리가 끝났거나 필요 없으면 링크 붕괴
+            elif st == "HB_HOLD" and (shed_cmd is None or not loads400 or cur_ok):   # 분리가 끝났거나 필요 없으면 링크 붕괴
                 aux.collapse(t, x[4]); go("HB_COLLAPSE", t)
             elif st == "HB_COLLAPSE" and (x[4] <= VL_SOFT or stalled or t - t_st >= T_COL_MAX):
                 t_close = t
@@ -522,14 +571,22 @@ def r2_run(job):
                 Gb = 1. / R_BRK if x[4] > vl_aux_ref + 5. else (0. if x[4] < vl_aux_ref + 2. else Gb)
             elif brk and st in ("DAB_HOLD", "DAB_RAMP", "ZERO") and dab_dead:
                 Gb = 1. / R_BRK if x[4] > 110. else (0. if x[4] < 105. else Gb)
+            elif st == "FAILSAFE" and fs_brake:                     # (E29) 이중 고장에서도 링크 과전압 보호 유지
+                Gb = 1. / R_BRK if x[4] > 110. else (0. if x[4] < 105. else Gb)
             else:
                 Gb = 0.
         if st == "SOFT_BYP":
             e_soft += G * x[1] * x[1] * DT                        # 소프트 투입 소자(선형 영역)의 소비 에너지
-        if shed_cmd is not None and loads400 and t - shed_cmd >= t_shed and not (curtail_only and t_deg is not None):
-            loads400 = False; events.append(("shed_done", round(t * 1e3, 4)))
-        if curtail_only and t_deg is not None and not loads400 and t - t_deg >= T_RESTORE:
-            loads400 = True; events.append(("restore", round(t * 1e3, 4)))   # 일시 감발 해제(버스 = V_A ≤ 상한)
+        if SL is not None:                                         # (E29) 접촉기 = 400 V 부하 연결 상태, 되돌림은 SALS 메시지
+            if t_cont is not None and loads400 and t - t_cont >= t_shed:
+                loads400 = False; events.append(("shed_done", round(t * 1e3, 4)))
+            if curtail_only and t_cont is None and t_deg is not None and not restored and t - t_deg >= T_RESTORE:
+                SL.restore(t); restored = True; events.append(("restore", round(t * 1e3, 4)))
+        else:
+            if shed_cmd is not None and loads400 and t - shed_cmd >= t_shed and not (curtail_only and t_deg is not None):
+                loads400 = False; events.append(("shed_done", round(t * 1e3, 4)))
+            if curtail_only and t_deg is not None and not loads400 and t - t_deg >= T_RESTORE:
+                loads400 = True; events.append(("restore", round(t * 1e3, 4)))   # 일시 감발 해제(버스 = V_A ≤ 상한)
         # ---- 적용(전달지연 버퍼) --------------------------------------------------------------------
         buf[tick] = u; applied = buf[(tick + 1) % len(buf)].copy(); tick = (tick + 1) % len(buf)
         if event in ("m_pos", "m_neg") and t >= T_EV:
@@ -550,13 +607,21 @@ def r2_run(job):
             icmd = applied[1]
         else:
             icmd = 0.
-        Pl = (P if loads400 else min(P, P_C))
+        if SL is not None:                                         # (E29) 등급별 계약 응답(5 µs 표본마다 갱신)
+            if k % sample == 0 or Pl_s is None:
+                Pl_s = SL.power(t, loads400)
+            Pl = Pl_s
+        else:
+            Pl = (P if loads400 else min(P, p_c))
         if x[2] < LOAD_MIN_V - 10:
             Pl = 0.                                                # 저전압 차단
         dz = diode(x, vd) if bridge == "off" else None
         ih0 = x[3]
-        d1 = deriv_r2(x, applied[0], bridge, icmd, G, VA, Pl, p, dz, vd, Gb)
-        x = x + DT * deriv_r2(x + .5 * DT * d1, applied[0], bridge, icmd, G, VA, Pl, p, dz, vd, Gb)
+        vsrc = VA
+        if t_as is not None and t >= t_as:                         # (E29) Stage A 정지: V_A 노드 = C_A, 경로전류로 방전
+            vA = max(vA - x[0] * DT / astop["C_A"], 0.); vsrc = vA
+        d1 = deriv_r2(x, applied[0], bridge, icmd, G, vsrc, Pl, p, dz, vd, Gb)
+        x = x + DT * deriv_r2(x + .5 * DT * d1, applied[0], bridge, icmd, G, vsrc, Pl, p, dz, vd, Gb)
         if bridge == "off" and (ih0 == 0. or ih0 * x[3] < 0.) and not abs(x[1]) > x[4] + 2 * vd:
             x[3] = 0.
         if loads400 and x[2] > upper and t_over is None and t >= T_EV:
@@ -588,6 +653,12 @@ def r2_run(job):
              soft_ms=None if (t_soft0 is None or t_deg is None) else round((t_deg - t_soft0) * 1e3, 4),
              hold=hold, curtail=curtail, dmod=dmod, soft_fail=soft_fail, dab_peak_hold=dab_pk_hold, dab_peak_collapse=dab_pk_col,
              dab_peak_limit=pkf * pk_rated)
+    if "p_c" in job:
+        m["p_c"] = p_c
+    if SL is not None or ev2 is not None or astop is not None:      # (E29) 연동 기록
+        m.update(sals=None if SL is None else SL.describe(), t_cont_ms=None if t_cont is None else round((t_cont - T_EV) * 1e3, 4),
+                 restored=restored, t_astop_ms=None if t_as is None else round((t_as - T_EV) * 1e3, 4),
+                 vA_end=None if t_as is None else float(vA), fs_brake=fs_brake)
     if t_close is not None:                                        # 바이패스 투입 순간(소프트 투입 포함) + 50 µs
         w = (tt >= t_close) & (tt <= (t_deg if t_deg is not None else t_close) + 50e-6)
         m.update(close_ms=round((t_close - T_EV) * 1e3, 4), vs_at_close=float(log[np.searchsorted(tt, t_close), 1]),

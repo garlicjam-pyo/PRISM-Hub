@@ -1,0 +1,8 @@
+TB23 protection supervisor - SALS link (R2-W460), SALS time scale 0.15, DAB design limit 1.387x rated
+run  case                         limits   failed
+A    A_930V_MX_S5                 PASS     
+B    B_930V_MX_LA                 PASS     
+C    C_930V_R1_noblock            PASS     
+D    D_930V_R1_block              PASS     
+E    E_1008V_dab_double           PASS     
+TB23 overall: PASS

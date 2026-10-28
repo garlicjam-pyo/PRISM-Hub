@@ -1,0 +1,149 @@
+{
+ "case": "W460_240s",
+ "V": 1008.0,
+ "P": 25000.0,
+ "event": "dab",
+ "policy": "brk_hold",
+ "prep": "-",
+ "t_prep_ms": 0.5,
+ "close": "zero",
+ "start_share": false,
+ "tag": null,
+ "damper": true,
+ "vd": 2.0,
+ "t_soft_us": 1000.0,
+ "t_shed_ms": 3.0,
+ "wait_ms": 0.2,
+ "events": [
+  [
+   "shed_cmd",
+   1.275
+  ],
+  [
+   "DAB_HOLD",
+   1.275
+  ],
+  [
+   "hw_trip",
+   1.7751
+  ],
+  [
+   "FAILSAFE",
+   1.78
+  ],
+  [
+   "stageA_stop",
+   1.79
+  ],
+  [
+   "shed_done",
+   4.275
+  ]
+ ],
+ "det_src": "link_window",
+ "det_ms": 0.775,
+ "final_state": "FAILSAFE",
+ "path_peak": 55.71874755336004,
+ "bridge_peak": 55.780987949189,
+ "series_peak": 98.77276743876484,
+ "vlink_max": 110.04886571628712,
+ "vlink_min": 99.99113780433267,
+ "vbus_min": 392.78799385237426,
+ "vbus_max": 460.04274588735404,
+ "vbus_max_loaded": 460.04274588735404,
+ "vbus_end": 392.78799385237426,
+ "byp_peak": 0.0,
+ "t_over_ms": null,
+ "shed_needed": true,
+ "gate_timeout": false,
+ "fault_path_peak": 55.71874755336004,
+ "fault_bridge_peak": 55.780987949189,
+ "fault_bus_min": 423.46621182421865,
+ "brk_energy_J": 1.9638632993379779,
+ "brk_peak_kW": 4.036860966258465,
+ "dab_sec_peak": 24.17361434584181,
+ "dab_prim_peak": 5.255133553443872,
+ "dab_peak_ms": -0.44,
+ "dab_peak_state": "WINDOW",
+ "dab_rated_sec_peak": 45.82809454192978,
+ "dab_peak_ratio": 0.527484604967036,
+ "soft_entry": null,
+ "soft_timeout": false,
+ "soft_energy_J": 0.0,
+ "soft_ms": null,
+ "hold": "match",
+ "curtail": true,
+ "dmod": "eps",
+ "soft_fail": true,
+ "dab_peak_hold": 0.0,
+ "dab_peak_collapse": 0.0,
+ "dab_peak_limit": 63.563567129656604,
+ "sals": {
+  "mix_W": {
+   "sc": 5300.0,
+   "v2l": 3800.0,
+   "comp": 6000.0,
+   "ptc": 7000.0,
+   "bh": 2900.0
+  },
+  "delay_s": {
+   "comp": 0.00075,
+   "ptc": 0.00075,
+   "bh": 0.00075
+  },
+  "lost": {
+   "comp": 0,
+   "ptc": 0,
+   "bh": 0
+  },
+  "lost_r": {
+   "comp": 0,
+   "ptc": 0,
+   "bh": 0
+  },
+  "period_s": 0.0015,
+  "wd_s": 0.0075,
+  "up_W_per_s": 400000.0,
+  "dn_W_per_s": 3333333.3333333335,
+  "sc_block": true,
+  "t_sc_s": 0.0001,
+  "sc_slew_W_per_s": 4000000.0,
+  "ks": 0.15,
+  "t_cut": 0.0012749999999999999,
+  "t_rest": null,
+  "arr_cut": {
+   "comp": 0.002025,
+   "ptc": 0.002025,
+   "bh": 0.002025
+  },
+  "arr_rest": {
+   "comp": null,
+   "ptc": null,
+   "bh": null
+  }
+ },
+ "t_cont_ms": 0.775,
+ "restored": false,
+ "t_astop_ms": 1.29,
+ "vA_end": 491.5676962175158,
+ "fs_brake": true,
+ "checks": {
+  "current_100A": true,
+  "series_120V": true,
+  "link_120V": true,
+  "bypass_current": true,
+  "bus_ge_260": true,
+  "degraded_reached": false,
+  "class_upper_while_400V_loads": true
+ },
+ "pass_": false,
+ "checks_tb23": {
+  "current_100A": true,
+  "series_120V": true,
+  "link_120V": true,
+  "class_upper_while_400V_loads": true,
+  "brake_64J": true,
+  "ip_zero_5ms": true
+ },
+ "pass_tb23": true
+}

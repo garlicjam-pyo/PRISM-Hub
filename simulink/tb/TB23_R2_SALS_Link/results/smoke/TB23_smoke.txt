@@ -1,0 +1,1 @@
+TB23 smoke (case A to 1.5 ms): wall 63 s, final state 9, code 10, p_load first/last 0/22550 W, v_A last 465.00 V, max |i_p| 59.0 A

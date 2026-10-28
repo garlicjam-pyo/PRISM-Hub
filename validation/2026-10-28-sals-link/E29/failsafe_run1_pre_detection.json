@@ -1,0 +1,530 @@
+{
+ "rows": [
+  {
+   "tag": "W460_240s_930_F0",
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     2.3
+    ],
+    [
+     "FAILSAFE",
+     2.3
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": false,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 54.48324962994355,
+   "bridge_peak": 54.4892570627621,
+   "series_peak": 215.5022427503307,
+   "vlink_max": 213.22504240339399,
+   "brk_energy_J": 0.0,
+   "ip_zero_ms": 8.088099999999999,
+   "vA_end": null,
+   "vbus_end": 249.98468048376637,
+   "vlink_end": 213.22504197387678,
+   "t_astop_ms": null,
+   "pol": "F0",
+   "vbus_below_250_ms": 9.5011
+  },
+  {
+   "tag": "W460_240s_930_F1",
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     2.3
+    ],
+    [
+     "FAILSAFE",
+     2.3
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": false,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 63.275221044408,
+   "bridge_peak": 62.70668208676034,
+   "series_peak": 155.8356540933251,
+   "vlink_max": 151.73973842701747,
+   "brk_energy_J": 46.04132538217304,
+   "ip_zero_ms": null,
+   "vA_end": null,
+   "vbus_end": 308.4665002869859,
+   "vlink_end": 151.73861655537667,
+   "t_astop_ms": null,
+   "pol": "F1",
+   "vbus_below_250_ms": null
+  },
+  {
+   "tag": "W460_240s_930_F2",
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     2.3
+    ],
+    [
+     "FAILSAFE",
+     2.3
+    ],
+    [
+     "stageA_stop",
+     2.31
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 54.48324962994355,
+   "bridge_peak": 54.4892570627621,
+   "series_peak": 114.14387238326069,
+   "vlink_max": 110.02011456217069,
+   "brk_energy_J": 2.2702640623013797,
+   "ip_zero_ms": 5.622099999999999,
+   "vA_end": 359.8534408485186,
+   "vbus_end": 249.9900833637988,
+   "vlink_end": 107.63064865221102,
+   "t_astop_ms": 1.81,
+   "pol": "F2",
+   "vbus_below_250_ms": 7.0630999999999995
+  },
+  {
+   "tag": "W460_240s_1008_F0",
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     2.3
+    ],
+    [
+     "FAILSAFE",
+     2.3
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": false,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 55.71874755336004,
+   "bridge_peak": 55.780987949189,
+   "series_peak": 254.50170127218834,
+   "vlink_max": 252.2248559148411,
+   "brk_energy_J": 0.0,
+   "ip_zero_ms": 9.0551,
+   "vA_end": null,
+   "vbus_end": 249.98222726499287,
+   "vlink_end": 252.2248559148411,
+   "t_astop_ms": null,
+   "pol": "F0",
+   "vbus_below_250_ms": 10.4791
+  },
+  {
+   "tag": "W460_240s_1008_F1",
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     2.3
+    ],
+    [
+     "FAILSAFE",
+     2.3
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": false,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 56.46399514874645,
+   "bridge_peak": 55.89234001237804,
+   "series_peak": 151.1204224260643,
+   "vlink_max": 147.03275293473357,
+   "brk_energy_J": 52.86534677149398,
+   "ip_zero_ms": null,
+   "vA_end": null,
+   "vbus_end": 352.2392084577468,
+   "vlink_end": 147.03129551847823,
+   "t_astop_ms": null,
+   "pol": "F1",
+   "vbus_below_250_ms": null
+  },
+  {
+   "tag": "W460_240s_1008_F2",
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     2.3
+    ],
+    [
+     "FAILSAFE",
+     2.3
+    ],
+    [
+     "stageA_stop",
+     2.31
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 55.71874755336004,
+   "bridge_peak": 55.780987949189,
+   "series_peak": 114.14101482607812,
+   "vlink_max": 110.01775132526646,
+   "brk_energy_J": 6.368956488825581,
+   "ip_zero_ms": 5.602099999999999,
+   "vA_end": 357.4478045314444,
+   "vbus_end": 249.99257605482907,
+   "vlink_end": 104.96884819907879,
+   "t_astop_ms": 1.81,
+   "pol": "F2",
+   "vbus_below_250_ms": 7.2961
+  },
+  {
+   "tag": "W410_spec_860_F0",
+   "case": "W410_spec",
+   "V": 860.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     2.215
+    ],
+    [
+     "FAILSAFE",
+     2.215
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": false,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 61.7546851447079,
+   "bridge_peak": 61.789458222296936,
+   "series_peak": 180.5019610212806,
+   "vlink_max": 178.22499658514226,
+   "brk_energy_J": 0.0,
+   "ip_zero_ms": 5.3221,
+   "vA_end": null,
+   "vbus_end": 249.9847535691207,
+   "vlink_end": 178.22499610835982,
+   "t_astop_ms": null,
+   "pol": "F0",
+   "vbus_below_250_ms": 6.6321
+  },
+  {
+   "tag": "W410_spec_860_F1",
+   "case": "W410_spec",
+   "V": 860.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     2.215
+    ],
+    [
+     "FAILSAFE",
+     2.215
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": false,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 68.19131099975453,
+   "bridge_peak": 67.34450701764878,
+   "series_peak": 178.24788666589794,
+   "vlink_max": 174.13305101234548,
+   "brk_energy_J": 62.18978943928928,
+   "ip_zero_ms": null,
+   "vA_end": null,
+   "vbus_end": 250.92463374560975,
+   "vlink_end": 174.1308771666487,
+   "t_astop_ms": null,
+   "pol": "F1",
+   "vbus_below_250_ms": null
+  },
+  {
+   "tag": "W410_spec_860_F2",
+   "case": "W410_spec",
+   "V": 860.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     2.215
+    ],
+    [
+     "FAILSAFE",
+     2.215
+    ],
+    [
+     "stageA_stop",
+     2.225
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": true
+   },
+   "pass_": true,
+   "path_peak": 61.7546851447079,
+   "bridge_peak": 61.789458222296936,
+   "series_peak": 114.1381003591294,
+   "vlink_max": 110.00554649169699,
+   "brk_energy_J": 2.2367350068097926,
+   "ip_zero_ms": 3.6210999999999993,
+   "vA_end": 357.6306448474462,
+   "vbus_end": 249.9946337702373,
+   "vlink_end": 104.92042966796792,
+   "t_astop_ms": 1.725,
+   "pol": "F2",
+   "vbus_below_250_ms": 5.134099999999999
+  },
+  {
+   "tag": "W410_spec_920_F0",
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     1.12
+    ],
+    [
+     "FAILSAFE",
+     1.12
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": false,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 62.90058325093333,
+   "bridge_peak": 62.988050485011385,
+   "series_peak": 210.50082084955207,
+   "vlink_max": 208.22483338047905,
+   "brk_energy_J": 0.0,
+   "ip_zero_ms": 7.0840999999999985,
+   "vA_end": null,
+   "vbus_end": 249.9813614300911,
+   "vlink_end": 208.22483338047905,
+   "t_astop_ms": null,
+   "pol": "F0",
+   "vbus_below_250_ms": 7.311099999999999
+  },
+  {
+   "tag": "W410_spec_920_F1",
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     1.12
+    ],
+    [
+     "FAILSAFE",
+     1.12
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": false,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 64.76403354387116,
+   "bridge_peak": 64.33079294337008,
+   "series_peak": 163.58514389484773,
+   "vlink_max": 159.48734127632665,
+   "brk_energy_J": 63.68094380699688,
+   "ip_zero_ms": null,
+   "vA_end": null,
+   "vbus_end": 295.7162092804625,
+   "vlink_end": 159.48722449546437,
+   "t_astop_ms": null,
+   "pol": "F1",
+   "vbus_below_250_ms": null
+  },
+  {
+   "tag": "W410_spec_920_F2",
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "hw_trip",
+     1.1
+    ],
+    [
+     "shed_cmd",
+     1.12
+    ],
+    [
+     "FAILSAFE",
+     1.12
+    ],
+    [
+     "stageA_stop",
+     1.13
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": true
+   },
+   "pass_": true,
+   "path_peak": 62.90058325093333,
+   "bridge_peak": 62.988050485011385,
+   "series_peak": 114.34974469694518,
+   "vlink_max": 110.00895567754065,
+   "brk_energy_J": 4.422334024108476,
+   "ip_zero_ms": 4.988099999999999,
+   "vA_end": 357.8145347795681,
+   "vbus_end": 249.9878636645633,
+   "vlink_end": 105.8241856516603,
+   "t_astop_ms": 0.63,
+   "pol": "F2",
+   "vbus_below_250_ms": 5.249099999999999
+  }
+ ],
+ "T_EV2_after_fault_ms": 0.6,
+ "ASTOP": {
+  "delay": 5e-06,
+  "C_A": 0.0004
+ },
+ "note": "1차(설정 오류): 두 번째 고장을 DAB 고장 0.6 ms 뒤로 두었고, 주입한 H-브리지 차단을 검출로 기록하지 않았다(E29 T_EV2 주석)."
+}

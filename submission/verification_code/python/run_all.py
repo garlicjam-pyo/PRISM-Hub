@@ -39,6 +39,7 @@ STEPS = [
     ("E26", ["E26_charging_stop.py"]),           # 충전 중 Stage A 정지·충전기 차단 협조(overload event figures, 2코어 약 2분)
     ("E27", ["E27_zcp_reversal.py"]),            # Stage A 영교차 게이트 방향 반전 처리(repro stress regress figures, 2코어 약 15분)
     ("E28", ["E28_stage_a_modules.py"]),         # Stage A 4모듈 경부하 운전(design rated static transient restart regress figures, 2코어 약 75분)
+    ("E29", ["E29_sals_degradation.py"]),        # 보호 상태기계–SALS 연동(E17·E20·E21 결과 필요. contract resid seq regen regen_sens failsafe regress figures, 2코어 약 60분)
 ]
 
 if __name__ == "__main__":

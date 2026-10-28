@@ -1,0 +1,305 @@
+[
+ {
+  "run": "A",
+  "case": "A_930V_MX_S5",
+  "verdict": "PASS",
+  "failed": [],
+  "peaks": {
+   "ip_A": 60.378176449836126,
+   "ih_A": 58.31129469437569,
+   "vs_V": 70.7819094432498,
+   "vlink_max_V": 100.06316661510053,
+   "vlink_min_V": 0.384298343821767,
+   "ibyp_A": 59.513807286994776,
+   "bus_min_V": 393.96013930185285,
+   "bus_max_V": 464.68885110159823,
+   "bus_max_loaded_V": 464.68885110159823,
+   "brake_J": 7.531538131415179
+  },
+  "transitions": [
+   {
+    "state": "HB_HOLD",
+    "ms": 0.505
+   },
+   {
+    "state": "HB_COLLAPSE",
+    "ms": 3.69
+   },
+   {
+    "state": "SOFT_BYP",
+    "ms": 13.690000000000001
+   },
+   {
+    "state": "DEGRADED",
+    "ms": 15.420000000000002
+   },
+   {
+    "state": "shed_cmd",
+    "ms": 0.505
+   },
+   {
+    "state": "restore",
+    "ms": 15.92
+   }
+  ],
+  "final_state": "DEGRADED",
+  "ip_zero_ms": null,
+  "soft": {
+   "entry_ms": 13.690000000000001,
+   "vl_V": 17.54655412434562,
+   "vs_V": -21.572744722122856,
+   "ms": 1.7300000000000006,
+   "energy_J": 0.47585022921049525,
+   "path_peak_A": 60.378176449836126
+  },
+  "dab": {
+   "sec_peak_A": 64.30213338127784,
+   "prim_peak_A": 13.97872464810388,
+   "ms": 5.085,
+   "state": "HB_COLLAPSE"
+  },
+  "wall_s": 699.2478909
+ },
+ {
+  "run": "B",
+  "case": "B_930V_MX_LA",
+  "verdict": "PASS",
+  "failed": [],
+  "peaks": {
+   "ip_A": 70.62410751320955,
+   "ih_A": 71.16653877846507,
+   "vs_V": 91.34091196097127,
+   "vlink_max_V": 100.06316661510053,
+   "vlink_min_V": -1.7585984919903785,
+   "ibyp_A": 39.594074631368606,
+   "bus_min_V": 372.893725253196,
+   "bus_max_V": 464.82101341268304,
+   "bus_max_loaded_V": 460.07643762839416,
+   "brake_J": 9.224005038179916
+  },
+  "transitions": [
+   {
+    "state": "HB_HOLD",
+    "ms": 0.505
+   },
+   {
+    "state": "HB_COLLAPSE",
+    "ms": 8.005
+   },
+   {
+    "state": "SOFT_BYP",
+    "ms": 18.005
+   },
+   {
+    "state": "DEGRADED",
+    "ms": 19.01
+   },
+   {
+    "state": "shed_done",
+    "ms": 8.005
+   },
+   {
+    "state": "shed_cmd",
+    "ms": 0.505
+   }
+  ],
+  "final_state": "DEGRADED",
+  "ip_zero_ms": null,
+  "soft": {
+   "entry_ms": 18.005,
+   "vl_V": 1.940427536476784,
+   "vs_V": -5.856709219008708,
+   "ms": 1.0050000000000023,
+   "energy_J": 0.03590328775514011,
+   "path_peak_A": 37.46326137187761
+  },
+  "dab": {
+   "sec_peak_A": 64.4401143817788,
+   "prim_peak_A": 14.008720517778002,
+   "ms": 10.085,
+   "state": "HB_COLLAPSE"
+  },
+  "wall_s": 796.2162455
+ },
+ {
+  "run": "C",
+  "case": "C_930V_R1_noblock",
+  "verdict": "FAIL",
+  "failed": [
+   "class_upper_while_400V_loads"
+  ],
+  "peaks": {
+   "ip_A": 36.432657357781686,
+   "ih_A": 37.73463642038081,
+   "vs_V": 15.952586508709222,
+   "vlink_max_V": 100.0032502613773,
+   "vlink_min_V": -1.9999999974549165,
+   "ibyp_A": 28.909039716077665,
+   "bus_min_V": 459.9989218263085,
+   "bus_max_V": 481.03746275006057,
+   "bus_max_loaded_V": 481.03746275006057,
+   "brake_J": 4.310026227209494
+  },
+  "transitions": [
+   {
+    "state": "HB_HOLD",
+    "ms": 0.505
+   },
+   {
+    "state": "HB_COLLAPSE",
+    "ms": 0.71
+   },
+   {
+    "state": "SOFT_BYP",
+    "ms": 6.930000000000001
+   },
+   {
+    "state": "DEGRADED",
+    "ms": 7.935000000000001
+   },
+   {
+    "state": "shed_cmd",
+    "ms": 0.505
+   },
+   {
+    "state": "restore",
+    "ms": 8.435000000000002
+   }
+  ],
+  "final_state": "DEGRADED",
+  "ip_zero_ms": null,
+  "soft": {
+   "entry_ms": 6.930000000000001,
+   "vl_V": 0.495452740118947,
+   "vs_V": 4.473563870874401,
+   "ms": 1.0050000000000008,
+   "energy_J": 0.020750063004983412,
+   "path_peak_A": 27.288401242561893
+  },
+  "dab": {
+   "sec_peak_A": 64.28286494041967,
+   "prim_peak_A": 13.974535856612972,
+   "ms": 3.7700000000000005,
+   "state": "HB_COLLAPSE"
+  },
+  "wall_s": 393.7874084
+ },
+ {
+  "run": "D",
+  "case": "D_930V_R1_block",
+  "verdict": "PASS",
+  "failed": [],
+  "peaks": {
+   "ip_A": 10.967061454214004,
+   "ih_A": 8.616068516599057,
+   "vs_V": 4.79006089635622,
+   "vlink_max_V": 100.0032502613773,
+   "vlink_min_V": -1.999999997455327,
+   "ibyp_A": 11.7463778236312,
+   "bus_min_V": 459.9989218263085,
+   "bus_max_V": 467.45338187070934,
+   "bus_max_loaded_V": 467.45338187070934,
+   "brake_J": 4.31606115364515
+  },
+  "transitions": [
+   {
+    "state": "HB_HOLD",
+    "ms": 0.505
+   },
+   {
+    "state": "HB_COLLAPSE",
+    "ms": 0.71
+   },
+   {
+    "state": "SOFT_BYP",
+    "ms": 6.255
+   },
+   {
+    "state": "DEGRADED",
+    "ms": 7.260000000000001
+   },
+   {
+    "state": "shed_cmd",
+    "ms": 0.505
+   },
+   {
+    "state": "restore",
+    "ms": 7.760000000000001
+   }
+  ],
+  "final_state": "DEGRADED",
+  "ip_zero_ms": null,
+  "soft": {
+   "entry_ms": 6.255,
+   "vl_V": 0.4773121651076443,
+   "vs_V": 2.444088987938955,
+   "ms": 1.0050000000000008,
+   "energy_J": 0.004595222159201884,
+   "path_peak_A": 10.967061454214004
+  },
+  "dab": {
+   "sec_peak_A": 64.30855752996216,
+   "prim_peak_A": 13.980121202165689,
+   "ms": 3.585,
+   "state": "HB_COLLAPSE"
+  },
+  "wall_s": 361.1922383
+ },
+ {
+  "run": "E",
+  "case": "E_1008V_dab_double",
+  "verdict": "PASS",
+  "failed": [],
+  "peaks": {
+   "ip_A": 55.36746656563357,
+   "ih_A": 61.66214058927855,
+   "vs_V": 98.20149852623692,
+   "vlink_max_V": 110.02590835974175,
+   "vlink_min_V": 100.00346143504908,
+   "ibyp_A": 0.00010013752849657958,
+   "bus_min_V": 393.05555612203227,
+   "bus_max_V": 460.1011510774638,
+   "bus_max_loaded_V": 460.1011510774638,
+   "brake_J": 1.981870731404676
+  },
+  "transitions": [
+   {
+    "state": "DAB_HOLD",
+    "ms": 1.2650000000000001
+   },
+   {
+    "state": "FAILSAFE",
+    "ms": 1.78
+   },
+   {
+    "state": "shed_done",
+    "ms": 4.265000000000001
+   },
+   {
+    "state": "shed_cmd",
+    "ms": 1.2650000000000001
+   },
+   {
+    "state": "stageA_stop",
+    "ms": 1.7850000000000001
+   }
+  ],
+  "final_state": "FAILSAFE",
+  "ip_zero_ms": 2.6050000000000004,
+  "soft": {
+   "entry_ms": null,
+   "vl_V": null,
+   "vs_V": null,
+   "ms": null,
+   "energy_J": null,
+   "path_peak_A": null
+  },
+  "dab": {
+   "sec_peak_A": 27.68149946551787,
+   "prim_peak_A": 6.017717275112581,
+   "ms": 0.01,
+   "state": "WINDOW"
+  },
+  "wall_s": 317.4426209
+ }
+]

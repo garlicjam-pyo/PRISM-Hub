@@ -1,0 +1,1 @@
+prism_sals_loads vs sals_loads.SalsLoads: 40 scenarios, 32040 samples, max |dP| = 6e-08 W (scenario 4) -> PASS
