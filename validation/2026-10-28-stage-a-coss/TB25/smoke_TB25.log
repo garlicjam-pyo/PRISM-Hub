@@ -1,0 +1,4 @@
+[prism_run] smoke_TB25 start 2026-10-28 16:27:26
+O_nl_C   loss   176.35 W (P_in    176.35, P_out     -0.00), I_out  -0.000 A, V_out  400.00 V, I_pk    0.0 A, f_s 147.0 kHz, 1.6 s
+smoke done (no verdict)
+[prism_run] smoke_TB25 finished (1.8 s)

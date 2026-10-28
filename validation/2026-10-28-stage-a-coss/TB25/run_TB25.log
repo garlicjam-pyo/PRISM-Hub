@@ -1,0 +1,33 @@
+[prism_run] run_TB25 start 2026-10-28 16:28:38
+O_nl_0   loss     0.01 W (P_in      0.01, P_out     -0.00), I_out  -0.000 A, V_out  400.00 V, I_pk    0.0 A, f_s 147.0 kHz, 3.3 s
+O_nl_C   loss   176.35 W (P_in    176.35, P_out     -0.00), I_out  -0.000 A, V_out  400.00 V, I_pk    0.0 A, f_s 147.0 kHz, 3.3 s
+O_ld_0   loss    45.31 W (P_in  18751.67, P_out  18706.14), I_out  46.879 A, V_out  399.03 V, I_pk   75.3 A, f_s 147.0 kHz, 42.0 s
+O_ld_C   loss   213.80 W (P_in  18919.94, P_out  18705.94), I_out  46.879 A, V_out  399.03 V, I_pk   75.3 A, f_s 147.0 kHz, 42.6 s
+A_nl_0   loss     0.01 W (P_in      0.01, P_out      0.00), I_out   0.000 A, V_out  400.00 V, I_pk    0.0 A, f_s 73.5 kHz, 5.1 s
+A_nl_C   loss    27.52 W (P_in     27.52, P_out      0.00), I_out   0.000 A, V_out  400.00 V, I_pk    0.0 A, f_s 73.5 kHz, 5.0 s
+A_ld_0   loss    98.70 W (P_in  18750.01, P_out  18651.30), I_out  46.875 A, V_out  397.89 V, I_pk   75.3 A, f_s 73.5 kHz, 85.0 s
+A_ld_C   loss   125.32 W (P_in  18776.61, P_out  18651.29), I_out  46.875 A, V_out  397.89 V, I_pk   75.3 A, f_s 73.5 kHz, 84.2 s
+B_nl_0   loss     0.01 W (P_in      0.01, P_out     -0.00), I_out  -0.000 A, V_out  400.00 V, I_pk    0.0 A, f_s 24.5 kHz, 9.7 s
+B_nl_C   loss    29.39 W (P_in     29.39, P_out     -0.00), I_out  -0.000 A, V_out  400.00 V, I_pk    0.0 A, f_s 24.5 kHz, 9.0 s
+B_ld_0   loss    41.23 W (P_in  18750.23, P_out  18708.88), I_out  46.877 A, V_out  399.11 V, I_pk   76.6 A, f_s 24.5 kHz, 216.8 s
+B_ld_C   loss    64.92 W (P_in  18773.99, P_out  18708.96), I_out  46.877 A, V_out  399.11 V, I_pk   76.5 A, f_s 24.5 kHz, 216.5 s
+TB25 Stage A 1-phase RSC with switch output capacitance (fixed timing 0.98 f_r, 800 V)
+design check                                Simulink  reference      diff result
+O      T1 no-load C_oss loss vs 4CV^2f        176.34     176.34    -0.00%   PASS
+O      T2 46.9 A loss with C_oss vs exact     213.80     222.29    -3.82%   PASS
+O      T3 46.9 A loss without C_oss vs E1      45.31      44.36    +2.14%   PASS
+O      info: 46.9 A C_oss loss / formula      168.48     176.34    0.955    info
+O        (original 150 kHz, C4MS008075U2 x2 per position, f_r 150.0 kHz, C_oss 1.874 nF per switch, R_ds 6.00 mOhm; exact no-load 176.34 W)
+A      T1 no-load C_oss loss vs 4CV^2f         27.52      27.52    -0.00%   PASS
+A      T2 46.9 A loss with C_oss vs exact     125.32     128.89    -2.77%   PASS
+A      T3 46.9 A loss without C_oss vs E1      98.70     103.26    -4.41%   FAIL
+A      info: 46.9 A C_oss loss / formula       26.62      27.52    0.967    info
+A        (E31 selection (ga) C4MS025075K1x2 f_r 75 kHz, f_r 75.0 kHz, C_oss 0.585 nF per switch, R_ds 16.43 mOhm; exact no-load 27.52 W)
+B      T1 no-load C_oss loss vs 4CV^2f         29.39      29.39    -0.00%   PASS
+B      T2 46.9 A loss with C_oss vs exact      64.92      69.66    -6.80%   FAIL
+B      T3 46.9 A loss without C_oss vs E1      41.23      44.35    -7.03%   FAIL
+B      info: 46.9 A C_oss loss / formula       23.69      29.39    0.806    info
+B        (E31 selection (na) C4MS008075U2x2 f_r 25 kHz, f_r 25.0 kHz, C_oss 1.874 nF per switch, R_ds 5.27 mOhm; exact no-load 29.39 W)
+VERDICT: FAIL
+results written to C:\Users\hj000\Documents\MATLAB\PRISM_Hub_Simulink\tb\TB25_StageA_Coss\results
+[prism_run] run_TB25 finished (733.0 s)
