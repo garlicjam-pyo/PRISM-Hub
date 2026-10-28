@@ -22,8 +22,13 @@ dev3: D1에서 남은 것은 (a) 충전 램프 끝(2.2 ms)의 V_A가 전부 켬�
   V_A 리플이 커짐). 후보 D4: 막혔다 풀린 위상은 기준 위상(가장 낮은 번호의 동작 위상)의 마지막 구간 시작 + 인터리빙 차 자리에서만
   시작(cfg align_start). D4 단독, D1 + D4를 느린 충전 3사례와 Tier-1 계단 2사례(docs/14 D3, ±10 kW)에서 본다.
 
-■ 실행   python E35_a25r_design.py [dev] [dev2] [dev3]   (2코어 각 약 25·35·40분)
-■ 결과   results/E35/design_dev.json, design_dev2.json, design_dev3.json
+dev3 결과: Tier-1 계단(MA10·MG10)은 A25 그대로 통과. 느린 충전은 D4 단독·D1 + D4 모두 불통과(D1 + D4는 MC가 V_A 1.02 V로 T3만,
+  ME는 첨두 91.5 A로 더 나빠짐).
+dev4: E33 진단에서 MC 느린 충전을 통과한 두 변경(TM1: 관리기 시간 상수 다섯 개를 150 kHz 값, CA6: C_A 2.4 mF)을 MD·ME 느린 충전과
+  Tier-1 계단 2사례에도 적용해 본다.
+
+■ 실행   python E35_a25r_design.py [dev] [dev2] [dev3] [dev4]   (2코어 각 약 25·35·40·35분)
+■ 결과   results/E35/design_dev.json, design_dev2.json, design_dev3.json, design_dev4.json
 """
 from multiprocessing import Pool
 
@@ -59,6 +64,10 @@ def _run(args):
     E28.CASES = dict(E28.CASES, **E33.slow_cases(), **dev_cases(), **tier1())
     if var == "D1":
         E28.MGR = dict(E28.MGR, chg_noshed=True)
+    elif var == "TM1":
+        E28.MGR = dict(E28.MGR, **{k: R1_MGR[k] for k in TM_KEYS})
+    elif var == "CA6":
+        E28.CA = 6 * 400e-6
     elif var == "D4":
         E28.MGR = dict(E28.MGR, align_start=True)
     elif var == "D14":
@@ -107,6 +116,16 @@ def dev3():
         rows = p.map(_run, jobs, chunksize=1)
     report(rows)
     save_json("E35", "design_dev3", dict(rows=rows, note="설계 단계(판정 시험 아님): D4 인터리빙 맞춤 시작, D1 + D4"))
+
+
+def dev4():
+    E33.configure()
+    names = ["MD_640V_charge_slow", "ME_920V_charge_slow"] + list(tier1())
+    jobs = [(v, n) for v in ("TM1", "CA6") for n in names]
+    with Pool(workers()) as p:
+        rows = p.map(_run, jobs, chunksize=1)
+    report(rows)
+    save_json("E35", "design_dev4", dict(rows=rows, note="설계 단계(판정 시험 아님): TM1·CA6을 MD·ME 느린 충전과 Tier-1 계단에"))
 
 
 def dev():
