@@ -295,6 +295,173 @@ def clamp_judge():
         "therm": v.get("therm")} for k, v in sws.items()}))
 
 
+
+# ======================================================================================================
+# Q1 C_fly 2차
+# ======================================================================================================
+def _c_at(it, V):
+    cb = it.get("C_bias_uF")
+    if not cb:
+        return None
+    a = np.array(cb, float)
+    if V < a[:, 0].min() or V > a[:, 0].max():
+        return None
+    return float(np.interp(V, a[:, 0], a[:, 1]))
+
+
+def cfly():
+    out = []
+    for fn, d in cands("E37_cfly_").items():
+        fam = d.get("family")
+        for it in d.get("items", []):
+            r = dict(file=fn, family=fam, pn=it.get("pn"), C_uF=it.get("C_uF"), V_R=it.get("V_R_DC"))
+            notes = []
+            C = it.get("C_uF")
+            if not C:
+                r.update(ok=None, note="용량 숫자 없음"); out.append(r); continue
+            if fam == "ceralink":
+                c_lo, c_hi = _c_at(it, 320.), _c_at(it, 504.)
+                if c_lo is None or c_hi is None:
+                    n = max(1, round(C_FLY / C)); ok_c = None; notes.append("바이어스 용량 숫자 없음(조건부)")
+                    Cn = [n * C]
+                else:
+                    n = max(1, round(C_FLY / (0.5 * (c_lo + c_hi))))
+                    Cn = [n * c_lo, n * c_hi]
+                    ok_c = all(abs(x / C_FLY - 1) <= 0.05 for x in Cn)
+            else:
+                n = max(1, round(C_FLY / C)); Cn = [n * C]
+                ok_c = abs(Cn[0] / C_FLY - 1) <= 0.05
+            # 전류: 25 kHz에 가장 가까운 표 값
+            tab = it.get("I_rms_table") or ([[it["I_rms_f_kHz"], it["I_rms_A"]]] if it.get("I_rms_A") and it.get("I_rms_f_kHz") else [])
+            if tab:
+                f0, I0 = min(tab, key=lambda x: abs(math.log(x[0] / 25.)))
+                ok_i = (n * I0 >= I_CFLY) if f0 <= 25. else (None if n * I0 >= I_CFLY else False)
+                if f0 > 25.:
+                    notes.append("정격 주파수 %.0f kHz > 25 kHz(조건부)" % f0)
+            else:
+                f0 = I0 = None; ok_i = None; notes.append("실효전류 숫자 없음")
+            ok_v = (it.get("V_R_DC") or 0) >= V_CFLY
+            vol = it.get("volume_cm3") or (np.prod(it["dims_mm"]) / 1e3 if it.get("dims_mm") else None)
+            flags = [ok_c, ok_i, ok_v]
+            ok = False if False in flags else (None if None in flags else True)
+            r.update(n=n, C_total=Cn, ok_C=ok_c, I_f_kHz=f0, I_each=I0, I_total=None if I0 is None else n * I0, ok_I=ok_i, ok_V=bool(ok_v),
+                     vol_phase_cm3=None if vol is None else n * vol, ok=ok, note="; ".join(notes))
+            out.append(r)
+    for r in out:
+        print("  %-28s %-9s C %s µF × %s → %s, I %s A @ %s kHz → %s, V_R %s: %s %s" % (
+            r["pn"], r["family"], r["C_uF"], r.get("n"), [round(x, 2) for x in r.get("C_total", [])], r.get("I_each"), r.get("I_f_kHz"),
+            None if r.get("I_total") is None else round(r["I_total"], 1), r["V_R"],
+            {True: "통과", False: "불통과", None: "조건부"}[r["ok"]], r.get("note", "")))
+    ok = [r for r in out if r["ok"]]
+    best = min(ok, key=lambda r: r["vol_phase_cm3"] if r["vol_phase_cm3"] is not None else 1e9) if ok else None
+    verdict("(Q1) C_fly 2차", best is not None, "선택 %s × %d(위상당 %s cm³)" % (best["pn"], best["n"], best["vol_phase_cm3"]) if best else
+            "통과 품목 없음(조건부 %d)" % sum(r["ok"] is None for r in out))
+    save_json(EID, "cfly", dict(rows=out, best=best, req=dict(C_uF=C_FLY, I_rms=I_CFLY, V=V_CFLY)))
+
+
+# ======================================================================================================
+# Q4 소프트 투입 전용 선형 소자
+# ======================================================================================================
+def bypass():
+    P6 = load_json("E34", "prot")
+    soft = [r for r in P6["rows"] if r["kind"] == "soft"]
+    w = max(soft, key=lambda r: r["dT_one"])
+    P_pk, span, vmax, imax = w["P_byp_pk_W"], w["p_span_ms"] * 1e-3, P6["P6"]["V_max"], w["ib_max"]
+    out = []
+    for fn, d in cands("E37_lin_").items():
+        rt = d.get("ratings", {})
+        zt = d.get("zth"); zf = d.get("zth_foster")
+        if zf:
+            Z = sum(r_ * (1 - math.exp(-span / t_)) for r_, t_ in zf); zsrc = "Foster"
+        elif zt:
+            a = np.array(zt, float); Z = float(np.exp(np.interp(math.log(span), np.log(a[:, 0]), np.log(a[:, 1])))); zsrc = "Z_th 표"
+        else:
+            Z = rt.get("R_thJC_KperW"); zsrc = "R_thJC(보수)"
+        Tj = None if Z is None else E34.T_C_SEMI + P_pk * Z
+        Id = rt.get("I_D_A") or {}
+        Ilim = Id.get("100") or Id.get("25")
+        ok = None if (Tj is None or rt.get("T_J_max_C") is None or rt.get("V_DSS_V") is None or Ilim is None) else bool(
+            Tj <= rt["T_J_max_C"] and vmax <= E34.V_DER * rt["V_DSS_V"] and imax <= Ilim)
+        out.append(dict(file=fn, part=d.get("part"), V_DSS=rt.get("V_DSS_V"), R_on_mohm=rt.get("R_DSon_mohm"), Z=Z, Z_src=zsrc, T_J=Tj,
+                        T_J_max=rt.get("T_J_max_C"), I_lim=Ilim, soa=d.get("soa_points"), ok=ok))
+    for r in out:
+        print("  %-20s V_DSS %s V, R_on %s mΩ, Z %.4f K/W(%s) → T_J %s °C(한도 %s), %s" % (
+            r["part"], r["V_DSS"], r["R_on_mohm"], r["Z"] or float("nan"), r["Z_src"], None if r["T_J"] is None else round(r["T_J"], 1),
+            r["T_J_max"], {True: "통과", False: "불통과", None: "조건부"}[r["ok"]]))
+    okl = [r for r in out if r["ok"]]
+    verdict("(Q4) 소프트 투입 전용 선형 소자", bool(okl), "입력: 첨두 %.0f W, %.2f ms, 직렬 %.1f V, 전류 %.1f A; 통과 %s"
+            % (P_pk, span * 1e3, vmax, imax, [r["part"] for r in okl]))
+    save_json(EID, "bypass", dict(rows=out, input=dict(P_pk_W=P_pk, span_ms=span * 1e3, V_max=vmax, I_max=imax, tag=w["tag"])))
+
+
+# ======================================================================================================
+# Q5 접촉기 2차
+# ======================================================================================================
+def ctc():
+    p9 = load_json("E34", "prot")["P9"]
+    out = []
+    for fn, d in cands("E37_ctc_").items():
+        rt = d.get("ratings", {})
+        res = {}
+        for case, v in p9.items():
+            up, ib = v["V_bus_upper"], v["i_break_max"]
+            rows = [x for x in (rt.get("electrical_life") or []) + (rt.get("break_max") or [])
+                    if x.get("V") is not None and x.get("I_A") is not None and x["V"] >= up and abs(x["I_A"]) >= ib]
+            okv = rt.get("V_rated_V") is not None and rt["V_rated_V"] >= up
+            res[case] = dict(V_upper=up, i_break=ib, ok_V=bool(okv), rows=rows, ok=bool(okv and rows))
+        out.append(dict(file=fn, part=d.get("part"), status=d.get("status"), V_rated=rt.get("V_rated_V"), I_carry=rt.get("I_carry_A"), cases=res))
+    for r in out:
+        print("  %-22s %s V, %s A, %s: W460 %s, W410 %s" % (r["part"], r["V_rated"], r["I_carry"], r["status"],
+              "통과" if r["cases"]["W460_240s"]["ok"] else "불통과", "통과" if r["cases"]["W410_spec"]["ok"] else "불통과"))
+    okc = [r["part"] for r in out if r["cases"]["W460_240s"]["ok"]]
+    verdict("(Q5) W460 접촉기 2차", bool(okc), "통과 %s" % okc)
+    save_json(EID, "ctc", dict(rows=out, P9_input=p9))
+
+
+# ======================================================================================================
+# Q7 L_r 공심 1점 설계(판정 없음)
+# ======================================================================================================
+def lr():
+    L = 864.6e-9; Irms, Ipk = I_CFLY, 169.3; f = 25e3
+    D, pitch = 0.060, 0.007                       # 코일 지름, 권선 간격(Litz 외경 약 6.2 mm)
+    A_cu = Irms / 4e6                             # 4 A/mm²
+    r_in = D / 2 / 0.0254; p_in = pitch / 0.0254
+    # Wheeler: L[µH] = r²N²/(9r + 10l), l = N·p [in]
+    a, b, c = r_in ** 2, -L * 1e6 * 10 * p_in, -L * 1e6 * 9 * r_in
+    N = (-b + math.sqrt(b * b - 4 * a * c)) / (2 * a)
+    wire = N * math.pi * D
+    Rdc = 1.72e-8 * wire / A_cu
+    Fr = (1.1, 1.5)
+    out = dict(L_nH=L * 1e9, D_mm=D * 1e3, N=N, length_mm=N * pitch * 1e3, A_cu_mm2=A_cu * 1e6, wire_m=wire, R_dc_mohm=Rdc * 1e3,
+               R_ac_mohm=[Rdc * k * 1e3 for k in Fr], P_W=[Irms ** 2 * Rdc * k for k in Fr], model_RL_mohm=1.0, model_P_W=Irms ** 2 * 1e-3,
+               I_rms=Irms, I_pk=Ipk, f_kHz=f / 1e3, E_pk_mJ=0.5 * L * Ipk ** 2 * 1e3, note="Wheeler 근사, Litz 0.1 mm 소선 가정, F_r 1.1–1.5")
+    print("  L_r 공심: 지름 %.0f mm, %.2f회, 길이 %.0f mm, Cu %.1f mm², R_dc %.2f mΩ, R_ac %.2f–%.2f mΩ → %.1f–%.1f W(모델 1 mΩ → %.1f W), 첨두 에너지 %.1f mJ"
+          % (out["D_mm"], N, out["length_mm"], out["A_cu_mm2"], out["R_dc_mohm"], *out["R_ac_mohm"], *out["P_W"], out["model_P_W"], out["E_pk_mJ"]))
+    save_json(EID, "lr", out)
+
+
+# ======================================================================================================
+# Q8 남은 요구값(문서 값 정리, 판정 없음)
+# ======================================================================================================
+REQ = [
+    dict(item="H-브리지 필터 인덕터 포화 전류", value="≥ 150 A(또는 비교기 지연 개선)", cond="변조율 고착, 비교기 지연 1.2 µs 동안 128–147 A", src="docs/24, E17"),
+    dict(item="DAB 누설 인덕터·변압기(1차) 포화 근거", value="15.2 A(TB12 최대), 14.4 A(TB13)", cond="R2-W460 H-브리지 고장 강등", src="docs/26"),
+    dict(item="DAB 링크 쪽 강등 중 첨두 설계 상한", value="1.387 × 정격점(회로 66.4·64.4 A)", cond="P3t, 스위칭 반영 지령표", src="docs/26, E21·TB13"),
+    dict(item="DAB 정격", value="정적 최대 링크전력 × 1.8", cond="1.25배는 Tier-2 최대 전압에서 포화", src="docs/23, E19"),
+    dict(item="조정형 Stage C 데드타임", value="1차 100 ns·2차 40 ns(두 브리지 구동 2차 90 ns), 창 폭 20–30 ns 안에 게이트 지연 편차",
+         cond="출력용량 ±20 %에서 통과 창 1차 90–110 ns·2차 25–55 ns(두 브리지 80–100 ns)", src="docs/27, E22·TB14·TB15"),
+    dict(item="조정형 Stage C 회생 차단 응답", value="검출 뒤 R2-W460 ≤ 1.0 ms·R2-W410 ≤ 0.5 ms, ≥ 4 kW/ms", cond="48 V 회생 중 H-브리지 고장",
+         src="docs/35, E29"),
+    dict(item="Stage B 게이트 시간 분해능", value="≤ 0.625 ns", cond="H-브리지 PWM·DAB 위상 에지(디지털 PWM 리밋 사이클)", src="docs/16, E12·TB04B"),
+]
+
+
+def req():
+    for r in REQ:
+        print("  %-28s %s (%s; %s)" % (r["item"], r["value"], r["cond"], r["src"]))
+    save_json(EID, "req", dict(rows=REQ))
+
+
 if __name__ == "__main__":
     for part in sys.argv[1:]:
         print("E37", part, "...", flush=True)
