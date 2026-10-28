@@ -1,0 +1,67 @@
+{
+  "case": "FB_540V_drive_25kW_m1",
+  "verdict": "PASS",
+  "failed": [],
+  "limits": {
+    "F1_turnoff": true,
+    "F2_phase_peak": true,
+    "F3_vA": true,
+    "F4_modules": true
+  },
+  "n_turnoff": 1396,
+  "n_bad": 0,
+  "ioff_max": 0.26235887408256531,
+  "phase_peak": 39.232418060302734,
+  "pk_limit": 76.490447998046875,
+  "vA_pre": 269.51656235270656,
+  "vA": [
+    269.45763312873873,
+    269.57484170280662
+  ],
+  "events_ms": [],
+  "n_end": 2,
+  "restart": false,
+  "n_cancel": 0,
+  "t_rep_us": 0,
+  "wall_s": 100.3274992,
+  "dt_ns": 2.5,
+  "date": "2026-10-28 16:22:35",
+  "compare": [
+    {
+      "metric": "replacement start [us]",
+      "simscape": 0,
+      "e30": 0,
+      "tol": 1
+    },
+    {
+      "metric": "phase peak [A]",
+      "simscape": 39.232418060302734,
+      "e30": 38.848670959472656,
+      "tol": 3.884867095947266
+    },
+    {
+      "metric": "V_A before fault [V]",
+      "simscape": 269.51656235270656,
+      "e30": 269.525146484375,
+      "tol": 0.3
+    },
+    {
+      "metric": "V_A min after fault [V]",
+      "simscape": 269.45763312873873,
+      "e30": 269.47906494140625,
+      "tol": 0.3
+    },
+    {
+      "metric": "V_A max after fault [V]",
+      "simscape": 269.57484170280662,
+      "e30": 269.56552124023438,
+      "tol": 0.3
+    },
+    {
+      "metric": "max turn-off current [A]",
+      "simscape": 0.26235887408256531,
+      "e30": 0.45989805459976196,
+      "tol": null
+    }
+  ]
+}

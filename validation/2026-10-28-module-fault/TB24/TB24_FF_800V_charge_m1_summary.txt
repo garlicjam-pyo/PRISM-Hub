@@ -1,0 +1,17 @@
+TB24 case FF_800V_charge_m1 (V_bat 800 V, charge, module 1 fault at 0.50 ms), dt 2.50 ns, wall 100 s
+(1) criteria (t >= 0.3 ms):
+    F1_turnoff           PASS
+    F2_phase_peak        PASS
+    F3_vA                PASS
+    F4_modules           PASS
+    turn-offs 2201, violations 0 (worst |i_off| 1.56 A); phase peak 105.7 A (limit 114.7 A, P_rated 76.5 A)
+    V_A before 400.879 V, after 400.509-402.061 V; module changes: [0.5 3]; end 3, restart 0, cancel 0, replacement NaN us
+(2) comparison with E30 (info):
+    metric                                  Simscape         E30      diff    result
+    module change 1 time [ms] (-> 3)             0.5         0.5        +0        ok
+    replacement start [us]                       NaN         NaN       NaN        ok
+    phase peak [A]                             105.7      106.59    -0.885        ok
+    V_A before fault [V]                      400.88      400.86   +0.0177        ok
+    V_A min after fault [V]                   400.51      400.46   +0.0506        ok
+    V_A max after fault [V]                   402.06      402.07  -0.00769        ok
+    max turn-off current [A]                  1.5562       1.261    +0.295      info

@@ -1,0 +1,16 @@
+TB24 case FB_540V_drive_25kW_m1 (V_bat 540 V, drive, module 1 fault at 0.50 ms), dt 2.50 ns, wall 100 s
+(1) criteria (t >= 0.3 ms):
+    F1_turnoff           PASS
+    F2_phase_peak        PASS
+    F3_vA                PASS
+    F4_modules           PASS
+    turn-offs 1396, violations 0 (worst |i_off| 0.26 A); phase peak 39.2 A (limit 76.5 A, P_rated 76.5 A)
+    V_A before 269.517 V, after 269.458-269.575 V; module changes: zeros(0,2); end 2, restart 0, cancel 0, replacement 0.00 us
+(2) comparison with E30 (info):
+    metric                                  Simscape         E30      diff    result
+    replacement start [us]                         0           0        +0        ok
+    phase peak [A]                            39.232      38.849    +0.384        ok
+    V_A before fault [V]                      269.52      269.53  -0.00858        ok
+    V_A min after fault [V]                   269.46      269.48   -0.0214        ok
+    V_A max after fault [V]                   269.57      269.57  +0.00932        ok
+    max turn-off current [A]                 0.26236      0.4599    -0.198      info

@@ -1,0 +1,7 @@
+TB24 Stage A module fault + module manager (faulted module excluded), R2 bus, reference E30
+case                     result peak[A]   limit     vA pre -> min-max [V]    modules      failed
+FA_800V_drive_15kW_m1    PASS   36.1      76.5      399.61  -> 399.50 -399.78  end 1 
+FB_540V_drive_25kW_m1    PASS   39.2      76.5      269.52  -> 269.46 -269.57  end 2 
+FF_800V_charge_m1        PASS   105.7     114.7     400.88  -> 400.51 -402.06  end 3 
+FH_800V_charge_m4        PASS   106.4     114.7     400.88  -> 400.49 -402.07  end 3 
+TB24 overall: PASS
