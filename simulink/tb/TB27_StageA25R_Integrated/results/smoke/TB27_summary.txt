@@ -1,0 +1,4 @@
+TB27 Stage A 25 kHz design revision (A25R, C_A 2.4 mF) 4 modules + switch C_oss, module manager/shedding/fault, R2 bus, reference E35
+case                     result peak[A]   limit     vA [V]                     modules  loss sim/model [W] failed
+FF27_800V_charge_m1      PASS   99.0      111.8     400.57 -401.81  (400.76 ) end 3    696.5 /   521.9   
+TB27 overall: PASS

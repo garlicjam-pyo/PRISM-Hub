@@ -92,7 +92,8 @@ def main():
             na = r["nact"].astype(int); ch = np.where(np.diff(na) != 0)[0]
             ev = [(round(float(t[k + 1]) * 1e3, 4), int(na[k + 1])) for k in ch]
             n0 = int(na[0])
-            tP, PP = pad6(*c["bus"]); tI, II = pad6(*c["prof"]); chg = list(c["chg"]) if c.get("chg") else [1.0, 1.0]
+            tP, PP = pad6(*c["bus"]); chg = list(c["chg"]) if c.get("chg") else [1.0, 1.0]
+            tI, II = pad6(*c["prof"]) if not np.isscalar(c["prof"]) else pad6([0, 1], [float(c["prof"])] * 2)
             fm, tf = 0, 0.
             V = c["V"]; t_end = c["tend"]
             pk_limit = E28.p_rated(None); n_end = c["n_end"]; kind_s = "charge_steady" if kind == "steady" else \

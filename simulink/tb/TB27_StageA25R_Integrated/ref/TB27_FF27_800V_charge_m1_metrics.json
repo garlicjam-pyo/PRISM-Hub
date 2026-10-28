@@ -1,0 +1,28 @@
+{
+ "passed": true,
+ "limits": {
+  "F1": true,
+  "F2": true,
+  "F3": true,
+  "F4": true
+ },
+ "events": [
+  [
+   1.1,
+   3
+  ]
+ ],
+ "phase_peak": 99.48812866210938,
+ "vA_pre": 400.7558898925781,
+ "vA": [
+  400.5816650390625,
+  401.8204650878906
+ ],
+ "ioff_max": 0.4988846182823181,
+ "n_turnoff": 372,
+ "t_rep_us": null,
+ "n_end": 3,
+ "loss_ng_W": 521.8564579856977,
+ "loss_ncyc": 10,
+ "model": "FF_800V_charge_m1"
+}

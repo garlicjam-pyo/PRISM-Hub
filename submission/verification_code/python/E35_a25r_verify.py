@@ -37,6 +37,17 @@
   E35 합격 = 요구 안 transient 6사례 × 2표본 모두 통과 + fault 16/16. static은 E33처럼 따로 보고한다(정격 충전점의 시작 과도는
   E28·E33에서도 불통과였던 항목).
 
+■ 실행 결과(2026-10-28, 기준은 바꾸지 않았다)
+  transient(요구 안): 공칭 6/6, 표본 1 6/6. 느린 충전 턴오프 위반 0(A25: 3–15번), 위상 첨두 ≤ 70.2·76.1 A.
+  fault    : 16/16. 3모듈 충전 위상 첨두 최대 105.5 A(A25 119.6 A).
+  → E35 합격(요구 안 transient 12/12 + fault 16/16).
+  static   : 공칭 33/36(정격 충전점 S4: 시작 유지 뒤 첨두 76.7 A > 74.5 A, 마지막 10주기 74.3 A — E28·E33과 같은 시작 과도),
+             표본 1 36/36.
+  beyond(정보): 0/6·0/6. 20 kW 순간 계단 MA 첨두 87–88 A·MG 모듈 추가 1번(T4), 100 µs 충전 턴오프 위반 12–22번,
+             사전 기동 없는 충전 MF 첨두 217–221 A(A25 169 A — C_A가 커 충전기 전류가 V_A를 늦게 올리므로 모듈 추가가 늦다).
+  clamp    : C1·P4 통과, P5 불통과. 클램프 스위칭 5.8–8.7 kHz(A25 29–40 kHz), 사건당 IGBT 18–49 J, 보수 계산 T_vj 145–193 °C,
+             전류 468 A > 450 A.
+
 ■ 실행   python E35_a25r_verify.py static transient beyond fault clamp   (2코어 약 3시간)
 ■ 결과   results/E35/static.json, transient.json, beyond.json, fault.json, clamp.json
 """

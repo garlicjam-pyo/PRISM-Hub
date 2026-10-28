@@ -1,0 +1,18 @@
+TB27 case MC27_800V_charge_slow (V_bat 800 V, charge_startstop, fault module 0 at 0.00 ms; model MC_800V_charge_slow), dt 2.50 ns, wall 241 s
+(1) criteria (t >= 0.90 ms):
+    C1_turnoff           PASS
+    C2_phase_peak        PASS
+    C3_vA                PASS
+    C4_modules           PASS
+    turn-offs 1366, violations 0 (worst |i_off| 0.79 A); phase peak 72.4 A (limit 74.5 A, P_rated 74.5 A)
+    V_A 399.419-401.077 V (pre-fault NaN); module changes: [1 4;4.65 1]; end 1, restart 0, cancel 0; loss 347.1 W (model 161.1 W, P_bat 15044 W)
+(2) comparison with E35 model (info):
+    metric                                  Simscape         E35      diff    result
+    module change 1 time [ms] (-> 4)               1           1        +0        ok
+    module change 2 time [ms] (-> 1)            4.65        4.65        +0        ok
+    replacement start [us]                       NaN         NaN       NaN        ok
+    phase peak [A]                            72.378       70.15     +2.23        ok
+    V_A min [V]                               399.42      399.41  +0.00483        ok
+    V_A max [V]                               401.08      401.02   +0.0572        ok
+    Stage A loss, last 20 periods [W]         347.12      161.05      +186      over
+    max turn-off current [A]                 0.78976     0.49987     +0.29      info

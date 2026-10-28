@@ -1,0 +1,7 @@
+[prism_run] check_gate_parity_TB27 start 2026-10-28 20:35:13
+gate parity (case FF27_800V_charge_m1, 106080 steps, fault module 1 at step 56100): mismatch phases [0  0  0  0  0  0  0  0], active modules 0, module modes [0  0  0  0] -> PASS
+gate parity (case MC27_800V_charge_slow, 255000 steps, fault module 0 at step 0): mismatch phases [0  0  0  0  0  0  0  0], active modules 0, module modes [0  0  0  0] -> PASS
+gate parity (case MA27_540V_bus_5_15_5kW, 177480 steps, fault module 0 at step 0): mismatch phases [0  0  0  0  0  0  0  0], active modules 0, module modes [0  0  0  0] -> PASS
+gate parity (case SC27_800V_charge_steady, 204000 steps, fault module 0 at step 0): mismatch phases [0  0  0  0  0  0  0  0], active modules 0, module modes [0  0  0  0] -> PASS
+gate parity overall: PASS
+[prism_run] check_gate_parity_TB27 finished (12.4 s)
