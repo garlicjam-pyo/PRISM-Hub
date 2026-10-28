@@ -31,9 +31,10 @@ for k = 1:numel(cases)
     tic; out = sim(mdl); wall = toc;
     t = out.t(:); iin = out.iin(:); io = out.io(:); vo = out.vout(:); iC = out.iC(:); vC = out.vC(:);
     T = TBc.A.T;
-    t1 = t(end) - TBc.neval*T;
+    neval = min(TBc.neval, TBc.ncyc - 2);         % (smoke: 짧은 실행)
+    t1 = t(end) - neval*T;
     m = t > t1 + 0.5*TBc.dt;
-    i0 = find(m, 1) - 1; i1 = numel(t);
+    i0 = max(find(m, 1) - 1, 1); i1 = numel(t);
     Pin = TBc.vbat*mean(iin(m));
     Pout = mean(vo(m).*io(m));
     dE = 0.5*TBc.A.Cfly*(vC(i1)^2 - vC(i0)^2) + 0.5*TBc.A.Lr*(iC(i1)^2 - iC(i0)^2);
