@@ -208,6 +208,8 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     if mgr is not None:                                          # (E28) 모듈 관리기
         chg_on = (lambda tk: chg is not None and chg[0] <= tk < chg[1])
         M = mgr_init(mgr, N, IL, dt, chg_on(0.))
+        align = bool(mgr.get("align_start"))                      # (E35) 새로 켜지는 위상을 동작 위상의 인터리빙 자리에 맞춰 시작
+        fresh = M["blk"].copy(); lastk = np.full(N, -1); hp = np.full(N, half)
         flt_steps = [(int(mround(tf / dt)), int(fm)) for tf, fm in (fault or [])]
         log_na = np.zeros(n, np.int8); log_mm = np.zeros((n, N // 2), np.int8); log_if = np.zeros(n, np.float32)
         log_ig = np.zeros((n, N), np.float32); log_chg = np.zeros(n, np.int8)
@@ -253,6 +255,21 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
                 start[sh["sh"]] = False                              # 셰딩된 위상은 시작하지 않는다
             if mgr is not None:
                 start &= ~M["blk"]                                   # (E28) 멈춘 모듈·셰딩된 위상은 시작하지 않는다
+                if align:                                            # (E35) 막혔다 풀린 위상의 첫 시작: 기준 위상(가장 낮은 번호의
+                    fresh |= M["blk"]                                #   동작 위상)의 마지막 시작 + 인터리빙 차(off) 자리에서만
+                    run = np.flatnonzero((~fresh) & (~M["blk"]) & (lastk >= 0))
+                    if len(run):
+                        p0 = run[0]
+                        for q in np.flatnonzero(start & fresh):
+                            d = int((off[q] - off[p0]) % hp[p0])
+                            if (k - lastk[p0] - d) % hp[p0] != 0:
+                                start[q] = False
+                if True:
+                    for q in np.flatnonzero(start):
+                        if lastk[q] >= 0 and k - lastk[q] < 1.5 * half:
+                            hp[q] = k - lastk[q]
+                        lastk[q] = k
+                    fresh &= ~start
             st = np.where(start, nxt, st); nxt = np.where(start, 3 - nxt, nxt)
             armed = np.where(start, False, armed); det = np.where(start, 0, det)
             oncnt = np.where(start, 0, oncnt); tmr = np.where(start, 0, tmr)
@@ -450,10 +467,14 @@ def mgr_step(M, iC, st, chg):
             M["nact"] = nact = ndn; M["tdn"] = 0
     else:
         M["tdn"] = 0
+    noshed = bool(c.get("chg_noshed")) and chg               # (E35) 충전 요청 중에는 위상 셰딩을 하지 않는다(멈춘 위상은 바로 복귀)
     for m in range(nm):
         kp, ks = 2 * m, 2 * m + 1
         if rk[m] < nact:                                 # 동작 모듈: 위상 셰딩(E24 shed_step, 복귀는 바로)
-            ret = abs(M["Ifm"][m]) > c["I_on"] or abs(iC[kp]) > c["Ipk_on"]
+            ret = noshed or abs(M["Ifm"][m]) > c["I_on"] or abs(iC[kp]) > c["Ipk_on"]
+            if noshed and mm[m] == 2:
+                M["tlow"][m] = 0
+                continue
             if mm[m] == 2:
                 M["tlow"][m] = M["tlow"][m] + 1 if abs(M["Ifm"][m]) < c["I_off"] else 0
                 if M["tlow"][m] >= M["ndwell"]:
