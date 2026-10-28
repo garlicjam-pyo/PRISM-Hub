@@ -1,0 +1,19 @@
+TB28 case D28_800V_charge_slow, V_bat 800 V, event 1.00 ms, dt 2.50 ns, wall 470 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           PASS
+    C6_charge_slow       PASS
+    C7_modules           PASS
+    V_A 1 us max 401.08 V (E26 400.76), bus 400.92 V (E26 400.68); instantaneous V_A 401.08 V, bus 400.93 V (limit 470 V)
+    clamp: energy 0.0 J (E26 0.0 J), on 0.000 ms (E26 0.000 ms), peak 0 kW, turn-ons 0
+    48 V (10 us mean, from 1 ms) 47.998-48.013 V (E22 48.000-48.000, band 47.04-48.96); Stage C 100 us max 102.6 A, secondary peak 80.6 A
+    Stage C ZVS: primary 0.11 V (2000 edges), secondary 0.00 V (0 edges)
+    Stage A pre: ZCS max 1.42 % (ref 1.51 %), Ipk max 29.9 A (ref 29.9 A), sharing 1.18 %, V_A 399.662 V (ref 399.663 V), i_A 37.8 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 1356, violations 0, worst 0.79 A; phase peak 72.5 A (P_rated 74.5 A, fault limit 111.8 A)
+    modules: events [1 4;4.65 1] (model [1 4;4.65 1]), end 1 (model 1), cancels 0
+    Stage A after event: ZCS max 0.47 % (ref 0.73 %), Ipk max 69.7 A (ref 67.4 A), sharing 3.91 % (ref 0.85 %)

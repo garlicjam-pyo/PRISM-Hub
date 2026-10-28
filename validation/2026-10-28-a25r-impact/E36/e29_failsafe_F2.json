@@ -1,0 +1,212 @@
+{
+ "rows": [
+  {
+   "tag": "W460_240s_930_F2",
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "DAB_RAMP",
+     7.905
+    ],
+    [
+     "hw_trip",
+     8.4051
+    ],
+    [
+     "FAILSAFE",
+     8.41
+    ],
+    [
+     "stageA_stop",
+     8.42
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": true,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 63.084161805198896,
+   "bridge_peak": 63.562651039953046,
+   "series_peak": 120.07174636915659,
+   "vlink_max": 116.01016763163159,
+   "brk_energy_J": 26.00059282103312,
+   "ip_zero_ms": null,
+   "vA_end": 363.93320115977406,
+   "vbus_end": 249.98682991780342,
+   "vlink_end": 110.02276809499816,
+   "t_astop_ms": 7.92,
+   "pol": "F2",
+   "dab_det_ms": 7.405,
+   "t2_ms": 7.905,
+   "vbus_below_250_ms": 17.1531
+  },
+  {
+   "tag": "W460_240s_1008_F2",
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "shed_cmd",
+     1.275
+    ],
+    [
+     "DAB_HOLD",
+     1.275
+    ],
+    [
+     "hw_trip",
+     1.7751
+    ],
+    [
+     "FAILSAFE",
+     1.78
+    ],
+    [
+     "stageA_stop",
+     1.79
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 55.71874755336004,
+   "bridge_peak": 55.780987949189,
+   "series_peak": 114.61468538477068,
+   "vlink_max": 110.54342191366592,
+   "brk_energy_J": 30.866851303035794,
+   "ip_zero_ms": null,
+   "vA_end": 388.65365189061913,
+   "vbus_end": 275.24285239716033,
+   "vlink_end": 108.90869908688387,
+   "t_astop_ms": 1.29,
+   "pol": "F2",
+   "dab_det_ms": 0.7750000000000001,
+   "t2_ms": 1.2750000000000001,
+   "vbus_below_250_ms": null
+  },
+  {
+   "tag": "W410_spec_860_F2",
+   "case": "W410_spec",
+   "V": 860.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "shed_cmd",
+     2.0
+    ],
+    [
+     "DAB_HOLD",
+     2.0
+    ],
+    [
+     "hw_trip",
+     2.5
+    ],
+    [
+     "FAILSAFE",
+     2.5
+    ],
+    [
+     "stageA_stop",
+     2.51
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": true,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 61.7546851447079,
+   "bridge_peak": 61.789458222296936,
+   "series_peak": 122.21837046419319,
+   "vlink_max": 118.26732436827324,
+   "brk_energy_J": 19.52371746264899,
+   "ip_zero_ms": 7.6480999999999995,
+   "vA_end": 358.45966097767257,
+   "vbus_end": 249.97357779147745,
+   "vlink_end": 105.94590929855954,
+   "t_astop_ms": 2.01,
+   "pol": "F2",
+   "dab_det_ms": 1.5,
+   "t2_ms": 2.0,
+   "vbus_below_250_ms": 7.8100999999999985
+  },
+  {
+   "tag": "W410_spec_920_F2",
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "final_state": "FAILSAFE",
+   "events": [
+    [
+     "shed_cmd",
+     1.12
+    ],
+    [
+     "DAB_HOLD",
+     1.12
+    ],
+    [
+     "hw_trip",
+     1.62
+    ],
+    [
+     "FAILSAFE",
+     1.62
+    ],
+    [
+     "stageA_stop",
+     1.63
+    ]
+   ],
+   "checks": {
+    "current_100A": true,
+    "series_120V": false,
+    "link_120V": true,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": false
+   },
+   "pass_": false,
+   "path_peak": 62.90058325093333,
+   "bridge_peak": 62.988050485011385,
+   "series_peak": 123.25189530708569,
+   "vlink_max": 119.24661934635493,
+   "brk_energy_J": 29.200984525861788,
+   "ip_zero_ms": 8.7871,
+   "vA_end": 358.46424932960593,
+   "vbus_end": 249.97494206372733,
+   "vlink_end": 105.72020216824636,
+   "t_astop_ms": 1.13,
+   "pol": "F2",
+   "dab_det_ms": 0.62,
+   "t2_ms": 1.1199999999999999,
+   "vbus_below_250_ms": 7.954099999999999
+  }
+ ],
+ "ASTOP": {
+  "delay": 5e-06,
+  "C_A": 0.0024
+ }
+}
