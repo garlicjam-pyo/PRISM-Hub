@@ -1,0 +1,5 @@
+TB29 = TB28 circuit (A25R) with V_A clamp resistor 1.2 ohm (E37 Q2), reference E26 (1.2 ohm) / E22 / E35 model
+case                   result vA_max    ref       E_cl[J]   ref       vo_min    failed
+A29_920V_pathloss      PASS   468.12    468.17    441.7     441.4     47.992    
+B29_640V_pathloss      PASS   468.10    468.18    144.0     144.2     47.979    
+TB29 overall: PASS
