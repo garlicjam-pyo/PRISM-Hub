@@ -259,7 +259,9 @@ def loss():
     out["ref"] = ref
     out["E31_pred"] = dict(none=e31["none"]["aux4"], shed=e31["shed"]["aux4"], charge=e31["shed"]["charge"])
     # (D0) 800 V 위상당 손실: E31 예측(150 kHz 도통 격자 + 공식) 대비
-    ct = c31["cond_tables"]["%.3fmOhm" % (A.BASE["Rds"] * 1e3)] if ("%.3fmOhm" % (A.BASE["Rds"] * 1e3)) in c31["cond_tables"] else None
+    A.set_design(DESIGN)                                      # (수정) 표 열쇠는 A25 R_ds로 찾는다(1차 집계는 R1 6 mΩ 표를 썼다)
+    key = "%.3fmOhm" % (A.BASE["Rds"] * 1e3)
+    ct = c31["cond_tables"][key] if key in c31["cond_tables"] else None
     d0 = []
     if ct is not None:
         Ig = np.array(E15.IGRID)
