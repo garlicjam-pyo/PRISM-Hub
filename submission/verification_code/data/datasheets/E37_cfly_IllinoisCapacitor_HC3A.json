@@ -1,0 +1,199 @@
+{
+ "part": "HC3A (conduction cooled)",
+ "maker": "Illinois Capacitor (Knowles / Cornell Dubilier)",
+ "title": "HC3A conduction-cooled capacitors, High AC Voltage - High current, Induction Heating - Tank Circuits (Sep-20)",
+ "url": "https://wmsc.lcsc.com/wmsc/upload/file/pdf/v2/lcsc/2401161652_Illinois-Capacitor-174HC3A102K2SM6_C5477353.pdf",
+ "accessed": "2026-10-29",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Values not stated numerically in text/tables are null. volume_cm3 and A_per_uF are derived here (box l*w*h or cylinder pi/4*D^2*L from the stated max dimensions; A_per_uF = I_rms_A / C_uF), not datasheet values. Distributor-hosted copy (LCSC) of the Illinois Capacitor PDF. AC-rated induction-heating parts: NO DC voltage rating is stated (V_R_DC = null), so V_R >= 518 Vdc cannot be verified. 'Maximum RMS current' applies at the listed frequency (range); all parts are 300 kVAr (current is kVAr/voltage-limited at that frequency); no value at 25 kHz. Max core temperature +85 C, surface +45 C; above 45 C kVAr derated 2.25 %/C. ESR at 100 kHz, 25 C. Self-inductance < 3 nH. Tolerance +-10 %. The other LC/HC datasheets (LC2-LC5, HC1-HC6) linked on Mouser could not be fetched (permission/robots), so only HC3A is recorded.",
+ "family": "film",
+ "conditions": {
+  "I_rms": "max rms current at the listed frequency, core <= 85 C, surface 45 C",
+  "kVAr_derating": "2.25 %/C above 45 C"
+ },
+ "items": [
+  {
+   "pn": "104HC3A102K2SM6",
+   "C_uF": 0.1,
+   "tol_pct": 10,
+   "V_R_DC": null,
+   "V_R_AC": 1000,
+   "I_rms_A": 300,
+   "I_rms_f_kHz": 478,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": 1.5,
+   "dims_mm": [
+    68,
+    30.2,
+    30
+   ],
+   "volume_cm3": 61.61,
+   "T_max_C": 85,
+   "C_bias_uF": null,
+   "A_per_uF": 3000.0,
+   "I_rms_f_range_kHz": null,
+   "kVAr": 300,
+   "ESR_f_kHz": 100,
+   "dims_order": "[L, B, H]"
+  },
+  {
+   "pn": "174HC3A102K2SM6",
+   "C_uF": 0.17,
+   "tol_pct": 10,
+   "V_R_DC": null,
+   "V_R_AC": 1000,
+   "I_rms_A": 300,
+   "I_rms_f_kHz": 281,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": 1.4,
+   "dims_mm": [
+    68,
+    30.2,
+    30
+   ],
+   "volume_cm3": 61.61,
+   "T_max_C": 85,
+   "C_bias_uF": null,
+   "A_per_uF": 1764.706,
+   "I_rms_f_range_kHz": null,
+   "kVAr": 300,
+   "ESR_f_kHz": 100,
+   "dims_order": "[L, B, H]"
+  },
+  {
+   "pn": "334HC3A800K2SM6",
+   "C_uF": 0.33,
+   "tol_pct": 10,
+   "V_R_DC": null,
+   "V_R_AC": 800,
+   "I_rms_A": 400,
+   "I_rms_f_kHz": 225,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": 1.2,
+   "dims_mm": [
+    68,
+    30.2,
+    30
+   ],
+   "volume_cm3": 61.61,
+   "T_max_C": 85,
+   "C_bias_uF": null,
+   "A_per_uF": 1212.121,
+   "I_rms_f_range_kHz": [
+    225,
+    256
+   ],
+   "kVAr": 300,
+   "ESR_f_kHz": 100,
+   "dims_order": "[L, B, H]"
+  },
+  {
+   "pn": "504HC3A800K2SM6",
+   "C_uF": 0.5,
+   "tol_pct": 10,
+   "V_R_DC": null,
+   "V_R_AC": 800,
+   "I_rms_A": 400,
+   "I_rms_f_kHz": 149,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": 1.1,
+   "dims_mm": [
+    68,
+    30.2,
+    30
+   ],
+   "volume_cm3": 61.61,
+   "T_max_C": 85,
+   "C_bias_uF": null,
+   "A_per_uF": 800.0,
+   "I_rms_f_range_kHz": [
+    149,
+    170
+   ],
+   "kVAr": 300,
+   "ESR_f_kHz": 100,
+   "dims_order": "[L, B, H]"
+  },
+  {
+   "pn": "664HC3A700K2SM6",
+   "C_uF": 0.66,
+   "tol_pct": 10,
+   "V_R_DC": null,
+   "V_R_AC": 700,
+   "I_rms_A": 450,
+   "I_rms_f_kHz": 147,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": 1.0,
+   "dims_mm": [
+    68,
+    30.2,
+    30
+   ],
+   "volume_cm3": 61.61,
+   "T_max_C": 85,
+   "C_bias_uF": null,
+   "A_per_uF": 681.818,
+   "I_rms_f_range_kHz": [
+    147,
+    163
+   ],
+   "kVAr": 300,
+   "ESR_f_kHz": 100,
+   "dims_order": "[L, B, H]"
+  },
+  {
+   "pn": "135HC3A600K2SM6",
+   "C_uF": 1.33,
+   "tol_pct": 10,
+   "V_R_DC": null,
+   "V_R_AC": 600,
+   "I_rms_A": 500,
+   "I_rms_f_kHz": 99,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": 0.9,
+   "dims_mm": [
+    68,
+    30.2,
+    30
+   ],
+   "volume_cm3": 61.61,
+   "T_max_C": 85,
+   "C_bias_uF": null,
+   "A_per_uF": 375.94,
+   "I_rms_f_range_kHz": null,
+   "kVAr": 300,
+   "ESR_f_kHz": 100,
+   "dims_order": "[L, B, H]"
+  },
+  {
+   "pn": "245HC3A500K2SM6",
+   "C_uF": 2.4,
+   "tol_pct": 10,
+   "V_R_DC": null,
+   "V_R_AC": 500,
+   "I_rms_A": 600,
+   "I_rms_f_kHz": 79,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": 0.8,
+   "dims_mm": [
+    68,
+    30.2,
+    30
+   ],
+   "volume_cm3": 61.61,
+   "T_max_C": 85,
+   "C_bias_uF": null,
+   "A_per_uF": 250.0,
+   "I_rms_f_range_kHz": null,
+   "kVAr": 300,
+   "ESR_f_kHz": 100,
+   "dims_order": "[L, B, H]"
+  }
+ ]
+}

@@ -45,7 +45,25 @@
      저항과 손실을 계산해 모델 가정(R_L 1 mΩ)과 비교해 적는다.
   Q8 남은 요구값 정리(판정 없음): DAB 누설 인덕터·변압기·H-브리지 필터 인덕터 포화 전류, 조정형 Stage C 데드타임(docs/24–27 값).
 
-■ 실행   python E37_parts_round2.py ca fs clamp cfly bypass ctc lr table
+■ 실행 경과와 결과(2026-10-29, 기준은 바꾸지 않았다)
+  실행 경과: ctc 1차는 단발 최대 차단 행도 '전기적 수명' 행으로 넣어 AEVA1251을 통과로 냈다(ctc_run1_breakmax.json) → 수명 행만 쓰게
+            고쳐 다시 실행. cfly 1차는 CeraLink 바이어스 용량을 0 V·정격 전압 두 점의 직선 보간으로 계산했다(cfly_run1_interp.json,
+            판정은 모두 불통과로 나옴) → 그 바이어스(±25 V)의 숫자만 쓰게 고쳐 다시 실행(조건부). bypass의 펄스 폭 보고를 첨두 10 %
+            구간(1.75 ms)으로 고쳤다(판정은 R_thJC 대체라 영향 없음). 후보 데이터는 별도 조사(데이터시트 표·본문 숫자만)로 모았다.
+  Q1 통과: Fischer & Tausche CastorCap CC7.5u1300 × 6 = 45.0 µF(−4.0 %), 180 A(10 kHz·30 °C 표 값), V_R 1300 V, 위상당 420 g.
+           단서: 전류 정격 온도 30 °C, 치수·개정일 없음. 100 kHz 정격만 있는 고전류 필름(CDE 942C, KEMET C4G, TDK B3265xS)과
+           CDE 944U470(47 µF 1개, 67 A, 주파수 미기재), CeraLink(바이어스 용량 그림만)는 조건부.
+  Q2 통과(설계 변경): FF450R12ME4P + R_clamp 1.2 Ω·끔 463 V, 전류 390 A, T_vj 149 °C(여유 1 °C). 같은 IGBT·458 V면 135 °C.
+           SiC FF2MR12KM1P(예비 데이터시트)는 원설계 1.0 Ω·463 V에서도 145 °C로 통과. 클램프 스위칭 0.9–6.8 kHz.
+  Q3 불통과: R_dis 10 Ω 0/4, 3 Ω 0/4, 1 Ω 2/4(W410 860·920 V 통과 4.4 ms). 직렬 전압은 1–3 Ω에서 ≤ 67 V로 해결, W460은 경로전류
+           소멸 6.1–6.2 ms(> 5 ms). 1 Ω 방전 첨두 465–504 A. 실행 뒤 진단: 연결된 400 V 부하가 버스를 저전압 차단(250 V)까지 끄는
+           동안 수 A–14 A가 남는다(부하 쪽 시간). P7은 모두 T_J ≤ 106 °C.
+  Q4 불통과: 선형 MOSFET 5종 모두 Z_th 숫자 없음 → R_thJC 대체로 T_J 246–884 °C. 그림 대조 전에는 판정 불가.
+  Q5 통과: TE ECK100B(1000 V, 100 A @ 800 V 1,000회), Omron G9EK-1(500 V, 60 A 6,000회·120 A 1,000회). W460·W410 모두.
+  Q6 통과: C_A 실효 공칭 4.1–4.5 A, 공차 표본 1 최대 50.6 A → TDK B32778Z5606 × 40 = 2.4 mF, 820 A, 3,105 cm³.
+  Q7: 공심 지름 60 mm·3.6회·길이 25 mm, Litz 15.2 mm², R_ac 0.83–1.14 mΩ → 3.1–4.2 W(모델 1 mΩ 3.7 W), 첨두 에너지 12.4 mJ.
+
+■ 실행   python E37_parts_round2.py ca fs clamp cfly bypass ctc lr req table
 ■ 결과   results/E37/*.json
 """
 import glob
@@ -304,9 +322,10 @@ def _c_at(it, V):
     if not cb:
         return None
     a = np.array(cb, float)
-    if V < a[:, 0].min() or V > a[:, 0].max():
+    k = int(np.argmin(np.abs(a[:, 0] - V)))
+    if abs(a[k, 0] - V) > 25.:                    # 그 바이어스(±25 V)의 숫자가 없으면 계산하지 않는다(두 점 직선 보간은 쓰지 않음)
         return None
-    return float(np.interp(V, a[:, 0], a[:, 1]))
+    return float(a[k, 1])
 
 
 def cfly():
@@ -333,7 +352,11 @@ def cfly():
                 ok_c = abs(Cn[0] / C_FLY - 1) <= 0.05
             # 전류: 25 kHz에 가장 가까운 표 값
             tab = it.get("I_rms_table") or ([[it["I_rms_f_kHz"], it["I_rms_A"]]] if it.get("I_rms_A") and it.get("I_rms_f_kHz") else [])
-            if tab:
+            if not tab and it.get("I_rms_A"):
+                f0, I0 = None, it["I_rms_A"]
+                ok_i = None if n * I0 >= I_CFLY else False
+                notes.append("정격 주파수 미기재(조건부)")
+            elif tab:
                 f0, I0 = min(tab, key=lambda x: abs(math.log(x[0] / 25.)))
                 ok_i = (n * I0 >= I_CFLY) if f0 <= 25. else (None if n * I0 >= I_CFLY else False)
                 if f0 > 25.:
@@ -344,7 +367,9 @@ def cfly():
             vol = it.get("volume_cm3") or (np.prod(it["dims_mm"]) / 1e3 if it.get("dims_mm") else None)
             flags = [ok_c, ok_i, ok_v]
             ok = False if False in flags else (None if None in flags else True)
-            r.update(n=n, C_total=Cn, ok_C=ok_c, I_f_kHz=f0, I_each=I0, I_total=None if I0 is None else n * I0, ok_I=ok_i, ok_V=bool(ok_v),
+            if it.get("I_rms_T_C") is not None:
+                notes.append("전류 정격 온도 %s °C" % it["I_rms_T_C"])
+            r.update(n=n, C_total=Cn, ok_C=ok_c, weight_phase_g=None if not it.get("weight_g") else n * it["weight_g"], I_f_kHz=f0, I_each=I0, I_total=None if I0 is None else n * I0, ok_I=ok_i, ok_V=bool(ok_v),
                      vol_phase_cm3=None if vol is None else n * vol, ok=ok, note="; ".join(notes))
             out.append(r)
     for r in out:

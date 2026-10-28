@@ -1,0 +1,119 @@
+{
+ "part": "KC-LINK with KONNEKT (stacked C0G)",
+ "maker": "KEMET (YAGEO)",
+ "title": "Surface Mount Multilayer Ceramic Chip Capacitors (SMD MLCCs) - KC-LINK with KONNEKT Technology (C1105_KONNEKT_KC-Link_C0G, 3/5/2025)",
+ "url": "https://content.kemet.com/datasheets/KEM_C1105_KONNEKT_KC-Link_C0G.pdf",
+ "accessed": "2026-10-29",
+ "method": "Table values copied from the datasheet text with a fetch tool (no curve digitized). Values not stated numerically in text/tables are null. volume_cm3 and A_per_uF are derived here (box l*w*h or cylinder pi/4*D^2*L from the stated max dimensions; A_per_uF = I_rms_A / C_uF), not datasheet values. Manufacturer PDF. 650 V parts only. Ripple current is given only as curves ('Typical AC Current Performance 650 V standard / low-loss orientation'); no numeric ripple current or AC-voltage limit and no test condition text -> I_rms fields null. ESR/ESL only as typical upper bounds per configuration (25 C, 100 kHz). (a) = orientation/packaging suffix. Multi-chip L/W/T assignment in the dimension table is ambiguous in text: T values per orientation are copied; L x W = 9.3 x 10.2 mm assumed from the 3640 case for the derived volume only. C0G: no numeric capacitance-vs-DC-bias data. Range 14-880 nF, 500-2000 V, tolerance +-10 % (K), -55 to +150 C.",
+ "family": "c0g",
+ "conditions": {
+  "I_rms": "graph only",
+  "ESR_ESL": "typical, 25 C, 100 kHz",
+  "T_op_C": [
+   -55,
+   150
+  ]
+ },
+ "items": [
+  {
+   "pn": "CKC33C604KWGLC(a)",
+   "C_uF": 0.6,
+   "tol_pct": 10,
+   "V_R_DC": 650,
+   "V_R_AC": null,
+   "I_rms_A": null,
+   "I_rms_f_kHz": null,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": null,
+   "volume_cm3": null,
+   "T_max_C": 150,
+   "C_bias_uF": null,
+   "A_per_uF": null,
+   "case": "3640",
+   "chips": 4,
+   "T_mm_standard": 10.3,
+   "T_mm_low_loss": 10.2,
+   "L_W_mm": [
+    9.3,
+    10.2
+   ],
+   "ESR_note": "4-chip: std < 2.5 mOhm, low-loss < 1.1 mOhm typ (25 C, 100 kHz)",
+   "volume_cm3_standard_orientation_derived": 0.98
+  },
+  {
+   "pn": "CKC33C454KWGLC(a)",
+   "C_uF": 0.45,
+   "tol_pct": 10,
+   "V_R_DC": 650,
+   "V_R_AC": null,
+   "I_rms_A": null,
+   "I_rms_f_kHz": null,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": null,
+   "volume_cm3": null,
+   "T_max_C": 150,
+   "C_bias_uF": null,
+   "A_per_uF": null,
+   "case": "3640",
+   "chips": 3,
+   "T_mm_standard": 7.7,
+   "T_mm_low_loss": 10.2,
+   "L_W_mm": [
+    9.3,
+    10.2
+   ],
+   "ESR_note": "3-chip: std < 2.5 mOhm, low-loss < 1.6 mOhm typ",
+   "volume_cm3_standard_orientation_derived": 0.73
+  },
+  {
+   "pn": "CKC33C304KWGLC(a)",
+   "C_uF": 0.3,
+   "tol_pct": 10,
+   "V_R_DC": 650,
+   "V_R_AC": null,
+   "I_rms_A": null,
+   "I_rms_f_kHz": null,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": [
+    9.3,
+    10.2,
+    5.1
+   ],
+   "volume_cm3": 0.48,
+   "T_max_C": 150,
+   "C_bias_uF": null,
+   "A_per_uF": null,
+   "case": "3640",
+   "chips": 2,
+   "ESR_note": "2-chip std < 2.5 mOhm typ, ESL < 1.5 nH"
+  },
+  {
+   "pn": "CKC21C404KWGLC(a)",
+   "C_uF": 0.4,
+   "tol_pct": 10,
+   "V_R_DC": 650,
+   "V_R_AC": null,
+   "I_rms_A": null,
+   "I_rms_f_kHz": null,
+   "I_rms_T_C": null,
+   "I_rms_table": null,
+   "ESR_mohm": null,
+   "dims_mm": null,
+   "volume_cm3": null,
+   "T_max_C": 150,
+   "C_bias_uF": null,
+   "A_per_uF": null,
+   "case": "2220",
+   "chips": 4,
+   "orientation": "low loss only",
+   "T_mm_low_loss": 5.0,
+   "ESR_note": "4-chip low-loss < 1.1 mOhm, ESL < 0.45 nH typ"
+  }
+ ]
+}

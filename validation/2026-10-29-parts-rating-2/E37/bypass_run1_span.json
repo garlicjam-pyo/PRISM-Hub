@@ -1,0 +1,116 @@
+{
+ "rows": [
+  {
+   "file": "E37_lin_IPB083N15N5LF",
+   "part": "IPB083N15N5LF",
+   "V_DSS": 150,
+   "R_on_mohm": 8.3,
+   "Z": 0.7,
+   "Z_src": "R_thJC(보수)",
+   "T_J": 883.6221139453461,
+   "T_J_max": 150,
+   "I_lim": 66,
+   "soa": [
+    {
+     "V_DS_V": 56,
+     "I_D_A": 5.6,
+     "t_s": 0.01,
+     "T_C_C": null,
+     "note": "Table 1 'I_pulse (V_DS = 56 V, t_p = 10 ms) 5.6 A' (314 W); T_C not printed in the row"
+    }
+   ],
+   "ok": false
+  },
+  {
+   "file": "E37_lin_IPB110N20N3LF",
+   "part": "IPB110N20N3LF",
+   "V_DSS": 200,
+   "R_on_mohm": 11,
+   "Z": 0.5,
+   "Z_src": "R_thJC(보수)",
+   "T_J": 659.730081389533,
+   "T_J_max": 150,
+   "I_lim": 61,
+   "soa": [
+    {
+     "V_DS_V": 56,
+     "I_D_A": 8.7,
+     "t_s": 0.01,
+     "T_C_C": null,
+     "note": "Table 1 'I_pulse (V_DS = 56 V, t_p = 10 ms) 8.7 A' (488 W); T_C not printed in the row"
+    }
+   ],
+   "ok": false
+  },
+  {
+   "file": "E37_lin_IXTH44N25L2",
+   "part": "IXTH44N25L2",
+   "V_DSS": 250,
+   "R_on_mohm": 75,
+   "Z": 0.31,
+   "Z_src": "R_thJC(보수)",
+   "T_J": 447.03265046151046,
+   "T_J_max": 150,
+   "I_lim": 44,
+   "soa": [
+    {
+     "V_DS_V": 250,
+     "I_D_A": 0.96,
+     "t_s": 2,
+     "T_C_C": 75,
+     "note": "Characteristics-table row 'SOA V_DS = 250 V, I_D = 0.96 A, T_C = 75 C, Tp = 2 s: 240 W'"
+    }
+   ],
+   "ok": false
+  },
+  {
+   "file": "E37_lin_IXTH58N25L2",
+   "part": "IXTH58N25L2",
+   "V_DSS": 250,
+   "R_on_mohm": 64,
+   "Z": 0.23,
+   "Z_src": "R_thJC(보수)",
+   "T_J": 357.47583743918517,
+   "T_J_max": 150,
+   "I_lim": 58,
+   "soa": [
+    {
+     "V_DS_V": 250,
+     "I_D_A": 1.3,
+     "t_s": 2,
+     "T_C_C": 75,
+     "note": "Characteristics-table row 'SOA V_DS = 250 V, I_D = 1.3 A, T_C = 75 C, Tp = 2 s: 326 W'"
+    }
+   ],
+   "ok": false
+  },
+  {
+   "file": "E37_lin_IXTK90N25L2",
+   "part": "IXTK90N25L2",
+   "V_DSS": 250,
+   "R_on_mohm": 36,
+   "Z": 0.13,
+   "Z_src": "R_thJC(보수)",
+   "T_J": 245.5298211612786,
+   "T_J_max": 150,
+   "I_lim": 90,
+   "soa": [
+    {
+     "V_DS_V": 250,
+     "I_D_A": 2.3,
+     "t_s": 5,
+     "T_C_C": 75,
+     "note": "Characteristics-table row 'SOA V_DS = 250 V, I_D = 2.3 A, T_C = 75 C, Tp = 5 s: 575 W'"
+    }
+   ],
+   "ok": false
+  }
+ ],
+ "input": {
+  "P_pk_W": 1119.460162779066,
+  "span_ms": 30.649,
+  "V_max": 25.715232865179804,
+  "I_max": 58.447921479431756,
+  "tag": "W460_240s_930_MX_L1"
+ }
+}
