@@ -462,6 +462,61 @@ def req():
     save_json(EID, "req", dict(rows=REQ))
 
 
+
+# ======================================================================================================
+# 표
+# ======================================================================================================
+def table():
+    def L(name):
+        try:
+            return load_json(EID, name)
+        except FileNotFoundError:
+            return None
+    rows = []
+    c = L("cfly")
+    if c:
+        b = c["best"]
+        rows.append(dict(no="Q1", item="C_fly 46.9 µF(P2 2차)", cand=b["pn"] if b else "-",
+                         stress="실효 %.1f A, %.1f V" % (I_CFLY, V_CFLY),
+                         value=("%d개, %.1f A, 위상당 %s cm³" % (b["n"], b["I_total"], None if b["vol_phase_cm3"] is None else round(b["vol_phase_cm3"])))
+                         if b else "통과 품목 없음", verdict="통과" if b else "불통과"))
+    k = L("clamp")
+    if k:
+        sel = k["selected"]
+        v = k["variants"][sel[1]]["switches"][sel[0]] if sel else None
+        rows.append(dict(no="Q2", item="V_A 클램프(P5 2차)", cand="%s, %s" % tuple(sel) if sel else "-",
+                         stress="E26 사건 32개, C_A 2.4 mF", value="전류 %.0f A, T_vj %.0f °C" % (v["i_max"], v["T_vj"]) if v else "-",
+                         verdict="통과(설계 변경)" if sel else "불통과"))
+    f = L("fs")
+    if f:
+        sm = f["summary"]
+        rows.append(dict(no="Q3", item="이중 고장 C_A 방전(F2·P7)", cand="R_dis " + ", ".join("%s Ω %d/4" % (r, v["n_pass"]) for r, v in sm.items()),
+                         stress="E29 F2 4사례", value="선택 %s" % f["selected_R_dis"], verdict="통과" if f["selected_R_dis"] else "불통과"))
+    b = L("bypass")
+    if b:
+        okl = [r["part"] for r in b["rows"] if r["ok"]]
+        rows.append(dict(no="Q4", item="소프트 투입 전용 선형 소자(P6 2차)", cand=", ".join(okl) if okl else "-",
+                         stress="%.0f W, %.2f ms" % (b["input"]["P_pk_W"], b["input"]["span_ms"]), value="통과 %d/%d" % (len(okl), len(b["rows"])),
+                         verdict="통과" if okl else ("조건부" if any(r["ok"] is None for r in b["rows"]) else "불통과")))
+    t = L("ctc")
+    if t:
+        okc = [r["part"] for r in t["rows"] if r["cases"]["W460_240s"]["ok"]]
+        rows.append(dict(no="Q5", item="W460 접촉기(P9 2차)", cand=", ".join(okc) if okc else "-", stress="470 V, 52.7 A",
+                         value="통과 %d/%d" % (len(okc), len(t["rows"])), verdict="통과" if okc else "불통과"))
+    a = L("ca")
+    if a:
+        bb = a["best"]
+        rows.append(dict(no="Q6", item="C_A 2.4 mF", cand=bb["part"] if bb else "-", stress="실효 %.1f A" % a["I_rms_worst"],
+                         value="%d개, %.0f A, %.0f cm³" % (bb["n"], bb["I_rms"], bb["vol_cm3"]) if bb else "-", verdict="통과" if bb else "불통과"))
+    r = L("lr")
+    if r:
+        rows.append(dict(no="Q7", item="L_r 864.6 nH(공심 추정)", cand="원통 공심 + Litz", stress="실효 %.1f A, 첨두 %.1f A" % (r["I_rms"], r["I_pk"]),
+                         value="%.1f회·%.0f mm, %.1f–%.1f W" % (r["N"], r["length_mm"], *r["P_W"]), verdict="요구"))
+    for x in rows:
+        print("  %-3s %-28s %-30s %-24s %-34s %s" % (x["no"], x["item"], x["cand"], x["stress"], x["value"], x["verdict"]))
+    save_json(EID, "table", dict(rows=rows))
+
+
 if __name__ == "__main__":
     for part in sys.argv[1:]:
         print("E37", part, "...", flush=True)
