@@ -12,6 +12,7 @@ Stage A를 25 kHz 설계 A25R(C\_A 2.4 mF)로 바꾼 뒤, 150 kHz 설계로 계�
 | E36/e25\_comparison.json, e25\_statements.json, e25\_motor\_boost.png | L2: 보조·충전 손실, 모터 승압, 손익분기, 감도, 결론 문장 대조 |
 | E36/e18\_R1\_value\_map.json, e18\_A25R\_value\_map.json, e18\_compare.json, 그림 2개 | L3: 가치 지도(R1 표·A25R 표)와 바뀐 칸 |
 | E36/e18\_A25R\_magnetics\_fix.json, E36\_magnetics\_fix.log | L3 정정(2026-10-29): 인덕터 저장에너지를 A25R 공진 인덕턴스(864.6 nH)로 다시 계산(`E36_magnetics_fix.py`). E36 원 파일은 144 nH 상수를 썼다. 판정 무관 |
+| E36/e25\_breakeven\_grid.json, E36\_breakeven\_grid.log | L2 정정(2026-10-29): 격자의 모든 모터 승압 조합보다 Stage A가 작아지는 상저항(`E36_breakeven_grid.py`). A25R 3.93·4.57·5.12 mΩ, 150 kHz 3.45·2.75·2.24 mΩ(640·800·920 V). 판정 무관 |
 | E36/e16\_static·concurrent·transition·sequence.json | D1: 충전 중 보조버스(R\_A 9.0 mΩ) |
 | E36/e23\_base.json, e23\_zbus.json | D2: R2 기본형 버스·48 V, 버스 임피던스(R\_A 9.0 mΩ, C\_A 2.4 mF) |
 | E36/e26\_noclamp.json | D3: 클램프 없는 충전 중 정지 8사건(C\_A 2.4 mF) |
