@@ -45,6 +45,38 @@ BASE = dict(
 )
 FR0 = 1 / (2 * np.pi * np.sqrt(BASE["Lr"] * BASE["Cfly"]))   # 공칭 공진주파수 [Hz]
 
+# (E32) 설계 묶음. 'R1_150k'는 위 BASE(E1–E31, 150 kHz)이고, 'A25'는 E31·docs/37의 수정안 (나)다.
+#   A25: 위치당 C4MS008075U2 2병렬(R_ds 125 °C 10.53 mΩ/2), f_r 25 kHz(√(L/C) 유지: L_r·C_fly 6배),
+#        출력용량 손실은 E_oss 대신 하드 스위칭 전이 손실 4·Q_oss,위치(V/2)·V/2·f_s(analyze, coss 키),
+#        게이트 에너지 2 × 278 nC × 22 V, 바디 다이오드 V_SD 4.5 V(데이터시트 175 °C, V_GS −4 V),
+#        적분 간격을 150 kHz와 같은 약 20 ns로(Nstep 2040: 25 kHz에서 340단계는 120 ns라 데드타임·영교차가 거칠다, TB25 진단).
+#   set_design(name)이 BASE를 그 값으로 바꾸고 FR0를 다시 계산한다(모듈 전역 T = 1/FR0를 쓰는 스크립트는 다시 계산해야 한다).
+DESIGNS = {
+    "R1_150k": dict(BASE, Nstep=340, coss=None),
+    "A25": dict(Cfly=7.8125e-6 * 6, Lr=1.441e-7 * 6, Rds=(8.0 + (11.8 - 8.0) * 100 / 150) * 1e-3 / 2, ESR=1.5e-3, RL=1e-3, Rmisc=1.5e-3, Vf=4.5,
+                Eoss=0.0, Qg_E=2 * 278e-9 * 22., tdead=100e-9, Nstep=2040,
+                coss=dict(Ctr=828e-12, Cer=510e-12, Vs=500., npar=2, device="C4MS008075U2")),
+}
+DESIGN = "R1_150k"
+
+
+def set_design(name):
+    """Stage A 설계 묶음을 바꾼다(BASE를 제자리에서 바꾸므로 BASE를 참조하는 다른 모듈에도 적용된다)."""
+    global FR0, DESIGN
+    BASE.clear(); BASE.update(DESIGNS[name])
+    FR0 = 1 / (2 * np.pi * np.sqrt(BASE["Lr"] * BASE["Cfly"]))
+    DESIGN = name
+    return FR0
+
+
+def qoss_pos(V):
+    """(E32) 위치당 출력 전하 Q_oss(V) [C]: C_o(tr)·C_o(er) 거듭제곱 근사(E31과 같음). coss가 없으면 None."""
+    c = BASE.get("coss")
+    if not c:
+        return None
+    r = c["Cer"] / (2 * c["Ctr"]); m = r / (1 - r)
+    return c["npar"] * c["Ctr"] * c["Vs"] * (V / c["Vs"]) ** m
+
 
 def mround(x):
     """MATLAB round()와 같은 반올림(0.5는 0에서 먼 쪽). numpy·파이썬 round는 짝수 쪽으로 반올림하므로
@@ -75,7 +107,7 @@ def draw_tolerance(N, tol, rs):
 
 
 def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, tol=None, rs=None,
-              R_in=0.0, C_in=100e-6, ncyc=60, Nstep=340, vC0=None, Vbus0=None, en=None,
+              R_in=0.0, C_in=100e-6, ncyc=60, Nstep=None, vC0=None, Vbus0=None, en=None,
               td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False, unarmed_stop="max", mgr=None, chg=None, fault=None,
               idle=0.0):
     """N위상 Stage A 어레이를 ncyc 주기 동안 적분한다.
@@ -128,6 +160,7 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     C, L, R = draw_tolerance(N, tol, rs)
     en = np.ones(N, bool) if en is None else np.array(en, bool)
     Vf = BASE["Vf"]; td = BASE["tdead"]
+    Nstep = int(Nstep or BASE.get("Nstep", 340))                   # (E32) 설계 묶음의 기본 단계 수(R1 340)
     fs = fratio * FR0; T = 1 / fs; dt = T / Nstep; n = ncyc * Nstep
     ndead = int(mround(td / dt)); half = Nstep // 2; ndet = int(mround(td_det / dt))
     nwait = ndead + int(mround(idle / dt))                         # (E31) 휴지 시간 포함 대기(idle = 0이면 ndead)
@@ -459,7 +492,10 @@ def analyze(r, ncyc_last=10):
         fsk = 1 / (np.mean(np.diff(onk)) * r["dt"]) if len(onk) > 2 else r["fs"]
         Pcond = np.mean(ik ** 2) * r["R"][k]
         Pdiode = np.mean((sk == 0) * 2 * BASE["Vf"] * np.abs(ik))
-        Psw = 4 * BASE["Eoss"] * fsk + 4 * BASE["Qg_E"] * fsk
+        if BASE.get("coss"):                                 # (E32) 하드 스위칭 출력용량 손실(노드 전압 = 버스 평균)
+            Vh = float(np.mean(Lb)); Psw = 4 * qoss_pos(Vh) * Vh * fsk + 4 * BASE["Qg_E"] * fsk
+        else:
+            Psw = 4 * BASE["Eoss"] * fsk + 4 * BASE["Qg_E"] * fsk
         ph.append(dict(zcs=ioff / max(Ipk, 1e-6), Ipk=Ipk, Iavg=float(np.mean(Lio[:, k])),
                        fs=fsk, fr_ratio=fsk * 2 * np.pi * np.sqrt(r["L"][k] * r["C"][k]),
                        Ploss=Pcond + Pdiode + Psw))
