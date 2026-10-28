@@ -105,6 +105,8 @@ MGR = dict(I_off=15., I_on=22., Ipk_on=36., tau=2e-6, t_dwell=100e-6,           
            t_hold=100e-6,    # 시작 유지: static 1차 실행(유지 없음)에서 시작 과도로 모듈을 더해 S3 불통과 → 추가(docs/34)
            tau_m=20e-6)      # 모듈 수 판단용 필터: static 2차 실행(τ 2 µs)에서 위상 펄스 리플로 60 A 평균이 75 A까지 흔들려 추가
 
+T_JUDGE = 0.3e-3                           # 과도 판정 시작 [s](E33은 A25 시작 유지에 맞춰 바꾼다)
+
 DES_V = (540., 800., 1008.)
 DES_I = (5., 7.5, 10., 15., 20., 25., 30., 40., 50., 60., 70., 80., 93.75)       # 모듈 출력전류 [A]
 
@@ -293,8 +295,8 @@ def run_case(name, seed=None, ref=False):
 def case_metrics(name, r, b, seed=None):
     """과도 사례 판정(T1–T4). r = 관리기 켬, b = 전부 켬(같은 프로파일·공차). TB22 기준값도 이 함수로 만든다."""
     c = CASES[name]
-    t = r["t"]; w = t > 0.3e-3
-    to = E24.turnoffs(r, 0.3e-3)
+    t = r["t"]; w = t > T_JUDGE
+    to = E24.turnoffs(r, T_JUDGE)
     bad = [x for x in to if abs(x[2]) > max(0.05 * x[3], I_ABS)]
     pk = float(np.abs(r["i"][w]).max()); pkb = float(np.abs(b["i"][w]).max())
     vmin, vmax = float(r["vb"][w].min()), float(r["vb"][w].max())
@@ -308,7 +310,7 @@ def case_metrics(name, r, b, seed=None):
         pev[m] = [(round(float(t[k + 1]) * 1e3, 4), int(mm[k + 1])) for k in cm]
     L = dict(T1=len(bad) == 0, T2=pk <= p_rated(seed), T3=abs(vmin - bmin) <= 1.0 and abs(vmax - bmax) <= 1.0,
              T4=int(na[-1]) == c["n_end"] and n_add <= c["add_max"] and n_rem <= c["rem_max"] and r["n_mcancel"] == 0)
-    tob = E24.turnoffs(b, 0.3e-3)
+    tob = E24.turnoffs(b, T_JUDGE)
     badb = [x for x in tob if abs(x[2]) > max(0.05 * x[3], I_ABS)]
     worst = max(to, key=lambda x: abs(x[2]) - max(0.05 * x[3], I_ABS))
     return dict(case=name, V=c["V"], limits=L, passed=all(L.values()), P_rated=p_rated(seed), events=ev, n_add=n_add, n_rem=n_rem,

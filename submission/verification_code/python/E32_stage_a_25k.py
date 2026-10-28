@@ -231,9 +231,15 @@ class StageAs(E15.StageA):
 
 
 def loss():
-    jobs = [(V, i, 1.) for V in E15.VGRID for i in E15.IGRID] + [(V, 375. / 8, -1.) for V in E15.VGRID]
-    with Pool(workers(), initializer=_init) as p:
-        res = p.map(_e15_point, jobs)
+    import os
+    cache = outdir(EID) / "loss_grid_raw.json"
+    if cache.exists() and os.environ.get("E32_RECOMPUTE") != "1":
+        res = json.loads(cache.read_text(encoding="utf-8"))
+    else:
+        jobs = [(V, i, 1.) for V in E15.VGRID for i in E15.IGRID] + [(V, 375. / 8, -1.) for V in E15.VGRID]
+        with Pool(workers(), initializer=_init) as p:
+            res = p.map(_e15_point, jobs)
+        save_json(EID, "loss_grid_raw", res)
     fw = [r for r in res if r["sign"] > 0]
     T = dict(P=np.array([r["ploss_ph"] for r in fw]).reshape(len(E15.VGRID), len(E15.IGRID)),
              D=np.array([r["dvA"] for r in fw]).reshape(len(E15.VGRID), len(E15.IGRID)),
@@ -267,7 +273,7 @@ def loss():
             got = float(T["P"][i800][j])
             d0.append(dict(V=Vrow, iph=iph, pred=pred, got=got, ok=abs(got - pred) <= max(0.05 * pred, 1.0)))
         chp = (ct["ch"]["Pc"] + ct["ch"]["Pd"]) + fix(800.) * ct["ch"]["fs"] * 25e3 / FR_R1
-        chg = T["charge"][800.]["ploss_ph"]
+        Vs = sorted(T["charge"]); chg = float(np.interp(800., Vs, [T["charge"][v]["ploss_ph"] for v in Vs]))
         d0.append(dict(V=800., iph=46.875, pred=chp, got=chg, ok=abs(chg - chp) <= max(0.05 * chp, 1.0)))
     out["D0"] = d0
     verdict("(D0) A25 직접 모의 위상당 손실이 E31 (나) 예측과 5 % 또는 1 W 안", all(x["ok"] for x in d0) and len(d0) > 0,
