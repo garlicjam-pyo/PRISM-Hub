@@ -1,0 +1,26 @@
+{
+ "part": "G9EK-1 (G9EK-1-U / G9EK-1-UTU)",
+ "maker": "OMRON (Electronic Components, rebranded Aratas in 2026)",
+ "title": "G9EK-1 DC Power Relays - Gasless High-capacity DC Power Relay, Cat. No. J269-E1-03, date code 1024 (0823), (c)2023-2024",
+ "url": "https://farnell.com/datasheets/4451659.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet/product page text with a fetch tool (no curve digitized). Distributor-hosted (Farnell) copy of the OMRON English datasheet; values cross-checked against the Japanese datasheet CDHA-033C (2024-12) hosted by DigiKey (https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/6611/G9EK-1-UTU%20DC12_Japan_Datasheet.pdf), which gives identical numbers. Electrical endurance is resistive load at 60 ops/h; switching/interruption measured with a varistor across the coil. Rows do not state forward/reverse; the datasheet highlights '500 VDC, 120 A high capacity with bidirectional' switching, and its contact-polarity warning names only G9EA/G9EC/G9EH/G9EJ, not G9EK. Mounting direction is restricted. Status not stated in the datasheet; the manufacturer product page (components.omron.com, now redirecting to aratas.com) could not be fetched. No automotive qualification was seen in the fetched text.",
+ "status": "Not stated (manufacturer product page not reachable)",
+ "ratings": {
+  "V_rated_V": 500,
+  "V_rated_note": "Rated load (resistive) 120 A at 500 VDC; maximum switching voltage 500 VDC; maximum switching current 120 A",
+  "I_carry_A": 120,
+  "electrical_life": [
+   {"V": 500, "I_A": 120, "ops": 1000, "note": "resistive, min.; direction not specified (bidirectional per datasheet)"},
+   {"V": 500, "I_A": 60, "ops": 6000, "note": "resistive, min.; direction not specified (bidirectional per datasheet)"}
+  ],
+  "break_max": [
+   {"V": 400, "I_A": 500, "ops": 1, "note": "maximum interruption current, min. 1 operation"}
+  ],
+  "mech_life_ops": 200000,
+  "t_operate_ms_max": 50,
+  "t_release_ms_max": 30,
+  "coil": "12 VDC (G9EK-1-U: 333 mA, 36 ohm; G9EK-1-UTU: 250 mA, 48 ohm; max 16 V)",
+  "polarized": false
+ }
+}

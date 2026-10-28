@@ -1,0 +1,31 @@
+{
+ "part": "LEV100",
+ "maker": "TE Connectivity (KILOVAC)",
+ "title": "KILOVAC LEV100 Series 900 Vdc Contactor, doc 6-1773450-9, date code 04-08 ((c)2008 Tyco Electronics)",
+ "url": "https://zoro.com/static/cms/enhanced_pdf/Waldom Electronics_ddecontrolleractionshowdocdociddatasheet7f617734509xxlev100xxdcaa3d.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet/product page text with a fetch tool (no curve digitized). Distributor-hosted (Waldom/Zoro) copy of the TE PDF; te.com direct download blocked by the network proxy. 900 VDC is the 'Main Contacts Switching (max)' voltage rating, but every hot-switching row is at 400 Vdc ('Hot Switching Performance (Polarity sensitive)'); no make/break rating at 450-900 V is stated in text. Load-life vs resistive power is a graph only and was not read. Release time 10 ms is printed without a 'Max.' label. Continuous 100 A per Note 1 depends on conductor size. Status from TE product spec pages: 4-1618391-0 'ACTIVE' (printed 02/21/2024, copy at https://atta.szlcsc.com/upload/public/pdf/source/20240415/6EA75236CED06679C8DBF59056DD05F9.pdf) and 4-1618391-1 '有效' (active, printed 05/10/2025, https://www.te.com.cn/chn-zh/product-4-1618391-1.datasheet.pdf). Applications listed include 'Automotive battery switching and backup'.",
+ "status": "Active (TE product pages for 4-1618391-0 / -1)",
+ "ratings": {
+  "V_rated_V": 900,
+  "V_rated_note": "Main contacts switching (max) 900 VDC; all tabulated life rows at 400 Vdc",
+  "I_carry_A": 100,
+  "I_carry_note": "Continuous 100 A (depends on conductor size); 200 A for 3 min at +40 C with 8.4 mm2 (#8 AWG)",
+  "electrical_life": [
+   {"V": 400, "I_A": 50, "ops": 50000, "note": "make/break @ +400 Vdc (forward polarity)"},
+   {"V": 400, "I_A": 100, "ops": 6000, "note": "make/break @ +400 Vdc (forward polarity)"},
+   {"V": 400, "I_A": 100, "ops": 1000, "note": "make/break @ -400 Vdc as printed (reverse polarity)"},
+   {"V": 400, "I_A": 200, "ops": 500, "note": "make/break @ +400 Vdc (forward polarity)"}
+  ],
+  "break_max": [
+   {"V": 400, "I_A": 1000, "ops": 25, "note": "break only @ +400 Vdc"}
+  ],
+  "make_only": "600 A make only, 25 cycles",
+  "short_circuit_carry": "1,250 A (1/2 cycle, 60 Hz) through closed contacts",
+  "mech_life_ops": 1000000,
+  "t_operate_ms_max": 25,
+  "t_release_ms_max": 10,
+  "coil": "12 / 24 / 48 VDC nominal (max 16 / 28 / 52 VDC; 5.5 / 6.0 / 6.0 W)",
+  "polarized": true
+ }
+}
