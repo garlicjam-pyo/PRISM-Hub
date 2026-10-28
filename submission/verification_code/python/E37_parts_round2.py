@@ -366,7 +366,9 @@ def bypass():
     P6 = load_json("E34", "prot")
     soft = [r for r in P6["rows"] if r["kind"] == "soft"]
     w = max(soft, key=lambda r: r["dT_one"])
-    P_pk, span, vmax, imax = w["P_byp_pk_W"], w["p_span_ms"] * 1e-3, P6["P6"]["V_max"], w["ib_max"]
+    tt = np.array(w["trace"]["t"]); pp = np.array(w["trace"]["p"]); big = tt[pp >= 0.1 * pp.max()]
+    span = float(big.max() - big.min()) * 1e-3              # 펄스 폭 = 첨두 10 % 이상 구간(E34 문서의 '약 1.8 ms'; p > 1 W 구간은 뒤 꼬리 포함)
+    P_pk, vmax, imax = w["P_byp_pk_W"], P6["P6"]["V_max"], w["ib_max"]
     out = []
     for fn, d in cands("E37_lin_").items():
         rt = d.get("ratings", {})
@@ -405,7 +407,8 @@ def ctc():
         res = {}
         for case, v in p9.items():
             up, ib = v["V_bus_upper"], v["i_break_max"]
-            rows = [x for x in (rt.get("electrical_life") or []) + (rt.get("break_max") or [])
+            # 기준은 '전기적 수명 정격'이다. 단발 최대 차단(break_max)은 넣지 않는다(1차 실행에서 넣은 것을 고침, 실행 경과)
+            rows = [x for x in (rt.get("electrical_life") or [])
                     if x.get("V") is not None and x.get("I_A") is not None and x["V"] >= up and abs(x["I_A"]) >= ib]
             okv = rt.get("V_rated_V") is not None and rt["V_rated_V"] >= up
             res[case] = dict(V_upper=up, i_break=ib, ok_V=bool(okv), rows=rows, ok=bool(okv and rows))
