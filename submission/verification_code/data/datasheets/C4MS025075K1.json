@@ -1,0 +1,55 @@
+{
+ "part": "C4MS025075K1",
+ "maker": "Wolfspeed",
+ "title": "C4MS025075K1 750 V, 25 mOhm silicon carbide MOSFET data sheet (Rev. 1)",
+ "url": "https://assets.wolfspeed.com/uploads/2026/05/Wolfspeed_C4MS025075K1_data_sheet.pdf",
+ "accessed": "2026-10-28",
+ "method": "Table values copied from the datasheet text (electrical characteristics and maximum ratings tables). No curve was digitized. Values the datasheet does not state are marked null; derived values are in 'derived'.",
+ "ratings": {
+  "V_DS_V": 750,
+  "I_D_25C_A": 85,
+  "I_D_100C_A": 62,
+  "I_D_note": "V_GS = 18 V, T_J <= 175 C",
+  "I_DM_A": 182,
+  "I_DM_note": "T_C = 25 C, t_p limited by T_J max",
+  "T_J_max_C": 175
+ },
+ "electrical": {
+  "R_DSon_25C_typ_mOhm": 25.0,
+  "R_DSon_25C_max_mOhm": 32.5,
+  "R_DSon_175C_typ_mOhm": 36.8,
+  "R_DSon_125C_mOhm": null,
+  "R_DSon_cond": "V_GS = 18 V, I_D = 26 A",
+  "C_iss_pF": 2126,
+  "C_oss_pF": 130,
+  "C_rss_pF": 4.9,
+  "C_cond": "V_GS = 0 V, V_DS = 500 V, f = 100 kHz",
+  "C_o_er_pF": 162,
+  "C_o_tr_pF": 259,
+  "C_o_range_V": [
+   0,
+   500
+  ],
+  "E_oss_uJ": 20.5,
+  "E_oss_note": "Fig. 16 value; 0.5 x C_o(er) x 500 V^2 = 20.3 uJ",
+  "Q_G_nC": 84,
+  "Q_GS_nC": 24,
+  "Q_GD_nC": 29,
+  "Q_G_cond": "V_DS = 500 V, V_GS = -4/18 V, I_D = 26 A",
+  "V_GS_on_V": [
+   15,
+   18
+  ],
+  "V_GS_off_V": [
+   -5,
+   0
+  ],
+  "V_SD_V": 5.1,
+  "V_SD_cond": "V_GS = -4 V, I_SD = 13 A, 25 C",
+  "Q_rr_nC": 304,
+  "Q_rr_cond": "T_J = 175 C, I_S = 26 A"
+ },
+ "thermal": {
+  "R_thJC_CperW": 0.49
+ }
+}

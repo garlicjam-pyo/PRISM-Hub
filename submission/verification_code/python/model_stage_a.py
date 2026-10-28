@@ -76,7 +76,8 @@ def draw_tolerance(N, tol, rs):
 
 def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, tol=None, rs=None,
               R_in=0.0, C_in=100e-6, ncyc=60, Nstep=340, vC0=None, Vbus0=None, en=None,
-              td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False, unarmed_stop="max", mgr=None, chg=None, fault=None):
+              td_det=20e-9, i_thr=0.5, shed=None, bus=None, dead_fix=False, unarmed_stop="max", mgr=None, chg=None, fault=None,
+              idle=0.0):
     """N위상 Stage A 어레이를 ncyc 주기 동안 적분한다.
 
     Iload     : 버스 부하전류 [A]. 음수면 역방향(버스 → 배터리) 전력.
@@ -114,6 +115,8 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     fault     : (E30) 모듈 고장 [(t_f, m), ...]. 간격 k·dt ≥ t_f(간격 번호 round(t_f/dt))에서 모듈 m(0부터)의 위상을 바로
                 멈추고(구간 0, 남은 전류는 다이오드로 소멸) 관리기 후보에서 영구히 뺀다(mgr_fault). mgr가 있어야 한다.
                 None이면 이전과 같다.
+    idle      : (E31) 휴지 시간 [s]. zcp에서 턴오프 뒤 데드타임에 이 시간을 더 기다린 다음 반주기를 시작한다(경부하 스위칭
+                주파수 저감 참고 계산용). 0(기본)이면 이전과 같다.
     mode      : 'fixed'(고정 타이밍) 또는 'zcp'(자기발진 영교차 추종)
     fratio    : 스위칭 주파수 / 공칭 공진주파수 (zcp에서는 적분 간격을 정하는 기준 주기로만 쓴다)
     tol, rs   : 부품 공차 {'C','L','R'}와 난수 생성기(matlab_rng)
@@ -127,6 +130,7 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
     Vf = BASE["Vf"]; td = BASE["tdead"]
     fs = fratio * FR0; T = 1 / fs; dt = T / Nstep; n = ncyc * Nstep
     ndead = int(mround(td / dt)); half = Nstep // 2; ndet = int(mround(td_det / dt))
+    nwait = ndead + int(mround(idle / dt))                         # (E31) 휴지 시간 포함 대기(idle = 0이면 ndead)
     off = mround(np.arange(N) * (Nstep / 2) / N).astype(int)       # 인터리빙 오프셋 T/(2N)
 
     # 초기조건: 정상상태 근처(v_C = V_bus = V_bat/2). 프리차지 시험은 0 V에서 시작.
@@ -211,7 +215,7 @@ def sim_array(N=8, Vbat=788., Iload=375., Cbus=400e-6, mode="zcp", fratio=1.0, t
             log_na[k] = M["nact"]; log_mm[k] = M["mmode"]; log_if[k] = M["If"]; log_chg[k] = cg
         if mode == "zcp":
             # 데드타임이 끝난 위상은 다음 구간(1↔2 교대)을 시작한다.
-            start = (st == 0) & (tmr >= ndead)
+            start = (st == 0) & (tmr >= nwait)
             if shed is not None and S["blocked"]:
                 start[sh["sh"]] = False                              # 셰딩된 위상은 시작하지 않는다
             if mgr is not None:
