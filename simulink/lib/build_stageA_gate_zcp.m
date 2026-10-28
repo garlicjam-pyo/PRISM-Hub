@@ -16,6 +16,7 @@ function build_stageA_gate_zcp(sys, pos, T, phases, opt)
 %   opt.mgr(선택, TB22): true면 4모듈 게이트 ctrl/prism_gate_stageA_zcpm.m(모듈 관리기 + 모듈별 위상 셰딩 + 방향 반전 처리)를
 %            쓴다. 파라미터는 T.gateA_zcpm_prm(21개), 충전 요청은 태그 opt.chgTag(기본 'chg_req')로 받고, 셋째 출력
 %            [동작 모듈 수; 모듈 모드 4; 필터한 전체 출력전류; 취소 수]는 태그 stA_mgr로 내보낸다.
+%            opt.gateFile(TB24)을 함께 주면 그 게이트 함수를 쓴다(prism_gate_stageA_zcpf.m: 모듈 고장 처리, 파라미터 23개).
 
 if nargin < 5, opt = struct(); end
 shed = isfield(opt, 'shed') && opt.shed;
@@ -57,7 +58,9 @@ else
 end
 sl_add(gs, 'simulink/Sources/Constant', 'phase_off', [230 380 330 400], 'Value', [T '.gateA_off']);
 if mgr
-    sl_mfunc(gs, 'StageA_ZCP_Gate', [380 60 540 460], 'prism_gate_stageA_zcpm.m');
+    gfm = 'prism_gate_stageA_zcpm.m';               % (TB24) opt.gateFile = 'prism_gate_stageA_zcpf.m'(모듈 고장 처리, 파라미터 23개)
+    if isfield(opt, 'gateFile') && ~isempty(opt.gateFile), gfm = opt.gateFile; end
+    sl_mfunc(gs, 'StageA_ZCP_Gate', [380 60 540 460], gfm);
     sl_add(gs, 'simulink/Signal Routing/Goto', 'stA_mgr', [580 480 680 500], 'GotoTag', 'stA_mgr', 'TagVisibility', 'global');
     sl_line(gs, 'StageA_ZCP_Gate/3', 'stA_mgr/1');
 elseif shed

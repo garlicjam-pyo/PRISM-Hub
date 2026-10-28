@@ -121,7 +121,8 @@ def metrics(name, r, n0, seed=None):
     pr = E28.p_rated(seed)
     lim_pk = pr if c["kind"] == "drive" else PK_CHG * pr
     to = E24.turnoffs(r, T0)
-    to_ok = [x for x in to if not (x[0] in fph and x[1] >= t[kf] - 0.5 * dt)]
+    # 고장 모듈의 강제 턴오프는 마지막 도통 표본(간격 kf − 1)에 기록된다 → 그 표본부터 뺀다
+    to_ok = [x for x in to if not (x[0] in fph and x[1] >= t[kf] - 1.5 * dt)]
     bad = [x for x in to_ok if abs(x[2]) > max(0.05 * x[3], E28.I_ABS)]
     w = t > T0
     I = np.abs(r["i"]).astype(float)
@@ -159,7 +160,7 @@ def metrics(name, r, n0, seed=None):
     return dict(case=name, V=c["V"], kind=c["kind"], seed=seed, limits=F, passed=all(F.values()), P_rated=pr, pk_limit=lim_pk,
                 phase_peak=pk_h, n_turnoff=len(to_ok), n_bad=len(bad), ioff_max=max((abs(x[2]) for x in to_ok), default=0.),
                 worst=dict(phase=worst[0], t_ms=worst[1] * 1e3, i_off=worst[2], pk=worst[3]),
-                i_fault=[float(r["i"][kf, k]) for k in fph], vA_pre=vpre, vA=[vmin, vmax], events=ev, n0=n0, n_end=int(na[-1]),
+                i_fault=[float(r["i"][kf - 1, k]) for k in fph], vA_pre=vpre, vA=[vmin, vmax], events=ev, n0=n0, n_end=int(na[-1]),
                 restart=restart, n_mcancel=int(r["n_mcancel"]), t_rep_us=None if t_rep is None else t_rep * 1e6,
                 steady=dict(pk=max((p["Ipk"] for p in hp), default=0.), Iavg=[float(p["Iavg"]) for p in hp],
                             share=float(iav.max() / iav.mean()) if iav.mean() > 0 else None,
@@ -252,8 +253,8 @@ def figures():
         a.set_title("(%s) %s: 위상 전류" % ("a" if col == 0 else "b", "800 V 주행 15 kW, 모듈 1 고장" if col == 0 else "800 V 충전 375 A, 모듈 1 고장"))
         a.set_xlabel("시간 [ms]"); a.set_ylabel("전류 [A]"); a.legend(fontsize=7, ncol=2)
         b = ax[1, col]
-        b.plot(t, r["vb"], color=COLOR[0], lw=0.8, label="V_A")
-        b2 = b.twinx(); b2.step(t, r["nact"], color=COLOR[3], lw=1, where="post", label="동작 모듈 수"); b2.set_ylim(0, 4.5)
+        b.plot(t, r["vb"], color=COLOR["blue"], lw=0.8, label="V_A")
+        b2 = b.twinx(); b2.step(t, r["nact"], color=COLOR["red"], lw=1, where="post", label="동작 모듈 수"); b2.set_ylim(0, 4.5)
         b.axvline(T_F * 1e3, color="k", ls=":", lw=0.8)
         b.set_xlabel("시간 [ms]"); b.set_ylabel("V_A [V]"); b2.set_ylabel("동작 모듈 수")
         b.set_title("(%s) V_A와 동작 모듈 수" % ("c" if col == 0 else "d"))
@@ -274,7 +275,7 @@ def figures():
         a.bar(np.arange(len(xs)) + (j - 1.5) * 0.2, [x["steady"]["pk"] for x in xs], 0.2, label="공칭" if s is None else "공차 %d" % s)
     a.set_xticks(range(4)); a.set_xticklabels([x["case"][:2] for x in sorted([x for x in chg if x["seed"] is None],
                                                                               key=lambda x: names.index(x["case"]))])
-    a.set_ylabel("3모듈 충전 정상 위상 첨두 [A]"); a.set_title("(f) 3모듈 375 A 정상(마지막 10주기) 위상 첨두"); a.legend(fontsize=7)
+    a.set_ylabel("3모듈 충전 정상 위상 첨두 [A]"); a.set_title("(f) 3모듈 375 A 정상(마지막 10주기) 위상 첨두"); a.legend(fontsize=7, loc="lower right")
     fig.tight_layout()
     p = outdir(EID) / "E30_module_fault.png"
     fig.savefig(p, dpi=130); print("  → 저장:", p)
