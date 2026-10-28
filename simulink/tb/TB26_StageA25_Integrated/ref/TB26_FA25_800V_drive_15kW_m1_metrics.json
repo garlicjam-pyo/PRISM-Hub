@@ -1,0 +1,22 @@
+{
+ "passed": true,
+ "limits": {
+  "F1": true,
+  "F2": true,
+  "F3": true,
+  "F4": true
+ },
+ "events": [],
+ "phase_peak": 35.1200065612793,
+ "vA_pre": 399.6620178222656,
+ "vA": [
+  399.2127685546875,
+  400.3233947753906
+ ],
+ "ioff_max": 0.49946069717407227,
+ "n_turnoff": 120,
+ "t_rep_us": 0.0,
+ "n_end": 1,
+ "loss_ng_W": 73.80299407772924,
+ "model": "FA_800V_drive_15kW_m1"
+}

@@ -54,6 +54,20 @@
       짧으면 그림의 펄스 에너지 곡선과 대조해야 한다), 넘으면 불통과.
   P9: 팩 등급별 (V) 버스 상한 ≤ 정격 전압 450 V, (I) 개방 순간 전류 최대 ≤ 80 A(450 V 전기적 수명 정격 전류) → 둘 다면 통과
 
+■ 실행 경과와 결과(2026-10-28, 기준은 바꾸지 않았다)
+  실행 경과: stagea 1차는 E33 transient·fault 결과 파일의 열쇠 이름(rows가 아니라 cases)을 잘못 읽어 두 결과가 첨두 출처에서
+            빠졌다(stagea_run1_E33key.json). 읽기 코드만 고쳐 다시 실행했다. 판정은 같았고 소자 첨두·L_r 요구가 커졌다.
+  P1 통과: 차단 518 V(한도 600), 소자 첨두 93.1 A(위상 169.3 A, E33 MF 사전 기동 없는 충전 — 금지 조건; 고장 최대는 119.6 A),
+           가장 뜨거운 위치 19.2 W → 소자 10.6 W → T_J 101.7 °C
+  P2 불통과: 위상 실효 공칭 52.5·최악 60.9 A → 1.30 A/µF 필요. ± 5 % 안 최대 46 µF·44.1 A(10 µF × 3 + 16 µF, 600 V).
+           전류만 맞추면 10 µF × 6 = 60 µF.
+  P3 요구: I_sat ≥ 203 A(금지 조건 MF 제외 시 144 A), 실효 60.9 A, 865 nH
+  P4 조건부 통과: 최대 6987 J ≤ 891SP 15 kJ(< 10 ms 기준, 1 Ω 허용치 제조사 확인)
+  P5 불통과: 클램프가 29–40 kHz로 켜고 꺼진다(사건당 최대 1599번). 보수 계산 T_vj 334–405 °C, 전류 469 A > 450 A
+  P6 불통과: 소프트 투입(W460 930 V, 0.75 J, 약 1.8 ms) 소자 1개 176 °C(같은 몫 138 °C)
+  P7 통과: 소자 32.7 A, T_J 103 °C.  P8 조건부 통과: 53.3 J/60 ms ≤ 75 J/0.1 s(짧은 펄스 곡선 대조 필요)
+  P9: W460 불통과(버스 470 V > 450 V), W410 통과(420 V, 70.7 A)
+
 ■ 실행   python E34_parts_rating.py clamp prot stagea table figures   (clamp·prot 약 15분, stagea 약 20분, 2코어)
 ■ 결과   results/E34/clamp.json, prot.json, stagea.json, table.json, table.csv, E34_parts_rating.png
 """
@@ -328,7 +342,8 @@ def stagea():
     pk = dict(E32_rated=max(x["Ipk"] for x in load_json("E32", "rated")["rows"]))
     for nm in ("static", "transient", "fault"):
         try:
-            rr = load_json("E33", nm)["rows"]
+            dd = load_json("E33", nm)
+            rr = dd["rows"] if "rows" in dd else dd["cases"]          # static은 rows, transient·fault는 cases
             pk["E33_" + nm] = max(x["phase_peak"] for x in rr)
         except Exception as e:                                       # noqa: BLE001
             pk["E33_" + nm] = None; print("  (E33 %s 없음: %s)" % (nm, e))
@@ -428,10 +443,8 @@ def table():
 
 
 def figures():
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-    plt.rcParams["font.family"] = ["NanumGothic", "DejaVu Sans"]
+    from plotstyle import korean
+    plt = korean()
     c = load_json(EID, "clamp"); p = load_json(EID, "prot"); s = load_json(EID, "stagea")
     fig, ax = plt.subplots(2, 3, figsize=(15, 8.4))
     # (a) 클램프 확대
@@ -443,8 +456,10 @@ def figures():
     # (b) 클램프 사건별 IGBT T_vj
     a = ax[0, 1]
     rr = c["rows"]
-    a.scatter([r["E_clamp_J"] for r in rr], [r["Tvj_C"] for r in rr], c=["C0" if r["arch"] == "R2" else "C1" for r in rr], s=18)
-    a.axhline(150, color="k", ls="--", lw=.8); a.set_xlabel("저항 에너지 [J]"); a.set_ylabel("IGBT T_vj(보수) [°C]")
+    for arch, col in (("R2", "C0"), ("R2W", "C1")):
+        q = [r for r in rr if r["arch"] == arch]
+        a.scatter([r["E_clamp_J"] for r in q], [r["Tvj_C"] for r in q], color=col, s=18, label=arch)
+    a.axhline(150, color="k", ls="--", lw=.8); a.legend(fontsize=7); a.set_xlabel("저항 에너지 [J]"); a.set_ylabel("IGBT T_vj(보수) [°C]")
     a.set_title("(b) 클램프 사건 32개: 저항 에너지와 스위치 온도")
     # (c) 바이패스·H-브리지 Z_th
     a = ax[0, 2]

@@ -1,0 +1,121 @@
+{
+ "rows": [
+  {
+   "id": "P1",
+   "part": "Stage A 스위치",
+   "candidate": "C4MS008075U2 × 2(위치당)",
+   "item": "차단 전압",
+   "stress": "518 V",
+   "rule": "≤ 0.8 × 750 = 600 V",
+   "verdict": "통과"
+  },
+  {
+   "id": "P1",
+   "part": "",
+   "candidate": "",
+   "item": "소자 첨두",
+   "stress": "93.1 A(위상 169.3 A)",
+   "rule": "≤ 0.5 × I_DM = 310 A",
+   "verdict": "통과"
+  },
+  {
+   "id": "P1",
+   "part": "",
+   "candidate": "",
+   "item": "접합 온도(정격 충전, 가장 뜨거운 위치)",
+   "stress": "10.6 W → 101.7 °C",
+   "rule": "T_C 100 °C, ≤ 150 °C",
+   "verdict": "통과"
+  },
+  {
+   "id": "P2",
+   "part": "플라잉 커패시터 46.9 µF",
+   "candidate": "TDK B3277x 조합",
+   "item": "실효전류·용량",
+   "stress": "52.5(최악 60.9) A, 1.30 A/µF",
+   "rule": "C ± 5 % 안 조합의 Σ I_rms ≥ 최악",
+   "verdict": "불통과"
+  },
+  {
+   "id": "P3",
+   "part": "공진 인덕터 864.6 nH",
+   "candidate": "맞춤(후보 없음)",
+   "item": "포화 전류 요구",
+   "stress": "I_sat ≥ 203 A, 실효 60.9 A",
+   "rule": "요구만",
+   "verdict": "판정 없음"
+  },
+  {
+   "id": "P4",
+   "part": "V_A 클램프 저항 1 Ω",
+   "candidate": "Ohmite 891SP",
+   "item": "사건 에너지",
+   "stress": "6987 J, V_A 469.4 V",
+   "rule": "≤ 15000 J(< 10 ms 기준)",
+   "verdict": "조건부 통과"
+  },
+  {
+   "id": "P5",
+   "part": "V_A 클램프 스위치",
+   "candidate": "FF450R12ME4P",
+   "item": "접합 온도(보수)",
+   "stress": "켬 1599번, 평균 29–40 kHz → 405 °C",
+   "rule": "T_H 65 °C, R_thJH, ≤ 150 °C",
+   "verdict": "불통과"
+  },
+  {
+   "id": "P5",
+   "part": "",
+   "candidate": "",
+   "item": "전류·전압",
+   "stress": "469 A, 469.4 V",
+   "rule": "≤ 450 A, ≤ 960 V",
+   "verdict": "불통과"
+  },
+  {
+   "id": "P6",
+   "part": "바이패스(소프트 투입)",
+   "candidate": "EPC2305 2병렬 × 역직렬",
+   "item": "접합 온도",
+   "stress": "1개 176.4 °C(같은 몫 138.2 °C)",
+   "rule": "T_C 100 °C, Z_thJC, ≤ 150 °C",
+   "verdict": "불통과"
+  },
+  {
+   "id": "P7",
+   "part": "H-브리지(이중 고장 역방향 도통)",
+   "candidate": "EPC2305 × 2(위치당)",
+   "item": "접합 온도",
+   "stress": "32.7 A → 103.1 °C",
+   "rule": "≤ 150 °C",
+   "verdict": "통과"
+  },
+  {
+   "id": "P8",
+   "part": "링크 제동 저항 3 Ω",
+   "candidate": "Vishay LTO 150H",
+   "item": "고장당 에너지",
+   "stress": "53.3 J(펄스 60 ms)",
+   "rule": "≤ 75 J/0.1 s",
+   "verdict": "조건부 통과"
+  },
+  {
+   "id": "P9",
+   "part": "400 V 부하 접촉기(W460)",
+   "candidate": "Panasonic AEV18012",
+   "item": "차단 전압·전류",
+   "stress": "470 V, 52.7 A",
+   "rule": "≤ 450 V, ≤ 80 A",
+   "verdict": "불통과"
+  },
+  {
+   "id": "P9",
+   "part": "400 V 부하 접촉기(W410)",
+   "candidate": "Panasonic AEV18012",
+   "item": "차단 전압·전류",
+   "stress": "420 V, 70.7 A",
+   "rule": "≤ 450 V, ≤ 80 A",
+   "verdict": "통과"
+  }
+ ]
+}

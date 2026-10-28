@@ -1,0 +1,82 @@
+{
+  "case": "FF25_800V_charge_m1",
+  "verdict": "FAIL",
+  "failed": [
+    "C5_loss"
+  ],
+  "limits": {
+    "C1_turnoff": true,
+    "C2_phase_peak": true,
+    "C3_vA": true,
+    "C4_modules": true,
+    "C5_loss": false
+  },
+  "n_turnoff": 140,
+  "n_bad": 0,
+  "ioff_max": 0.32297024130821228,
+  "phase_peak": 109.66236114501953,
+  "pk_limit": 111.79571914672852,
+  "vA_pre": 401.00759702717937,
+  "vA": [
+    399.11138120789042,
+    403.46204153532346
+  ],
+  "events_ms": [
+    1.1,
+    3
+  ],
+  "n_end": 3,
+  "restart": false,
+  "n_cancel": 0,
+  "t_rep_us": null,
+  "loss_sim": 455.149247971829,
+  "loss_model": 522.28931474180558,
+  "P_bat": -134524.54158415424,
+  "wall_s": 64.6940111,
+  "dt_ns": 2.5,
+  "date": "2026-10-28 18:36:50",
+  "compare": [
+    {
+      "metric": "module change 1 time [ms] (-> 3)",
+      "simscape": 1.1,
+      "e33": 1.1,
+      "tol": 0.05
+    },
+    {
+      "metric": "replacement start [us]",
+      "simscape": null,
+      "e33": null,
+      "tol": 5
+    },
+    {
+      "metric": "phase peak [A]",
+      "simscape": 109.66236114501953,
+      "e33": 109.67003631591797,
+      "tol": 10.967003631591798
+    },
+    {
+      "metric": "V_A min [V]",
+      "simscape": 399.11138120789042,
+      "e33": 398.9454345703125,
+      "tol": 0.5
+    },
+    {
+      "metric": "V_A max [V]",
+      "simscape": 403.46204153532346,
+      "e33": 403.33987426757812,
+      "tol": 0.5
+    },
+    {
+      "metric": "Stage A loss, last 10 periods [W]",
+      "simscape": 455.149247971829,
+      "e33": 522.28931474180558,
+      "tol": 52.228931474180563
+    },
+    {
+      "metric": "max turn-off current [A]",
+      "simscape": 0.32297024130821228,
+      "e33": 0.49868148565292358,
+      "tol": null
+    }
+  ]
+}

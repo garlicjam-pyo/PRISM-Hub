@@ -1,0 +1,471 @@
+---- 1차: clamp prot ----
+E34 clamp ...
+  R2   640 V  0+0 kW hold t_comm  0 ms: 저항   5079 J·220.2 kW· 23.4 ms, 켬   873번(평균 30.0 kHz, 구간  29.1 ms), IGBT 켬 18.5·끔 38.4·도통 22.6 J → 평균 2731 W → T_vj 349 °C
+  R2   640 V  0+0 kW hold t_comm 10 ms: 저항   6825 J·220.2 kW· 31.5 ms, 켬  1173번(평균 30.0 kHz, 구간  39.1 ms), IGBT 켬 24.8·끔 51.6·도통 30.3 J → 평균 2732 W → T_vj 349 °C
+  R2   640 V  0+0 kW ramp t_comm  0 ms: 저항   2453 J·220.2 kW· 11.3 ms, 켬  1021번(평균 36.5 kHz, 구간  28.0 ms), IGBT 켬 21.6·끔 44.9·도통 10.9 J → 평균 2766 W → T_vj 353 °C
+  R2   640 V  0+0 kW ramp t_comm 10 ms: 저항   4203 J·220.2 kW· 19.4 ms, 켬  1326번(평균 34.3 kHz, 구간  38.7 ms), IGBT 켬 28.0·끔 58.3·도통 18.7 J → 평균 2714 W → T_vj 347 °C
+  R2   640 V 20+5 kW hold t_comm  0 ms: 저항   4322 J·220.0 kW· 19.9 ms, 켬  1156번(평균 40.0 kHz, 구간  28.9 ms), IGBT 켬 24.5·끔 50.9·도통 19.2 J → 평균 3269 W → T_vj 405 °C
+  R2   640 V 20+5 kW hold t_comm 10 ms: 저항   5818 J·220.0 kW· 26.8 ms, 켬  1556번(평균 40.0 kHz, 구간  38.9 ms), IGBT 켬 32.9·끔 68.5·도통 25.9 J → 평균 3270 W → T_vj 405 °C
+  R2   640 V 20+5 kW ramp t_comm  0 ms: 저항   1755 J·220.0 kW·  8.1 ms, 켬   853번(평균 35.0 kHz, 구간  24.4 ms), IGBT 켬 18.0·끔 37.5·도통 7.8 J → 평균 2599 W → T_vj 335 °C
+  R2   640 V 20+5 kW ramp t_comm 10 ms: 저항   3250 J·220.0 kW· 15.0 ms, 켬  1256번(평균 36.7 kHz, 구간  34.2 ms), IGBT 켬 26.6·끔 55.2·도통 14.5 J → 평균 2815 W → T_vj 358 °C
+  R2   920 V  0+0 kW hold t_comm  0 ms: 저항   5236 J·220.3 kW· 24.1 ms, 켬   900번(평균 30.0 kHz, 구간  30.0 ms), IGBT 켬 19.1·끔 39.6·도통 23.3 J → 평균 2733 W → T_vj 349 °C
+  R2   920 V  0+0 kW hold t_comm 10 ms: 저항   6982 J·220.3 kW· 32.2 ms, 켬  1200번(평균 30.0 kHz, 구간  40.0 ms), IGBT 켬 25.4·끔 52.8·도통 31.0 J → 평균 2733 W → T_vj 349 °C
+  R2   920 V  0+0 kW ramp t_comm  0 ms: 저항   2610 J·220.3 kW· 12.0 ms, 켬  1049번(평균 36.3 kHz, 구간  28.9 ms), IGBT 켬 22.2·끔 46.1·도통 11.6 J → 평균 2766 W → T_vj 353 °C
+  R2   920 V  0+0 kW ramp t_comm 10 ms: 저항   4360 J·220.3 kW· 20.1 ms, 켬  1352번(평균 34.1 kHz, 구간  39.6 ms), IGBT 켬 28.6·끔 59.4·도통 19.4 J → 평균 2713 W → T_vj 347 °C
+  R2   920 V 20+5 kW hold t_comm  0 ms: 저항   4484 J·220.0 kW· 20.7 ms, 켬  1199번(평균 40.0 kHz, 구간  30.0 ms), IGBT 켬 25.4·끔 52.7·도통 19.9 J → 평균 3270 W → T_vj 405 °C
+  R2   920 V 20+5 kW hold t_comm 10 ms: 저항   5980 J·220.0 kW· 27.6 ms, 켬  1599번(평균 40.0 kHz, 구간  40.0 ms), IGBT 켬 33.9·끔 70.3·도통 26.6 J → 평균 3270 W → T_vj 405 °C
+  R2   920 V 20+5 kW ramp t_comm  0 ms: 저항   1916 J·220.0 kW·  8.8 ms, 켬   898번(평균 35.6 kHz, 구간  25.2 ms), IGBT 켬 19.0·끔 39.5·도통 8.5 J → 평균 2653 W → T_vj 341 °C
+  R2   920 V 20+5 kW ramp t_comm 10 ms: 저항   3412 J·220.0 kW· 15.7 ms, 켬  1299번(평균 36.8 kHz, 구간  35.3 ms), IGBT 켬 27.5·끔 57.1·도통 15.2 J → 평균 2828 W → T_vj 359 °C
+  R2W  640 V  0+0 kW hold t_comm  0 ms: 저항   5214 J·220.2 kW· 24.0 ms, 켬   861번(평균 28.8 kHz, 구간  29.8 ms), IGBT 켬 18.2·끔 37.9·도통 23.2 J → 평균 2658 W → T_vj 341 °C
+  R2W  640 V  0+0 kW hold t_comm 10 ms: 저항   6961 J·220.2 kW· 32.1 ms, 켬  1150번(평균 28.9 kHz, 구간  39.8 ms), IGBT 켬 24.4·끔 50.6·도통 30.9 J → 평균 2659 W → T_vj 342 °C
+  R2W  640 V  0+0 kW ramp t_comm  0 ms: 저항   2591 J·220.2 kW· 12.0 ms, 켬  1026번(평균 34.9 kHz, 구간  29.4 ms), IGBT 켬 21.7·끔 45.1·도통 11.5 J → 평균 2661 W → T_vj 342 °C
+  R2W  640 V  0+0 kW ramp t_comm 10 ms: 저항   4338 J·220.2 kW· 20.0 ms, 켬  1316번(평균 33.5 kHz, 구간  39.2 ms), IGBT 켬 27.8·끔 57.9·도통 19.3 J → 평균 2675 W → T_vj 343 °C
+  R2W  640 V 20+5 kW hold t_comm  0 ms: 저항   4461 J·220.0 kW· 20.6 ms, 켬  1188번(평균 39.9 kHz, 구간  29.8 ms), IGBT 켬 25.1·끔 52.3·도통 19.8 J → 평균 3262 W → T_vj 404 °C
+  R2W  640 V 20+5 kW hold t_comm 10 ms: 저항   5957 J·220.0 kW· 27.5 ms, 켬  1588번(평균 39.9 kHz, 구간  39.8 ms), IGBT 켬 33.6·끔 69.9·도통 26.5 J → 평균 3264 W → T_vj 404 °C
+  R2W  640 V 20+5 kW ramp t_comm  0 ms: 저항   1894 J·220.0 kW·  8.7 ms, 켬   874번(평균 34.6 kHz, 구간  25.2 ms), IGBT 켬 18.5·끔 38.4·도통 8.4 J → 평균 2586 W → T_vj 334 °C
+  R2W  640 V 20+5 kW ramp t_comm 10 ms: 저항   3390 J·220.0 kW· 15.6 ms, 켬  1272번(평균 35.9 kHz, 구간  35.4 ms), IGBT 켬 26.9·끔 55.9·도통 15.1 J → 평균 2765 W → T_vj 353 °C
+  R2W  920 V  0+0 kW hold t_comm  0 ms: 저항   5241 J·220.2 kW· 24.1 ms, 켬   865번(평균 28.8 kHz, 구간  30.0 ms), IGBT 켬 18.3·끔 38.1·도통 23.3 J → 평균 2657 W → T_vj 341 °C
+  R2W  920 V  0+0 kW hold t_comm 10 ms: 저항   6987 J·220.2 kW· 32.2 ms, 켬  1154번(평균 28.9 kHz, 구간  40.0 ms), IGBT 켬 24.4·끔 50.8·도통 31.1 J → 평균 2658 W → T_vj 341 °C
+  R2W  920 V  0+0 kW ramp t_comm  0 ms: 저항   2617 J·220.2 kW· 12.1 ms, 켬  1030번(평균 35.0 kHz, 구간  29.4 ms), IGBT 켬 21.8·끔 45.3·도통 11.6 J → 평균 2676 W → T_vj 343 °C
+  R2W  920 V  0+0 kW ramp t_comm 10 ms: 저항   4364 J·220.2 kW· 20.1 ms, 켬  1320번(평균 33.4 kHz, 구간  39.5 ms), IGBT 켬 27.9·끔 58.0·도통 19.4 J → 평균 2665 W → T_vj 342 °C
+  R2W  920 V 20+5 kW hold t_comm  0 ms: 저항   4487 J·220.0 kW· 20.7 ms, 켬  1195번(평균 39.9 kHz, 구간  30.0 ms), IGBT 켬 25.3·끔 52.6·도통 19.9 J → 평균 3262 W → T_vj 404 °C
+  R2W  920 V 20+5 kW hold t_comm 10 ms: 저항   5983 J·220.0 kW· 27.6 ms, 켬  1595번(평균 39.9 kHz, 구간  40.0 ms), IGBT 켬 33.8·끔 70.2·도통 26.6 J → 평균 3264 W → T_vj 404 °C
+  R2W  920 V 20+5 kW ramp t_comm  0 ms: 저항   1920 J·220.0 kW·  8.9 ms, 켬   880번(평균 34.8 kHz, 구간  25.3 ms), IGBT 켬 18.6·끔 38.7·도통 8.5 J → 평균 2605 W → T_vj 336 °C
+  R2W  920 V 20+5 kW ramp t_comm 10 ms: 저항   3416 J·220.0 kW· 15.8 ms, 켬  1279번(평균 36.4 kHz, 구간  35.2 ms), IGBT 켬 27.0·끔 56.2·도통 15.2 J → 평균 2798 W → T_vj 356 °C
+  [통과] P4 클램프 저항(891SP)  (최대 6987 J ≤ 15000 J, V_A 469.4 V, 조건: 저항값별 허용치 제조사 확인)
+  [실패] P5 클램프 스위치(FF450R12ME4P)  (전류 469 A(한도 450), T_vj 405 °C(한도 150), 켬 최대 1599번, 평균 29–40 kHz)
+  → 저장: results/E34/clamp.json
+E34 prot ...
+  EPC2305 Z_thJC Foster 맞춤: R 합 0.200 K/W(R_thJC 0.20), 최대 상대 오차 1.0 %
+  P6 W460_240s_930_MX_L1      소프트 에너지 0.749 J(재계산 0.790), 첨두 1119 W, 구간 30.65 ms → ΔT_J 1개 76.4 K / 같은 몫 38.2 K, 직렬 최대 91.4 V
+  P6 W410_spec_832_MD_LC      소프트 에너지 0.045 J(재계산 0.164), 첨두 132 W, 구간 39.40 ms → ΔT_J 1개 9.8 K / 같은 몫 4.9 K, 직렬 최대 86.8 V
+  P7 W460_240s_930_F2         소자 전류 최대 22.9 A(V_SD 2.10 V), 소자 에너지 0.034 J, 첨두 48 W, 구간 6.62 ms → ΔT_J 3.0 K
+  P7 W460_240s_1008_F2        소자 전류 최대 22.3 A(V_SD 2.09 V), 소자 에너지 0.053 J, 첨두 47 W, 구간 7.18 ms → ΔT_J 2.8 K
+  P7 W410_spec_860_F2         소자 전류 최대 32.6 A(V_SD 2.24 V), 소자 에너지 0.021 J, 첨두 73 W, 구간 4.59 ms → ΔT_J 3.1 K
+  P7 W410_spec_920_F2         소자 전류 최대 32.7 A(V_SD 2.24 V), 소자 에너지 0.036 J, 첨두 73 W, 구간 5.02 ms → ΔT_J 3.0 K
+  P8 W460_240s_930_MX_LA: 제동 53.3 J(0.1 s 창 최대 53.3 J), 첨두 3335 W, 펄스 구간 60.0 ms(켜진 시간 28.9 ms), 링크 최대 100.0 V
+  [실패] P6 바이패스 소프트 투입(소자 1개)  (T_J 176.4 °C(같은 몫 138.2 °C), 한도 150 °C, 직렬 25.7 V)
+  [통과] P7 H-브리지 역방향 도통  (T_J 103.1 °C, 소자 전류 32.7 A, 직렬 114.2 V)
+  [통과] P8 제동 저항(LTO 150H)  (53.3 J ≤ 75 J, 조건부(펄스 60 ms < 0.1 s: 곡선 대조 필요))
+  [실패] P9 접촉기(AEV18012) W460_240s  (버스 상한 470 V(정격 450 V), 개방 전류 최대 52.7 A(80 A))
+  [통과] P9 접촉기(AEV18012) W410_spec  (버스 상한 420 V(정격 450 V), 개방 전류 최대 70.7 A(80 A))
+  → 저장: results/E34/prot.json
+---- 2차: stagea table figures (E33 결과 열쇠 오류: transient·fault 첨두 빠짐) ----
+E34 stagea ...
+  (E33 transient 없음: 'rows')
+  (E33 fault 없음: 'rows')
+   640 V 공차 None: 위상 실효 ['52.1', '52.4', '52.0', '52.5', '52.0', '52.3', '52.2', '52.0'] A, 첨두 최대 74.3 A, v_C 최대 − V/2 10.1 V, 위치 손실 최대 12.7 W
+   800 V 공차 None: 위상 실효 ['52.2', '52.3', '52.5', '52.3', '51.9', '51.9', '52.3', '52.1'] A, 첨두 최대 74.5 A, v_C 최대 − V/2 10.1 V, 위치 손실 최대 14.7 W
+   920 V 공차 None: 위상 실효 ['52.1', '52.2', '52.5', '52.4', '52.0', '51.9', '52.2', '52.1'] A, 첨두 최대 74.5 A, v_C 최대 − V/2 10.1 V, 위치 손실 최대 16.4 W
+   640 V 공차 1   : 위상 실효 ['56.0', '50.6', '53.1', '52.8', '51.1', '49.9', '51.9', '54.8'] A, 첨두 최대 90.5 A, v_C 최대 − V/2 11.9 V, 위치 손실 최대 13.8 W
+   800 V 공차 1   : 위상 실효 ['51.3', '49.8', '57.3', '55.8', '50.9', '48.4', '53.8', '52.4'] A, 첨두 최대 94.1 A, v_C 최대 − V/2 12.7 V, 위치 손실 최대 16.5 W
+   920 V 공차 1   : 위상 실효 ['46.5', '49.7', '60.9', '59.3', '49.5', '48.8', '51.3', '54.2'] A, 첨두 최대 102.8 A, v_C 최대 − V/2 14.1 V, 위치 손실 최대 19.2 W
+   640 V 공차 2   : 위상 실효 ['49.1', '54.9', '46.1', '60.1', '48.8', '53.0', '50.1', '56.4'] A, 첨두 최대 95.5 A, v_C 최대 − V/2 12.7 V, 위치 손실 최대 15.0 W
+   800 V 공차 2   : 위상 실효 ['46.9', '53.4', '49.7', '54.8', '52.0', '57.0', '48.8', '55.6'] A, 첨두 최대 93.4 A, v_C 최대 − V/2 12.7 V, 위치 손실 최대 16.1 W
+   920 V 공차 2   : 위상 실효 ['47.1', '53.4', '49.8', '54.8', '51.8', '56.9', '48.9', '55.6'] A, 첨두 최대 92.9 A, v_C 최대 − V/2 12.6 V, 위치 손실 최대 17.7 W
+   640 V 공차 3   : 위상 실효 ['57.4', '50.7', '51.5', '53.8', '52.7', '46.4', '53.4', '51.9'] A, 첨두 최대 85.0 A, v_C 최대 − V/2 11.4 V, 위치 손실 최대 14.4 W
+   800 V 공차 3   : 위상 실효 ['58.0', '48.6', '51.7', '55.6', '52.9', '52.3', '47.9', '50.8'] A, 첨두 최대 86.5 A, v_C 최대 − V/2 11.7 V, 위치 손실 최대 16.7 W
+   920 V 공차 3   : 위상 실효 ['57.8', '48.6', '51.8', '55.3', '53.0', '52.1', '48.2', '51.0'] A, 첨두 최대 86.5 A, v_C 최대 − V/2 11.6 V, 위치 손실 최대 18.4 W
+  첨두 출처 {'E32_rated': 102.8, 'E33_static': 103.9, 'E33_transient': None, 'E33_fault': None} → 103.9 A
+  [통과] P1 Stage A 스위치(C4MS008075U2 2병렬)  (V 518 V(한도 600), 소자 첨두 57.2 A(한도 310), 가장 뜨거운 위치 19.2 W → 소자 10.6 W → T_J 101.7 °C(한도 150))
+  [실패] P2 C_fly(TDK B3277x 조합)  (실효 공칭 52.5·최악 60.9 A, 필요 1.30 A/µF; ±5 % 안 최대 {'parts': ['B32774X5106', 'B32774X5106', 'B32774X5106', 'B32774X5166'], 'C_uF': 46.0, 'I_rms': 44.099999999999994, 'V_R': 600}; 전류만 맞추면 B32774X5106 × 6 = 60 µF)
+  P3 L_r 요구: 865 nH, I_sat ≥ 125 A, 실효 52.5(최악 60.9) A, 저장 4670 µJ
+  → 저장: results/E34/stagea.json
+E34 table ...
+  → 저장: results/E34/table.json
+  P1  Stage A 스위치                  C4MS008075U2 × 2(위치당)    차단 전압                  518 V                              ≤ 0.8 × 750 = 600 V            통과
+  P1                                                        소자 첨두                  57.2 A(위상 103.9 A)                 ≤ 0.5 × I_DM = 310 A           통과
+  P1                                                        접합 온도(정격 충전, 가장 뜨거운 위치) 10.6 W → 101.7 °C                  T_C 100 °C, ≤ 150 °C           통과
+  P2  플라잉 커패시터 46.9 µF             TDK B3277x 조합            실효전류·용량                52.5(최악 60.9) A, 1.30 A/µF         C ± 5 % 안 조합의 Σ I_rms ≥ 최악     불통과
+  P3  공진 인덕터 864.6 nH              맞춤(후보 없음)                포화 전류 요구               I_sat ≥ 125 A, 실효 60.9 A           요구만                            판정 없음
+  P4  V_A 클램프 저항 1 Ω               Ohmite 891SP             사건 에너지                 6987 J, V_A 469.4 V                ≤ 15000 J(< 10 ms 기준)          조건부 통과
+  P5  V_A 클램프 스위치                  FF450R12ME4P             접합 온도(보수)              켬 1599번, 평균 29–40 kHz → 405 °C     T_H 65 °C, R_thJH, ≤ 150 °C    불통과
+  P5                                                        전류·전압                  469 A, 469.4 V                     ≤ 450 A, ≤ 960 V               불통과
+  P6  바이패스(소프트 투입)                 EPC2305 2병렬 × 역직렬        접합 온도                  1개 176.4 °C(같은 몫 138.2 °C)         T_C 100 °C, Z_thJC, ≤ 150 °C   불통과
+  P7  H-브리지(이중 고장 역방향 도통)          EPC2305 × 2(위치당)         접합 온도                  32.7 A → 103.1 °C                  ≤ 150 °C                       통과
+  P8  링크 제동 저항 3 Ω                 Vishay LTO 150H          고장당 에너지                53.3 J(펄스 60 ms)                   ≤ 75 J/0.1 s                   조건부 통과
+  P9  400 V 부하 접촉기(W460)           Panasonic AEV18012       차단 전압·전류               470 V, 52.7 A                      ≤ 450 V, ≤ 80 A                불통과
+  P9  400 V 부하 접촉기(W410)           Panasonic AEV18012       차단 전압·전류               420 V, 70.7 A                      ≤ 450 V, ≤ 80 A                통과
+E34 figures ...
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 49884 (\N{HANGUL SYLLABLE SI}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 44036 (\N{HANGUL SYLLABLE GAN}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 53364 (\N{HANGUL SYLLABLE KEUL}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 47016 (\N{HANGUL SYLLABLE RAEM}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 54532 (\N{HANGUL SYLLABLE PEU}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51204 (\N{HANGUL SYLLABLE JEON}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 47448 (\N{HANGUL SYLLABLE RYU}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 55176 (\N{HANGUL SYLLABLE HI}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 49828 (\N{HANGUL SYLLABLE SEU}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 53580 (\N{HANGUL SYLLABLE TE}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 47532 (\N{HANGUL SYLLABLE RI}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 50948 (\N{HANGUL SYLLABLE WI}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 52845 (\N{HANGUL SYLLABLE CING}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51200 (\N{HANGUL SYLLABLE JEO}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 54637 (\N{HANGUL SYLLABLE HANG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 50640 (\N{HANGUL SYLLABLE E}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 45320 (\N{HANGUL SYLLABLE NEO}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51648 (\N{HANGUL SYLLABLE JI}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 48372 (\N{HANGUL SYLLABLE BO}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 49688 (\N{HANGUL SYLLABLE SU}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 49324 (\N{HANGUL SYLLABLE SA}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 44148 (\N{HANGUL SYLLABLE GEON}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 44060 (\N{HANGUL SYLLABLE GAE}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 50752 (\N{HANGUL SYLLABLE WA}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 52824 (\N{HANGUL SYLLABLE CI}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 50728 (\N{HANGUL SYLLABLE ON}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 46020 (\N{HANGUL SYLLABLE DO}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 44256 (\N{HANGUL SYLLABLE GO}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51109 (\N{HANGUL SYLLABLE JANG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 46244 (\N{HANGUL SYLLABLE DWI}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51217 (\N{HANGUL SYLLABLE JEOB}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 54633 (\N{HANGUL SYLLABLE HAB}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 44217 (\N{HANGUL SYLLABLE GYEOB}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 52840 (\N{HANGUL SYLLABLE CIM}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 48148 (\N{HANGUL SYLLABLE BA}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51060 (\N{HANGUL SYLLABLE I}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 54056 (\N{HANGUL SYLLABLE PAE}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 48652 (\N{HANGUL SYLLABLE BEU}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 45800 (\N{HANGUL SYLLABLE DAN}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 48128 (\N{HANGUL SYLLABLE MIL}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 54028 (\N{HANGUL SYLLABLE PA}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 46993 (\N{HANGUL SYLLABLE RANG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51452 (\N{HANGUL SYLLABLE JU}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 54889 (\N{HANGUL SYLLABLE HWANG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 54596 (\N{HANGUL SYLLABLE PIL}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 50836 (\N{HANGUL SYLLABLE YO}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 52572 (\N{HANGUL SYLLABLE COE}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 50501 (\N{HANGUL SYLLABLE AG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 49345 (\N{HANGUL SYLLABLE SANG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 44277 (\N{HANGUL SYLLABLE GONG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51228 (\N{HANGUL SYLLABLE JE}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 46041 (\N{HANGUL SYLLABLE DONG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 47141 (\N{HANGUL SYLLABLE RYEOG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 47553 (\N{HANGUL SYLLABLE RING}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 53356 (\N{HANGUL SYLLABLE KEU}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51221 (\N{HANGUL SYLLABLE JEONG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 44201 (\N{HANGUL SYLLABLE GYEOG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 51216 (\N{HANGUL SYLLABLE JEOM}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 54364 (\N{HANGUL SYLLABLE PYO}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 48376 (\N{HANGUL SYLLABLE BON}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 49552 (\N{HANGUL SYLLABLE SON}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 49892 (\N{HANGUL SYLLABLE SIL}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 53685 (\N{HANGUL SYLLABLE TONG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 45796 (\N{HANGUL SYLLABLE DA}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 50724 (\N{HANGUL SYLLABLE O}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 46300 (\N{HANGUL SYLLABLE DEU}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 52636 (\N{HANGUL SYLLABLE CUL}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 50857 (\N{HANGUL SYLLABLE YONG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:478: UserWarning: Glyph 47049 (\N{HANGUL SYLLABLE RYANG}) missing from font(s) DejaVu Sans.
+  fig.tight_layout()
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 53364 (\N{HANGUL SYLLABLE KEUL}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 47016 (\N{HANGUL SYLLABLE RAEM}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 54532 (\N{HANGUL SYLLABLE PEU}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51204 (\N{HANGUL SYLLABLE JEON}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 47448 (\N{HANGUL SYLLABLE RYU}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 55176 (\N{HANGUL SYLLABLE HI}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 49828 (\N{HANGUL SYLLABLE SEU}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 53580 (\N{HANGUL SYLLABLE TE}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 47532 (\N{HANGUL SYLLABLE RI}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 49884 (\N{HANGUL SYLLABLE SI}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 50948 (\N{HANGUL SYLLABLE WI}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 52845 (\N{HANGUL SYLLABLE CING}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 44036 (\N{HANGUL SYLLABLE GAN}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 48372 (\N{HANGUL SYLLABLE BO}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 49688 (\N{HANGUL SYLLABLE SU}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 49324 (\N{HANGUL SYLLABLE SA}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 44148 (\N{HANGUL SYLLABLE GEON}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 44060 (\N{HANGUL SYLLABLE GAE}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51200 (\N{HANGUL SYLLABLE JEO}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 54637 (\N{HANGUL SYLLABLE HANG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 50640 (\N{HANGUL SYLLABLE E}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 45320 (\N{HANGUL SYLLABLE NEO}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51648 (\N{HANGUL SYLLABLE JI}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 50752 (\N{HANGUL SYLLABLE WA}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 52824 (\N{HANGUL SYLLABLE CI}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 50728 (\N{HANGUL SYLLABLE ON}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 46020 (\N{HANGUL SYLLABLE DO}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51217 (\N{HANGUL SYLLABLE JEOB}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 54633 (\N{HANGUL SYLLABLE HAB}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 44217 (\N{HANGUL SYLLABLE GYEOB}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 52840 (\N{HANGUL SYLLABLE CIM}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 44256 (\N{HANGUL SYLLABLE GO}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51109 (\N{HANGUL SYLLABLE JANG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 46244 (\N{HANGUL SYLLABLE DWI}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 48148 (\N{HANGUL SYLLABLE BA}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51060 (\N{HANGUL SYLLABLE I}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 54056 (\N{HANGUL SYLLABLE PAE}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 48652 (\N{HANGUL SYLLABLE BEU}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 48128 (\N{HANGUL SYLLABLE MIL}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 54028 (\N{HANGUL SYLLABLE PA}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 46993 (\N{HANGUL SYLLABLE RANG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51452 (\N{HANGUL SYLLABLE JU}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 54889 (\N{HANGUL SYLLABLE HWANG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 45800 (\N{HANGUL SYLLABLE DAN}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 54596 (\N{HANGUL SYLLABLE PIL}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 50836 (\N{HANGUL SYLLABLE YO}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 52572 (\N{HANGUL SYLLABLE COE}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 50501 (\N{HANGUL SYLLABLE AG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 49345 (\N{HANGUL SYLLABLE SANG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 44277 (\N{HANGUL SYLLABLE GONG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51228 (\N{HANGUL SYLLABLE JE}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 46041 (\N{HANGUL SYLLABLE DONG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 47141 (\N{HANGUL SYLLABLE RYEOG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 47553 (\N{HANGUL SYLLABLE RING}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 53356 (\N{HANGUL SYLLABLE KEU}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 49552 (\N{HANGUL SYLLABLE SON}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 49892 (\N{HANGUL SYLLABLE SIL}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 53685 (\N{HANGUL SYLLABLE TONG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 45796 (\N{HANGUL SYLLABLE DA}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 50724 (\N{HANGUL SYLLABLE O}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 46300 (\N{HANGUL SYLLABLE DEU}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 52636 (\N{HANGUL SYLLABLE CUL}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 50857 (\N{HANGUL SYLLABLE YONG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 47049 (\N{HANGUL SYLLABLE RYANG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51221 (\N{HANGUL SYLLABLE JEONG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 44201 (\N{HANGUL SYLLABLE GYEOG}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 51216 (\N{HANGUL SYLLABLE JEOM}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 54364 (\N{HANGUL SYLLABLE PYO}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+/home/claude/PRISM-Hub/submission/verification_code/python/E34_parts_rating.py:480: UserWarning: Glyph 48376 (\N{HANGUL SYLLABLE BON}) missing from font(s) DejaVu Sans.
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  → 저장: /home/claude/PRISM-Hub/submission/verification_code/results/E34/E34_parts_rating.png
+---- 3차: 열쇠 수정 뒤 stagea table figures ----
+E34 stagea ...
+   640 V 공차 None: 위상 실효 ['52.1', '52.4', '52.0', '52.5', '52.0', '52.3', '52.2', '52.0'] A, 첨두 최대 74.3 A, v_C 최대 − V/2 10.1 V, 위치 손실 최대 12.7 W
+   800 V 공차 None: 위상 실효 ['52.2', '52.3', '52.5', '52.3', '51.9', '51.9', '52.3', '52.1'] A, 첨두 최대 74.5 A, v_C 최대 − V/2 10.1 V, 위치 손실 최대 14.7 W
+   920 V 공차 None: 위상 실효 ['52.1', '52.2', '52.5', '52.4', '52.0', '51.9', '52.2', '52.1'] A, 첨두 최대 74.5 A, v_C 최대 − V/2 10.1 V, 위치 손실 최대 16.4 W
+   640 V 공차 1   : 위상 실효 ['56.0', '50.6', '53.1', '52.8', '51.1', '49.9', '51.9', '54.8'] A, 첨두 최대 90.5 A, v_C 최대 − V/2 11.9 V, 위치 손실 최대 13.8 W
+   800 V 공차 1   : 위상 실효 ['51.3', '49.8', '57.3', '55.8', '50.9', '48.4', '53.8', '52.4'] A, 첨두 최대 94.1 A, v_C 최대 − V/2 12.7 V, 위치 손실 최대 16.5 W
+   920 V 공차 1   : 위상 실효 ['46.5', '49.7', '60.9', '59.3', '49.5', '48.8', '51.3', '54.2'] A, 첨두 최대 102.8 A, v_C 최대 − V/2 14.1 V, 위치 손실 최대 19.2 W
+   640 V 공차 2   : 위상 실효 ['49.1', '54.9', '46.1', '60.1', '48.8', '53.0', '50.1', '56.4'] A, 첨두 최대 95.5 A, v_C 최대 − V/2 12.7 V, 위치 손실 최대 15.0 W
+   800 V 공차 2   : 위상 실효 ['46.9', '53.4', '49.7', '54.8', '52.0', '57.0', '48.8', '55.6'] A, 첨두 최대 93.4 A, v_C 최대 − V/2 12.7 V, 위치 손실 최대 16.1 W
+   920 V 공차 2   : 위상 실효 ['47.1', '53.4', '49.8', '54.8', '51.8', '56.9', '48.9', '55.6'] A, 첨두 최대 92.9 A, v_C 최대 − V/2 12.6 V, 위치 손실 최대 17.7 W
+   640 V 공차 3   : 위상 실효 ['57.4', '50.7', '51.5', '53.8', '52.7', '46.4', '53.4', '51.9'] A, 첨두 최대 85.0 A, v_C 최대 − V/2 11.4 V, 위치 손실 최대 14.4 W
+   800 V 공차 3   : 위상 실효 ['58.0', '48.6', '51.7', '55.6', '52.9', '52.3', '47.9', '50.8'] A, 첨두 최대 86.5 A, v_C 최대 − V/2 11.7 V, 위치 손실 최대 16.7 W
+   920 V 공차 3   : 위상 실효 ['57.8', '48.6', '51.8', '55.3', '53.0', '52.1', '48.2', '51.0'] A, 첨두 최대 86.5 A, v_C 최대 − V/2 11.6 V, 위치 손실 최대 18.4 W
+  첨두 출처 {'E32_rated': 102.8, 'E33_static': 103.9, 'E33_transient': 169.3, 'E33_fault': 119.6} → 169.3 A
+  [통과] P1 Stage A 스위치(C4MS008075U2 2병렬)  (V 518 V(한도 600), 소자 첨두 93.1 A(한도 310), 가장 뜨거운 위치 19.2 W → 소자 10.6 W → T_J 101.7 °C(한도 150))
+  [실패] P2 C_fly(TDK B3277x 조합)  (실효 공칭 52.5·최악 60.9 A, 필요 1.30 A/µF; ±5 % 안 최대 {'parts': ['B32774X5106', 'B32774X5106', 'B32774X5106', 'B32774X5166'], 'C_uF': 46.0, 'I_rms': 44.099999999999994, 'V_R': 600}; 전류만 맞추면 B32774X5106 × 6 = 60 µF)
+  P3 L_r 요구: 865 nH, I_sat ≥ 203 A, 실효 52.5(최악 60.9) A, 저장 12395 µJ
+  → 저장: results/E34/stagea.json
+E34 table ...
+  → 저장: results/E34/table.json
+  P1  Stage A 스위치                  C4MS008075U2 × 2(위치당)    차단 전압                  518 V                              ≤ 0.8 × 750 = 600 V            통과
+  P1                                                        소자 첨두                  93.1 A(위상 169.3 A)                 ≤ 0.5 × I_DM = 310 A           통과
+  P1                                                        접합 온도(정격 충전, 가장 뜨거운 위치) 10.6 W → 101.7 °C                  T_C 100 °C, ≤ 150 °C           통과
+  P2  플라잉 커패시터 46.9 µF             TDK B3277x 조합            실효전류·용량                52.5(최악 60.9) A, 1.30 A/µF         C ± 5 % 안 조합의 Σ I_rms ≥ 최악     불통과
+  P3  공진 인덕터 864.6 nH              맞춤(후보 없음)                포화 전류 요구               I_sat ≥ 203 A, 실효 60.9 A           요구만                            판정 없음
+  P4  V_A 클램프 저항 1 Ω               Ohmite 891SP             사건 에너지                 6987 J, V_A 469.4 V                ≤ 15000 J(< 10 ms 기준)          조건부 통과
+  P5  V_A 클램프 스위치                  FF450R12ME4P             접합 온도(보수)              켬 1599번, 평균 29–40 kHz → 405 °C     T_H 65 °C, R_thJH, ≤ 150 °C    불통과
+  P5                                                        전류·전압                  469 A, 469.4 V                     ≤ 450 A, ≤ 960 V               불통과
+  P6  바이패스(소프트 투입)                 EPC2305 2병렬 × 역직렬        접합 온도                  1개 176.4 °C(같은 몫 138.2 °C)         T_C 100 °C, Z_thJC, ≤ 150 °C   불통과
+  P7  H-브리지(이중 고장 역방향 도통)          EPC2305 × 2(위치당)         접합 온도                  32.7 A → 103.1 °C                  ≤ 150 °C                       통과
+  P8  링크 제동 저항 3 Ω                 Vishay LTO 150H          고장당 에너지                53.3 J(펄스 60 ms)                   ≤ 75 J/0.1 s                   조건부 통과
+  P9  400 V 부하 접촉기(W460)           Panasonic AEV18012       차단 전압·전류               470 V, 52.7 A                      ≤ 450 V, ≤ 80 A                불통과
+  P9  400 V 부하 접촉기(W410)           Panasonic AEV18012       차단 전압·전류               420 V, 70.7 A                      ≤ 450 V, ≤ 80 A                통과
+E34 figures ...
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  fig.savefig(path, dpi=130); print("  → 저장:", path)
+  → 저장: /home/claude/PRISM-Hub/submission/verification_code/results/E34/E34_parts_rating.png

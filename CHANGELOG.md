@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## [1.30.0] - 2026-10-28
+
+### 추가
+- Stage A 25 kHz 설계 묶음 A25(`model_stage_a.DESIGNS`, `set_design`, `qoss_pos`): 위치당 C4MS008075U2 2병렬, L_r 864.6 nH, C_fly 46.875 µF, 주기당 2040단계, 출력용량 손실 Q_oss(V)·V. `sim_array` 선택 인자 `Nstep`.
+- E32 A25 정상상태·문턱·손실(`E32_stage_a_25k.py`), E33 A25 동특성(`E33_stage_a_25k_dynamics.py`: static·transient·slow·fault, 사건 시각 0.6 ms 이동), 실행 뒤 진단 `E33_diag_transient.py`. `E28` 판정 시작 시각 변수(`T_JUDGE`).
+- E34 부품 정격 표(`E34_parts_rating.py`): Stage A 스위치·C_fly·L_r, V_A 클램프 저항·스위치, 바이패스 소프트 투입·H-브리지 역방향 도통(EPC2305 Z_thJC Foster 25항), 제동 저항, 접촉기. 후보 부품 데이터 `data/datasheets/`(TDK B3277x, Ohmite 800/1000, FF450R12ME4P, LTO 150H, AEV18012).
+- TB26(`simulink/tb/TB26_StageA25_Integrated`): A25 4모듈 + 스위치 출력용량, 사례 FA25·FF25·MC25, 게이트 함수 대조, 실행 뒤 진단 `ref/diag_loss_TB26.py`. `lib/build_stageA_module` 선택 인자 coss.
+- docs/38, docs/39, validation/2026-10-28-stage-a-25k, validation/2026-10-28-parts-rating.
+
+### 발견
+- **A25는 정상상태 손실과 모듈 고장 처리는 지켰지만 과도 판정을 대부분 통과하지 못했다.** E32: ④ 보조 94.4 W(⑤ 114.6 W보다 작음), 충전 520/586/639 W(920 V는 모터 승압 하한보다 6 W 큼). E33: static 33/36·31/36, transient 1/7·1/7, slow 0/3·0/3(충전 요구 갱신 불성립), fault 16/16. 충전전류 램프 100 µs가 25 kHz 공진 2.5주기이고, 부하 계단(MA)에서 두 번째 모듈이 들어오기 전 위상 첨두가 76.6 A(한도 74.5 A)였다.
+- **실행 뒤 진단:** 느린 충전은 C_A 6배 또는 관리기 시간 상수 150 kHz 값이면 통과, 부하 계단은 둘 다 불통과(86–87 A).
+- **TB26: 동특성은 회로와 모델이 같았다**(C1–C4 판정 일치, 첨두 차 ≤ 1.6 A, V_A 차 ≤ 0.18 V). 손실 대조 C5는 C_fly 저장 에너지(46.9 µF, 리플 ±10 V)를 보정하지 않아 판정 불가(창 끝 위치에 따라 ±0.5–0.8 kW 흩어짐).
+- **부품 정격 표: 9개 중 4개 불통과.** C_fly 전류 밀도(1.30 A/µF 필요, 필름 DC 링크 최선 1.02), V_A 클램프 스위치(29–40 kHz 히스테리시스 스위칭, 보수 계산 334–405 °C), 바이패스 소프트 투입(소자 1개 176 °C, 같은 몫 138 °C), W460 접촉기(470 V > 450 V). 통과: Stage A 스위치, H-브리지 역방향 도통. 조건부: 클램프 저항(891SP 15 kJ), 제동 저항(LTO 150H 75 J/0.1 s).
+- **실행 경과(기준 그대로).** E32 loss 집계 KeyError(충전 격자 800 V 없음 → 보간)와 D0 표 열쇠 오류(설계 전환 전 계산)를 고친 뒤 재실행(첫 결과 보관). E34 stagea 1차가 E33 결과 열쇠(cases)를 잘못 읽어 과도·고장 첨두가 빠져 재실행(판정 같음, 첫 결과 보관).
+
+### 변경
+- docs/20(요약, 표, 이력 E32–E34·TB26, 8절 TB26, 9절 계획), simulink README(TB26).
+
 ## [1.29.0] - 2026-10-28
 
 ### 추가
