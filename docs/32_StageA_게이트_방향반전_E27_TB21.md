@@ -63,6 +63,8 @@
 
 ## 4. 방법과 판정 기준(시험 전에 고정)
 
+〔정정 2026-10-29〕 이 기준은 결과와 같은 커밋(15a8644)으로 올렸다. 실행 전에 정했다고 적었으나, 그 순서를 저장소 기록으로는 확인할 수 없다(docs/45 B2).
+
 | 부분 | 내용 |
 |---|---|
 | repro | TB20 사례 D 조건: 800 V, 4모듈 8위상, V\_A 노드 400 µF + R2 버스(배선 3 mΩ·1.5 µH, C\_b 400 µF, 감쇠기 48.6 mΩ + 1.6 mF, 정전력 15 kW), 충전기 0 → 375 A(100 µs) → 유지 → 0 A(100 µs). 램프 시작을 스위칭 주기의 0–5/6로 6가지, 공차 표본 1개(C ±5 %, L ±10 %, R ±10 %, E1과 같은 난수) |
@@ -164,4 +166,4 @@
 ## 참고문헌
 
 1. K. Kesarwani, R. Sangwan, J. T. Stauth, "Resonant-Switched Capacitor Converters for Chip-Scale Power Delivery: Design and Implementation," *IEEE Trans. Power Electron.*, vol. 30, no. 12, pp. 6966–6977, 2015.
-2. IEEE Std 2030.1.1-2015, *IEEE Standard Technical Specifications of a DC Quick Charger for Use with Electric Vehicles*(충전전류 변화와 정지 조건, docs/31 참고문헌 1).
+2. IEEE Std 2030.1.1-2015, *IEEE Standard Technical Specifications of a DC Quick Charger for Use with Electric Vehicles*(〔2026-10-29 주석〕 현행판은 IEEE 2030.1.1-2021, *IEEE Standard for Technical Specifications of a DC Quick and Bidirectional Charger for Use with Electric Vehicles*이며 2015판을 대체했다. 이 문서는 2015판의 값을 썼고, 2021판에서 같은 값인지는 확인하지 않았다)(충전전류 변화와 정지 조건, docs/31 참고문헌 1).
