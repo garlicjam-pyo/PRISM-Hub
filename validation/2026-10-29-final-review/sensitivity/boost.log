@@ -1,0 +1,5 @@
+boost 800V 375A f=50 kHz: 1775 W
+boost 800V 375A f=25 kHz: 1370 W
+boost 800V 375A f=16 kHz: 1224 W
+aux buck P=500: 46.8 W
+aux buck P=2500: 57.9 W

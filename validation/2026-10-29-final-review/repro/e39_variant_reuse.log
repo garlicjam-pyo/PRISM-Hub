@@ -1,0 +1,17 @@
+n 2 R_b 1.6 Ω 끔 463 V: R 1.190–2.340 Ω, C1 469.38 V(max 469.38, min 468.77, mix 468.98) 통과, 가지 393 A, 에너지 4634 J(hi 3474, lo 4634)  | FF450R12ME4P ✗(230.7 °C), CAB450M12XM3 ✗(183.3 °C), CAB530M12BM3 ✓(146.5 °C), FF2MR12KM1P ✗(150.0 °C), SKM500MB120SC ✗(167.5 °C)
+wall 80.4 s
+  FF450R12ME4P   T_vj new 230.689150 stored 230.689150 diff 0  ok False/False
+  CAB450M12XM3   T_vj new 183.304515 stored 183.304515 diff 0  ok False/False
+  CAB530M12BM3   T_vj new 146.511925 stored 146.511925 diff 0  ok True/True
+  FF2MR12KM1P    T_vj new 150.034843 stored 150.034843 diff 0  ok False/False
+  SKM500MB120SC  T_vj new 167.523086 stored 167.523086 diff 0  ok False/False
+  C1_V            new 469.376473 stored 469.376473 diff 0
+  i_branch_max    new 393.425894 stored 393.425894 diff 0
+  E_branch_max_J  new 4634.06289 stored 4634.06289 diff 0
+  E_hi_obs        new 3473.79835 stored 3473.79835 diff 0
+  E_lo_obs        new 4634.06289 stored 4634.06289 diff 0
+  R_max           new 2.340104 stored 2.340104 diff 0
+  R_min           new 1.19016 stored 1.19016 diff 0
+  C1_by {'max': 469.37647334046767, 'min': 468.76595627352634, 'mix': 468.98103027573893} stored {'max': 469.37647334046767, 'min': 468.76595627352634, 'mix': 468.98103027573893}
+  ok_variant True True pick CAB530M12BM3
+EXIT 0 WALL 80 s

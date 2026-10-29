@@ -12,6 +12,7 @@
 - **검증 범위.** 시험 E1–E39(해석·평균모델·스위칭 ODE·데이터시트 대조), Simulink 소자 수준 테스트벤치 TB01–TB32, 독립 검토·외부 검토와 재검토 대응(2026-10-29).
 
 - **[아키텍처 설계·검증 종합 보고서](docs/20_종합보고서_아키텍처_설계검증.md)** — 처음부터 현재까지의 설계·검증 흐름과 Simulink 테스트벤치 계획을 한 문서로 정리
+- [최종 보고서 작성 전 최종 검토](docs/45_최종검토_보고서작성전.md) — 근거: [validation/2026-10-29-final-review](validation/2026-10-29-final-review/README.md)
 - [클램프 스위치 재판정(E39·TB32)](docs/44_클램프스위치_재판정_E39_TB32.md) — 근거: [validation/2026-10-29-clamp-switch](validation/2026-10-29-clamp-switch/README.md), 회로 모델: [TB32](simulink/tb/TB32_A25R_ClampMix/README.md)
 - [외부 검토 대응과 설계 변경(E38·TB30·TB31)](docs/43_외부검토대응_설계변경_E38_TB30_TB31.md) — 근거: [validation/2026-10-29-review-response](validation/2026-10-29-review-response/README.md), 회로 모델: [TB30](simulink/tb/TB30_A25R_ClampTol/README.md)·[TB31](simulink/tb/TB31_R2_ScPause_LoadStop/README.md)
 - [부품 정격 표 2차(E37·TB29)](docs/42_부품정격표_2차_E37.md) — 근거: [validation/2026-10-29-parts-rating-2](validation/2026-10-29-parts-rating-2/README.md), 회로 모델: [TB29](simulink/tb/TB29_A25R_Clamp12/README.md)
@@ -133,6 +134,7 @@ python python/compare_two_stage.py
 
 ## 남은 과제
 
+0. **보고서 작성 전 최종 검토의 지적 정리**([docs/45](docs/45_최종검토_보고서작성전.md)): P5 클램프 스위치의 R\_DS(on) 전형값(일관 규칙이면 불통과 가능), ④ 대 ⑤ 보조 손실 12 %의 비교 조건, 클램프 문턱 오차의 계속 켜짐, C\_A 후보 표 누락. 수정 결정 대기
 1. 새 인터페이스 요구의 차량 수준 확인: Stage C 보호 일시 정지(4 kW/ms, ≤ 12.4 ms), 이중 고장 400 V 부하 정지(전용 배선 신호 뒤 3 ms 안에 0)([docs/43](docs/43_외부검토대응_설계변경_E38_TB30_TB31.md))
 2. 고전압 팩(224s·240s) 충전 중 정지의 Stage B 결합·회로 확인
 3. 조건부 부품 확인(클램프 저항 891SP 열용량·허용치, 클램프 스위치 CAB530M12BM3 여유 3.5 °C(최대 열저항 미공개, 전형값 × 1.2 가정)([docs/44](docs/44_클램프스위치_재판정_E39_TB32.md)), 링크 제동 저항, C\_fly 온도 정격), 견인 모터 상저항 범위 재대조
