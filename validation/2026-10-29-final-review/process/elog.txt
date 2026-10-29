@@ -1,0 +1,229 @@
+=== E26
+a2459c1 10-26 11:54 E26 충전 중 Stage A 정지 협조(평균모델), TB20 회로 준비
+    python/E26_charging_stop.py
+    validation/2026-10-26-charging-stop/E26/E26_charging_stop.png
+    validation/2026-10-26-charging-stop/E26/event_summary.json
+    validation/2026-10-26-charging-stop/E26/overload.json
+39cd0ce 10-29 14:01 E38 기준 사전 등록: 외부 검토 대응(클램프 재선정·고전압 팩 범위·Stage C 모델·충전 손실)과 P6·F2 설계 변경
+    python/E26_charging_stop.py
+6a615ba 10-29 17:45 E39 판정 기준(실행 전): 클램프 스위치 재판정 — 최대 열저항, 가지 저항 조합, 자기 가열 갱신, 선정 규칙. E26 가지별 저항 선택 인자(회귀 차 0)
+    python/E26_charging_stop.py
+=== E27
+15a8644 10-27 19:56 E27·TB21 Stage A 영교차 게이트 방향 반전 처리: TB20 사례 D 해결(회로 4/4), 1.25.0
+    python/E27_zcp_reversal.py
+    validation/2026-10-27-zcp-reversal/E27/E27_zcp_reversal.png
+    validation/2026-10-27-zcp-reversal/E27/regress.json
+    validation/2026-10-27-zcp-reversal/E27/repro.json
+    validation/2026-10-27-zcp-reversal/E27/stress.json
+=== E28
+7f7f75f 10-28 03:26 E28·TB22 Stage A 4모듈 경부하 운전: 모듈 관리기 + 모듈별 위상 셰딩 + 부품 공차, 1.27.0
+    python/E28_stage_a_modules.py
+    validation/2026-10-28-stage-a-modules/E28/E28_stage_a_modules.png
+    validation/2026-10-28-stage-a-modules/E28/design.json
+    validation/2026-10-28-stage-a-modules/E28/rated.json
+    validation/2026-10-28-stage-a-modules/E28/regress.json
+    validation/2026-10-28-stage-a-modules/E28/restart.json
+    validation/2026-10-28-stage-a-modules/E28/restart_run1_nohold.json
+    validation/2026-10-28-stage-a-modules/E28/static.json
+    validation/2026-10-28-stage-a-modules/E28/static_run1_nohold.json
+    validation/2026-10-28-stage-a-modules/E28/static_run2_hold.json
+    validation/2026-10-28-stage-a-modules/E28/transient.json
+    validation/2026-10-28-stage-a-modules/E28/transient_run1.json
+e62c778 10-28 17:34 E32 loss 집계 오류 수정(충전 격자에 800 V 없음 → 보간, 격자 원자료 저장), E33 실행 전 판정 기준 고정, E28 과도 판정 시작 시각 변수화
+    python/E28_stage_a_modules.py
+=== E29
+eae5863 10-28 13:54 E29·TB23 보호 상태기계–SALS 연동: 400 V 부하 분리·감발의 지연·손실·계약 응답, 이중 고장 Stage A 정지, 1.28.0
+    python/E29_sals_degradation.py
+    validation/2026-10-28-sals-link/E29/E29_sals_degradation.png
+    validation/2026-10-28-sals-link/E29/contract.json
+    validation/2026-10-28-sals-link/E29/failsafe.json
+    validation/2026-10-28-sals-link/E29/failsafe_run1_pre_detection.json
+    validation/2026-10-28-sals-link/E29/regen.json
+    validation/2026-10-28-sals-link/E29/regen_sens.json
+    validation/2026-10-28-sals-link/E29/regress.json
+    validation/2026-10-28-sals-link/E29/regress_head_check.json
+    validation/2026-10-28-sals-link/E29/resid.json
+    validation/2026-10-28-sals-link/E29/seq.json
+=== E30
+f81357a 10-28 15:33 E30 실행 전: Stage A 모듈 고장 처리(mgr_fault)와 사례·판정 기준 고정
+    python/E30_module_fault.py
+95bd8c8 10-28 15:46 E30 결과와 TB24 테스트벤치(회로 실행 전), EPC2305 데이터시트 곡선
+    python/E30_module_fault.py
+    validation/2026-10-28-module-fault/E30/E30_module_fault.png
+    validation/2026-10-28-module-fault/E30/fault.json
+    validation/2026-10-28-module-fault/E30/regress.json
+=== E31
+0b8523d 10-28 16:14 E31 실행 전: Stage A 출력용량 손실 재평가와 설계 수정안의 판정 기준 고정, 소자 데이터시트 표 값
+    python/E31_stage_a_coss.py
+46ab52f 10-28 16:23 E31 결과(Stage A 출력용량 손실 재평가)와 TB25 테스트벤치(회로 실행 전, 판정 기준 고정)
+    validation/2026-10-28-stage-a-coss/E31/E31_run.log
+    validation/2026-10-28-stage-a-coss/E31/E31_stage_a_coss.png
+    validation/2026-10-28-stage-a-coss/E31/coss.json
+=== E32
+0579c6d 10-28 16:54 E32 실행 전: Stage A 25 kHz 설계 묶음(A25)과 정상상태·문턱 규칙·판정 기준 고정
+    python/E32_stage_a_25k.py
+e62c778 10-28 17:34 E32 loss 집계 오류 수정(충전 격자에 800 V 없음 → 보간, 격자 원자료 저장), E33 실행 전 판정 기준 고정, E28 과도 판정 시작 시각 변수화
+    python/E32_stage_a_25k.py
+42f75b1 10-28 17:49 E32 결과(A25 정상상태·문턱·손실)와 TB26 테스트벤치 초안(실행 전)
+    python/E32_stage_a_25k.py
+    validation/2026-10-28-stage-a-25k/E32/E32_run.log
+    validation/2026-10-28-stage-a-25k/E32/E32_stage_a_25k.png
+    validation/2026-10-28-stage-a-25k/E32/design.json
+    validation/2026-10-28-stage-a-25k/E32/loss.json
+    validation/2026-10-28-stage-a-25k/E32/loss_run2_D0lookupbug.json
+    validation/2026-10-28-stage-a-25k/E32/rated.json
+    validation/2026-10-28-stage-a-25k/E32/thresholds.json
+=== E33
+e62c778 10-28 17:34 E32 loss 집계 오류 수정(충전 격자에 800 V 없음 → 보간, 격자 원자료 저장), E33 실행 전 판정 기준 고정, E28 과도 판정 시작 시각 변수화
+    python/E33_stage_a_25k_dynamics.py
+147daa6 10-28 18:54 A25 재검증 결과(E33 동특성·실행 뒤 진단, TB26 회로)와 부품 정격 표(E34), docs/38·39, docs/20·37 갱신, CHANGELOG 1.30.0
+    python/E33_diag_transient.py
+    python/E33_stage_a_25k_dynamics.py
+    validation/2026-10-28-stage-a-25k/E33/E33_diag_transient.log
+    validation/2026-10-28-stage-a-25k/E33/E33_run.log
+    validation/2026-10-28-stage-a-25k/E33/E33_stage_a_25k_dynamics.png
+    validation/2026-10-28-stage-a-25k/E33/diag_transient.json
+    validation/2026-10-28-stage-a-25k/E33/fault.json
+    validation/2026-10-28-stage-a-25k/E33/slow.json
+    validation/2026-10-28-stage-a-25k/E33/static.json
+    validation/2026-10-28-stage-a-25k/E33/transient.json
+=== E34
+a442ab2 10-28 18:13 E34 실행 전: 부품 정격 표(A25 기준) 대상·후보·가정·판정 기준 고정, 후보 부품 데이터시트 표 값(TDK B3277x, Ohmite 800/1000, FF450R12ME4P, LTO 150H, AEV18012)
+    python/E34_parts_rating.py
+147daa6 10-28 18:54 A25 재검증 결과(E33 동특성·실행 뒤 진단, TB26 회로)와 부품 정격 표(E34), docs/38·39, docs/20·37 갱신, CHANGELOG 1.30.0
+    python/E34_parts_rating.py
+    validation/2026-10-28-parts-rating/E34/E34_parts_rating.png
+    validation/2026-10-28-parts-rating/E34/E34_run.log
+    validation/2026-10-28-parts-rating/E34/clamp.json
+    validation/2026-10-28-parts-rating/E34/prot.json
+    validation/2026-10-28-parts-rating/E34/stagea.json
+    validation/2026-10-28-parts-rating/E34/stagea_run1_E33key.json
+    validation/2026-10-28-parts-rating/E34/table.csv
+    validation/2026-10-28-parts-rating/E34/table.json
+=== E35
+232c318 10-28 19:45 E35 설계 단계(A25 수정안): 충전 요청 중 셰딩 정지(D1)·Tier-1 계단 사례·관리기 시간 상수 하나씩 되돌리기 결과, 인터리빙 맞춤 시작(D4) 모델 선택 인자, E35 판정 스크립트 초안(설계 변경 미정)
+    python/E35_a25r_design.py
+    python/E35_a25r_verify.py
+22b33c4 10-28 19:58 E35 설계 단계 dev3(인터리빙 맞춤 시작 D4, D1 + D4, Tier-1 계단) 결과와 dev4 추가
+    python/E35_a25r_design.py
+8e8ef90 10-28 20:06 E35 실행 전: A25R = A25 + C_A 2.4 mF(설계 단계 dev4에서 유일하게 통과한 변경), 사례(요구 안 6·요구 밖 6·고장 8·클램프 32)와 판정 기준 고정
+    python/E35_a25r_verify.py
+e3e76f0 10-28 20:53 A25R(C_A 2.4 mF) 판정 결과: E35 요구 안 과도 12/12·고장 16/16, TB27 4/4(손실 회로 대조 +3.0 %), docs/40, docs/20·38·39 갱신, CHANGELOG 1.31.0
+    python/E35_a25r_verify.py
+    validation/2026-10-28-stage-a-25k/E35/E35_run.log
+    validation/2026-10-28-stage-a-25k/E35/beyond.json
+    validation/2026-10-28-stage-a-25k/E35/clamp.json
+    validation/2026-10-28-stage-a-25k/E35/fault.json
+    validation/2026-10-28-stage-a-25k/E35/static.json
+    validation/2026-10-28-stage-a-25k/E35/transient.json
+=== E36
+80d045f 10-28 22:43 E36: A25R 영향 재확인 시험 코드와 판정 기준(실행 전 고정)
+    python/E36_a25r_impact.py
+f1033e7 10-28 23:40 E36·TB28 결과: A25R 영향 재확인
+    python/E36_a25r_impact.py
+    validation/2026-10-28-a25r-impact/E36/E36_run0_e26.log
+    validation/2026-10-28-a25r-impact/E36/E36_run1.log
+    validation/2026-10-28-a25r-impact/E36/E36_run2.log
+    validation/2026-10-28-a25r-impact/E36/a25_grid.json
+    validation/2026-10-28-a25r-impact/E36/a25_grid_Rpass_x2.json
+    validation/2026-10-28-a25r-impact/E36/dropout.json
+    validation/2026-10-28-a25r-impact/E36/e15_comparison.json
+    validation/2026-10-28-a25r-impact/E36/e16_concurrent.json
+    validation/2026-10-28-a25r-impact/E36/e16_sequence.json
+    validation/2026-10-28-a25r-impact/E36/e16_static.json
+    validation/2026-10-28-a25r-impact/E36/e16_transition.json
+    validation/2026-10-28-a25r-impact/E36/e18_A25R_value_map.json
+    validation/2026-10-28-a25r-impact/E36/e18_A25R_value_map.png
+    validation/2026-10-28-a25r-impact/E36/e18_R1_value_map.json
+    validation/2026-10-28-a25r-impact/E36/e18_R1_value_map.png
+    validation/2026-10-28-a25r-impact/E36/e18_compare.json
+    validation/2026-10-28-a25r-impact/E36/e23_base.json
+    validation/2026-10-28-a25r-impact/E36/e23_zbus.json
+    validation/2026-10-28-a25r-impact/E36/e25_comparison.json
+    validation/2026-10-28-a25r-impact/E36/e25_motor_boost.png
+    validation/2026-10-28-a25r-impact/E36/e25_statements.json
+    validation/2026-10-28-a25r-impact/E36/e26_noclamp.json
+    validation/2026-10-28-a25r-impact/E36/e29_failsafe_F2.json
+d9781a0 10-29 02:49 E36 정정: 가치 지도 인덕터 저장에너지를 A25R 공진 인덕턴스로 재계산(판정 무관)
+    python/E36_magnetics_fix.py
+    validation/2026-10-28-a25r-impact/E36/E36_magnetics_fix.log
+    validation/2026-10-28-a25r-impact/E36/e18_A25R_magnetics_fix.json
+515812a 10-29 03:18 검증 정리 3: 독립 검토 반영(수치·표현 불일치, 정정 누락), 손익분기 상저항 격자 재계산
+    python/E36_breakeven_grid.py
+    python/E36_magnetics_fix.py
+    validation/2026-10-28-a25r-impact/E36/E36_breakeven_grid.log
+    validation/2026-10-28-a25r-impact/E36/e25_breakeven_grid.json
+=== E37
+9e286c9 10-28 23:49 E37: 부품 정격 표 2차 판정 기준(실행 전 고정)
+    python/E37_parts_round2.py
+bddc5ba 10-28 23:52 E37: ca·fs·clamp 구현, E17 r2_run에 V_A 노드 방전 저항 선택 인자(기본 꺼짐)
+    python/E37_parts_round2.py
+0df46e3 10-28 23:54 E37: cfly·bypass·ctc·lr·req 구현(판정 기준은 9e286c9 그대로)
+    python/E37_parts_round2.py
+676d5c3 10-29 00:02 E37: 결과 표(table) 함수
+    python/E37_parts_round2.py
+a39bffc 10-29 00:11 E37: 접촉기 판정을 전기적 수명 행만으로(단발 최대 차단 행 제외), 소프트 투입 펄스 폭을 첨두 10 % 구간으로
+    python/E37_parts_round2.py
+4ea47ca 10-29 00:16 E37 결과: 부품 정격 표 2차
+    python/E37_diag_fs.py
+    python/E37_parts_round2.py
+    validation/2026-10-29-parts-rating-2/E37/E37_diag_fs.log
+    validation/2026-10-29-parts-rating-2/E37/E37_run1.log
+    validation/2026-10-29-parts-rating-2/E37/E37_run2.log
+    validation/2026-10-29-parts-rating-2/E37/bypass.json
+    validation/2026-10-29-parts-rating-2/E37/bypass_run1_span.json
+    validation/2026-10-29-parts-rating-2/E37/ca.json
+    validation/2026-10-29-parts-rating-2/E37/cfly.json
+    validation/2026-10-29-parts-rating-2/E37/cfly_run1_interp.json
+    validation/2026-10-29-parts-rating-2/E37/clamp.json
+    validation/2026-10-29-parts-rating-2/E37/clamp_rows.json
+    validation/2026-10-29-parts-rating-2/E37/ctc.json
+    validation/2026-10-29-parts-rating-2/E37/ctc_run1_breakmax.json
+    validation/2026-10-29-parts-rating-2/E37/fs.json
+    validation/2026-10-29-parts-rating-2/E37/lr.json
+    validation/2026-10-29-parts-rating-2/E37/req.json
+    validation/2026-10-29-parts-rating-2/E37/table.json
+=== E38
+39cd0ce 10-29 14:01 E38 기준 사전 등록: 외부 검토 대응(클램프 재선정·고전압 팩 범위·Stage C 모델·충전 손실)과 P6·F2 설계 변경
+    python/E38_review_response.py
+06f3a42 10-29 15:05 E38 Q1·Q2 실행: 클램프 재선정(가지 2개 × SP 1.6 Ω + SiC), 고전압 팩 W460 설정(511/506 V, 가지 2개 × 1.8 Ω)
+    python/E38_review_response.py
+    validation/2026-10-29-review-response/E38/E38_run1.log
+    validation/2026-10-29-review-response/E38/clamp.json
+    validation/2026-10-29-review-response/E38/hv.json
+5d716ce 10-29 15:23 TB30·TB31 기준값과 판정 기준(실행 전), E38 l1·l2·p6·f2 결과
+    validation/2026-10-29-review-response/E38/E38_run2.log
+    validation/2026-10-29-review-response/E38/E38_run2_l1_first.log
+    validation/2026-10-29-review-response/E38/f2.json
+    validation/2026-10-29-review-response/E38/l1_compare.json
+    validation/2026-10-29-review-response/E38/l1_e15_comparison.json
+    validation/2026-10-29-review-response/E38/l1_e18_A25R_value_map.json
+    validation/2026-10-29-review-response/E38/l1_e25_comparison.json
+    validation/2026-10-29-review-response/E38/l1_e25_statements.json
+    validation/2026-10-29-review-response/E38/l2.json
+    validation/2026-10-29-review-response/E38/p6.json
+    validation/2026-10-29-review-response/E38/table.json
+c1c07b8 10-29 16:20 TB31 실행 결과(2/2, 1차 출력 오류 수정 뒤 재실행), docs/43 회로 절·독립 검토 반영, 외부 검토 재현 근거(E38_review_repro), 정정 2 보완(docs/21·23·30·31·33·34·35·38·40·41), docs/20·README·CHANGELOG 1.35.0
+    python/E38_review_repro.py
+    validation/2026-10-29-review-response/E38/E38_review_repro.log
+    validation/2026-10-29-review-response/E38/l1_e18_R1_value_map.json
+    validation/2026-10-29-review-response/E38/l1_e18_compare.json
+    validation/2026-10-29-review-response/E38/review_repro.json
+a34b904 10-29 16:21 E38 근거 폴더에 l1 그림 3개(가치 지도 A25R·R1, 모터 승압 대비 충전 손실) 추가
+    validation/2026-10-29-review-response/E38/l1_e18_A25R_value_map.png
+    validation/2026-10-29-review-response/E38/l1_e18_R1_value_map.png
+    validation/2026-10-29-review-response/E38/l1_e25_motor_boost.png
+=== E39
+6a615ba 10-29 17:45 E39 판정 기준(실행 전): 클램프 스위치 재판정 — 최대 열저항, 가지 저항 조합, 자기 가열 갱신, 선정 규칙. E26 가지별 저항 선택 인자(회귀 차 0)
+    python/E39_clamp_switch_rejudge.py
+7f120a6 10-29 17:49 E39 실행 경과: reg 1차 불통과(시험 코드 상태 누수, 가지 전류 정의 차) 수정, 구현 확인 기준 상대 차 1e-9
+    python/E39_clamp_switch_rejudge.py
+102d2da 10-29 18:19 E39 사양 팩 결과(가지 2 × 1.6 Ω·끔 463 V·CAB530M12BM3 146.5 °C, E38 선정 CAB450M12XM3 183.3 °C 불통과), TB32 기준값(E26 가지별)
+    validation/2026-10-29-clamp-switch/E39/E39_run1_reg_fail.log
+    validation/2026-10-29-clamp-switch/E39/reg.json
+    validation/2026-10-29-clamp-switch/E39/spec.json
+a220e7f 10-29 19:01 E39 결과: 사양 팩·W460 모두 같은 저항 + CAB530M12BM3(146.5·145.1 °C), E38 선정 CAB450M12XM3 183.3·180.8 °C 불통과, 과도 열(정보)
+    validation/2026-10-29-clamp-switch/E39/E39_run2.log
+    validation/2026-10-29-clamp-switch/E39/hv.json
+    validation/2026-10-29-clamp-switch/E39/table.json
+    validation/2026-10-29-clamp-switch/E39/tr.json

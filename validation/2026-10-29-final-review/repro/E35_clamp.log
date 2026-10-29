@@ -1,0 +1,37 @@
+E35 clamp ...
+  R2   640 V  0+0 kW hold t_comm  0 ms: V_A 최고 468.2 V, 저항   4941 J· 22.8 ms, 켬   183번(평균  6.5 kHz), IGBT 34 J → 평균 1196 W → T_vj 189 °C
+  R2   640 V  0+0 kW hold t_comm 10 ms: V_A 최고 468.2 V, 저항   6684 J· 30.9 ms, 켬   247번(평균  6.4 kHz), IGBT 46 J → 평균 1195 W → T_vj 189 °C
+  R2   640 V  0+0 kW ramp t_comm  0 ms: V_A 최고 468.2 V, 저항   2318 J· 10.7 ms, 켬   213번(평균  7.9 kHz), IGBT 24 J → 평균 897 W → T_vj 158 °C
+  R2   640 V  0+0 kW ramp t_comm 10 ms: V_A 최고 468.2 V, 저항   4065 J· 18.8 ms, 켬   279번(평균  7.4 kHz), IGBT 36 J → 평균 968 W → T_vj 166 °C
+  R2   640 V 20+5 kW hold t_comm  0 ms: V_A 최고 468.2 V, 저항   4182 J· 19.3 ms, 켬   243번(평균  8.7 kHz), IGBT 34 J → 평균 1231 W → T_vj 193 °C
+  R2   640 V 20+5 kW hold t_comm 10 ms: V_A 최고 468.2 V, 저항   5674 J· 26.2 ms, 켬   329번(평균  8.7 kHz), IGBT 47 J → 평균 1230 W → T_vj 193 °C
+  R2   640 V 20+5 kW ramp t_comm  0 ms: V_A 최고 468.2 V, 저항   1612 J·  7.4 ms, 켬   173번(평균  7.7 kHz), IGBT 18 J → 평균 822 W → T_vj 151 °C
+  R2   640 V 20+5 kW ramp t_comm 10 ms: V_A 최고 468.2 V, 저항   3106 J· 14.3 ms, 켬   261번(평균  8.1 kHz), IGBT 31 J → 평균 955 W → T_vj 164 °C
+  R2   920 V  0+0 kW hold t_comm  0 ms: V_A 최고 468.2 V, 저항   5227 J· 24.2 ms, 켬   193번(평균  6.4 kHz), IGBT 36 J → 평균 1196 W → T_vj 189 °C
+  R2   920 V  0+0 kW hold t_comm 10 ms: V_A 최고 468.2 V, 저항   6967 J· 32.2 ms, 켬   257번(평균  6.4 kHz), IGBT 48 J → 평균 1195 W → T_vj 189 °C
+  R2   920 V  0+0 kW ramp t_comm  0 ms: V_A 최고 468.2 V, 저항   2606 J· 12.0 ms, 켬   225번(평균  7.8 kHz), IGBT 26 J → 평균 910 W → T_vj 160 °C
+  R2   920 V  0+0 kW ramp t_comm 10 ms: V_A 최고 468.2 V, 저항   4348 J· 20.1 ms, 켬   289번(평균  7.5 kHz), IGBT 38 J → 평균 990 W → T_vj 168 °C
+  R2   920 V 20+5 kW hold t_comm  0 ms: V_A 최고 468.2 V, 저항   4479 J· 20.7 ms, 켬   260번(평균  8.7 kHz), IGBT 37 J → 평균 1231 W → T_vj 193 °C
+  R2   920 V 20+5 kW hold t_comm 10 ms: V_A 최고 468.2 V, 저항   5974 J· 27.6 ms, 켬   347번(평균  8.7 kHz), IGBT 49 J → 평균 1230 W → T_vj 193 °C
+  R2   920 V 20+5 kW ramp t_comm  0 ms: V_A 최고 468.2 V, 저항   1911 J·  8.8 ms, 켬   192번(평균  7.8 kHz), IGBT 21 J → 평균 850 W → T_vj 153 °C
+  R2   920 V 20+5 kW ramp t_comm 10 ms: V_A 최고 468.2 V, 저항   3408 J· 15.7 ms, 켬   279번(평균  7.9 kHz), IGBT 33 J → 평균 946 W → T_vj 163 °C
+  R2W  640 V  0+0 kW hold t_comm  0 ms: V_A 최고 468.2 V, 저항   5078 J· 23.4 ms, 켬   169번(평균  5.8 kHz), IGBT 34 J → 평균 1156 W → T_vj 185 °C
+  R2W  640 V  0+0 kW hold t_comm 10 ms: V_A 최고 468.2 V, 저항   6819 J· 31.5 ms, 켬   227번(평균  5.8 kHz), IGBT 45 J → 평균 1156 W → T_vj 185 °C
+  R2W  640 V  0+0 kW ramp t_comm  0 ms: V_A 최고 468.2 V, 저항   2456 J· 11.3 ms, 켬   202번(평균  7.2 kHz), IGBT 24 J → 평균 862 W → T_vj 155 °C
+  R2W  640 V  0+0 kW ramp t_comm 10 ms: V_A 최고 468.2 V, 저항   4205 J· 19.4 ms, 켬   261번(평균  6.8 kHz), IGBT 36 J → 평균 923 W → T_vj 161 °C
+  R2W  640 V 20+5 kW hold t_comm  0 ms: V_A 최고 468.2 V, 저항   4322 J· 19.9 ms, 켬   230번(평균  8.0 kHz), IGBT 34 J → 평균 1184 W → T_vj 188 °C
+  R2W  640 V 20+5 kW hold t_comm 10 ms: V_A 최고 468.2 V, 저항   5818 J· 26.8 ms, 켬   309번(평균  8.0 kHz), IGBT 46 J → 평균 1183 W → T_vj 188 °C
+  R2W  640 V 20+5 kW ramp t_comm  0 ms: V_A 최고 468.2 V, 저항   1757 J·  8.1 ms, 켬   169번(평균  7.0 kHz), IGBT 19 J → 평균 774 W → T_vj 145 °C
+  R2W  640 V 20+5 kW ramp t_comm 10 ms: V_A 최고 468.2 V, 저항   3248 J· 15.0 ms, 켬   248번(평균  7.5 kHz), IGBT 31 J → 평균 922 W → T_vj 161 °C
+  R2W  920 V  0+0 kW hold t_comm  0 ms: V_A 최고 468.2 V, 저항   5235 J· 24.2 ms, 켬   175번(평균  5.8 kHz), IGBT 35 J → 평균 1157 W → T_vj 185 °C
+  R2W  920 V  0+0 kW hold t_comm 10 ms: V_A 최고 468.2 V, 저항   6981 J· 32.2 ms, 켬   233번(평균  5.8 kHz), IGBT 46 J → 평균 1156 W → T_vj 185 °C
+  R2W  920 V  0+0 kW ramp t_comm  0 ms: V_A 최고 468.2 V, 저항   2615 J· 12.1 ms, 켬   208번(평균  7.1 kHz), IGBT 25 J → 평균 859 W → T_vj 154 °C
+  R2W  920 V  0+0 kW ramp t_comm 10 ms: V_A 최고 468.2 V, 저항   4360 J· 20.1 ms, 켬   266번(평균  6.8 kHz), IGBT 37 J → 평균 938 W → T_vj 163 °C
+  R2W  920 V 20+5 kW hold t_comm  0 ms: V_A 최고 468.2 V, 저항   4483 J· 20.7 ms, 켬   238번(평균  8.0 kHz), IGBT 35 J → 평균 1184 W → T_vj 188 °C
+  R2W  920 V 20+5 kW hold t_comm 10 ms: V_A 최고 468.2 V, 저항   5980 J· 27.6 ms, 켬   318번(평균  8.0 kHz), IGBT 47 J → 평균 1184 W → T_vj 188 °C
+  R2W  920 V 20+5 kW ramp t_comm  0 ms: V_A 최고 468.2 V, 저항   1919 J·  8.9 ms, 켬   178번(평균  7.1 kHz), IGBT 20 J → 평균 798 W → T_vj 148 °C
+  R2W  920 V 20+5 kW ramp t_comm 10 ms: V_A 최고 468.2 V, 저항   3412 J· 15.7 ms, 켬   257번(평균  7.4 kHz), IGBT 32 J → 평균 922 W → T_vj 161 °C
+  [통과] (clamp, C_A 2.4 mF) C1
+  [통과] (clamp, C_A 2.4 mF) P4
+  [실패] (clamp, C_A 2.4 mF) P5
+  → 저장: results/E35/clamp.json

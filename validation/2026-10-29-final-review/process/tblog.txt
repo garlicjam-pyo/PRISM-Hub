@@ -1,0 +1,166 @@
+=== simulink/tb/TB20_R2_Charging_Stop
+a2459c1 10-26 11:54 E26 충전 중 Stage A 정지 협조(평균모델), TB20 회로 준비
+    TB20_init.m
+    build_TB20.m
+    diag_TB20.m
+    ref/*
+    run_TB20.m
+    smoke_TB20.m
+db12fc5 10-26 12:13 TB20 충전 중 R2 정지 협조 회로 3/4, docs/31, docs/20·README·CHANGELOG 1.24.0
+    README.md
+    TB20_R2_Charging_Stop.slx
+    diag4_TB20.m
+    results/*
+    run_TB20.m
+09df9f8 10-26 12:15 docs/31·TB20 README: 기준 (C4)의 사례 D 경부하 판정 방식 명시
+    README.md
+=== simulink/tb/TB21_R2_Charging_Reversal
+15a8644 10-27 19:56 E27·TB21 Stage A 영교차 게이트 방향 반전 처리: TB20 사례 D 해결(회로 4/4), 1.25.0
+    README.md
+    TB21_R2_Charging_Reversal.slx
+    TB21_init.m
+    build_TB21.m
+    ref/*
+    results/*
+    run_TB21.m
+    smoke_TB21.m
+=== simulink/tb/TB22_StageA_Modules
+7f7f75f 10-28 03:26 E28·TB22 Stage A 4모듈 경부하 운전: 모듈 관리기 + 모듈별 위상 셰딩 + 부품 공차, 1.27.0
+    README.md
+    TB22_StageA_Modules.slx
+    TB22_init.m
+    build_TB22.m
+    ref/*
+    results/*
+    run_TB22.m
+    smoke_TB22.m
+=== simulink/tb/TB23_R2_SALS_Link
+eae5863 10-28 13:54 E29·TB23 보호 상태기계–SALS 연동: 400 V 부하 분리·감발의 지연·손실·계약 응답, 이중 고장 Stage A 정지, 1.28.0
+    README.md
+    TB23_R2_SALS_Link.slx
+    TB23_init.m
+    build_TB23.m
+    ref/*
+    results/*
+    run_TB23.m
+    run_TB23_C.m
+    smoke_TB23.m
+=== simulink/tb/TB24_StageA_ModuleFault
+95bd8c8 10-28 15:46 E30 결과와 TB24 테스트벤치(회로 실행 전), EPC2305 데이터시트 곡선
+    TB24_init.m
+    build_TB24.m
+    ref/*
+    run_TB24.m
+    smoke_TB24.m
+7bbec48 10-28 16:29 TB24 회로 결과(4/4 통과)와 docs/36(E30·TB24 Stage A 모듈 고장과 관리기 연동), 근거 폴더 README
+    README.md
+    results/*
+=== simulink/tb/TB25_StageA_Coss
+46ab52f 10-28 16:23 E31 결과(Stage A 출력용량 손실 재평가)와 TB25 테스트벤치(회로 실행 전, 판정 기준 고정)
+    TB25_init.m
+    build_TB25.m
+    ref/*
+    run_TB25.m
+    smoke_TB25.m
+77aa757 10-28 16:29 TB25 run: 짧은 실행에서 평가 구간 시작 색인이 0이 되는 오류 수정(판정 기준 그대로)
+    run_TB25.m
+f802241 10-28 16:45 TB25 회로 결과(T1 3/3 통과, 부하 시 대조 3개 불통과와 진단), docs/37 v1.0, docs/20 E30·E31·TB24·TB25 반영, CHANGELOG 1.29.0
+    README.md
+    ref/*
+    results/*
+=== simulink/tb/TB26_StageA25_Integrated
+42f75b1 10-28 17:49 E32 결과(A25 정상상태·문턱·손실)와 TB26 테스트벤치 초안(실행 전)
+    TB26_init.m
+    build_TB26.m
+    ref/*
+    run_TB26.m
+    smoke_TB26.m
+147daa6 10-28 18:54 A25 재검증 결과(E33 동특성·실행 뒤 진단, TB26 회로)와 부품 정격 표(E34), docs/38·39, docs/20·37 갱신, CHANGELOG 1.30.0
+    README.md
+    ref/*
+    results/*
+=== simulink/tb/TB27_StageA25R_Integrated
+1e8c999 10-28 20:20 TB27 실행 전: A25R(C_A 2.4 mF) 4모듈 회로 사례(FF27·MC27 느린 충전·MA27 Tier-1·SC27 정상상태)와 판정 기준 고정(C5는 정상상태 사례만, 실제 주기 × 20 창)
+    TB27_init.m
+    build_TB27.m
+    ref/*
+    run_TB27.m
+    smoke_TB27.m
+e3e76f0 10-28 20:53 A25R(C_A 2.4 mF) 판정 결과: E35 요구 안 과도 12/12·고장 16/16, TB27 4/4(손실 회로 대조 +3.0 %), docs/40, docs/20·38·39 갱신, CHANGELOG 1.31.0
+    README.md
+    ref/*
+    results/*
+be0c32f 10-28 22:51 TB28: 충전 중 정지·V_A 클램프 A25R 테스트벤치(회로·판정 기준, 실행 전 고정)
+    build_TB27.m
+f1033e7 10-28 23:40 E36·TB28 결과: A25R 영향 재확인
+    results/*
+=== simulink/tb/TB28_A25R_Charging_Stop
+be0c32f 10-28 22:51 TB28: 충전 중 정지·V_A 클램프 A25R 테스트벤치(회로·판정 기준, 실행 전 고정)
+    README.md
+    TB28_init.m
+    build_TB28.m
+    ref/*
+    run_TB28.m
+    smoke_TB28.m
+21c2c09 10-28 22:54 TB28 기준값(사례 A·B·C, 생성 중)과 docs/41 초안 골격
+    ref/*
+e165dc7 10-28 22:54 TB28 기준값: 사례 D(느린 충전 시작·종료) 추가
+    ref/*
+f1033e7 10-28 23:40 E36·TB28 결과: A25R 영향 재확인
+    README.md
+    results/*
+=== simulink/tb/TB29_A25R_Clamp12
+1ef21a5 10-29 00:17 TB29: V_A 클램프 1.2 Ω 회로 확인 테스트벤치(판정 기준 실행 전 고정)
+    README.md
+    TB29_init.m
+    build_TB29.m
+    ref/*
+    run_TB29.m
+    smoke_TB29.m
+5c8913e 10-29 00:19 docs/42 부품 정격 표 2차, TB29 기준값
+    ref/*
+4f5c175 10-29 00:48 TB29 결과: 클램프 1.2 Ω 회로 2/2 통과, docs/42·docs/20·README 반영
+    README.md
+    results/*
+=== simulink/tb/TB30_A25R_ClampTol
+06f3a42 10-29 15:05 E38 Q1·Q2 실행: 클램프 재선정(가지 2개 × SP 1.6 Ω + SiC), 고전압 팩 W460 설정(511/506 V, 가지 2개 × 1.8 Ω)
+    README.md
+    TB30_init.m
+    build_TB30.m
+    ref/*
+    run_TB30.m
+    smoke_TB30.m
+5d716ce 10-29 15:23 TB30·TB31 기준값과 판정 기준(실행 전), E38 l1·l2·p6·f2 결과
+    ref/*
+c15f230 10-29 15:48 TB30 실행 결과: 재선정 V_A 클램프 두 저항 모서리 2/2 통과(버스 469.35 V, 가지 392.7 A)
+    README.md
+    results/*
+f17e1b2 10-29 19:06 TB30 README·외부 검토 근거 README에 클램프 스위치 정정 표시(E39)
+    README.md
+=== simulink/tb/TB31_R2_ScPause_LoadStop
+5d716ce 10-29 15:23 TB30·TB31 기준값과 판정 기준(실행 전), E38 l1·l2·p6·f2 결과
+    README.md
+    TB31_init.m
+    build_TB31.m
+    ref/*
+    run_TB31.m
+    smoke_TB31.m
+c1c07b8 10-29 16:20 TB31 실행 결과(2/2, 1차 출력 오류 수정 뒤 재실행), docs/43 회로 절·독립 검토 반영, 외부 검토 재현 근거(E38_review_repro), 정정 2 보완(docs/21·23·30·31·33·34·35·38·40·41), docs/20·README·CHANGELOG 1.35.0
+    README.md
+    results/*
+    run_TB31.m
+=== simulink/tb/TB32_A25R_ClampMix
+415b18e 10-29 17:54 TB32 판정 기준(실행 전): 가지를 따로 둔 V_A 클램프(E39 mix 조합), 모델·초기화·실행·기준값 생성 코드
+    README.md
+    TB32_init.m
+    build_TB32.m
+    ref/*
+    run_TB32.m
+    smoke_TB32.m
+102d2da 10-29 18:19 E39 사양 팩 결과(가지 2 × 1.6 Ω·끔 463 V·CAB530M12BM3 146.5 °C, E38 선정 CAB450M12XM3 183.3 °C 불통과), TB32 기준값(E26 가지별)
+    ref/*
+be2b5b1 10-29 18:40 TB32 실행 결과 2/2 통과(가지 저항 섞임: 작은 저항 가지 393.0 A·에너지 몫 0.665, E26과 같음)
+    README.md
+    results/*
+e126c19 10-29 19:16 독립 검토 반영(E39 문서): docs/44 1.1 표 열 구분·진단 근거 파일, 1.5e-14, W460 첫 실행 두 가지 모두 가정 초과, 150.03 °C, 3 × 3.0 Ω 갱신, TB32 확인 범위(전류 첨두·에너지 몫), 최악 조합 범위 한정, 축소 실행 FAIL 출력, docs/43 정정 표시 추가, 근거 README 진단 공개
+    README.md
