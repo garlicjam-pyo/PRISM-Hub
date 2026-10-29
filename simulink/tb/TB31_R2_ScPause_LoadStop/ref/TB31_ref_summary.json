@@ -1,0 +1,94 @@
+{
+ "A31_930V_MX_S5_pause": {
+  "pass_": true,
+  "failed": [],
+  "events": [
+   [
+    "shed_cmd",
+    0.505
+   ],
+   [
+    "HB_HOLD",
+    0.505
+   ],
+   [
+    "sc_pause",
+    3.685
+   ],
+   [
+    "HB_COLLAPSE",
+    3.685
+   ],
+   [
+    "SOFT_BYP",
+    12.665
+   ],
+   [
+    "DEGRADED",
+    13.67
+   ],
+   [
+    "restore",
+    14.1701
+   ],
+   [
+    "sc_resume",
+    14.1701
+   ]
+  ],
+  "path_peak": 53.874668062785034,
+  "bridge_peak": 53.87421905305359,
+  "vbus_min": 395.466402736801,
+  "vbus_max": 464.8724853778408,
+  "vbus_max_loaded": 464.8724853778408,
+  "vlink_max": 100.0328120065443,
+  "brk_energy_J": 5.539440483574249,
+  "soft_energy_J": 0.02139846763950557,
+  "dab_sec_peak": 63.67408379227166,
+  "t_end": 0.0153701
+ },
+ "E31_1008V_dab_double_stop": {
+  "pass_": true,
+  "failed": [],
+  "events": [
+   [
+    "shed_cmd",
+    1.275
+   ],
+   [
+    "DAB_HOLD",
+    1.275
+   ],
+   [
+    "hw_trip",
+    1.7751
+   ],
+   [
+    "FAILSAFE",
+    1.78
+   ],
+   [
+    "load_stop",
+    1.785
+   ],
+   [
+    "stageA_stop",
+    1.79
+   ],
+   [
+    "shed_done",
+    4.275
+   ]
+  ],
+  "path_peak": 55.71874755336004,
+  "bridge_peak": 55.780987949189,
+  "vbus_min": 430.67121965004804,
+  "vbus_max": 460.04274588735404,
+  "vbus_max_loaded": 460.04274588735404,
+  "vlink_max": 110.04886571628712,
+  "brk_energy_J": 1.9638632993379779,
+  "soft_energy_J": 0.0,
+  "dab_sec_peak": 24.17361434584181,
+  "t_end": 0.009775
+ }
+}

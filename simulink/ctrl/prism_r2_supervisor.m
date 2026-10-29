@@ -39,6 +39,8 @@ function s = prism_r2_supervisor(t, y, fl, prm)
 %   prm(67) C_tot = C_b + C_dmp [F], prm(68) τ_il [s], prm(69) 부하전류 추정 시작값 [A]
 %   SALS 모드의 s(10)은 비트 명령이다: 1 접촉기 열림(분리 끝), 2 SALS 감발, 4 SALS 되돌림, 8 Stage C 회생 차단, 16 Stage A 정지
 %   (부하 블록 ctrl/prism_sals_loads.m, Stage A 정지 스위치가 읽는다).
+%   (E38·TB31, 선택) prm(70) Stage C 일시 정지(1): 링크 붕괴 시작부터 강등 T_RESTORE 뒤까지 비트 32를 켠다(Stage C 입력 0, 허브 내부).
+%                    prm(71) 400 V 부하 정지(1): 이중 고장(13)에서 비트 64를 켠다(전용 배선 정지 신호). 69개 이하면 이전과 같다.
 %
 %  입력  t    시각 [s]
 %        y    측정 [i_p v_s v_bus i_h v_link]
@@ -49,7 +51,7 @@ function s = prism_r2_supervisor(t, y, fl, prm)
 %             제동 저항 게이트(1/0); 400 V 부하 분리(1/0); 상태 번호; 고장 검출(0 없음, 1 구동기, 2 비교기, 3 링크 창, 4 버스 창)]
 
 persistent st t_st t_det det shed_cmd shed sw_since vb_since rv0 rv1 rt1 rtype qb amode vl0 t0 tsoft0 Rs main brk mst gsince ip_s0 stall_t stall_v ...
-           curt_only restored t_cont low_since cutb restb blkb t_as il_f vb_prev
+           curt_only restored t_cont low_since cutb restb blkb t_as il_f vb_prev pz lsb
 VW = prm(1); upper = prm(2); H = prm(3); R = prm(4); Rh = prm(5); Cs = prm(6); Lh = prm(7); itau = prm(8);
 Clink = prm(9); VD = prm(10); t_ev = prm(11); ev = prm(12); pol = prm(13); prep = prm(14); cls = prm(15);
 t_prep = prm(16); t_wait = prm(17); RAMP = prm(18); HOLD = prm(19); ZERO = prm(20); t_shed = prm(21);
@@ -69,6 +71,10 @@ if numel(prm) >= 69
     SALS = prm(61); I_COL = prm(62); T_CONF = prm(63); T_CUR_MAX = prm(64); FS_BRAKE = prm(65); ASTOP = prm(66);
     C_TOT = prm(67); TAU_IL = prm(68); IL0 = prm(69);
 end
+SC_PAUSE = 0; LOAD_STOP = 0;
+if numel(prm) >= 71
+    SC_PAUSE = prm(70); LOAD_STOP = prm(71);
+end
 
 ip = y(1); vs = y(2); vb = y(3); ih = y(4); vl = y(5);
 if isempty(st)
@@ -77,6 +83,7 @@ if isempty(st)
     if st0 == 3, Rs = R_OPEN; main = 0; else, Rs = R_OPEN; main = 1; end
     brk = 0; mst = 0; gsince = -1; ip_s0 = 0; stall_t = -1; stall_v = 0; curt_only = 0; restored = 0;
     t_cont = -1; low_since = -1; cutb = 0; restb = 0; blkb = 0; t_as = -1; il_f = IL0; vb_prev = vb;
+    pz = 0; lsb = 0;
 end
 va_m = vbat/2 - R*ip;                                  % V_A 추정(배터리 전압 센서 − 경로 강하)
 gwin = (st == 5 && t - t_st >= HOLD - 1e-12) || (st == 8 && t - t_st >= RAMP + HOLD - 1e-12);
@@ -227,6 +234,12 @@ if st == 11 && t > tsoft0 + 1e-12                        % 소프트 투입(경�
         Rs = max(Rs/K_DN, R_ON);
     end
 end
+% ---- (E38) Stage C 일시 정지·400 V 부하 정지 ---------------------------------------------------------
+if SC_PAUSE > 0.5
+    if pz == 0 && st == 10, pz = 1; end                  % 링크 붕괴 시작: Stage C 일시 정지
+    if pz == 1 && st == 12 && t - t_st >= T_RESTORE - 1e-12, pz = 2; end   % 강등 T_RESTORE 뒤 재개
+end
+if LOAD_STOP > 0.5 && st == 13, lsb = 1; end             % 이중 고장: 400 V 부하 정지 신호
 % ---- 지령 --------------------------------------------------------------------------------------
 vref = vref_at(t, rtype, rv0, rv1, rt1, RAMP, VW, va_m);
 rst = double(st == 0 || st == 1 || st == 2 || st == 6 || st >= 9);
@@ -287,7 +300,7 @@ else
 end
 shed_out = shed;
 if SALS > 0.5                                            % 비트 명령(부하 블록·Stage A 정지 스위치)
-    shed_out = shed + 2*cutb + 4*restb + 8*blkb + 16*double(t_as >= 0 && t >= t_as - 1e-12);
+    shed_out = shed + 2*cutb + 4*restb + 8*blkb + 16*double(t_as >= 0 && t >= t_as - 1e-12) + 32*double(pz == 1) + 64*lsb;
 end
 s = [vref; rst; bmode; mst; dmode; icmd_aux; Rs; main; brk; shed_out; st; det];
 end

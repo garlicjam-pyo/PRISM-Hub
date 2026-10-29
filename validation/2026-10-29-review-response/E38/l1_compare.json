@@ -1,0 +1,179 @@
+{
+ "stage_c": {
+  "reg": {
+   "Lm": 3.3e-05,
+   "n": 4.8,
+   "front": "buck"
+  },
+  "fix": {
+   "Lm": 6.218905472636816e-05,
+   "n": 8.333333333333334
+  }
+ },
+ "ratings_stageC": {
+  "regulated_dcx": {
+   "positions": 8,
+   "devices": 16,
+   "switch_kVA": 94.01777052121604,
+   "rated_kW": 5.0,
+   "magnetics": 1
+  },
+  "regulated_front": {
+   "positions": 2,
+   "devices": 4,
+   "switch_kVA": 27.49883991557938,
+   "rated_kW": 5.0,
+   "magnetics": 1
+  },
+  "fixed": {
+   "positions": 8,
+   "devices": 16,
+   "switch_kVA": 75.51008390268372,
+   "rated_kW": 5.0,
+   "magnetics": 1
+  }
+ },
+ "aux_W": {
+  "1": [
+   114.55132527604324,
+   115.87798991753213
+  ],
+  "2": [
+   133.26181809286473,
+   134.58565567211932
+  ],
+  "3": [
+   143.20558723889755,
+   144.52549989128192
+  ],
+  "3w": [
+   123.42935199621178,
+   130.4309060574016
+  ],
+  "4": [
+   94.40529336290135,
+   101.54411222006114
+  ]
+ },
+ "ratings": {
+  "1": [
+   {
+    "positions": 24,
+    "devices": 28,
+    "switch_kVA": 788.7259956185673,
+    "rated_kW": 178.0,
+    "magnetics": 9
+   },
+   {
+    "positions": 24,
+    "devices": 32,
+    "switch_kVA": 817.9722041485586,
+    "rated_kW": 180.0,
+    "magnetics": 9
+   }
+  ],
+  "2": [
+   {
+    "positions": 44,
+    "devices": 80,
+    "switch_kVA": 1066.2741922553262,
+    "rated_kW": 178.0,
+    "magnetics": 10
+   },
+   {
+    "positions": 44,
+    "devices": 84,
+    "switch_kVA": 1095.5204007853176,
+    "rated_kW": 180.0,
+    "magnetics": 10
+   }
+  ],
+  "3": [
+   {
+    "positions": 52,
+    "devices": 96,
+    "switch_kVA": 1069.6729045238012,
+    "rated_kW": 161.0,
+    "magnetics": 11
+   },
+   {
+    "positions": 52,
+    "devices": 100,
+    "switch_kVA": 1098.919113053793,
+    "rated_kW": 163.0,
+    "magnetics": 11
+   }
+  ],
+  "3w": [
+   {
+    "positions": 58,
+    "devices": 100,
+    "switch_kVA": 1071.2886711642284,
+    "rated_kW": 161.3,
+    "magnetics": 12
+   },
+   {
+    "positions": 56,
+    "devices": 104,
+    "switch_kVA": 1131.3739657718802,
+    "rated_kW": 165.0,
+    "magnetics": 12
+   }
+  ],
+  "4": [
+   {
+    "positions": 44,
+    "devices": 80,
+    "switch_kVA": 948.8591112393,
+    "rated_kW": 156.3,
+    "magnetics": 10
+   },
+   {
+    "positions": 42,
+    "devices": 84,
+    "switch_kVA": 1008.9444058469517,
+    "rated_kW": 160.0,
+    "magnetics": 10
+   }
+  ]
+ },
+ "H5": [
+  false,
+  false
+ ],
+ "H5_band3": [
+  false,
+  false
+ ],
+ "e25_statements": [
+  {
+   "aux4_lt_5": true,
+   "aux4_gt_6": true,
+   "charge_lt_motor_base": {
+    "640V": true,
+    "800V": true,
+    "920V": true
+   },
+   "charge_lt_motor_min": {
+    "640V": true,
+    "800V": true,
+    "920V": false
+   }
+  },
+  {
+   "aux4_lt_5": true,
+   "aux4_gt_6": true,
+   "charge_lt_motor_base": {
+    "640V": true,
+    "800V": true,
+    "920V": true
+   },
+   "charge_lt_motor_min": {
+    "640V": true,
+    "800V": true,
+    "920V": false
+   }
+  }
+ ],
+ "e18_changed": []
+}

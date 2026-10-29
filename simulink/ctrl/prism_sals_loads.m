@@ -15,16 +15,25 @@ function [i_load, p_load] = prism_sals_loads(t, vb, code, prm)
 %   입력  t 시각 [s], vb 버스전압(한 간격 지연·시작 보호), code s(10) 비트 명령,
 %         prm [sc v2l comp ptc bh | d_comp d_ptc d_bh | k_comp k_ptc k_bh | kr_comp kr_ptc kr_bh |
 %              period wd up dn t_sc sc_slew v_min v_cut]  (22개, 시간 [s]·변화율 [W/s]는 시간 축소를 이미 넣은 값)
+%   (E38·TB31, 선택) prm(23) 400 V 부하 정지 램프 [s]. 비트 32 Stage C 일시 정지(켜진 동안 양의 입력전력을 sc_slew로 0까지,
+%         꺼지면 같은 변화율로 복귀), 비트 64 400 V 부하 정지(처음 켜진 시각부터 램프 동안 전체 부하를 선형으로 0까지).
+%         검증 코드 sals_loads.SalsLoads의 sc_pause·sc_resume·load_stop과 같다. 22개면 이전과 같다.
 %   출력  i_load = p_load / max(vb, v_min) [A], p_load [W]
 
-persistent t_cut t_rest t_blk acut arest
+persistent t_cut t_rest t_blk acut arest t_pz t_rz t_stp
 if isempty(t_cut)
-    t_cut = -1; t_rest = -1; t_blk = -1; acut = inf(3, 1); arest = inf(3, 1);
+    t_cut = -1; t_rest = -1; t_blk = -1; acut = inf(3, 1); arest = inf(3, 1); t_pz = -1; t_rz = -1; t_stp = -1;
 end
+ramp = 1;
+if numel(prm) >= 23, ramp = prm(23); end
 mix = prm(1:5); dl = prm(6:8); kc = prm(9:11); kr = prm(12:14);
 period = prm(15); wd = prm(16); up = prm(17); dn = prm(18); t_sc = prm(19); sc_slew = prm(20); vmin = prm(21); vcut = prm(22);
 c = round(code);
 open_c = mod(c, 2) >= 1; cut = mod(floor(c/2), 2) >= 1; rest = mod(floor(c/4), 2) >= 1; blk = mod(floor(c/8), 2) >= 1;
+pz = mod(floor(c/32), 2) >= 1; stp = mod(floor(c/64), 2) >= 1;
+if pz && t_pz < 0, t_pz = t; end                       % (E38) Stage C 일시 정지
+if ~pz && t_pz >= 0 && t_rz < 0, t_rz = t; end         % 재개
+if stp && t_stp < 0, t_stp = t; end                    % 400 V 부하 정지
 
 if cut && t_cut < 0                                   % 감발 명령: 장치별 도착 시각
     t_cut = t;
@@ -46,7 +55,14 @@ end
 
 % Stage C(M0): 회생 차단이면 하한 0으로
 sc = mix(1);
-if sc < 0 && t_blk >= 0 && t >= t_blk + t_sc
+if sc > 0 && t_pz >= 0 && t >= t_pz                    % (E38) Stage C 일시 정지·재개
+    pS = max(sc - sc_slew*(t - t_pz), 0);
+    if t_rz >= 0 && t >= t_rz
+        p0 = max(sc - sc_slew*(t_rz - t_pz), 0);
+        pS = min(sc, p0 + sc_slew*(t - t_rz));
+    end
+    sc = pS;
+elseif sc < 0 && t_blk >= 0 && t >= t_blk + t_sc
     sc = min(0, sc + sc_slew*(t - t_blk - t_sc));
 end
 p = sc;
@@ -65,6 +81,9 @@ if ~open_c
         end
         p = p + pj;
     end
+end
+if t_stp >= 0 && t >= t_stp                            % (E38) 400 V 부하 정지
+    p = p*max(0, 1 - (t - t_stp)/ramp);
 end
 if vb < vcut
     p = 0;
