@@ -1,0 +1,181 @@
+{
+  "case": "E31_1008V_dab_double_stop",
+  "event": "dab",
+  "limits": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "class_upper_while_400V_loads": true,
+    "brake_64J": true,
+    "ip_zero_5ms": true
+  },
+  "P6": {
+    "Tj_C": null,
+    "P_pk_1us_W": null
+  },
+  "verdict": "PASS",
+  "failed": [],
+  "transitions": [
+    {
+      "state": "DAB_HOLD",
+      "ms": 1.2650000000000001
+    },
+    {
+      "state": "FAILSAFE",
+      "ms": 1.78
+    },
+    {
+      "state": "shed_done",
+      "ms": 4.2650000000000006
+    },
+    {
+      "state": "shed_cmd",
+      "ms": 1.2650000000000001
+    },
+    {
+      "state": "stageA_stop",
+      "ms": 1.7850000000000001
+    },
+    {
+      "state": "load_stop",
+      "ms": 1.78
+    }
+  ],
+  "final_state": "FAILSAFE",
+  "clamp_err_V": null,
+  "dab": {
+    "sec_peak_A": 27.681493950519585,
+    "prim_peak_A": 6.0177160761999104,
+    "ms": 0.01,
+    "state": "WINDOW"
+  },
+  "soft": {
+    "entry_ms": null,
+    "vl_V": null,
+    "vs_V": null,
+    "ms": null,
+    "energy_J": null,
+    "path_peak_A": null
+  },
+  "peaks": {
+    "ip_A": 55.367454465754371,
+    "ih_A": 61.662140553518348,
+    "vs_V": 72.034725674724982,
+    "vlink_max_V": 110.02590828027741,
+    "vlink_min_V": 100.00346105657771,
+    "ibyp_A": 7.34474201881738E-5,
+    "bus_min_V": 430.92985766070069,
+    "bus_max_V": 460.1011498291835,
+    "bus_max_loaded_V": 460.1011498291835,
+    "brake_J": 1.9818711675879532
+  },
+  "ip_zero_ms": 1.1100000000000003,
+  "vA_end_V": 502.96418955900009,
+  "wall_s": 340.0618183,
+  "dt_ns": 2.5,
+  "date": "2026-10-29 16:18:14",
+  "compare": [
+    {
+      "metric": "min period-mean v_bus after event [V]",
+      "simscape": 430.92986143212062,
+      "e17": 430.671248,
+      "tol": 3
+    },
+    {
+      "metric": "max period-mean v_bus after event [V]",
+      "simscape": 460.08302674841485,
+      "e17": 460.04274160000006,
+      "tol": 3
+    },
+    {
+      "metric": "max period-mean i_p [A]",
+      "simscape": 55.360729155848553,
+      "e17": 55.718659380000005,
+      "tol": 5
+    },
+    {
+      "metric": "max period-mean i_h [A]",
+      "simscape": 55.399179374363158,
+      "e17": 55.779787580000004,
+      "tol": 5
+    },
+    {
+      "metric": "max period-mean v_link [V]",
+      "simscape": 110.00668833363513,
+      "e17": 110.03265719999999,
+      "tol": 2
+    },
+    {
+      "metric": "min period-mean v_link [V]",
+      "simscape": 100.03276620485239,
+      "e17": 99.99431232,
+      "tol": 2
+    },
+    {
+      "metric": "final mean v_bus [V]",
+      "simscape": 430.93571183686811,
+      "e17": 430.67694199999994,
+      "tol": 1
+    },
+    {
+      "metric": "brake energy [J]",
+      "simscape": 1.9818711675879532,
+      "e17": 1.9640272048099998,
+      "tol": null
+    },
+    {
+      "metric": "load energy after event [J]",
+      "simscape": 59.130056666666647,
+      "e17": 59.257007016639704,
+      "tol": null
+    },
+    {
+      "metric": "V_A node at end [V]",
+      "simscape": 502.96418955900009,
+      "e17": null,
+      "tol": null
+    },
+    {
+      "metric": "DAB link-side peak (circuit n|i_L|, E17 SPS) [A]",
+      "simscape": 27.681493950519585,
+      "e17": 24.173614345841809,
+      "tol": null
+    },
+    {
+      "metric": "transition DAB_HOLD [ms]",
+      "simscape": 1.2650000000000001,
+      "e17": 1.275,
+      "tol": 0.05
+    },
+    {
+      "metric": "transition FAILSAFE [ms]",
+      "simscape": 1.78,
+      "e17": 1.78,
+      "tol": 0.05
+    },
+    {
+      "metric": "transition shed_done [ms]",
+      "simscape": 4.2650000000000006,
+      "e17": 4.275,
+      "tol": 0.05
+    },
+    {
+      "metric": "transition shed_cmd [ms]",
+      "simscape": 1.2650000000000001,
+      "e17": 1.275,
+      "tol": 0.05
+    },
+    {
+      "metric": "transition stageA_stop [ms]",
+      "simscape": 1.7850000000000001,
+      "e17": 1.79,
+      "tol": 0.05
+    },
+    {
+      "metric": "transition load_stop [ms]",
+      "simscape": 1.78,
+      "e17": 1.785,
+      "tol": 0.05
+    }
+  ]
+}

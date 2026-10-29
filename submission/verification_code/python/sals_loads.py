@@ -18,6 +18,11 @@
                    하한을 0으로 두고 계약 변화율(4 kW/ms)로 올린다. 양의 전력은 그대로 둔다.
   접촉기 분리      : 접촉기 상태는 r2_run이 정한다(power의 connected). 분리되면 Stage C만 남는다(V2L·M1·D는 400 V급 부품이므로 함께 분리).
 
+■ (E38, 선택) Stage C 일시 정지(sc_pause/sc_resume)와 400 V 부하 정지(load_stop). 부르지 않으면 이전과 같다.
+  Stage C 일시 정지: 허브 내부 명령. 일시 정지 시각부터 양의 입력전력을 sc_slew(4 kW/ms)로 0까지 내리고, 재개 시각부터 같은
+                   변화율로 요청값까지 올린다(음의 전력 = 회생은 회생 차단 규칙 그대로). 48 V는 48 V 배터리가 맡는다.
+  400 V 부하 정지  : 이중 고장의 전용 배선 정지 신호. 정지 시각부터 ramp 동안 400 V 부하 전체(Stage C 포함)를 선형으로 0까지.
+
 ■ 시간 축소 ks(회로 시험용): SALS 시간(지연·재송신 주기·워치독)에 ks를 곱하고 M1·D 변화율은 ks로 나눈다(TB09–TB13의
   분리 20 ms → 3 ms와 같은 방식, ks = 0.15). Stage C 회생 차단(허브 내부, 1 ms 미만)은 축소하지 않는다.
 """
@@ -55,6 +60,8 @@ class SalsLoads:
         self.up, self.dn = up / ks, dn / ks
         self.sc_block, self.t_sc, self.sc_slew = sc_block, t_sc, sc_slew      # Stage C(허브 내부)는 축소하지 않는다
         self.t_cut = self.t_rest = self.t_blk = None
+        self.t_pause = self.t_resume = None                                  # (E38) Stage C 일시 정지·재개
+        self.t_stop = None; self.stop_ramp = None                            # (E38) 400 V 부하 정지
         self.arr_cut = {k: INF for k in DEV}
         self.arr_rest = {k: INF for k in DEV}
 
@@ -89,6 +96,21 @@ class SalsLoads:
         for k in DEV:
             self.arr_rest[k] = self._arrival(t, k, self.lost_r[k])
 
+    def sc_pause(self, t):
+        """(E38) Stage C 일시 정지(허브 내부, 통신 없음)."""
+        if self.t_pause is None:
+            self.t_pause = t
+
+    def sc_resume(self, t):
+        """(E38) Stage C 재개."""
+        if self.t_pause is not None and self.t_resume is None:
+            self.t_resume = t
+
+    def load_stop(self, t, ramp):
+        """(E38) 400 V 부하 정지(이중 고장의 전용 배선 신호): t부터 ramp 동안 선형으로 0."""
+        if self.t_stop is None:
+            self.t_stop, self.stop_ramp = t, ramp
+
     # ---- 전력 -----------------------------------------------------------------------------------
     def p_dev(self, k, t):
         p0 = self.mix[k]
@@ -103,6 +125,12 @@ class SalsLoads:
 
     def p_sc(self, t):
         sc = self.mix["sc"]
+        if sc > 0. and self.t_pause is not None and t >= self.t_pause:        # (E38) Stage C 일시 정지
+            p = max(sc - self.sc_slew * (t - self.t_pause), 0.)
+            if self.t_resume is not None and t >= self.t_resume:
+                p0 = max(sc - self.sc_slew * (self.t_resume - self.t_pause), 0.)
+                p = min(sc, p0 + self.sc_slew * (t - self.t_resume))
+            return p
         if sc >= 0. or not self.sc_block or self.t_blk is None or t < self.t_blk + self.t_sc:
             return sc
         return min(0., sc + self.sc_slew * (t - self.t_blk - self.t_sc))
@@ -111,6 +139,8 @@ class SalsLoads:
         p = self.p_sc(t)
         if connected:
             p += self.mix["v2l"] + sum(self.p_dev(k, t) for k in DEV)
+        if self.t_stop is not None and t >= self.t_stop:                     # (E38) 400 V 부하 정지
+            p *= max(0., 1. - (t - self.t_stop) / self.stop_ramp)
         return p
 
     # ---- 해석값 -----------------------------------------------------------------------------------
@@ -137,4 +167,6 @@ class SalsLoads:
         return dict(mix_W=self.mix, delay_s=self.delay, lost=self.lost, lost_r=self.lost_r, period_s=self.period, wd_s=self.wd,
                     up_W_per_s=self.up, dn_W_per_s=self.dn, sc_block=self.sc_block, t_sc_s=self.t_sc, sc_slew_W_per_s=self.sc_slew, ks=self.ks,
                     t_cut=self.t_cut, t_rest=self.t_rest, arr_cut={k: (None if v == INF else v) for k, v in self.arr_cut.items()},
-                    arr_rest={k: (None if v == INF else v) for k, v in self.arr_rest.items()})
+                    arr_rest={k: (None if v == INF else v) for k, v in self.arr_rest.items()},
+                    **({} if self.t_pause is None and self.t_stop is None else      # (E38) 쓴 경우에만 기록(이전 결과와 키가 같게)
+                       dict(t_pause=self.t_pause, t_resume=self.t_resume, t_stop=self.t_stop, stop_ramp=self.stop_ramp)))

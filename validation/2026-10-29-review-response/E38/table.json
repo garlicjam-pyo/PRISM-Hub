@@ -1,0 +1,46 @@
+{
+ "rows": [
+  {
+   "item": "Q1 V_A 클램프(사양 팩)",
+   "result": {
+    "n": 2,
+    "R_b": 1.6,
+    "off": 463.0,
+    "switch": "CAB450M12XM3"
+   }
+  },
+  {
+   "item": "Q2 고전압 팩 범위",
+   "result": {
+    "hv_packs": [
+     "224s",
+     "240s"
+    ],
+    "W460": {
+     "on": 511.0,
+     "off": 506,
+     "selected": {
+      "n": 2,
+      "R_b": 1.8,
+      "off": 506,
+      "switch": "CAB450M12XM3"
+     }
+    }
+   }
+  },
+  {
+   "item": "P6 Stage C 일시 정지",
+   "result": {
+    "pause_ms": [
+     8.7,
+     12.4101
+    ],
+    "batt48_J_max": 65.77353
+   }
+  },
+  {
+   "item": "F2 부하 정지 램프",
+   "result": 3.0
+  }
+ ]
+}

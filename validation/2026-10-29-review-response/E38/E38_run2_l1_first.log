@@ -1,0 +1,31 @@
+E38 l1 ...
+== l1 E15(H5) ==
+  → 저장: results/E38/l1_e15_comparison.json
+구조   주행 대표(A25R / E15) | 충전 800 V(A25R / E15)
+  1     115.9 /   114.6 W |   1775 /   1775 W
+  2     134.6 /   123.8 W |    586 /    497 W
+  3     144.5 /   133.8 W |    586 /    497 W
+  3w    130.4 /   114.1 W |    586 /    497 W
+  4     101.5 /    85.0 W |    586 /    497 W
+  [엄격] ③ vs 4: 우수 {'loss': False, 'kVA': False, 'count': False} → 불통과 (E15 불통과)
+  [엄격] ③ vs 3w: 우수 {'loss': False, 'kVA': True, 'count': True} → 통과 (E15 통과)
+  [통과] (L1 엄격) H5 판정이 E15와 같음  (A25R 불충족(기각), E15 불충족(기각))
+  [동등범위 3 %] ③ vs 4: 우수 {'loss': False, 'kVA': False, 'count': False} → 불통과 (E15 불통과)
+  [동등범위 3 %] ③ vs 3w: 우수 {'loss': False, 'kVA': False, 'count': True} → 불통과 (E15 불통과)
+  [통과] (L1 동등범위 3 %) H5 판정이 E15와 같음  (A25R 불충족(기각), E15 불충족(기각))
+  ③ = ④ 손익분기 Stage B 비도통 손실 배율: 0.31976733184459255(E15 0.228)
+== l1 E25 ==
+Traceback (most recent call last):
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E38_review_response.py", line 578, in <module>
+    globals()[part]()
+    ~~~~~~~~~~~~~~~^^
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E38_review_response.py", line 378, in l1
+    print("== l1 E25 ==", flush=True); E36.e25()
+                                       ~~~~~~~^^
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E36_a25r_impact.py", line 189, in e25
+    E25.main()
+    ~~~~~~~~^^
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E25_motor_boost_comparison.py", line 193, in main
+    aux=rat15["4"]["parts"]["stageC"]["positions"] + rat15["4"]["parts"]["stageC_pre"]["positions"]),
+                                                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+KeyError: 'stageC_pre'

@@ -1,0 +1,7507 @@
+{
+ "rows": [
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 53.874668062785034,
+   "bridge_peak": 53.87421905305359,
+   "series_peak": 86.0817034274674,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 378.4081705291075,
+   "vbus_max_loaded": 464.87248810458703,
+   "dab_sec_peak": 63.74678152858928,
+   "dab_peak_ratio": 1.3909978620268633,
+   "brk_energy_J": 6.704468137653598,
+   "soft_energy_J": 0.02142158426023285,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 22.925,
+    "vl": 0.49846435668028105,
+    "vs": -4.492746096906698,
+    "ip": 11.743649884830152
+   },
+   "soft_timeout": false,
+   "hold_ms": 13.34,
+   "deg_ms": 23.93,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     13.845
+    ],
+    [
+     "HB_COLLAPSE",
+     13.845
+    ],
+    [
+     "SOFT_BYP",
+     23.425
+    ],
+    [
+     "DEGRADED",
+     24.43
+    ],
+    [
+     "restore",
+     24.9301
+    ],
+    [
+     "sc_resume",
+     24.9301
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": 142.097,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MX_S1",
+   "soft": {
+    "soft_energy_J": 0.02142158426023285,
+    "E_byp_J": 0.13399349893216025,
+    "P_pk_W": 58.85119507829934,
+    "span10_ms": 0.685999999999999,
+    "dT_one": 4.695841698060179,
+    "vs_max_soft": 4.492146353540735,
+    "ib_max": 36.08056787288631
+   },
+   "sc_pause_ms": 13.345,
+   "sc_resume_ms": 24.4301,
+   "P6": {
+    "Tj": 104.69584169806018,
+    "ok": true
+   },
+   "pause_ms": 12.410099999999998,
+   "batt48_J": 65.77352999999998
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 66.32046559234564,
+   "bridge_peak": 67.07770494676093,
+   "series_peak": 91.28209285690427,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 373.07421142763786,
+   "vbus_max_loaded": 464.87248810461256,
+   "dab_sec_peak": 63.74678112925184,
+   "dab_peak_ratio": 1.3909978533130503,
+   "brk_energy_J": 7.824265456898217,
+   "soft_energy_J": 0.021421584476502147,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.925,
+    "vl": 0.4984643869309096,
+    "vs": -4.492746126375536,
+    "ip": 11.743649996268982
+   },
+   "soft_timeout": false,
+   "hold_ms": 17.34,
+   "deg_ms": 27.93,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     17.845
+    ],
+    [
+     "HB_COLLAPSE",
+     17.845
+    ],
+    [
+     "SOFT_BYP",
+     27.425
+    ],
+    [
+     "DEGRADED",
+     28.43
+    ],
+    [
+     "restore",
+     28.9301
+    ],
+    [
+     "sc_resume",
+     28.9301
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": 150.097,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MX_S5",
+   "soft": {
+    "soft_energy_J": 0.021421584476502147,
+    "E_byp_J": 0.10756023657202683,
+    "P_pk_W": 58.851195660620725,
+    "span10_ms": 0.685999999999999,
+    "dT_one": 4.695841745475268,
+    "vs_max_soft": 4.492146383001656,
+    "ib_max": 32.9761842163508
+   },
+   "sc_pause_ms": 17.345,
+   "sc_resume_ms": 28.4301,
+   "P6": {
+    "Tj": 104.69584174547526,
+    "ok": true
+   },
+   "pause_ms": 12.4101,
+   "batt48_J": 65.77353
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 70.53909930494983,
+   "bridge_peak": 71.07436733373333,
+   "series_peak": 91.36481627533082,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 372.8758199779966,
+   "vbus_max_loaded": 464.872487220704,
+   "dab_sec_peak": 63.74918434832052,
+   "dab_peak_ratio": 1.3910502931775635,
+   "brk_energy_J": 17.778247360549198,
+   "soft_energy_J": 0.021414090698421748,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 36.93,
+    "vl": 0.4974162075363762,
+    "vs": -4.491734233314316,
+    "ip": 11.739676950539474
+   },
+   "soft_timeout": false,
+   "hold_ms": 27.345,
+   "deg_ms": 37.935,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     27.85
+    ],
+    [
+     "HB_COLLAPSE",
+     27.85
+    ],
+    [
+     "SOFT_BYP",
+     37.43
+    ],
+    [
+     "DEGRADED",
+     38.435
+    ],
+    [
+     "restore",
+     38.935
+    ],
+    [
+     "sc_resume",
+     38.935
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 29.005,
+   "restore_done_ms": 170.102,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MX_L1",
+   "soft": {
+    "soft_energy_J": 0.021414090698421748,
+    "E_byp_J": 0.06398924641529276,
+    "P_pk_W": 58.83102070040932,
+    "span10_ms": 0.685999999999999,
+    "dT_one": 4.694198721792951,
+    "vs_max_soft": 4.491134761176342,
+    "ib_max": 30.131758361544975
+   },
+   "sc_pause_ms": 27.35,
+   "sc_resume_ms": 38.435,
+   "P6": {
+    "Tj": 104.69419872179296,
+    "ok": true
+   },
+   "pause_ms": 12.41,
+   "batt48_J": 65.773
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 70.53928107030461,
+   "bridge_peak": 71.07455473605013,
+   "series_peak": 91.36610723245332,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 372.8748998725047,
+   "vbus_max_loaded": 460.00073811862535,
+   "dab_sec_peak": 63.71097153725229,
+   "dab_peak_ratio": 1.3902164638104433,
+   "brk_energy_J": 27.74719548225243,
+   "soft_energy_J": 0.012206817857008381,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 57.775,
+    "vl": 0.49083677659333175,
+    "vs": -4.474318391407997,
+    "ip": 5.611370634373596
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 58.78,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     58.275
+    ],
+    [
+     "DEGRADED",
+     59.28
+    ],
+    [
+     "sc_resume",
+     59.78
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": 39.005,
+   "restore_done_ms": null,
+   "i_break": 19.8935985428253,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MX_L2",
+   "soft": {
+    "soft_energy_J": 0.012206817857008381,
+    "E_byp_J": 0.015589827444629117,
+    "P_pk_W": 32.47374366061079,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.6780976959565934,
+    "vs_max_soft": 4.473611389059772,
+    "ib_max": 19.13566535245858
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 59.28,
+   "P6": {
+    "Tj": 102.6780976959566,
+    "ok": true
+   },
+   "pause_ms": 10.595000000000002,
+   "batt48_J": 56.153500000000015
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 68.01735508996893,
+   "bridge_peak": 68.73108177132475,
+   "series_peak": 91.29769284196293,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 373.01036048436566,
+   "vbus_max_loaded": 460.00073811862535,
+   "dab_sec_peak": 63.73413043236225,
+   "dab_peak_ratio": 1.3907218065557927,
+   "brk_energy_J": 7.020511830355531,
+   "soft_energy_J": 0.012193667429022413,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 57.795,
+    "vl": 0.48848593029886234,
+    "vs": -4.472118522315083,
+    "ip": 5.606201713068149
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 58.8,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     58.295
+    ],
+    [
+     "DEGRADED",
+     59.3
+    ],
+    [
+     "sc_resume",
+     59.8
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 33.025729862151444,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MX_LC",
+   "soft": {
+    "soft_energy_J": 0.012193667429022413,
+    "E_byp_J": 0.01556805720857421,
+    "P_pk_W": 32.43904621733537,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.675218935246606,
+    "vs_max_soft": 4.471411880480617,
+    "ib_max": 19.12541672601326
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 59.3,
+   "P6": {
+    "Tj": 102.6752189352466,
+    "ok": true
+   },
+   "pause_ms": 10.614999999999998,
+   "batt48_J": 56.259499999999996
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 70.54102771812052,
+   "bridge_peak": 71.07564036159823,
+   "series_peak": 91.37019693830804,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 372.8708098042809,
+   "vbus_max_loaded": 460.00073811862535,
+   "dab_sec_peak": 63.76949003260508,
+   "dab_peak_ratio": 1.3914933769341002,
+   "brk_energy_J": 51.87535912196788,
+   "soft_energy_J": 0.01223348632341885,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 57.995,
+    "vl": 0.4956718097583589,
+    "vs": -4.478973169030191,
+    "ip": 5.618440766748891
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 59.0,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     58.495
+    ],
+    [
+     "DEGRADED",
+     59.5
+    ],
+    [
+     "sc_resume",
+     60.0
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 52.659923861936754,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MX_LA",
+   "soft": {
+    "soft_energy_J": 0.01223348632341885,
+    "E_byp_J": 0.015522182718171693,
+    "P_pk_W": 32.54393256430142,
+    "span10_ms": 0.7099999999999953,
+    "dT_one": 2.683929685422794,
+    "vs_max_soft": 4.478265284357197,
+    "ib_max": 19.15639199759198
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 59.5,
+   "P6": {
+    "Tj": 102.6839296854228,
+    "ok": true
+   },
+   "pause_ms": 10.815000000000001,
+   "batt48_J": 57.319500000000005
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 53.874668062785034,
+   "bridge_peak": 53.87421905305359,
+   "series_peak": 86.0817034274674,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 378.4081705291075,
+   "vbus_max_loaded": 465.0048959208655,
+   "dab_sec_peak": 63.75798478652199,
+   "dab_peak_ratio": 1.391242324687698,
+   "brk_energy_J": 6.07097448951082,
+   "soft_energy_J": 0.012182804621536317,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 19.28,
+    "vl": 0.4865455050750187,
+    "vs": -4.470320000925596,
+    "ip": 5.601787975607456
+   },
+   "soft_timeout": false,
+   "hold_ms": 11.26,
+   "deg_ms": 20.285,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     11.765
+    ],
+    [
+     "HB_COLLAPSE",
+     11.765
+    ],
+    [
+     "SOFT_BYP",
+     19.78
+    ],
+    [
+     "DEGRADED",
+     20.785
+    ],
+    [
+     "restore",
+     21.285
+    ],
+    [
+     "sc_resume",
+     21.285
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": 138.452,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MD_S1",
+   "soft": {
+    "soft_energy_J": 0.012182804621536317,
+    "E_byp_J": 0.07945488712785923,
+    "P_pk_W": 32.41036892630814,
+    "span10_ms": 0.7099999999999989,
+    "dT_one": 2.672840490575691,
+    "vs_max_soft": 4.469613647346302,
+    "ib_max": 29.303803196651348
+   },
+   "sc_pause_ms": 11.265,
+   "sc_resume_ms": 20.785,
+   "P6": {
+    "Tj": 102.6728404905757,
+    "ok": true
+   },
+   "pause_ms": 10.844999999999999,
+   "batt48_J": 57.4785
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 66.32046559234564,
+   "bridge_peak": 67.07770494676093,
+   "series_peak": 91.28209285690427,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 373.07421142763786,
+   "vbus_max_loaded": 465.0049088739589,
+   "dab_sec_peak": 63.76306317300807,
+   "dab_peak_ratio": 1.3913531385135147,
+   "brk_energy_J": 7.189839281241959,
+   "soft_energy_J": 0.012250513734598527,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 23.28,
+    "vl": 0.49866733571808713,
+    "vs": -4.481762992002941,
+    "ip": 5.625376762210663
+   },
+   "soft_timeout": false,
+   "hold_ms": 15.265,
+   "deg_ms": 24.285,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     15.77
+    ],
+    [
+     "HB_COLLAPSE",
+     15.77
+    ],
+    [
+     "SOFT_BYP",
+     23.78
+    ],
+    [
+     "DEGRADED",
+     24.785
+    ],
+    [
+     "restore",
+     25.285
+    ],
+    [
+     "sc_resume",
+     25.285
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": 146.452,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MD_S5",
+   "soft": {
+    "soft_energy_J": 0.012250513734598527,
+    "E_byp_J": 0.060884641046097684,
+    "P_pk_W": 32.588883727015094,
+    "span10_ms": 0.7099999999999989,
+    "dT_one": 2.6876595227246614,
+    "vs_max_soft": 4.481054617207359,
+    "ib_max": 26.20091532137268
+   },
+   "sc_pause_ms": 15.27,
+   "sc_resume_ms": 24.785,
+   "P6": {
+    "Tj": 102.68765952272466,
+    "ok": true
+   },
+   "pause_ms": 10.84,
+   "batt48_J": 57.452
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 70.53909930494983,
+   "bridge_peak": 71.07436733373333,
+   "series_peak": 91.36481627533082,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 372.8758199779966,
+   "vbus_max_loaded": 465.00489593028635,
+   "dab_sec_peak": 63.75791542298087,
+   "dab_peak_ratio": 1.3912408111283452,
+   "brk_energy_J": 17.145179026351002,
+   "soft_energy_J": 0.01218285378058198,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 33.28,
+    "vl": 0.4865542916613338,
+    "vs": -4.470328115395026,
+    "ip": 5.601807880582656
+   },
+   "soft_timeout": false,
+   "hold_ms": 25.26,
+   "deg_ms": 34.285,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     25.765
+    ],
+    [
+     "HB_COLLAPSE",
+     25.765
+    ],
+    [
+     "SOFT_BYP",
+     33.78
+    ],
+    [
+     "DEGRADED",
+     34.785
+    ],
+    [
+     "restore",
+     35.285
+    ],
+    [
+     "sc_resume",
+     35.285
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 29.005,
+   "restore_done_ms": 166.452,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MD_L1",
+   "soft": {
+    "soft_energy_J": 0.01218285378058198,
+    "E_byp_J": 0.03188584990744851,
+    "P_pk_W": 32.410498716041786,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.672851254423995,
+    "vs_max_soft": 4.469621760540385,
+    "ib_max": 19.1169820058895
+   },
+   "sc_pause_ms": 25.265,
+   "sc_resume_ms": 34.785,
+   "P6": {
+    "Tj": 102.67285125442399,
+    "ok": true
+   },
+   "pause_ms": 10.844999999999995,
+   "batt48_J": 57.47849999999998
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 70.53928107030461,
+   "bridge_peak": 71.07455473605013,
+   "series_peak": 91.36610723245332,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 372.8748998725047,
+   "vbus_max_loaded": 460.00073811862535,
+   "dab_sec_peak": 63.70542816708172,
+   "dab_peak_ratio": 1.3900955037263294,
+   "brk_energy_J": 27.693620877460603,
+   "soft_energy_J": 0.012206737767954945,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 57.75,
+    "vl": 0.4908224212429526,
+    "vs": -4.474305054452837,
+    "ip": 5.611339294862251
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 58.755,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     58.25
+    ],
+    [
+     "DEGRADED",
+     59.255
+    ],
+    [
+     "sc_resume",
+     59.755
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": 39.005,
+   "restore_done_ms": null,
+   "i_break": 11.582674912237293,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MD_L2",
+   "soft": {
+    "soft_energy_J": 0.012206737767954945,
+    "E_byp_J": 0.01560047345307312,
+    "P_pk_W": 32.47353241960732,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.678080163962811,
+    "vs_max_soft": 4.473598054212443,
+    "ib_max": 19.13560295519423
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 59.255,
+   "P6": {
+    "Tj": 102.67808016396282,
+    "ok": true
+   },
+   "pause_ms": 10.570000000000004,
+   "batt48_J": 56.02100000000002
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 68.01735508996893,
+   "bridge_peak": 68.73108177132475,
+   "series_peak": 91.29769284196293,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 373.01036048436566,
+   "vbus_max_loaded": 460.00073811862535,
+   "dab_sec_peak": 63.74930206561078,
+   "dab_peak_ratio": 1.391052861848407,
+   "brk_energy_J": 7.007955498714228,
+   "soft_energy_J": 0.012181711096916367,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 57.785,
+    "vl": 0.48635004666376114,
+    "vs": -4.4701394947442985,
+    "ip": 5.601345170182897
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 58.79,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     58.285
+    ],
+    [
+     "DEGRADED",
+     59.29
+    ],
+    [
+     "sc_resume",
+     59.79
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 24.050919877723455,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MD_LC",
+   "soft": {
+    "soft_energy_J": 0.012181711096916367,
+    "E_byp_J": 0.015560356197317134,
+    "P_pk_W": 32.407481800461646,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.6726010527247577,
+    "vs_max_soft": 4.469433169534995,
+    "ib_max": 19.116090437359254
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 59.29,
+   "P6": {
+    "Tj": 102.67260105272476,
+    "ok": true
+   },
+   "pause_ms": 10.605,
+   "batt48_J": 56.2065
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 70.54102771812052,
+   "bridge_peak": 71.07564036159823,
+   "series_peak": 91.37019693830804,
+   "vlink_max": 100.0328120065443,
+   "vbus_min": 372.8708098042809,
+   "vbus_max_loaded": 460.00073811862535,
+   "dab_sec_peak": 63.76949003260508,
+   "dab_peak_ratio": 1.3914933769341002,
+   "brk_energy_J": 51.87535912196788,
+   "soft_energy_J": 0.01223348632341885,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 57.995,
+    "vl": 0.4956718097583589,
+    "vs": -4.478973169030191,
+    "ip": 5.618440766748891
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 59.0,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     58.495
+    ],
+    [
+     "DEGRADED",
+     59.5
+    ],
+    [
+     "sc_resume",
+     60.0
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 52.659923861936754,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_MD_LA",
+   "soft": {
+    "soft_energy_J": 0.01223348632341885,
+    "E_byp_J": 0.015522182718171693,
+    "P_pk_W": 32.54393256430142,
+    "span10_ms": 0.7099999999999953,
+    "dT_one": 2.683929685422794,
+    "vs_max_soft": 4.478265284357197,
+    "ib_max": 19.15639199759198
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 59.5,
+   "P6": {
+    "Tj": 102.6839296854228,
+    "ok": true
+   },
+   "pause_ms": 10.815000000000001,
+   "batt48_J": 57.319500000000005
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 33.30840918427639,
+   "bridge_peak": 34.28053199740643,
+   "series_peak": 29.759734871872773,
+   "vlink_max": 100.00489926969196,
+   "vbus_min": 435.11350380850513,
+   "vbus_max_loaded": 464.9599090753766,
+   "dab_sec_peak": 63.522755878740476,
+   "dab_peak_ratio": 1.386109470919006,
+   "brk_energy_J": 4.60392297631899,
+   "soft_energy_J": 0.016280269551811152,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 7.18,
+    "vl": 0.495257509288154,
+    "vs": -4.4925162114442845,
+    "ip": 8.844036267408912
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.27,
+   "deg_ms": 8.185,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.775
+    ],
+    [
+     "HB_COLLAPSE",
+     0.775
+    ],
+    [
+     "SOFT_BYP",
+     7.68
+    ],
+    [
+     "DEGRADED",
+     8.685
+    ],
+    [
+     "restore",
+     9.1851
+    ],
+    [
+     "sc_resume",
+     9.1851
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 11.005,
+   "restore_done_ms": 82.019,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_ML_S1",
+   "soft": {
+    "soft_energy_J": 0.016280269551811152,
+    "E_byp_J": 0.05324361846290674,
+    "P_pk_W": 44.0673053623242,
+    "span10_ms": 0.6950000000000012,
+    "dT_one": 3.575463698480832,
+    "vs_max_soft": 4.491848698167338,
+    "ib_max": 24.051765140096297
+   },
+   "sc_pause_ms": 0.275,
+   "sc_resume_ms": 8.6851,
+   "P6": {
+    "Tj": 103.57546369848083,
+    "ok": true
+   },
+   "pause_ms": 9.7351,
+   "batt48_J": 51.59603
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 37.345479618778164,
+   "bridge_peak": 38.11439289076092,
+   "series_peak": 32.953553292709515,
+   "vlink_max": 100.00489926969196,
+   "vbus_min": 431.80899938669836,
+   "vbus_max_loaded": 464.92841832258324,
+   "dab_sec_peak": 63.53976373562545,
+   "dab_peak_ratio": 1.3864805938525466,
+   "brk_energy_J": 4.769425218301273,
+   "soft_energy_J": 0.022238752774218617,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 8.405,
+    "vl": 0.49910856825895,
+    "vs": -4.493094999845246,
+    "ip": 13.290218691294035
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.27,
+   "deg_ms": 9.41,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.775
+    ],
+    [
+     "HB_COLLAPSE",
+     0.775
+    ],
+    [
+     "SOFT_BYP",
+     8.905
+    ],
+    [
+     "DEGRADED",
+     9.91
+    ],
+    [
+     "restore",
+     10.4101
+    ],
+    [
+     "sc_resume",
+     10.4101
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": 97.453,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_ML_S5",
+   "soft": {
+    "soft_energy_J": 0.022238752774218617,
+    "E_byp_J": 0.04809871471260228,
+    "P_pk_W": 61.48413697060046,
+    "span10_ms": 0.6809999999999993,
+    "dT_one": 4.8910994652587085,
+    "vs_max_soft": 4.492502183215373,
+    "ib_max": 30.859353881561162
+   },
+   "sc_pause_ms": 0.275,
+   "sc_resume_ms": 9.9101,
+   "P6": {
+    "Tj": 104.8910994652587,
+    "ok": true
+   },
+   "pause_ms": 10.960099999999999,
+   "batt48_J": 58.08852999999999
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 39.649327296872045,
+   "bridge_peak": 38.11439289076092,
+   "series_peak": 32.953553292709515,
+   "vlink_max": 100.00489926969196,
+   "vbus_min": 431.80899938669836,
+   "vbus_max_loaded": 464.9301169424175,
+   "dab_sec_peak": 63.53976373562545,
+   "dab_peak_ratio": 1.3864805938525466,
+   "brk_energy_J": 4.778578687363413,
+   "soft_energy_J": 0.03209579307319134,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 8.915,
+    "vl": 0.49792162101074416,
+    "vs": -4.526848494466148,
+    "ip": 19.03916809247088
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.27,
+   "deg_ms": 9.92,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.775
+    ],
+    [
+     "HB_COLLAPSE",
+     0.775
+    ],
+    [
+     "SOFT_BYP",
+     9.415
+    ],
+    [
+     "DEGRADED",
+     10.42
+    ],
+    [
+     "restore",
+     10.92
+    ],
+    [
+     "sc_resume",
+     10.92
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 25.005,
+   "restore_done_ms": 108.753,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_ML_L1",
+   "soft": {
+    "soft_energy_J": 0.03209579307319134,
+    "E_byp_J": 0.05986665112172075,
+    "P_pk_W": 90.82371503810133,
+    "span10_ms": 0.6750000000000003,
+    "dT_one": 7.039011478884914,
+    "vs_max_soft": 4.5263214674754355,
+    "ib_max": 41.626885349776515
+   },
+   "sc_pause_ms": 0.275,
+   "sc_resume_ms": 10.42,
+   "P6": {
+    "Tj": 107.03901147888492,
+    "ok": true
+   },
+   "pause_ms": 11.469999999999999,
+   "batt48_J": 60.791
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 39.649327296872045,
+   "bridge_peak": 38.11439289076092,
+   "series_peak": 32.953553292709515,
+   "vlink_max": 100.00489926969196,
+   "vbus_min": 431.80899938669836,
+   "vbus_max_loaded": 464.9301169424175,
+   "dab_sec_peak": 63.53976373562545,
+   "dab_peak_ratio": 1.3864805938525466,
+   "brk_energy_J": 4.778578687363413,
+   "soft_energy_J": 0.03209579307319134,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 8.915,
+    "vl": 0.49792162101074416,
+    "vs": -4.526848494466148,
+    "ip": 19.03916809247088
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.27,
+   "deg_ms": 9.92,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.775
+    ],
+    [
+     "HB_COLLAPSE",
+     0.775
+    ],
+    [
+     "SOFT_BYP",
+     9.415
+    ],
+    [
+     "DEGRADED",
+     10.42
+    ],
+    [
+     "restore",
+     10.92
+    ],
+    [
+     "sc_resume",
+     10.92
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 35.005,
+   "restore_done_ms": 118.753,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_ML_L2",
+   "soft": {
+    "soft_energy_J": 0.03209579307319134,
+    "E_byp_J": 0.06866850262659956,
+    "P_pk_W": 90.82371503810133,
+    "span10_ms": 0.6750000000000003,
+    "dT_one": 7.039011478884914,
+    "vs_max_soft": 4.5263214674754355,
+    "ib_max": 41.626885349776515
+   },
+   "sc_pause_ms": 0.275,
+   "sc_resume_ms": 10.42,
+   "P6": {
+    "Tj": 107.03901147888492,
+    "ok": true
+   },
+   "pause_ms": 11.469999999999999,
+   "batt48_J": 60.791
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 37.345479618778164,
+   "bridge_peak": 38.11439289076092,
+   "series_peak": 32.953553292709515,
+   "vlink_max": 100.00489926969196,
+   "vbus_min": 431.80899938669836,
+   "vbus_max_loaded": 464.8236091670359,
+   "dab_sec_peak": 63.53976373562545,
+   "dab_peak_ratio": 1.3864805938525466,
+   "brk_energy_J": 4.773723457176881,
+   "soft_energy_J": 0.02673135337284064,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 8.63,
+    "vl": 0.49426584764632164,
+    "vs": -4.520109105184545,
+    "ip": 15.688211495992723
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.27,
+   "deg_ms": 9.635,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.775
+    ],
+    [
+     "HB_COLLAPSE",
+     0.775
+    ],
+    [
+     "SOFT_BYP",
+     9.13
+    ],
+    [
+     "DEGRADED",
+     10.135
+    ],
+    [
+     "restore",
+     10.635
+    ],
+    [
+     "sc_resume",
+     10.635
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": 98.468,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_ML_LC",
+   "soft": {
+    "soft_energy_J": 0.02673135337284064,
+    "E_byp_J": 0.0656223327395361,
+    "P_pk_W": 74.06812319139321,
+    "span10_ms": 0.68,
+    "dT_one": 5.869958986758063,
+    "vs_max_soft": 4.519544863103664,
+    "ib_max": 35.92548824690358
+   },
+   "sc_pause_ms": 0.275,
+   "sc_resume_ms": 10.135,
+   "P6": {
+    "Tj": 105.86995898675806,
+    "ok": true
+   },
+   "pause_ms": 11.184999999999999,
+   "batt48_J": 59.280499999999996
+  },
+  {
+   "case": "W460_240s",
+   "V": 930.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 39.649327296872045,
+   "bridge_peak": 38.11439289076092,
+   "series_peak": 32.953553292709515,
+   "vlink_max": 100.00489926969196,
+   "vbus_min": 431.80899938669836,
+   "vbus_max_loaded": 464.7264744190442,
+   "dab_sec_peak": 63.53976373562545,
+   "dab_peak_ratio": 1.3864805938525466,
+   "brk_energy_J": 4.778578687363413,
+   "soft_energy_J": 0.03209579307319134,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 8.915,
+    "vl": 0.49792162101074416,
+    "vs": -4.526848494466148,
+    "ip": 19.03916809247088
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.27,
+   "deg_ms": 9.92,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.775
+    ],
+    [
+     "HB_COLLAPSE",
+     0.775
+    ],
+    [
+     "SOFT_BYP",
+     9.415
+    ],
+    [
+     "DEGRADED",
+     10.42
+    ],
+    [
+     "restore",
+     10.92
+    ],
+    [
+     "sc_resume",
+     10.92
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": 10.42,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_930_ML_LA",
+   "soft": {
+    "soft_energy_J": 0.03209579307319134,
+    "E_byp_J": 0.12057226947984372,
+    "P_pk_W": 90.82371503810133,
+    "span10_ms": 0.6750000000000003,
+    "dT_one": 7.039011478884914,
+    "vs_max_soft": 4.5263214674754355,
+    "ib_max": 41.626885349776515
+   },
+   "sc_pause_ms": 0.275,
+   "sc_resume_ms": 10.42,
+   "P6": {
+    "Tj": 107.03901147888492,
+    "ok": true
+   },
+   "pause_ms": 11.469999999999999,
+   "batt48_J": 60.791
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 60.255144841182116,
+   "bridge_peak": 60.25468024448401,
+   "series_peak": 84.63913912992965,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 330.7517594245285,
+   "vbus_max_loaded": 415.8569442778386,
+   "dab_sec_peak": 83.32867657862272,
+   "dab_peak_ratio": 1.3891583706963337,
+   "brk_energy_J": 5.189106049536715,
+   "soft_energy_J": 0.022369604537734518,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 18.8,
+    "vl": 0.49923025638233304,
+    "vs": -4.505028016646356,
+    "ip": 11.88220169087184
+   },
+   "soft_timeout": false,
+   "hold_ms": 11.68,
+   "deg_ms": 19.805,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     12.185
+    ],
+    [
+     "HB_COLLAPSE",
+     12.185
+    ],
+    [
+     "SOFT_BYP",
+     19.3
+    ],
+    [
+     "DEGRADED",
+     20.305
+    ],
+    [
+     "restore",
+     20.805
+    ],
+    [
+     "sc_resume",
+     20.805
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": 137.972,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MX_S1",
+   "soft": {
+    "soft_energy_J": 0.022369604537734518,
+    "E_byp_J": 0.18623625575564587,
+    "P_pk_W": 61.306934954732164,
+    "span10_ms": 0.685999999999999,
+    "dT_one": 4.899069834197512,
+    "vs_max_soft": 4.504458582511527,
+    "ib_max": 42.13413109437112
+   },
+   "sc_pause_ms": 11.685,
+   "sc_resume_ms": 20.305,
+   "P6": {
+    "Tj": 104.89906983419752,
+    "ok": true
+   },
+   "pause_ms": 9.944999999999999,
+   "batt48_J": 52.708499999999994
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 67.70551139541273,
+   "bridge_peak": 67.88219525814274,
+   "series_peak": 86.4126103366099,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 328.8375074445877,
+   "vbus_max_loaded": 415.85694397845623,
+   "dab_sec_peak": 83.34191918015587,
+   "dab_peak_ratio": 1.3893791358821606,
+   "brk_energy_J": 5.188612819299734,
+   "soft_energy_J": 0.022366963907456985,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 22.805,
+    "vl": 0.4988975275590881,
+    "vs": -4.50471805334268,
+    "ip": 11.881314685435607
+   },
+   "soft_timeout": false,
+   "hold_ms": 15.685,
+   "deg_ms": 23.81,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     16.19
+    ],
+    [
+     "HB_COLLAPSE",
+     16.19
+    ],
+    [
+     "SOFT_BYP",
+     23.305
+    ],
+    [
+     "DEGRADED",
+     24.31
+    ],
+    [
+     "restore",
+     24.81
+    ],
+    [
+     "sc_resume",
+     24.81
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": 145.977,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MX_S5",
+   "soft": {
+    "soft_energy_J": 0.022366963907456985,
+    "E_byp_J": 0.1494253425205386,
+    "P_pk_W": 61.29983210024312,
+    "span10_ms": 0.6860000000000026,
+    "dT_one": 4.898491777074319,
+    "vs_max_soft": 4.504148672413647,
+    "ib_max": 38.65929041019211
+   },
+   "sc_pause_ms": 15.69,
+   "sc_resume_ms": 24.31,
+   "P6": {
+    "Tj": 104.89849177707431,
+    "ok": true
+   },
+   "pause_ms": 9.944999999999999,
+   "batt48_J": 52.708499999999994
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 78.37158073533715,
+   "bridge_peak": 79.01608344847303,
+   "series_peak": 89.76371233330026,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 325.4063543318,
+   "vbus_max_loaded": 415.8569442778583,
+   "dab_sec_peak": 83.32867580808005,
+   "dab_peak_ratio": 1.3891583578507463,
+   "brk_energy_J": 11.421768045860833,
+   "soft_energy_J": 0.022369604712831736,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 32.8,
+    "vl": 0.4992302784194078,
+    "vs": -4.505028037180313,
+    "ip": 11.882201750443455
+   },
+   "soft_timeout": false,
+   "hold_ms": 25.68,
+   "deg_ms": 33.805,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     26.185
+    ],
+    [
+     "HB_COLLAPSE",
+     26.185
+    ],
+    [
+     "SOFT_BYP",
+     33.3
+    ],
+    [
+     "DEGRADED",
+     34.305
+    ],
+    [
+     "restore",
+     34.805
+    ],
+    [
+     "sc_resume",
+     34.805
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 29.005,
+   "restore_done_ms": 165.972,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MX_L1",
+   "soft": {
+    "soft_energy_J": 0.022369604712831736,
+    "E_byp_J": 0.08710702807978367,
+    "P_pk_W": 61.30693542571256,
+    "span10_ms": 0.685999999999999,
+    "dT_one": 4.899069872529173,
+    "vs_max_soft": 4.504458603041938,
+    "ib_max": 31.27068262951724
+   },
+   "sc_pause_ms": 25.685,
+   "sc_resume_ms": 34.305,
+   "P6": {
+    "Tj": 104.89906987252917,
+    "ok": true
+   },
+   "pause_ms": 9.945,
+   "batt48_J": 52.7085
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 78.37158073533715,
+   "bridge_peak": 79.01608344847303,
+   "series_peak": 89.76371233330026,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 325.4063543318,
+   "vbus_max_loaded": 410.00069431926664,
+   "dab_sec_peak": 83.37166700505443,
+   "dab_peak_ratio": 1.3898750568743636,
+   "brk_energy_J": 17.15828913366384,
+   "soft_energy_J": 0.011963540877800792,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 55.895,
+    "vl": 0.49207903774869693,
+    "vs": -4.481923681727877,
+    "ip": 6.007289550606224
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 56.9,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     56.395
+    ],
+    [
+     "DEGRADED",
+     57.4
+    ],
+    [
+     "sc_resume",
+     57.9
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": 39.005,
+   "restore_done_ms": null,
+   "i_break": 22.279523034856656,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MX_L2",
+   "soft": {
+    "soft_energy_J": 0.011963540877800792,
+    "E_byp_J": 0.017189636340039678,
+    "P_pk_W": 31.773198477114118,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.623116638339395,
+    "vs_max_soft": 4.4811931652792945,
+    "ib_max": 18.9341040778111
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 57.4,
+   "P6": {
+    "Tj": 102.6231166383394,
+    "ok": true
+   },
+   "pause_ms": 8.715,
+   "batt48_J": 46.1895
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 67.70551139541273,
+   "bridge_peak": 67.88219525814274,
+   "series_peak": 86.80356573430194,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 328.445581143352,
+   "vbus_max_loaded": 410.00069431926664,
+   "dab_sec_peak": 83.38339712102817,
+   "dab_peak_ratio": 1.3900706076674785,
+   "brk_energy_J": 4.549805690705164,
+   "soft_energy_J": 0.011957956682373861,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 55.905,
+    "vl": 0.49107856819174184,
+    "vs": -4.480950846413826,
+    "ip": 6.005530156149768
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 56.91,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     56.405
+    ],
+    [
+     "DEGRADED",
+     57.41
+    ],
+    [
+     "sc_resume",
+     57.91
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 36.99020966943358,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MX_LC",
+   "soft": {
+    "soft_energy_J": 0.011957956682373861,
+    "E_byp_J": 0.017178673793788977,
+    "P_pk_W": 31.758696391784525,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.621895307106116,
+    "vs_max_soft": 4.480220490763728,
+    "ib_max": 18.929714414822534
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 57.41,
+   "P6": {
+    "Tj": 102.62189530710612,
+    "ok": true
+   },
+   "pause_ms": 8.724999999999998,
+   "batt48_J": 46.242499999999986
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 78.37158073533715,
+   "bridge_peak": 79.01608344847303,
+   "series_peak": 89.76400994761363,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 325.4060784057107,
+   "vbus_max_loaded": 410.00069431926664,
+   "dab_sec_peak": 83.41653686936525,
+   "dab_peak_ratio": 1.3906230748455908,
+   "brk_energy_J": 32.18424556382659,
+   "soft_energy_J": 0.011964638496965831,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 56.07,
+    "vl": 0.4922728847859605,
+    "vs": -4.482114578304434,
+    "ip": 6.007632219872024
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 57.075,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     56.57
+    ],
+    [
+     "DEGRADED",
+     57.575
+    ],
+    [
+     "sc_resume",
+     58.075
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 70.74247978540012,
+   "kind": "cur",
+   "mix": "MX",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MX_LA",
+   "soft": {
+    "soft_energy_J": 0.011964638496965831,
+    "E_byp_J": 0.017096904039609468,
+    "P_pk_W": 31.77605347019831,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.6233568044654096,
+    "vs_max_soft": 4.481384029280908,
+    "ib_max": 18.934967525167508
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 57.575,
+   "P6": {
+    "Tj": 102.62335680446542,
+    "ok": true
+   },
+   "pause_ms": 8.890000000000004,
+   "batt48_J": 47.117000000000026
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 60.255144841182116,
+   "bridge_peak": 60.25468024448401,
+   "series_peak": 84.63913912992965,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 330.7517594245285,
+   "vbus_max_loaded": 416.0048736068389,
+   "dab_sec_peak": 83.38400560273358,
+   "dab_peak_ratio": 1.3900807515637839,
+   "brk_energy_J": 4.981045732533693,
+   "soft_energy_J": 0.011989261335651738,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 16.475,
+    "vl": 0.49661364718187373,
+    "vs": -4.486394914061252,
+    "ip": 6.015388469818326
+   },
+   "soft_timeout": false,
+   "hold_ms": 10.185,
+   "deg_ms": 17.48,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     10.69
+    ],
+    [
+     "HB_COLLAPSE",
+     10.69
+    ],
+    [
+     "SOFT_BYP",
+     16.975
+    ],
+    [
+     "DEGRADED",
+     17.98
+    ],
+    [
+     "restore",
+     18.48
+    ],
+    [
+     "sc_resume",
+     18.48
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": 135.647,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MD_S1",
+   "soft": {
+    "soft_energy_J": 0.011989261335651738,
+    "E_byp_J": 0.10637735495270137,
+    "P_pk_W": 31.840099617587633,
+    "span10_ms": 51.449,
+    "dT_one": 2.628744590331933,
+    "vs_max_soft": 4.485663627904069,
+    "ib_max": 33.980902702450585
+   },
+   "sc_pause_ms": 10.19,
+   "sc_resume_ms": 17.98,
+   "P6": {
+    "Tj": 102.62874459033193,
+    "ok": true
+   },
+   "pause_ms": 9.115,
+   "batt48_J": 48.3095
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 67.70551139541273,
+   "bridge_peak": 67.88219525814274,
+   "series_peak": 86.4126103366099,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 328.8375074445877,
+   "vbus_max_loaded": 416.00487360731455,
+   "dab_sec_peak": 83.38399763826739,
+   "dab_peak_ratio": 1.3900806187895058,
+   "brk_energy_J": 4.981046114910744,
+   "soft_energy_J": 0.01198926383411869,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 20.475,
+    "vl": 0.49661408874300234,
+    "vs": -4.486395349575694,
+    "ip": 6.015389239757612
+   },
+   "soft_timeout": false,
+   "hold_ms": 14.185,
+   "deg_ms": 21.48,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     14.69
+    ],
+    [
+     "HB_COLLAPSE",
+     14.69
+    ],
+    [
+     "SOFT_BYP",
+     20.975
+    ],
+    [
+     "DEGRADED",
+     21.98
+    ],
+    [
+     "restore",
+     22.48
+    ],
+    [
+     "sc_resume",
+     22.48
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": 143.647,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MD_S5",
+   "soft": {
+    "soft_energy_J": 0.01198926383411869,
+    "E_byp_J": 0.08104522018130195,
+    "P_pk_W": 31.840106112009188,
+    "span10_ms": 0.7099999999999989,
+    "dT_one": 2.628745136952559,
+    "vs_max_soft": 4.4856640633431955,
+    "ib_max": 30.51048361406366
+   },
+   "sc_pause_ms": 14.19,
+   "sc_resume_ms": 21.98,
+   "P6": {
+    "Tj": 102.62874513695256,
+    "ok": true
+   },
+   "pause_ms": 9.115,
+   "batt48_J": 48.3095
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 78.37158073533715,
+   "bridge_peak": 79.01608344847303,
+   "series_peak": 89.76371233330026,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 325.4063543318,
+   "vbus_max_loaded": 416.00487360758916,
+   "dab_sec_peak": 83.38399304061655,
+   "dab_peak_ratio": 1.3900805421428408,
+   "brk_energy_J": 11.213708292249896,
+   "soft_energy_J": 0.011989265276398839,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 30.475,
+    "vl": 0.4966143436435869,
+    "vs": -4.486395600985679,
+    "ip": 6.0153896842173795
+   },
+   "soft_timeout": false,
+   "hold_ms": 24.185,
+   "deg_ms": 31.48,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     24.69
+    ],
+    [
+     "HB_COLLAPSE",
+     24.69
+    ],
+    [
+     "SOFT_BYP",
+     30.975
+    ],
+    [
+     "DEGRADED",
+     31.98
+    ],
+    [
+     "restore",
+     32.48
+    ],
+    [
+     "sc_resume",
+     32.48
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 29.005,
+   "restore_done_ms": 163.647,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MD_L1",
+   "soft": {
+    "soft_energy_J": 0.011989265276398839,
+    "E_byp_J": 0.04077740629755027,
+    "P_pk_W": 31.84010986102717,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.6287454524983533,
+    "vs_max_soft": 4.485664314709712,
+    "ib_max": 21.838623026190902
+   },
+   "sc_pause_ms": 24.19,
+   "sc_resume_ms": 31.98,
+   "P6": {
+    "Tj": 102.62874545249835,
+    "ok": true
+   },
+   "pause_ms": 9.114999999999998,
+   "batt48_J": 48.30949999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 78.37158073533715,
+   "bridge_peak": 79.01608344847303,
+   "series_peak": 89.76371233330026,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 325.4063543318,
+   "vbus_max_loaded": 410.00069431926664,
+   "dab_sec_peak": 83.40585436545265,
+   "dab_peak_ratio": 1.390444988617182,
+   "brk_energy_J": 17.13770589269442,
+   "soft_energy_J": 0.011967379772566905,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 55.88,
+    "vl": 0.4927569697596752,
+    "vs": -4.48259134779555,
+    "ip": 6.008488737701436
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 56.885,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     56.38
+    ],
+    [
+     "DEGRADED",
+     57.385
+    ],
+    [
+     "sc_resume",
+     57.885
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": 39.005,
+   "restore_done_ms": null,
+   "i_break": 12.971120545041495,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MD_L2",
+   "soft": {
+    "soft_energy_J": 0.011967379772566905,
+    "E_byp_J": 0.017201529394458688,
+    "P_pk_W": 31.783183807806836,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.6239566145644617,
+    "vs_max_soft": 4.481860717393757,
+    "ib_max": 18.937123800142004
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 57.385,
+   "P6": {
+    "Tj": 102.62395661456446,
+    "ok": true
+   },
+   "pause_ms": 8.7,
+   "batt48_J": 46.10999999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 67.70551139541273,
+   "bridge_peak": 67.88219525814274,
+   "series_peak": 86.80356573430194,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 328.445581143352,
+   "vbus_max_loaded": 415.7831970699192,
+   "dab_sec_peak": 83.33634882604058,
+   "dab_peak_ratio": 1.3892862734443454,
+   "brk_energy_J": 5.383354504873599,
+   "soft_energy_J": 0.02844437740303046,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.34,
+    "vl": 0.4960176438586801,
+    "vs": -4.527223684681008,
+    "ip": 15.787157214975478
+   },
+   "soft_timeout": false,
+   "hold_ms": 18.585,
+   "deg_ms": 27.345,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     19.09
+    ],
+    [
+     "HB_COLLAPSE",
+     19.09
+    ],
+    [
+     "SOFT_BYP",
+     26.84
+    ],
+    [
+     "DEGRADED",
+     27.845
+    ],
+    [
+     "restore",
+     28.345
+    ],
+    [
+     "sc_resume",
+     28.345
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": 149.512,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MD_LC",
+   "soft": {
+    "soft_energy_J": 0.02844437740303046,
+    "E_byp_J": 0.15554849004991322,
+    "P_pk_W": 78.86438231093324,
+    "span10_ms": 0.68,
+    "dT_one": 6.239138878577815,
+    "vs_max_soft": 4.526675508078072,
+    "ib_max": 37.51930521564758
+   },
+   "sc_pause_ms": 18.59,
+   "sc_resume_ms": 27.845,
+   "P6": {
+    "Tj": 106.23913887857782,
+    "ok": true
+   },
+   "pause_ms": 10.579999999999998,
+   "batt48_J": 56.07399999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 78.37158073533715,
+   "bridge_peak": 79.01608344847303,
+   "series_peak": 89.76400994761363,
+   "vlink_max": 100.04069635713708,
+   "vbus_min": 325.4060784057107,
+   "vbus_max_loaded": 410.00069431926664,
+   "dab_sec_peak": 83.41653686936525,
+   "dab_peak_ratio": 1.3906230748455908,
+   "brk_energy_J": 32.18424556382659,
+   "soft_energy_J": 0.011964638496965831,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 56.07,
+    "vl": 0.4922728847859605,
+    "vs": -4.482114578304434,
+    "ip": 6.007632219872024
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 57.075,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "fallback_sep",
+     30.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     56.57
+    ],
+    [
+     "DEGRADED",
+     57.575
+    ],
+    [
+     "sc_resume",
+     58.075
+    ]
+   ],
+   "t_cont_ms": 30.005,
+   "restored": false,
+   "fallback": true,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 70.74247978540012,
+   "kind": "cur",
+   "mix": "MD",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_MD_LA",
+   "soft": {
+    "soft_energy_J": 0.011964638496965831,
+    "E_byp_J": 0.017096904039609468,
+    "P_pk_W": 31.77605347019831,
+    "span10_ms": 0.7100000000000023,
+    "dT_one": 2.6233568044654096,
+    "vs_max_soft": 4.481384029280908,
+    "ib_max": 18.934967525167508
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 57.575,
+   "P6": {
+    "Tj": 102.62335680446542,
+    "ok": true
+   },
+   "pause_ms": 8.890000000000004,
+   "batt48_J": 47.117000000000026
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 42.62356862487714,
+   "bridge_peak": 44.18231118059644,
+   "series_peak": 32.92949052107843,
+   "vlink_max": 100.00602995628417,
+   "vbus_min": 382.9191758336788,
+   "vbus_max_loaded": 415.946060772894,
+   "dab_sec_peak": 83.13907109549686,
+   "dab_peak_ratio": 1.3859974895347844,
+   "brk_energy_J": 4.636863158672273,
+   "soft_energy_J": 0.01708850793997196,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 6.72,
+    "vl": 0.4995481278054772,
+    "vs": -4.511005450512868,
+    "ip": 9.639940228266227
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.205,
+   "deg_ms": 7.725,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.71
+    ],
+    [
+     "HB_COLLAPSE",
+     0.71
+    ],
+    [
+     "SOFT_BYP",
+     7.22
+    ],
+    [
+     "DEGRADED",
+     8.225
+    ],
+    [
+     "restore",
+     8.725
+    ],
+    [
+     "sc_resume",
+     8.725
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 11.005,
+   "restore_done_ms": 77.725,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_ML_S1",
+   "soft": {
+    "soft_energy_J": 0.01708850793997196,
+    "E_byp_J": 0.06727667944617179,
+    "P_pk_W": 46.50853132985542,
+    "span10_ms": 0.6950000000000003,
+    "dT_one": 3.750388782159374,
+    "vs_max_soft": 4.510349342466504,
+    "ib_max": 25.13997357333419
+   },
+   "sc_pause_ms": 0.21,
+   "sc_resume_ms": 8.225,
+   "P6": {
+    "Tj": 103.75038878215938,
+    "ok": true
+   },
+   "pause_ms": 9.339999999999998,
+   "batt48_J": 49.501999999999995
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 47.84588774737121,
+   "bridge_peak": 49.21881891057014,
+   "series_peak": 36.067669482754596,
+   "vlink_max": 100.00602995628417,
+   "vbus_min": 379.662889755294,
+   "vbus_max_loaded": 415.9040125464584,
+   "dab_sec_peak": 83.15353725836769,
+   "dab_peak_ratio": 1.3862386525061525,
+   "brk_energy_J": 4.728154530585495,
+   "soft_energy_J": 0.0260450990389299,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 7.6,
+    "vl": 0.4956614397400191,
+    "vs": -4.511699556185681,
+    "ip": 15.19531598899625
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.205,
+   "deg_ms": 8.605,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.71
+    ],
+    [
+     "HB_COLLAPSE",
+     0.71
+    ],
+    [
+     "SOFT_BYP",
+     8.1
+    ],
+    [
+     "DEGRADED",
+     9.105
+    ],
+    [
+     "restore",
+     9.6051
+    ],
+    [
+     "sc_resume",
+     9.6051
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": 89.939,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_ML_S5",
+   "soft": {
+    "soft_energy_J": 0.0260450990389299,
+    "E_byp_J": 0.06437659333466221,
+    "P_pk_W": 72.00039203594072,
+    "span10_ms": 0.68,
+    "dT_one": 5.728326591922696,
+    "vs_max_soft": 4.511152083552028,
+    "ib_max": 34.81281228400622
+   },
+   "sc_pause_ms": 0.21,
+   "sc_resume_ms": 9.1051,
+   "P6": {
+    "Tj": 105.7283265919227,
+    "ok": true
+   },
+   "pause_ms": 10.220099999999999,
+   "batt48_J": 54.166529999999995
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 47.84588774737121,
+   "bridge_peak": 49.21881891057014,
+   "series_peak": 36.067669482754596,
+   "vlink_max": 100.00602995628417,
+   "vbus_min": 379.662889755294,
+   "vbus_max_loaded": 415.9051023729974,
+   "dab_sec_peak": 83.15353725836769,
+   "dab_peak_ratio": 1.3862386525061525,
+   "brk_energy_J": 4.729399839043066,
+   "soft_energy_J": 0.03642886605201956,
+   "soft_entry": {
+    "why": "stall",
+    "ms": 7.655,
+    "vl": 0.6694562188356468,
+    "vs": -4.700566575021428,
+    "ip": 20.720368528872818
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.205,
+   "deg_ms": 8.66,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.71
+    ],
+    [
+     "HB_COLLAPSE",
+     0.71
+    ],
+    [
+     "SOFT_BYP",
+     8.155
+    ],
+    [
+     "DEGRADED",
+     9.16
+    ],
+    [
+     "restore",
+     9.66
+    ],
+    [
+     "sc_resume",
+     9.66
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 25.005,
+   "restore_done_ms": 100.452,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_ML_L1",
+   "soft": {
+    "soft_energy_J": 0.03642886605201956,
+    "E_byp_J": 0.07808234182204808,
+    "P_pk_W": 103.7398692429218,
+    "span10_ms": 0.6710000000000015,
+    "dT_one": 7.993908546591092,
+    "vs_max_soft": 4.700041605325556,
+    "ib_max": 44.9986358128181
+   },
+   "sc_pause_ms": 0.21,
+   "sc_resume_ms": 9.16,
+   "P6": {
+    "Tj": 107.99390854659109,
+    "ok": true
+   },
+   "pause_ms": 10.274999999999999,
+   "batt48_J": 54.457499999999996
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 47.84588774737121,
+   "bridge_peak": 49.21881891057014,
+   "series_peak": 36.067669482754596,
+   "vlink_max": 100.00602995628417,
+   "vbus_min": 379.662889755294,
+   "vbus_max_loaded": 415.9051023729974,
+   "dab_sec_peak": 83.15353725836769,
+   "dab_peak_ratio": 1.3862386525061525,
+   "brk_energy_J": 4.729399839043066,
+   "soft_energy_J": 0.03642886605201956,
+   "soft_entry": {
+    "why": "stall",
+    "ms": 7.655,
+    "vl": 0.6694562188356468,
+    "vs": -4.700566575021428,
+    "ip": 20.720368528872818
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.205,
+   "deg_ms": 8.66,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.71
+    ],
+    [
+     "HB_COLLAPSE",
+     0.71
+    ],
+    [
+     "SOFT_BYP",
+     8.155
+    ],
+    [
+     "DEGRADED",
+     9.16
+    ],
+    [
+     "restore",
+     9.66
+    ],
+    [
+     "sc_resume",
+     9.66
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": 35.005,
+   "restore_done_ms": 110.452,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_ML_L2",
+   "soft": {
+    "soft_energy_J": 0.03642886605201956,
+    "E_byp_J": 0.08759609310430629,
+    "P_pk_W": 103.7398692429218,
+    "span10_ms": 0.6710000000000015,
+    "dT_one": 7.993908546591092,
+    "vs_max_soft": 4.700041605325556,
+    "ib_max": 44.9986358128181
+   },
+   "sc_pause_ms": 0.21,
+   "sc_resume_ms": 9.16,
+   "P6": {
+    "Tj": 107.99390854659109,
+    "ok": true
+   },
+   "pause_ms": 10.274999999999999,
+   "batt48_J": 54.457499999999996
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 47.84588774737121,
+   "bridge_peak": 49.21881891057014,
+   "series_peak": 36.067669482754596,
+   "vlink_max": 100.00602995628417,
+   "vbus_min": 379.662889755294,
+   "vbus_max_loaded": 415.7867274791917,
+   "dab_sec_peak": 83.15353725836769,
+   "dab_peak_ratio": 1.3862386525061525,
+   "brk_energy_J": 4.7287507463731355,
+   "soft_energy_J": 0.03096797468394218,
+   "soft_entry": {
+    "why": "stall",
+    "ms": 7.69,
+    "vl": 0.5641261864951979,
+    "vs": -4.571919080850068,
+    "ip": 17.584853853813108
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.205,
+   "deg_ms": 8.695,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.71
+    ],
+    [
+     "HB_COLLAPSE",
+     0.71
+    ],
+    [
+     "SOFT_BYP",
+     8.19
+    ],
+    [
+     "DEGRADED",
+     9.195
+    ],
+    [
+     "restore",
+     9.6951
+    ],
+    [
+     "sc_resume",
+     9.6951
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": 90.779,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_ML_LC",
+   "soft": {
+    "soft_energy_J": 0.03096797468394218,
+    "E_byp_J": 0.08706847666053522,
+    "P_pk_W": 86.74208801839667,
+    "span10_ms": 0.6750000000000003,
+    "dT_one": 6.803008789952117,
+    "vs_max_soft": 4.571410780150171,
+    "ib_max": 39.77642656605312
+   },
+   "sc_pause_ms": 0.21,
+   "sc_resume_ms": 9.1951,
+   "P6": {
+    "Tj": 106.80300878995212,
+    "ok": true
+   },
+   "pause_ms": 10.310099999999998,
+   "batt48_J": 54.64352999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 832.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 47.84588774737121,
+   "bridge_peak": 49.21881891057014,
+   "series_peak": 36.067669482754596,
+   "vlink_max": 100.00602995628417,
+   "vbus_min": 379.662889755294,
+   "vbus_max_loaded": 415.6938635365522,
+   "dab_sec_peak": 83.15353725836769,
+   "dab_peak_ratio": 1.3862386525061525,
+   "brk_energy_J": 4.729399839043066,
+   "soft_energy_J": 0.03642886605201956,
+   "soft_entry": {
+    "why": "stall",
+    "ms": 7.655,
+    "vl": 0.6694562188356468,
+    "vs": -4.700566575021428,
+    "ip": 20.720368528872818
+   },
+   "soft_timeout": false,
+   "hold_ms": 0.205,
+   "deg_ms": 8.66,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "sc_pause",
+     0.71
+    ],
+    [
+     "HB_COLLAPSE",
+     0.71
+    ],
+    [
+     "SOFT_BYP",
+     8.155
+    ],
+    [
+     "DEGRADED",
+     9.16
+    ],
+    [
+     "restore",
+     9.66
+    ],
+    [
+     "sc_resume",
+     9.66
+    ]
+   ],
+   "t_cont_ms": null,
+   "restored": true,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": 9.16,
+   "kind": "cur",
+   "mix": "ML",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_832_ML_LA",
+   "soft": {
+    "soft_energy_J": 0.03642886605201956,
+    "E_byp_J": 0.14941298134270523,
+    "P_pk_W": 103.7398692429218,
+    "span10_ms": 0.6710000000000015,
+    "dT_one": 7.993908546591092,
+    "vs_max_soft": 4.700041605325556,
+    "ib_max": 44.9986358128181
+   },
+   "sc_pause_ms": 0.21,
+   "sc_resume_ms": 9.16,
+   "P6": {
+    "Tj": 107.99390854659109,
+    "ok": true
+   },
+   "pause_ms": 10.274999999999999,
+   "batt48_J": 54.457499999999996
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 52.62346219234031,
+   "bridge_peak": 52.76785394670297,
+   "series_peak": 93.01819305472785,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 410.4325623258539,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.67105088673099,
+   "dab_peak_ratio": 1.3893453682320578,
+   "brk_energy_J": 6.456779494487714,
+   "soft_energy_J": 0.01184067395239502,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.47,
+    "vl": 0.4995071648026988,
+    "vs": -4.485402757334281,
+    "ip": 6.0059515889244866
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.475,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.97
+    ],
+    [
+     "DEGRADED",
+     29.975
+    ],
+    [
+     "sc_resume",
+     30.475
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": null,
+   "i_break": 18.340313402963634,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MX_S1",
+   "soft": {
+    "soft_energy_J": 0.01184067395239502,
+    "E_byp_J": 0.025425860114218678,
+    "P_pk_W": 31.431015780475466,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5955033172445736,
+    "vs_max_soft": 4.48467338705708,
+    "ib_max": 18.83159150492602
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.975,
+   "P6": {
+    "Tj": 102.59550331724458,
+    "ok": true
+   },
+   "pause_ms": 11.29,
+   "batt48_J": 59.836999999999996
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 67.95138269141194,
+   "bridge_peak": 68.75010364639257,
+   "series_peak": 98.26199465467579,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0867861488619,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.68634711147341,
+   "dab_peak_ratio": 1.3896791421952852,
+   "brk_energy_J": 7.751381617907922,
+   "soft_energy_J": 0.011763151128199248,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.475,
+    "vl": 0.48485722720089613,
+    "vs": -4.47181539408817,
+    "ip": 5.980710831744648
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.48,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.975
+    ],
+    [
+     "DEGRADED",
+     29.98
+    ],
+    [
+     "sc_resume",
+     30.48
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": null,
+   "i_break": 18.359592224397804,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MX_S5",
+   "soft": {
+    "soft_energy_J": 0.011763151128199248,
+    "E_byp_J": 0.025346283047215055,
+    "P_pk_W": 31.230812031607318,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.578574530249048,
+    "vs_max_soft": 4.471087283368124,
+    "ib_max": 18.77041248790779
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.98,
+   "P6": {
+    "Tj": 102.57857453024904,
+    "ok": true
+   },
+   "pause_ms": 11.294999999999998,
+   "batt48_J": 59.863499999999995
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 69.31432744449607,
+   "bridge_peak": 70.03708059428214,
+   "series_peak": 98.27965539591722,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0417670987663,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.65514537560808,
+   "dab_peak_ratio": 1.3889982992281664,
+   "brk_energy_J": 14.93047880424329,
+   "soft_energy_J": 0.011781230751362838,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.515,
+    "vl": 0.488255421805428,
+    "vs": -4.474930965071668,
+    "ip": 5.9871414362176605
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.52,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     29.015
+    ],
+    [
+     "DEGRADED",
+     30.02
+    ],
+    [
+     "sc_resume",
+     30.52
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 29.005,
+   "restore_done_ms": null,
+   "i_break": 36.236613272366974,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MX_L1",
+   "soft": {
+    "soft_energy_J": 0.011781230751362838,
+    "E_byp_J": 0.025349808697016557,
+    "P_pk_W": 31.2776169951865,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5825246514552114,
+    "vs_max_soft": 4.474202545116673,
+    "ib_max": 18.78471265336111
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 30.02,
+   "P6": {
+    "Tj": 102.58252465145522,
+    "ok": true
+   },
+   "pause_ms": 11.334999999999997,
+   "batt48_J": 60.075499999999984
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 69.31432744449607,
+   "bridge_peak": 70.03708059428214,
+   "series_peak": 98.27965539591722,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0417670987663,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.673585486513694,
+   "dab_peak_ratio": 1.3894006749125567,
+   "brk_energy_J": 18.18095819200244,
+   "soft_energy_J": 0.011806621436367796,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.67,
+    "vl": 0.4931511532470819,
+    "vs": -4.479470649654063,
+    "ip": 5.993606580136141
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.675,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     29.17
+    ],
+    [
+     "DEGRADED",
+     30.175
+    ],
+    [
+     "sc_resume",
+     30.675
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 39.005,
+   "restore_done_ms": null,
+   "i_break": 49.20345259622581,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MX_L2",
+   "soft": {
+    "soft_energy_J": 0.011806621436367796,
+    "E_byp_J": 0.025318671750941626,
+    "P_pk_W": 31.34298977531174,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5880642287423163,
+    "vs_max_soft": 4.478742009008112,
+    "ib_max": 18.80472178396442
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 30.175,
+   "P6": {
+    "Tj": 102.58806422874231,
+    "ok": true
+   },
+   "pause_ms": 11.489999999999998,
+   "batt48_J": 60.89699999999999
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 68.4329464064779,
+   "bridge_peak": 69.20500056814004,
+   "series_peak": 98.26100056755361,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0785173338108,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.66912831900447,
+   "dab_peak_ratio": 1.3893034165047227,
+   "brk_energy_J": 7.82195575107391,
+   "soft_energy_J": 0.011790723024342073,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.495,
+    "vl": 0.4900275641090411,
+    "vs": -4.476556517382396,
+    "ip": 5.990744997241683
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.5,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.995
+    ],
+    [
+     "DEGRADED",
+     30.0
+    ],
+    [
+     "sc_resume",
+     30.5
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 30.45025833592523,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MX_LC",
+   "soft": {
+    "soft_energy_J": 0.011790723024342073,
+    "E_byp_J": 0.025366632456956088,
+    "P_pk_W": 31.30220090956327,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5845990817598765,
+    "vs_max_soft": 4.4758279214111925,
+    "ib_max": 18.792219767373666
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 30.0,
+   "P6": {
+    "Tj": 102.58459908175988,
+    "ok": true
+   },
+   "pause_ms": 11.314999999999998,
+   "batt48_J": 59.96949999999999
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 69.31432744449607,
+   "bridge_peak": 70.03708059428214,
+   "series_peak": 98.27965539591722,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0417670987663,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.673585486513694,
+   "dab_peak_ratio": 1.3894006749125567,
+   "brk_energy_J": 18.18095819200244,
+   "soft_energy_J": 0.011806621436367796,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.67,
+    "vl": 0.4931511532470819,
+    "vs": -4.479470649654063,
+    "ip": 5.993606580136141
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.675,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     29.17
+    ],
+    [
+     "DEGRADED",
+     30.175
+    ],
+    [
+     "sc_resume",
+     30.675
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 49.20345259622581,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MX_LA",
+   "soft": {
+    "soft_energy_J": 0.011806621436367796,
+    "E_byp_J": 0.025318671750941626,
+    "P_pk_W": 31.34298977531174,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5880642287423163,
+    "vs_max_soft": 4.478742009008112,
+    "ib_max": 18.80472178396442
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 30.175,
+   "P6": {
+    "Tj": 102.58806422874231,
+    "ok": true
+   },
+   "pause_ms": 11.489999999999998,
+   "batt48_J": 60.89699999999999
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 52.62346219234031,
+   "bridge_peak": 52.76785394670297,
+   "series_peak": 93.01819305472785,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 410.4325623258539,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.67362922913829,
+   "dab_peak_ratio": 1.3894016294061928,
+   "brk_energy_J": 6.410599221815826,
+   "soft_energy_J": 0.011781247448247066,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.455,
+    "vl": 0.48825855854418504,
+    "vs": -4.474933850032721,
+    "ip": 5.987147372844895
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.46,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.955
+    ],
+    [
+     "DEGRADED",
+     29.96
+    ],
+    [
+     "sc_resume",
+     30.46
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": null,
+   "i_break": 10.680702693110401,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MD_S1",
+   "soft": {
+    "soft_energy_J": 0.011781247448247066,
+    "E_byp_J": 0.025371736081886243,
+    "P_pk_W": 31.277660191473363,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.582528299246998,
+    "vs_max_soft": 4.4742054297807545,
+    "ib_max": 18.7847258531462
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.96,
+   "P6": {
+    "Tj": 102.582528299247,
+    "ok": true
+   },
+   "pause_ms": 11.274999999999999,
+   "batt48_J": 59.75749999999999
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 67.95138269141194,
+   "bridge_peak": 68.75010364639257,
+   "series_peak": 98.26199465467579,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0867861488619,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.68967856459351,
+   "dab_peak_ratio": 1.389751836754232,
+   "brk_energy_J": 7.703170342247766,
+   "soft_energy_J": 0.011774359345956222,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.455,
+    "vl": 0.4869627001797122,
+    "vs": -4.473746033562325,
+    "ip": 5.984710179749107
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.46,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.955
+    ],
+    [
+     "DEGRADED",
+     29.96
+    ],
+    [
+     "sc_resume",
+     30.46
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": null,
+   "i_break": 10.698213723686496,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MD_S5",
+   "soft": {
+    "soft_energy_J": 0.011774359345956222,
+    "E_byp_J": 0.025364827728793442,
+    "P_pk_W": 31.259836031099866,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.581023441756424,
+    "vs_max_soft": 4.473017730831018,
+    "ib_max": 18.77927960566587
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.96,
+   "P6": {
+    "Tj": 102.58102344175643,
+    "ok": true
+   },
+   "pause_ms": 11.274999999999999,
+   "batt48_J": 59.75749999999999
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 69.31432744449607,
+   "bridge_peak": 70.03708059428214,
+   "series_peak": 98.27965539591722,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0417670987663,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.6551453756081,
+   "dab_peak_ratio": 1.3889982992281669,
+   "brk_energy_J": 14.930478804243277,
+   "soft_energy_J": 0.011781230751362849,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.515,
+    "vl": 0.48825542180542386,
+    "vs": -4.474930965071734,
+    "ip": 5.987141436217287
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.52,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     29.015
+    ],
+    [
+     "DEGRADED",
+     30.02
+    ],
+    [
+     "sc_resume",
+     30.52
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 29.005,
+   "restore_done_ms": null,
+   "i_break": 36.23661327236874,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MD_L1",
+   "soft": {
+    "soft_energy_J": 0.011781230751362849,
+    "E_byp_J": 0.02534980869701657,
+    "P_pk_W": 31.2776169951865,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5825246514552154,
+    "vs_max_soft": 4.474202545116738,
+    "ib_max": 18.784712653361108
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 30.02,
+   "P6": {
+    "Tj": 102.58252465145522,
+    "ok": true
+   },
+   "pause_ms": 11.334999999999997,
+   "batt48_J": 60.075499999999984
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 69.31432744449607,
+   "bridge_peak": 70.03708059428214,
+   "series_peak": 98.27965539591722,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0417670987663,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.673585486513694,
+   "dab_peak_ratio": 1.3894006749125567,
+   "brk_energy_J": 18.18095819200244,
+   "soft_energy_J": 0.011806621436367796,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.67,
+    "vl": 0.4931511532470819,
+    "vs": -4.479470649654063,
+    "ip": 5.993606580136141
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.675,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     29.17
+    ],
+    [
+     "DEGRADED",
+     30.175
+    ],
+    [
+     "sc_resume",
+     30.675
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 39.005,
+   "restore_done_ms": null,
+   "i_break": 49.20345259622581,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MD_L2",
+   "soft": {
+    "soft_energy_J": 0.011806621436367796,
+    "E_byp_J": 0.025318671750941626,
+    "P_pk_W": 31.34298977531174,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5880642287423163,
+    "vs_max_soft": 4.478742009008112,
+    "ib_max": 18.80472178396442
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 30.175,
+   "P6": {
+    "Tj": 102.58806422874231,
+    "ok": true
+   },
+   "pause_ms": 11.489999999999998,
+   "batt48_J": 60.89699999999999
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 68.4329464064779,
+   "bridge_peak": 69.20500056814004,
+   "series_peak": 98.26100056755361,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0785173338108,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.66946402377816,
+   "dab_peak_ratio": 1.3893107418098012,
+   "brk_energy_J": 7.798217840151298,
+   "soft_energy_J": 0.011803666444746149,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.48,
+    "vl": 0.49246261611192793,
+    "vs": -4.478784630100646,
+    "ip": 5.99534655311386
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.485,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.98
+    ],
+    [
+     "DEGRADED",
+     29.985
+    ],
+    [
+     "sc_resume",
+     30.485
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 22.21010836840942,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MD_LC",
+   "soft": {
+    "soft_energy_J": 0.011803666444746149,
+    "E_byp_J": 0.025385091678348876,
+    "P_pk_W": 31.335676839239216,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.587426815642709,
+    "vs_max_soft": 4.478055810511656,
+    "ib_max": 18.802444982104138
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.985,
+   "P6": {
+    "Tj": 102.58742681564271,
+    "ok": true
+   },
+   "pause_ms": 11.299999999999997,
+   "batt48_J": 59.889999999999986
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 69.31432744449607,
+   "bridge_peak": 70.03708059428214,
+   "series_peak": 98.27965539591722,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0417670987663,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.673585486513694,
+   "dab_peak_ratio": 1.3894006749125567,
+   "brk_energy_J": 18.18095819200244,
+   "soft_energy_J": 0.011806621436367796,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.67,
+    "vl": 0.4931511532470819,
+    "vs": -4.479470649654063,
+    "ip": 5.993606580136141
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.675,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     29.17
+    ],
+    [
+     "DEGRADED",
+     30.175
+    ],
+    [
+     "sc_resume",
+     30.675
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 49.20345259622581,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_MD_LA",
+   "soft": {
+    "soft_energy_J": 0.011806621436367796,
+    "E_byp_J": 0.025318671750941626,
+    "P_pk_W": 31.34298977531174,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5880642287423163,
+    "vs_max_soft": 4.478742009008112,
+    "ib_max": 18.80472178396442
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 30.175,
+   "P6": {
+    "Tj": 102.58806422874231,
+    "ok": true
+   },
+   "pause_ms": 11.489999999999998,
+   "batt48_J": 60.89699999999999
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 33.3950519176751,
+   "bridge_peak": 35.12179112941948,
+   "series_peak": 87.48495551448173,
+   "vlink_max": 99.99924945430116,
+   "vbus_min": 416.4407656375225,
+   "vbus_max_loaded": 459.9991699286685,
+   "dab_sec_peak": 63.6794653374341,
+   "dab_peak_ratio": 1.3895289772340733,
+   "brk_energy_J": 5.339540618206562,
+   "soft_energy_J": 0.01179704014881961,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 27.945,
+    "vl": 0.4912196828390101,
+    "vs": -4.477635848063563,
+    "ip": 5.992986501789275
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 28.95,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.445
+    ],
+    [
+     "DEGRADED",
+     29.45
+    ],
+    [
+     "sc_resume",
+     29.95
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 11.005,
+   "restore_done_ms": null,
+   "i_break": 4.404636846995671,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_ML_S1",
+   "soft": {
+    "soft_energy_J": 0.01179704014881961,
+    "E_byp_J": 0.013816489177709496,
+    "P_pk_W": 31.318540174220807,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5859792283175866,
+    "vs_max_soft": 4.47690715415341,
+    "ib_max": 18.79721124869236
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.45,
+   "P6": {
+    "Tj": 102.58597922831758,
+    "ok": true
+   },
+   "pause_ms": 10.764999999999997,
+   "batt48_J": 57.05449999999998
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 36.94824003827892,
+   "bridge_peak": 39.057083653084625,
+   "series_peak": 92.53008644844633,
+   "vlink_max": 99.99924945430116,
+   "vbus_min": 411.4165628998432,
+   "vbus_max_loaded": 459.9991699286685,
+   "dab_sec_peak": 63.67724574080964,
+   "dab_peak_ratio": 1.3894805441354108,
+   "brk_energy_J": 6.340297362657185,
+   "soft_energy_J": 0.011770356556939403,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.43,
+    "vl": 0.48620973449042104,
+    "vs": -4.47305379270898,
+    "ip": 5.9833042277324715
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.435,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.93
+    ],
+    [
+     "DEGRADED",
+     29.935
+    ],
+    [
+     "sc_resume",
+     30.435
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": null,
+   "i_break": 4.02902555689803,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_ML_S5",
+   "soft": {
+    "soft_energy_J": 0.011770356556939403,
+    "E_byp_J": 0.01376451739054781,
+    "P_pk_W": 31.249477468377645,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.580148972479891,
+    "vs_max_soft": 4.472325559868637,
+    "ib_max": 18.77611413827938
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.935,
+   "P6": {
+    "Tj": 102.58014897247989,
+    "ok": true
+   },
+   "pause_ms": 11.249999999999996,
+   "batt48_J": 59.62499999999998
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 37.120250313108734,
+   "bridge_peak": 39.209947195119746,
+   "series_peak": 92.48838340190383,
+   "vlink_max": 99.99924945430116,
+   "vbus_min": 411.2455710925559,
+   "vbus_max_loaded": 459.9991699286685,
+   "dab_sec_peak": 63.677193613746944,
+   "dab_peak_ratio": 1.389479406687668,
+   "brk_energy_J": 6.2887137673553255,
+   "soft_energy_J": 0.011838321955707455,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.405,
+    "vl": 0.49906831245729993,
+    "vs": -4.484998849748769,
+    "ip": 6.005067170996304
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.41,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.905
+    ],
+    [
+     "DEGRADED",
+     29.91
+    ],
+    [
+     "sc_resume",
+     30.41
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 25.005,
+   "restore_done_ms": null,
+   "i_break": 9.785230052948668,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_ML_L1",
+   "soft": {
+    "soft_energy_J": 0.011838321955707455,
+    "E_byp_J": 0.013833982517695721,
+    "P_pk_W": 31.42493291761688,
+    "span10_ms": 0.7149999999999969,
+    "dT_one": 2.59498939670474,
+    "vs_max_soft": 4.4842695272163215,
+    "ib_max": 18.8297361631546
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.91,
+   "P6": {
+    "Tj": 102.59498939670473,
+    "ok": true
+   },
+   "pause_ms": 11.224999999999998,
+   "batt48_J": 59.492499999999986
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 37.782855264669635,
+   "bridge_peak": 39.83687757373929,
+   "series_peak": 92.48838341513299,
+   "vlink_max": 99.99924945430116,
+   "vbus_min": 411.2455710789048,
+   "vbus_max_loaded": 459.9991699286685,
+   "dab_sec_peak": 63.69256913497761,
+   "dab_peak_ratio": 1.3898149109538687,
+   "brk_energy_J": 6.3377724842448915,
+   "soft_energy_J": 0.011839582029175559,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.425,
+    "vl": 0.4993033154206873,
+    "vs": -4.485215079501529,
+    "ip": 6.005542080760407
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.43,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.925
+    ],
+    [
+     "DEGRADED",
+     29.93
+    ],
+    [
+     "sc_resume",
+     30.43
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 35.005,
+   "restore_done_ms": null,
+   "i_break": 20.154800463969604,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_ML_L2",
+   "soft": {
+    "soft_energy_J": 0.011839582029175559,
+    "E_byp_J": 0.013834206737831624,
+    "P_pk_W": 31.428193121445354,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5952647390556627,
+    "vs_max_soft": 4.484485731456897,
+    "ib_max": 18.83073024631058
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.93,
+   "P6": {
+    "Tj": 102.59526473905566,
+    "ok": true
+   },
+   "pause_ms": 11.244999999999997,
+   "batt48_J": 59.59849999999999
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 37.13528442976397,
+   "bridge_peak": 39.225051535042304,
+   "series_peak": 92.31057769016232,
+   "vlink_max": 99.99924945430116,
+   "vbus_min": 411.46389179973056,
+   "vbus_max_loaded": 459.9991699286685,
+   "dab_sec_peak": 63.667963204463504,
+   "dab_peak_ratio": 1.3892779929178898,
+   "brk_energy_J": 6.291256807056801,
+   "soft_energy_J": 0.011772096399022535,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.41,
+    "vl": 0.4865368688902906,
+    "vs": -4.4733551587933755,
+    "ip": 5.983912579555868
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.415,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.91
+    ],
+    [
+     "DEGRADED",
+     29.915
+    ],
+    [
+     "sc_resume",
+     30.415
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 10.07395552559743,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_ML_LC",
+   "soft": {
+    "soft_energy_J": 0.011772096399022535,
+    "E_byp_J": 0.013767301905725162,
+    "P_pk_W": 31.253981073677025,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.580529063734242,
+    "vs_max_soft": 4.47262689500259,
+    "ib_max": 18.777490091064312
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.915,
+   "P6": {
+    "Tj": 102.58052906373425,
+    "ok": true
+   },
+   "pause_ms": 11.229999999999997,
+   "batt48_J": 59.518999999999984
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 37.782855264669635,
+   "bridge_peak": 39.83687757373929,
+   "series_peak": 92.48838341513299,
+   "vlink_max": 99.99924945430116,
+   "vbus_min": 411.2455710789048,
+   "vbus_max_loaded": 459.9991699286685,
+   "dab_sec_peak": 63.69256913497761,
+   "dab_peak_ratio": 1.3898149109538687,
+   "brk_energy_J": 6.3377724842448915,
+   "soft_energy_J": 0.011839582029175559,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 28.425,
+    "vl": 0.4993033154206873,
+    "vs": -4.485215079501529,
+    "ip": 6.005542080760407
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 29.43,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     28.925
+    ],
+    [
+     "DEGRADED",
+     29.93
+    ],
+    [
+     "sc_resume",
+     30.43
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 20.154800463969604,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W460_240s_1008_ML_LA",
+   "soft": {
+    "soft_energy_J": 0.011839582029175559,
+    "E_byp_J": 0.013834206737831624,
+    "P_pk_W": 31.428193121445354,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5952647390556627,
+    "vs_max_soft": 4.484485731456897,
+    "ib_max": 18.83073024631058
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 29.93,
+   "P6": {
+    "Tj": 102.59526473905566,
+    "ok": true
+   },
+   "pause_ms": 11.244999999999997,
+   "batt48_J": 59.59849999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 63.03848112676665,
+   "bridge_peak": 63.40888200311742,
+   "series_peak": 94.639557049703,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.49296849438565,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.33098646719142,
+   "dab_peak_ratio": 1.3891968784606754,
+   "brk_energy_J": 5.105365049936339,
+   "soft_energy_J": 0.011439712619477014,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.47,
+    "vl": 0.4984429926149835,
+    "vs": -4.488477063132419,
+    "ip": 6.560782403039499
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.475,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.97
+    ],
+    [
+     "DEGRADED",
+     27.975
+    ],
+    [
+     "sc_resume",
+     28.475
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": null,
+   "i_break": 20.126350894313212,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MX_S1",
+   "soft": {
+    "soft_energy_J": 0.011439712619477014,
+    "E_byp_J": 0.02861905669397705,
+    "P_pk_W": 30.26828438095779,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.505044100195012,
+    "vs_max_soft": 4.4877195613535905,
+    "ib_max": 18.493341150203555
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.975,
+   "P6": {
+    "Tj": 102.50504410019501,
+    "ok": true
+   },
+   "pause_ms": 9.29,
+   "batt48_J": 49.236999999999995
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.32838083921939,
+   "dab_peak_ratio": 1.3891534404744157,
+   "brk_energy_J": 5.1054731211819275,
+   "soft_energy_J": 0.011439558487641933,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.47,
+    "vl": 0.49841411610694114,
+    "vs": -4.488449052111995,
+    "ip": 6.560734812413217
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.475,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.97
+    ],
+    [
+     "DEGRADED",
+     27.975
+    ],
+    [
+     "sc_resume",
+     28.475
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": null,
+   "i_break": 20.130781446846,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MX_S5",
+   "soft": {
+    "soft_energy_J": 0.011439558487641933,
+    "E_byp_J": 0.02861890210730805,
+    "P_pk_W": 30.267889424141913,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.5050104688056383,
+    "vs_max_soft": 4.487691554231796,
+    "ib_max": 18.493217686968862
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.975,
+   "P6": {
+    "Tj": 102.50501046880564,
+    "ok": true
+   },
+   "pause_ms": 9.29,
+   "batt48_J": 49.236999999999995
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.33062479002822,
+   "dab_peak_ratio": 1.389190849001438,
+   "brk_energy_J": 5.131375842948055,
+   "soft_energy_J": 0.011440379323785476,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.485,
+    "vl": 0.4985678969520628,
+    "vs": -4.488598217947078,
+    "ip": 6.560988303730904
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.49,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.985
+    ],
+    [
+     "DEGRADED",
+     27.99
+    ],
+    [
+     "sc_resume",
+     28.49
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 29.005,
+   "restore_done_ms": null,
+   "i_break": 38.84226657242771,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MX_L1",
+   "soft": {
+    "soft_energy_J": 0.011440379323785476,
+    "E_byp_J": 0.0286131487802322,
+    "P_pk_W": 30.269992788353022,
+    "span10_ms": 0.7200000000000019,
+    "dT_one": 2.5051895744241817,
+    "vs_max_soft": 4.487840699307098,
+    "ib_max": 18.493875187298528
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.99,
+   "P6": {
+    "Tj": 102.50518957442418,
+    "ok": true
+   },
+   "pause_ms": 9.304999999999996,
+   "batt48_J": 49.31649999999998
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.36095536410622,
+   "dab_peak_ratio": 1.3896964849073281,
+   "brk_energy_J": 5.124159695966183,
+   "soft_energy_J": 0.011390742001810868,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.495,
+    "vl": 0.4892655842300621,
+    "vs": -4.479611151157184,
+    "ip": 6.5453937645905675
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.5,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.995
+    ],
+    [
+     "DEGRADED",
+     28.0
+    ],
+    [
+     "sc_resume",
+     28.5
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 39.005,
+   "restore_done_ms": null,
+   "i_break": 55.35947616412131,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MX_L2",
+   "soft": {
+    "soft_energy_J": 0.011390742001810868,
+    "E_byp_J": 0.028558980748370724,
+    "P_pk_W": 30.142701597238883,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.4943573737043416,
+    "vs_max_soft": 4.478854843834522,
+    "ib_max": 18.45406277578246
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 28.0,
+   "P6": {
+    "Tj": 102.49435737370435,
+    "ok": true
+   },
+   "pause_ms": 9.314999999999998,
+   "batt48_J": 49.36949999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.36681344311981,
+   "dab_peak_ratio": 1.3897941439585944,
+   "brk_energy_J": 5.1272982902092235,
+   "soft_energy_J": 0.011410972514099444,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.485,
+    "vl": 0.4930562119732142,
+    "vs": -4.483263929352161,
+    "ip": 6.551832566978746
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.49,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.985
+    ],
+    [
+     "DEGRADED",
+     27.99
+    ],
+    [
+     "sc_resume",
+     28.49
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 33.41270773988573,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MX_LC",
+   "soft": {
+    "soft_energy_J": 0.011410972514099444,
+    "E_byp_J": 0.028583655210807007,
+    "P_pk_W": 30.194606220896496,
+    "span10_ms": 0.7200000000000019,
+    "dT_one": 2.498772619917159,
+    "vs_max_soft": 4.48250714822984,
+    "ib_max": 18.47030233594758
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.99,
+   "P6": {
+    "Tj": 102.49877261991716,
+    "ok": true
+   },
+   "pause_ms": 9.304999999999996,
+   "batt48_J": 49.31649999999998
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.36095536410622,
+   "dab_peak_ratio": 1.3896964849073281,
+   "brk_energy_J": 5.124159695966183,
+   "soft_energy_J": 0.011390742001810868,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.495,
+    "vl": 0.4892655842300621,
+    "vs": -4.479611151157184,
+    "ip": 6.5453937645905675
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.5,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.995
+    ],
+    [
+     "DEGRADED",
+     28.0
+    ],
+    [
+     "sc_resume",
+     28.5
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 55.35947616412131,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MX_LA",
+   "soft": {
+    "soft_energy_J": 0.011390742001810868,
+    "E_byp_J": 0.028558980748370724,
+    "P_pk_W": 30.142701597238883,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.4943573737043416,
+    "vs_max_soft": 4.478854843834522,
+    "ib_max": 18.45406277578246
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 28.0,
+   "P6": {
+    "Tj": 102.49435737370435,
+    "ok": true
+   },
+   "pause_ms": 9.314999999999998,
+   "batt48_J": 49.36949999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 63.03848112676665,
+   "bridge_peak": 63.40888200311742,
+   "series_peak": 94.639557049703,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.49296849438565,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.3781586483716,
+   "dab_peak_ratio": 1.389983277969716,
+   "brk_energy_J": 5.061841454693315,
+   "soft_energy_J": 0.011406631270227202,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.45,
+    "vl": 0.4922443994257461,
+    "vs": -4.482481759345017,
+    "ip": 6.550428325778902
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.455,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.95
+    ],
+    [
+     "DEGRADED",
+     27.955
+    ],
+    [
+     "sc_resume",
+     28.455
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": null,
+   "i_break": 11.718176125350219,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MD_S1",
+   "soft": {
+    "soft_energy_J": 0.011406631270227202,
+    "E_byp_J": 0.02859464654911826,
+    "P_pk_W": 30.183464922544637,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.497825082420406,
+    "vs_max_soft": 4.4817250852655715,
+    "ib_max": 18.466818190665084
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.955,
+   "P6": {
+    "Tj": 102.4978250824204,
+    "ok": true
+   },
+   "pause_ms": 9.269999999999996,
+   "batt48_J": 49.13099999999998
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.37008374420283,
+   "dab_peak_ratio": 1.3898486625986437,
+   "brk_energy_J": 5.062303656314389,
+   "soft_energy_J": 0.011409408715371352,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.45,
+    "vl": 0.49276389351677136,
+    "vs": -4.482982209531725,
+    "ip": 6.551327072858475
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.455,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.95
+    ],
+    [
+     "DEGRADED",
+     27.955
+    ],
+    [
+     "sc_resume",
+     28.455
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": null,
+   "i_break": 11.739494289690517,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MD_S5",
+   "soft": {
+    "soft_energy_J": 0.011409408715371352,
+    "E_byp_J": 0.028597432178483175,
+    "P_pk_W": 30.190592103663008,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.498431293315262,
+    "vs_max_soft": 4.482225467009736,
+    "ib_max": 18.46904731101488
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.955,
+   "P6": {
+    "Tj": 102.49843129331526,
+    "ok": true
+   },
+   "pause_ms": 9.269999999999996,
+   "batt48_J": 49.13099999999998
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.33062479002822,
+   "dab_peak_ratio": 1.389190849001438,
+   "brk_energy_J": 5.131375842948053,
+   "soft_energy_J": 0.011440379323785485,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.485,
+    "vl": 0.49856789695206943,
+    "vs": -4.488598217947024,
+    "ip": 6.560988303731167
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.49,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.985
+    ],
+    [
+     "DEGRADED",
+     27.99
+    ],
+    [
+     "sc_resume",
+     28.49
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 29.005,
+   "restore_done_ms": null,
+   "i_break": 38.842266572427924,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MD_L1",
+   "soft": {
+    "soft_energy_J": 0.011440379323785485,
+    "E_byp_J": 0.0286131487802322,
+    "P_pk_W": 30.269992788353022,
+    "span10_ms": 0.7200000000000019,
+    "dT_one": 2.505189574424182,
+    "vs_max_soft": 4.487840699307044,
+    "ib_max": 18.493875187298524
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.99,
+   "P6": {
+    "Tj": 102.50518957442418,
+    "ok": true
+   },
+   "pause_ms": 9.304999999999996,
+   "batt48_J": 49.31649999999998
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.36095536410622,
+   "dab_peak_ratio": 1.3896964849073281,
+   "brk_energy_J": 5.124159695966183,
+   "soft_energy_J": 0.011390742001810868,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.495,
+    "vl": 0.4892655842300621,
+    "vs": -4.479611151157184,
+    "ip": 6.5453937645905675
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.5,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.995
+    ],
+    [
+     "DEGRADED",
+     28.0
+    ],
+    [
+     "sc_resume",
+     28.5
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 39.005,
+   "restore_done_ms": null,
+   "i_break": 55.35947616412131,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MD_L2",
+   "soft": {
+    "soft_energy_J": 0.011390742001810868,
+    "E_byp_J": 0.028558980748370724,
+    "P_pk_W": 30.142701597238883,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.4943573737043416,
+    "vs_max_soft": 4.478854843834522,
+    "ib_max": 18.45406277578246
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 28.0,
+   "P6": {
+    "Tj": 102.49435737370435,
+    "ok": true
+   },
+   "pause_ms": 9.314999999999998,
+   "batt48_J": 49.36949999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.32726049771057,
+   "dab_peak_ratio": 1.3891347634493034,
+   "brk_energy_J": 5.118474390835961,
+   "soft_energy_J": 0.011440846465555021,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.475,
+    "vl": 0.4986554121809423,
+    "vs": -4.488683103543855,
+    "ip": 6.561132583358879
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.48,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.975
+    ],
+    [
+     "DEGRADED",
+     27.98
+    ],
+    [
+     "sc_resume",
+     28.48
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 24.348472767981267,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MD_LC",
+   "soft": {
+    "soft_energy_J": 0.011440846465555021,
+    "E_byp_J": 0.028618001690812588,
+    "P_pk_W": 30.271189823525447,
+    "span10_ms": 0.7200000000000019,
+    "dT_one": 2.5052915043268014,
+    "vs_max_soft": 4.487925573090726,
+    "ib_max": 18.494249363625737
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.98,
+   "P6": {
+    "Tj": 102.5052915043268,
+    "ok": true
+   },
+   "pause_ms": 9.294999999999998,
+   "batt48_J": 49.26349999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.36095536410622,
+   "dab_peak_ratio": 1.3896964849073281,
+   "brk_energy_J": 5.124159695966183,
+   "soft_energy_J": 0.011390742001810868,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.495,
+    "vl": 0.4892655842300621,
+    "vs": -4.479611151157184,
+    "ip": 6.5453937645905675
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.5,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.995
+    ],
+    [
+     "DEGRADED",
+     28.0
+    ],
+    [
+     "sc_resume",
+     28.5
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 55.35947616412131,
+   "kind": "sep",
+   "mix": "MD",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_MD_LA",
+   "soft": {
+    "soft_energy_J": 0.011390742001810868,
+    "E_byp_J": 0.028558980748370724,
+    "P_pk_W": 30.142701597238883,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.4943573737043416,
+    "vs_max_soft": 4.478854843834522,
+    "ib_max": 18.45406277578246
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 28.0,
+   "P6": {
+    "Tj": 102.49435737370435,
+    "ok": true
+   },
+   "pause_ms": 9.314999999999998,
+   "batt48_J": 49.36949999999999
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 38.473499542602006,
+   "bridge_peak": 40.824501504298716,
+   "series_peak": 92.70822439493548,
+   "vlink_max": 99.99867092201049,
+   "vbus_min": 367.23318126239536,
+   "vbus_max_loaded": 409.998754951733,
+   "dab_sec_peak": 83.2956589121438,
+   "dab_peak_ratio": 1.3886079387243728,
+   "brk_energy_J": 5.021290853969337,
+   "soft_energy_J": 0.011389402527788105,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.44,
+    "vl": 0.48901505087631936,
+    "vs": -4.479369751523196,
+    "ip": 6.5449609317120885
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.445,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.94
+    ],
+    [
+     "DEGRADED",
+     27.945
+    ],
+    [
+     "sc_resume",
+     28.445
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 11.005,
+   "restore_done_ms": null,
+   "i_break": 4.421011649958265,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "S1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_ML_S1",
+   "soft": {
+    "soft_energy_J": 0.011389402527788105,
+    "E_byp_J": 0.013899538632412573,
+    "P_pk_W": 30.139261400968508,
+    "span10_ms": 0.7200000000000019,
+    "dT_one": 2.494064999536015,
+    "vs_max_soft": 4.478613474899206,
+    "ib_max": 18.452986730471498
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.945,
+   "P6": {
+    "Tj": 102.49406499953602,
+    "ok": true
+   },
+   "pause_ms": 9.259999999999998,
+   "batt48_J": 49.077999999999996
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 38.47349952856409,
+   "bridge_peak": 40.824501488682316,
+   "series_peak": 92.81673417487703,
+   "vlink_max": 99.99867092201049,
+   "vbus_min": 366.92409605346955,
+   "vbus_max_loaded": 409.998754951733,
+   "dab_sec_peak": 83.29565879646734,
+   "dab_peak_ratio": 1.38860793679595,
+   "brk_energy_J": 5.021290863867283,
+   "soft_energy_J": 0.0113894025880034,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.44,
+    "vl": 0.48901506214627943,
+    "vs": -4.479369762383689,
+    "ip": 6.544960951167021
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.445,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.94
+    ],
+    [
+     "DEGRADED",
+     27.945
+    ],
+    [
+     "sc_resume",
+     28.445
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 15.005,
+   "restore_done_ms": null,
+   "i_break": 4.421011493329498,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "S5",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_ML_S5",
+   "soft": {
+    "soft_energy_J": 0.0113894025880034,
+    "E_byp_J": 0.013899538692804848,
+    "P_pk_W": 30.139261555547073,
+    "span10_ms": 0.7200000000000019,
+    "dT_one": 2.4940650126791066,
+    "vs_max_soft": 4.478613485758318,
+    "ib_max": 18.452986778841005
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.945,
+   "P6": {
+    "Tj": 102.4940650126791,
+    "ok": true
+   },
+   "pause_ms": 9.259999999999998,
+   "batt48_J": 49.077999999999996
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 38.77909433801476,
+   "bridge_peak": 41.17037614372339,
+   "series_peak": 92.91340038256756,
+   "vlink_max": 99.99867092201049,
+   "vbus_min": 366.7946346506165,
+   "vbus_max_loaded": 409.998754951733,
+   "dab_sec_peak": 83.29131977724586,
+   "dab_peak_ratio": 1.388535601735325,
+   "brk_energy_J": 4.996576947154993,
+   "soft_energy_J": 0.01139106148065762,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.425,
+    "vl": 0.48932538247136836,
+    "vs": -4.479668767397408,
+    "ip": 6.545497071955819
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.43,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.925
+    ],
+    [
+     "DEGRADED",
+     27.93
+    ],
+    [
+     "sc_resume",
+     28.43
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 25.005,
+   "restore_done_ms": null,
+   "i_break": 11.414142554713143,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "L1",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_ML_L1",
+   "soft": {
+    "soft_energy_J": 0.01139106148065762,
+    "E_byp_J": 0.013902138462948386,
+    "P_pk_W": 30.143521591886664,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.4944271048165287,
+    "vs_max_soft": 4.478912452748965,
+    "ib_max": 18.454319384137587
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.93,
+   "P6": {
+    "Tj": 102.49442710481652,
+    "ok": true
+   },
+   "pause_ms": 9.244999999999997,
+   "batt48_J": 48.998499999999986
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 39.30748934432519,
+   "bridge_peak": 41.76017210804178,
+   "series_peak": 92.91340054633261,
+   "vlink_max": 99.99867092201049,
+   "vbus_min": 366.7946344831916,
+   "vbus_max_loaded": 409.998754951733,
+   "dab_sec_peak": 83.36773528968608,
+   "dab_peak_ratio": 1.38980951190786,
+   "brk_energy_J": 5.035156964126093,
+   "soft_energy_J": 0.01139343277091472,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.45,
+    "vl": 0.489769317512516,
+    "vs": -4.480096508349038,
+    "ip": 6.546264036133863
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.455,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.95
+    ],
+    [
+     "DEGRADED",
+     27.955
+    ],
+    [
+     "sc_resume",
+     28.455
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 35.005,
+   "restore_done_ms": null,
+   "i_break": 22.11837661470049,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "L2",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_ML_L2",
+   "soft": {
+    "soft_energy_J": 0.01139343277091472,
+    "E_byp_J": 0.01390295670008245,
+    "P_pk_W": 30.149607212295063,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.4949446655300385,
+    "vs_max_soft": 4.479340139309009,
+    "ib_max": 18.456223844571447
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.955,
+   "P6": {
+    "Tj": 102.49494466553004,
+    "ok": true
+   },
+   "pause_ms": 9.269999999999996,
+   "batt48_J": 49.13099999999998
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 38.76660007529154,
+   "bridge_peak": 41.15701666186616,
+   "series_peak": 92.84629328415437,
+   "vlink_max": 99.99867092201049,
+   "vbus_min": 366.8852630682191,
+   "vbus_max_loaded": 409.998754951733,
+   "dab_sec_peak": 83.3088694876665,
+   "dab_peak_ratio": 1.3888281700099587,
+   "brk_energy_J": 4.99273092919996,
+   "soft_energy_J": 0.011370725937055381,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.425,
+    "vl": 0.4853780292836407,
+    "vs": -4.475786496947438,
+    "ip": 6.542255976482374
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.43,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.925
+    ],
+    [
+     "DEGRADED",
+     27.93
+    ],
+    [
+     "sc_resume",
+     28.43
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 11.054573835969713,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "LC",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_ML_LC",
+   "soft": {
+    "soft_energy_J": 0.011370725937055381,
+    "E_byp_J": 0.013881743025775358,
+    "P_pk_W": 30.091746131130865,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.4899984279379677,
+    "vs_max_soft": 4.47503049157577,
+    "ib_max": 18.438048716485703
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.93,
+   "P6": {
+    "Tj": 102.48999842793796,
+    "ok": true
+   },
+   "pause_ms": 9.244999999999997,
+   "batt48_J": 48.998499999999986
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 10000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 39.30748934432519,
+   "bridge_peak": 41.76017210804178,
+   "series_peak": 92.91340054633261,
+   "vlink_max": 99.99867092201049,
+   "vbus_min": 366.7946344831916,
+   "vbus_max_loaded": 409.998754951733,
+   "dab_sec_peak": 83.36773528968608,
+   "dab_peak_ratio": 1.38980951190786,
+   "brk_energy_J": 5.035156964126093,
+   "soft_energy_J": 0.01139343277091472,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 26.45,
+    "vl": 0.489769317512516,
+    "vs": -4.480096508349038,
+    "ip": 6.546264036133863
+   },
+   "soft_timeout": false,
+   "hold_ms": 20.005,
+   "deg_ms": 27.455,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     20.505
+    ],
+    [
+     "sc_pause",
+     20.51
+    ],
+    [
+     "HB_COLLAPSE",
+     20.51
+    ],
+    [
+     "SOFT_BYP",
+     26.95
+    ],
+    [
+     "DEGRADED",
+     27.955
+    ],
+    [
+     "sc_resume",
+     28.455
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": null,
+   "restore_done_ms": null,
+   "i_break": 22.11837661470049,
+   "kind": "sep",
+   "mix": "ML",
+   "scen": "LA",
+   "t_shed_ms": 20.0,
+   "tag": "W410_spec_920_ML_LA",
+   "soft": {
+    "soft_energy_J": 0.01139343277091472,
+    "E_byp_J": 0.01390295670008245,
+    "P_pk_W": 30.149607212295063,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.4949446655300385,
+    "vs_max_soft": 4.479340139309009,
+    "ib_max": 18.456223844571447
+   },
+   "sc_pause_ms": 20.01,
+   "sc_resume_ms": 27.955,
+   "P6": {
+    "Tj": 102.49494466553004,
+    "ok": true
+   },
+   "pause_ms": 9.269999999999996,
+   "batt48_J": 49.13099999999998
+  },
+  {
+   "case": "W460_240s",
+   "V": 1008.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 67.95138269141194,
+   "bridge_peak": 68.75010364639257,
+   "series_peak": 98.26199465467579,
+   "vlink_max": 100.01093332180875,
+   "vbus_min": 405.0867861488619,
+   "vbus_max_loaded": 459.99794202053636,
+   "dab_sec_peak": 63.6691246181917,
+   "dab_peak_ratio": 1.3893033357504865,
+   "brk_energy_J": 7.750612957427719,
+   "soft_energy_J": 0.011841395669890295,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 58.47,
+    "vl": 0.4996419357412853,
+    "vs": -4.485526866123396,
+    "ip": 6.006221290420267
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 59.475,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     58.97
+    ],
+    [
+     "DEGRADED",
+     59.975
+    ],
+    [
+     "sc_resume",
+     60.4751
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": null,
+   "i_break": 18.339901465632188,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "S5",
+   "t_shed_ms": 50.0,
+   "tag": "W460_240s_1008_MX_S5_shed50",
+   "soft": {
+    "soft_energy_J": 0.011841395669890295,
+    "E_byp_J": 0.014471227891592024,
+    "P_pk_W": 31.43288133485954,
+    "span10_ms": 0.7150000000000003,
+    "dT_one": 2.5956610051961846,
+    "vs_max_soft": 4.484797481137989,
+    "ib_max": 18.83216072204861
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 59.9751,
+   "P6": {
+    "Tj": 102.59566100519618,
+    "ok": true
+   },
+   "pause_ms": 11.290099999999999,
+   "batt48_J": 59.837529999999994
+  },
+  {
+   "case": "W410_spec",
+   "V": 920.0,
+   "P": 25000.0,
+   "event": "hb_open",
+   "final_state": "DEGRADED",
+   "checks": {
+    "current_100A": true,
+    "series_120V": true,
+    "link_120V": true,
+    "bypass_current": true,
+    "bus_ge_260": true,
+    "degraded_reached": true,
+    "class_upper_while_400V_loads": true,
+    "dab_peak_1p5": true,
+    "brake_64J": true
+   },
+   "pass_": true,
+   "path_peak": 65.31437317336984,
+   "bridge_peak": 65.60841824661058,
+   "series_peak": 94.70390020736447,
+   "vlink_max": 100.01181015917334,
+   "vbus_min": 364.3977263301891,
+   "vbus_max_loaded": 409.9969050884977,
+   "dab_sec_peak": 83.32848697612599,
+   "dab_peak_ratio": 1.389155209864958,
+   "brk_energy_J": 5.105449746038671,
+   "soft_energy_J": 0.011439487734949799,
+   "soft_entry": {
+    "why": "vl",
+    "ms": 56.47,
+    "vl": 0.49840086056679506,
+    "vs": -4.488436193729232,
+    "ip": 6.560712967443197
+   },
+   "soft_timeout": false,
+   "hold_ms": 50.005,
+   "deg_ms": 57.475,
+   "events": [
+    [
+     "shed_cmd",
+     0.505
+    ],
+    [
+     "HB_HOLD",
+     0.505
+    ],
+    [
+     "shed_done",
+     50.5051
+    ],
+    [
+     "sc_pause",
+     50.51
+    ],
+    [
+     "HB_COLLAPSE",
+     50.51
+    ],
+    [
+     "SOFT_BYP",
+     56.97
+    ],
+    [
+     "DEGRADED",
+     57.975
+    ],
+    [
+     "sc_resume",
+     58.475
+    ]
+   ],
+   "t_cont_ms": 0.005,
+   "restored": false,
+   "fallback": false,
+   "curtail_done_ms": 19.005,
+   "restore_done_ms": null,
+   "i_break": 20.126433310640877,
+   "kind": "sep",
+   "mix": "MX",
+   "scen": "S5",
+   "t_shed_ms": 50.0,
+   "tag": "W410_spec_920_MX_S5_shed50",
+   "soft": {
+    "soft_energy_J": 0.011439487734949799,
+    "E_byp_J": 0.0154656602316141,
+    "P_pk_W": 30.267708123209633,
+    "span10_ms": 0.7199999999999984,
+    "dT_one": 2.5049950306520206,
+    "vs_max_soft": 4.487678697638725,
+    "ib_max": 18.49316101212216
+   },
+   "sc_pause_ms": 50.01,
+   "sc_resume_ms": 57.975,
+   "P6": {
+    "Tj": 102.50499503065203,
+    "ok": true
+   },
+   "pause_ms": 9.290000000000003,
+   "batt48_J": 49.237000000000016
+  }
+ ],
+ "limits": {
+  "T": 150,
+  "V": 120.0,
+  "I": 329.0
+ },
+ "pause_ms": [
+  8.7,
+  12.4101
+ ],
+ "batt48_J_max": 65.77353
+}
