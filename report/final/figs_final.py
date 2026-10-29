@@ -28,7 +28,7 @@ def fig2_1():
     box(ax, 0.2, 3.9, 1.9, 1.3, "고전압 배터리\n640–1008 V", C["lgray"], bold=True)
     box(ax, 2.8, 3.9, 2.3, 1.3, "Stage A(A25R)\n2:1 공진 SC, 25 kHz\n8위상 150 kW\n위상 셰딩·모듈 관리기", C["lblue"], fs=7.4)
     ax.add_patch(plt.Circle((6.0, 4.55), 0.16, color=C["blue"]))
-    ax.text(6.0, 4.05, "V_A 노드\nC_A 2.4 mF", ha="center", va="top", fontsize=7.6)
+    ax.text(5.85, 5.35, "V_A 노드\nC_A 2.4 mF", ha="right", va="bottom", fontsize=7.4)
     box(ax, 4.85, 7.3, 2.3, 1.1, "400·500 V급 충전기\n(≤ 375 A)", C["lgray"], fs=7.8)
     ax.add_patch(plt.Rectangle((6.55, 1.2), 3.2, 4.75, fill=False, ls="--", lw=1.0, ec=C["orange"]))
     ax.text(8.15, 6.3, "선택: 창 조정 모듈 R2-W(V_A > V_W인 팩만)", ha="center", va="center", fontsize=7.2, color=C["orange"])
@@ -50,12 +50,12 @@ def fig2_1():
     arrow(ax, (12.7, 7.2), (12.3, 7.2), color=C["green"], ls=":", lw=1.2)
     arrow(ax, (13.65, 6.6), (13.65, 5.2), color=C["green"], ls=":", lw=1.2)
     ax.plot([2.8, 5.1], [3.65, 3.65], color=C["red"], lw=2.0)
-    ax.text(3.95, 3.3, "충전 대전류 경로\n(Stage B 비경유)", ha="center", va="top", fontsize=7.0, color=C["red"])
+    ax.text(3.0, 3.3, "충전 대전류 경로\n(Stage B 비경유)", ha="center", va="top", fontsize=7.0, color=C["red"])
     txt = ("V_A 클램프: 가지 %d개 × %.1f Ω + SiC %s\n468/463 V(≤ 920 V 팩), W460 가지 %d개 × %.1f Ω·511/506 V\n최대 연속 켜짐 %.1f ms"
            % (s["n"], s["R_b"], s["switch"], w["n"], w["R_b"], ton))
-    box(ax, 3.0, 0.25, 3.4, 1.55, txt, C["lorange"], fs=6.6)
-    arrow(ax, (5.95, 3.25), (5.3, 1.8), color=C["orange"])
-    ax.text(4.7, 2.15, "충전 중 배터리\n경로 상실 시", ha="center", va="center", fontsize=6.4, color=C["orange"])
+    box(ax, 0.2, 0.2, 6.15, 1.45, txt, C["lorange"], fs=6.8)
+    arrow(ax, (6.0, 4.38), (5.6, 1.65), color=C["orange"])
+    ax.text(5.5, 2.2, "충전 중 배터리\n경로 상실 시", ha="right", va="center", fontsize=6.4, color=C["orange"])
     fig.tight_layout(); fig.savefig(FIG / "fig2_1_r2_final.png"); plt.close(fig)
 
 
