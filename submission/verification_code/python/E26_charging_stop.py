@@ -137,7 +137,7 @@ def run_event(Vbat, P400, PC, arch="R2", clamp=True, prof="hold", t_comm=0., nmo
     def deriv(xx, tt, running, nmod, cl):
         vA, iw, vb, vd = xx
         iA = (vA - Vbat / 2) / (RA_MOD / nmod) if running else 0.
-        icl = vA / CL["R"] if cl else 0.
+        icl = CL.get("n", 1) * max(vA - CL.get("vdrop", 0.), 0.) / CL["R"] if cl else 0.   # (E38) 가지 수 n·스위치 강하(기본 1·0 V)
         if has_bus:
             iload = (P400 + PC) / max(vb, b["vmin"])
             id_ = (vb - vd) / b["Rd"]
@@ -176,7 +176,7 @@ def run_event(Vbat, P400, PC, arch="R2", clamp=True, prof="hold", t_comm=0., nmo
         x = x + DT / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
         t += DT
         if clamp_on:
-            p = x[0] ** 2 / CL["R"]; E_cl += p * DT; Pcl_pk = max(Pcl_pk, p); t_cl_on += DT
+            p = CL.get("n", 1) * max(x[0] - CL.get("vdrop", 0.), 0.) ** 2 / CL["R"]; E_cl += p * DT; Pcl_pk = max(Pcl_pk, p); t_cl_on += DT
         vA_max = max(vA_max, x[0]); vb_max = max(vb_max, x[2])
         for lim in t_hit:
             if t_hit[lim] is None and x[0] >= lim:

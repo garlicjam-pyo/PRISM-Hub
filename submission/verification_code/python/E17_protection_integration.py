@@ -318,7 +318,11 @@ def r2_run(job):
          astop : dict(delay, C_A). 이중 고장이면 delay 뒤 Stage A를 멈춘다(V_A 노드 = C_A가 경로전류로 방전)
                  (E37, 선택) R_dis·dv_on·dv_off: Stage A 정지 뒤 V_A 노드 방전 저항. V_A > v_bus − dv_on(기본 60 V)이면 켬,
                  V_A < v_bus − dv_off(기본 65 V)이면 끔. 없으면 이전과 같다
-         fs_brake: 이중 고장에서도 링크 제동 저항의 과전압 보호(110 V 켬·105 V 끔)를 유지"""
+         fs_brake: 이중 고장에서도 링크 제동 저항의 과전압 보호(110 V 켬·105 V 끔)를 유지
+    (E38, 모두 선택이고 없으면 이전과 같다. sals가 있을 때만 쓴다)
+         sc_pause : True면 링크 붕괴 시작 때 Stage C를 일시 정지(양의 입력전력을 4 kW/ms로 0까지, 허브 내부 명령)하고,
+                    강등(바이패스 닫힘) T_RESTORE 뒤 같은 변화율로 재개한다(감발 전용 팩은 SALS 되돌림과 같은 시각)
+         load_stop: 이중 고장(FAILSAFE) 진입 때 400 V 부하 전체(Stage C 포함)를 이 시간[s] 동안 선형으로 0까지(전용 배선 정지 신호)"""
     case, V, P, event = job["case"], job["V"], job["P"], job["event"]
     pol = job.get("policy", {"dab": "brk_hold"}.get(event, "clamp_brk")); vd = job.get("vd", VD)
     t_soft = job.get("t_soft", T_SOFT); t_shed = job.get("t_shed", T_SHED)
@@ -332,6 +336,7 @@ def r2_run(job):
     t_cont = None; low_since = None; restored = False; ev2 = job.get("event2"); astop = job.get("astop"); t_as = None
     dis_on = False; E_dis = 0.; P_dis_pk = 0.; I_dis_pk = 0.; n_dis = 0                     # (E37) V_A 노드 방전 저항
     fs_brake = bool(job.get("fs_brake", False))
+    sc_pause = bool(job.get("sc_pause", False)); ls_ramp = job.get("load_stop")              # (E38)
     t_wait = job.get("wait", T_WAIT); t_prep = job.get("t_prep", T_PREP)
     prep, close = job.get("prep", "zero"), job.get("close", "zero")
     brk = pol in ("clamp_brk", "clamp_brk_hard", "brk_hold")
@@ -459,6 +464,8 @@ def r2_run(job):
                 SL.block_regen(t)                                   # (E29) Stage C 회생 차단(허브 내부 명령)
             if st == "FAILSAFE" and SL is not None and t_cont is None:
                 SL.curtail(t); t_cont = t                           # (E29) 이중 고장: 접촉기 분리 + SALS 감발
+            if st == "FAILSAFE" and SL is not None and ls_ramp and SL.t_stop is None:
+                SL.load_stop(t, ls_ramp); events.append(("load_stop", round(t * 1e3, 4)))   # (E38) 400 V 부하 정지 신호
             if st == "FAILSAFE" and astop is not None and t_as is None:
                 t_as = t + astop["delay"]; vA = V / 2; events.append(("stageA_stop", round(t_as * 1e3, 4)))
             # (E29) 감발 전용: 부하전류 추정으로 유지(9) 끝을 정하고, 시간 상한이면 접촉기 분리로.
@@ -515,6 +522,8 @@ def r2_run(job):
             elif st == "ZERO" and t - t_st >= ZERO:
                 G = 1. / R_BYP; t_close = t; go("DEGRADED" if t_det is not None else "BYPASS", t)
             elif st == "HB_HOLD" and (shed_cmd is None or not loads400 or cur_ok):   # 분리가 끝났거나 필요 없으면 링크 붕괴
+                if sc_pause and SL is not None:                     # (E38) Stage C 일시 정지(붕괴·소프트 투입 동안)
+                    SL.sc_pause(t); events.append(("sc_pause", round(t * 1e3, 4)))
                 aux.collapse(t, x[4]); go("HB_COLLAPSE", t)
             elif st == "HB_COLLAPSE" and (x[4] <= VL_SOFT or stalled or t - t_st >= T_COL_MAX):
                 t_close = t
@@ -585,6 +594,8 @@ def r2_run(job):
                 loads400 = False; events.append(("shed_done", round(t * 1e3, 4)))
             if curtail_only and t_cont is None and t_deg is not None and not restored and t - t_deg >= T_RESTORE:
                 SL.restore(t); restored = True; events.append(("restore", round(t * 1e3, 4)))
+            if sc_pause and SL.t_pause is not None and SL.t_resume is None and t_deg is not None and t - t_deg >= T_RESTORE:
+                SL.sc_resume(t); events.append(("sc_resume", round(t * 1e3, 4)))   # (E38) Stage C 재개
         else:
             if shed_cmd is not None and loads400 and t - shed_cmd >= t_shed and not (curtail_only and t_deg is not None):
                 loads400 = False; events.append(("shed_done", round(t * 1e3, 4)))
@@ -673,6 +684,10 @@ def r2_run(job):
                  vA_end=None if t_as is None else float(vA), fs_brake=fs_brake)
         if astop is not None and astop.get("R_dis"):
             m.update(dis_E_J=E_dis, dis_P_pk_W=P_dis_pk, dis_I_pk_A=I_dis_pk, dis_n_on=n_dis)
+        if sc_pause or ls_ramp:                                    # (E38)
+            ms = lambda v: None if v is None else round((v - T_EV) * 1e3, 4)
+            m.update(sc_pause=sc_pause, load_stop=ls_ramp, sc_pause_ms=ms(SL.t_pause), sc_resume_ms=ms(SL.t_resume),
+                     load_stop_ms=ms(SL.t_stop))
     if t_close is not None:                                        # 바이패스 투입 순간(소프트 투입 포함) + 50 µs
         w = (tt >= t_close) & (tt <= (t_deg if t_deg is not None else t_close) + 50e-6)
         m.update(close_ms=round((t_close - T_EV) * 1e3, 4), vs_at_close=float(log[np.searchsorted(tt, t_close), 1]),
