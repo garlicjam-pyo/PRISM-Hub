@@ -70,6 +70,9 @@
   p6·f2의 대책은 기준 커밋 전 검토 진단(저장소 밖, 판정 아님)에서 찾았다: Stage C 일시 정지 74/74·최악 0.036 J, 부하 정지 1–3 ms
   4/4(직렬 ≤ 95 V), 5 ms 4/4(직렬 114 V). 이 실행은 같은 로직을 공용 모듈의 선택 인자로 옮겨 기준대로 판정한다.
 
+  l1 1차 실행(2026-10-29): E15는 끝났지만 E25가 R2 정격의 'stageC_pre'(전단) 항목을 찾지 못해 멈췄다. 조정형 Stage C 정격을 한 항목으로
+  합쳐 넣었기 때문이다(구현 오류). 조정형을 DCX(stageC)와 전단 동기 벅(stageC_pre)으로 나눠 넣게 고쳐 l1부터 다시 실행했다(기준 그대로).
+
 ■ 실행   python E38_review_response.py clamp hv l1 l2 p6 f2 table
 ■ 결과   results/E38/*.json
 """
@@ -330,13 +333,15 @@ def stage_c_models():
     _, xA = E22.dcx_loss(c, E22.PO_MAX, E22.VO_NOM, c["np"], c["ns"])
     _, xF = E22.dcx_loss(cf, E22.PO_MAX, E22.VO_NOM, c["np"], c["ns"])
     IL = fd["IL_max"] * math.sqrt(1 + E22.RIPPLE ** 2 / 12)
-    regA = dict(positions=10, devices=2 * c["nsw"] + 4 * c["np"] + 4 * c["ns"],
-                switch_kVA=(2 * 650 * IL / math.sqrt(2) + 4 * 650 * xA["Ip"] / math.sqrt(2) + 4 * 150 * xA["Is"] / math.sqrt(2)) / 1e3,
-                rated_kW=E22.PO_MAX / 1e3, magnetics=2)
+    regA = dict(positions=8, devices=4 * c["np"] + 4 * c["ns"],                                  # DCX(1차·2차 브리지)
+                switch_kVA=(4 * 650 * xA["Ip"] / math.sqrt(2) + 4 * 150 * xA["Is"] / math.sqrt(2)) / 1e3,
+                rated_kW=E22.PO_MAX / 1e3, magnetics=1)
+    regF = dict(positions=2, devices=2 * c["nsw"], switch_kVA=2 * 650 * IL / math.sqrt(2) / 1e3,       # 전단 동기 벅
+                rated_kW=E22.PO_MAX / 1e3, magnetics=1)
     fixF = dict(positions=8, devices=4 * c["np"] + 4 * c["ns"],
                 switch_kVA=(4 * 650 * xF["Ip"] / math.sqrt(2) + 4 * 150 * xF["Is"] / math.sqrt(2)) / 1e3, rated_kW=E22.PO_MAX / 1e3,
                 magnetics=1)
-    return stage_c, orig, regA, fixF, dict(reg=dict(Lm=c["Lm"], n=c["n"], front=c["front"]), fix=dict(Lm=cf["Lm"], n=cf["n"]))
+    return stage_c, orig, (regA, regF), fixF, dict(reg=dict(Lm=c["Lm"], n=c["n"], front=c["front"]), fix=dict(Lm=cf["Lm"], n=cf["n"]))
 
 
 def l1():
@@ -345,7 +350,7 @@ def l1():
     import E25_motor_boost_comparison as E25
     import E36_a25r_impact as E36
     from common import outdir as od
-    sc, orig, regA, fixF, info = stage_c_models()
+    sc, orig, (regA, regF), fixF, info = stage_c_models()
     E15.stage_c = sc
     r0 = E15.ratings
 
@@ -355,15 +360,15 @@ def l1():
             if k == "extra":
                 continue
             parts = dict(v["parts"])
-            if "stageC_pre" in parts:
-                parts.pop("stageC_pre"); parts["stageC"] = regA
+            if "stageC_pre" in parts:                                       # 조정형: DCX(stageC) + 전단 벅(stageC_pre)
+                parts["stageC"] = regA; parts["stageC_pre"] = regF
             else:
                 parts["stageC"] = fixF
             tot = {m: sum(x[m] for x in parts.values()) for m in ("positions", "devices", "switch_kVA", "rated_kW", "magnetics")}
             r[k] = dict(parts=parts, total=tot)
         return r
     E15.ratings = ratings
-    E25.stage_c_rating_x2 = lambda: dict(positions=2 * regA["positions"], devices=2 * regA["devices"])
+    E25.stage_c_rating_x2 = lambda: dict(positions=2 * (regA["positions"] + regF["positions"]), devices=2 * (regA["devices"] + regF["devices"]))
     made = set()
 
     def sj(eid, name, obj):
@@ -374,6 +379,7 @@ def l1():
             return load_json(EID, "l1_" + name)
         return load_json(eid, name)
     E36.save_json = sj; E36.load_json = lj; E36.outdir = lambda eid: od(EID)
+    E25.outdir = lambda eid: od(EID)                                    # E25 그림도 E38 폴더로(E36 결과를 덮어쓰지 않게)
     print("== l1 E15(H5) ==", flush=True); E36.e15()
     print("== l1 E25 ==", flush=True); E36.e25()
     print("== l1 E18 ==", flush=True); E36.e18()
@@ -382,7 +388,7 @@ def l1():
             os.replace(od(EID) / f, od(EID) / ("l1_" + f))
     # E36과 대조
     a, b = load_json("E36", "e15_comparison"), load_json(EID, "l1_e15_comparison")
-    cmp = dict(stage_c=info, ratings_stageC=dict(regulated=regA, fixed=fixF),
+    cmp = dict(stage_c=info, ratings_stageC=dict(regulated_dcx=regA, regulated_front=regF, fixed=fixF),
                aux_W={s: [a["results"][s]["drive_typ"]["avg_loss_W"], b["results"][s]["drive_typ"]["avg_loss_W"]] for s in a["results"]},
                ratings={s: [a["ratings"][s]["total"], b["ratings"][s]["total"]] for s in a["ratings"] if s != "extra"},
                H5=[a["judge"]["H5_metric_pass"], b["judge"]["H5_metric_pass"]], H5_band3=[a["judge_band3"]["H5_metric_pass"], b["judge_band3"]["H5_metric_pass"]],
