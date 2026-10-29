@@ -5,4 +5,5 @@ E28 `regress`는 모듈 관리기를 쓰지 않는 경로가 이전 시험의 �
 | 파일 | 원본 | 쓰는 곳 |
 |---|---|---|
 | `E24_transient.json` | E24 transient 결과(2026-10-26, 근거 사본 validation/2026-10-26-stage-a-shedding/E24/transient.json) | E28 regress |
+| `E24_static.json` | E24 static 결과(2026-10-26, 근거 사본 validation/2026-10-26-stage-a-shedding/E24/static.json) | E28 regress (G3) |
 | `E27_repro.json` | E27 repro 결과(2026-10-27, 근거 사본 validation/2026-10-27-zcp-reversal/E27/repro.json) | E28 regress |

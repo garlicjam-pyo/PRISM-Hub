@@ -403,9 +403,9 @@ def _reg(job):
 
 
 def regress():
-    root = Path(__file__).resolve().parents[3] / "validation"
-    old24 = json.loads((root / "2026-10-26-stage-a-shedding" / "E24" / "transient.json").read_text(encoding="utf-8"))
-    old27 = json.loads((root / "2026-10-27-zcp-reversal" / "E27" / "repro.json").read_text(encoding="utf-8"))
+    ref = Path(__file__).resolve().parent.parent / "data" / "reference"     # 고정 기준(E24·E27 저장 결과 사본)
+    old24 = json.loads((ref / "E24_transient.json").read_text(encoding="utf-8"))
+    old27 = json.loads((ref / "E27_repro.json").read_text(encoding="utf-8"))
     jobs = [("E24", "F_1008V_bus_25_5_25kW"), ("E24", "H_1008V_bus5kW_charger_74A"), ("E27", "nom0")]
     with Pool(workers()) as p:
         res = p.map(_reg, jobs)
@@ -436,7 +436,7 @@ def regress():
     g2 = n_bad == 0
     verdict("(G2) 새 게이트: E27 repro·stress 모든 턴오프 ≤ max(5 %·첨두, 1 A)", g2, "위반 %d" % n_bad)
     # (G3) 새 게이트로 E24 정상·과도 판정
-    old24s = json.loads((root / "2026-10-26-stage-a-shedding" / "E24" / "static.json").read_text(encoding="utf-8"))
+    old24s = json.loads((ref / "E24_static.json").read_text(encoding="utf-8"))
     with Pool(workers()) as p:
         s24 = p.map(_g3s, list(E24.STATIC_I))
         t24 = p.map(_g3t, list(E24.CASES))

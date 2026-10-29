@@ -34,6 +34,6 @@
 
 1. (끝남) E40 전 부분 실행 완료, 결과는 `E40/`.
 2. TB33 기준값: `simulink/tb/TB33_A25R_ClampMaxOn/ref`에서 `python make_ref_TB33.py <검증 코드 python 폴더> <results/E40>` (E40 p5·thr 필요). 결과를 커밋한 뒤 PC에서 `zzt_` 작업 이름으로 `build_TB33` → `smoke_TB33` → `run_TB33`.
-3. E28 `regress`의 경로를 `data/reference/`로 바꾸기(E40 p1이 끝난 뒤. 파일은 이미 복사했다).
+3. (끝남, 2026-10-30) E28 `regress`가 `data/reference/`(E24\_transient·E24\_static·E27\_repro)를 읽도록 바꿨다. 다시 실행한 regress.json이 이전 결과와 차 0(10분).
 4. docs/46 작성(handoff 초안 + thr·P1·TB33), docs/20·README·docs/33 5절·docs/30·43·44·45 정정(결론 2·기여 1 새 문구, 클램프 3가지, P5 문구, 문턱 정확도 요구 +0.1 %), CHANGELOG, 제출 README 6절 수치.
 5. report-prep 병합(충돌 확인 뒤 커밋), 프로젝트·노션 반영, 독립 확인.
