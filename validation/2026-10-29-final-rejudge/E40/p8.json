@@ -1,0 +1,11 @@
+{
+ "E_max_J": 51.87535912196788,
+ "tag": "W460_240s_930_MX_LA",
+ "rep_J": 52.8,
+ "acc_J": 75.5,
+ "ok": true,
+ "conditional": true,
+ "accidental_only": false,
+ "k": 0.7,
+ "source": "Thick Film Power Resistors: D2TO-H and LTO-H High Energy Series, Application Note, Document Number 51114, Revision 18-Jun-2025"
+}
