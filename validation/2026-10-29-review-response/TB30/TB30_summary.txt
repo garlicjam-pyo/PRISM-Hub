@@ -1,0 +1,5 @@
+TB30 = TB28 circuit (A25R) with re-selected V_A clamp (E38 Q1: 2 x 1.6 ohm SP branches, resistance corners), reference E26 (same corner) / E22 / E35 model
+case                   result vA_max    ref       E_cl[J]   ref       vo_min    failed
+A30_640V_noload_Rmax   PASS   468.13    468.20    228.2     228.2     47.978    
+B30_920V_noload_Rmin   PASS   468.11    468.23    517.2     517.1     47.994    
+TB30 overall: PASS

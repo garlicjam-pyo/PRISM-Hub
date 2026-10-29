@@ -1,0 +1,18 @@
+TB30 case B30_920V_noload_Rmin, V_bat 920 V, event 1.50 ms, dt 2.50 ns, wall 253 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           PASS
+    V_A 1 us max 468.11 V (E26 468.23), bus 467.14 V (E26 467.12); instantaneous V_A 468.16 V, bus 467.14 V (limit 470 V)
+    clamp: energy 517.2 J (E26 517.1 J), on 1.423 ms (E26 1.420 ms), peak 368 kW, turn-ons 47 (E26 46), clamp current max 785.4 A
+    clamp branch current max (total / 2): 392.7 A, corner resistance 0.5951 ohm (equivalent), drop 0.00 V
+    48 V (10 us mean, from 1 ms) 47.994-48.012 V (E22 47.994-48.012, band 47.04-48.96); Stage C 100 us max 0.3 A, secondary peak 2.6 A
+    Stage C ZVS: primary 0.21 V (2250 edges), secondary 0.06 V (2250 edges)
+    Stage A pre: ZCS max 0.39 % (ref 0.67 %), Ipk max 74.0 A (ref 74.2 A), sharing 1.15 %, V_A 460.846 V (ref 460.845 V), i_A -374.9 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 199, violations 0, worst 0.29 A; phase peak 74.2 A (P_rated 74.5 A, fault limit 111.8 A)
+    modules: events zeros(0,2) (model zeros(0,2)), end 4 (model 4), cancels 0
+    Stage A forced cut currents [68.5 73.6 70.7 56.5 30.5 2 25.9 46.5] A, phase max 50 us after cut 0.00 A

@@ -1,0 +1,25 @@
+[prism_run] smoke_TB30 start 2026-10-29 15:25:27
+TB30 case A30_640V_noload_Rmax, V_bat 640 V, event 1.50 ms, dt 2.50 ns, wall 222 s
+(1) criteria:
+    C1_voltage           PASS
+    C1r_e26              FAIL
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           PASS
+    V_A 1 us max 328.97 V (E26 468.20), bus 324.74 V (E26 469.38); instantaneous V_A 329.03 V, bus 324.81 V (limit 470 V)
+    clamp: energy 0.0 J (E26 228.2 J), on 0.000 ms (E26 1.249 ms), peak 0 kW, turn-ons 0 (E26 3), clamp current max 0.0 A
+    clamp branch current max (total / 2): 0.0 A, corner resistance 1.1701 ohm (equivalent), drop 2.05 V
+    48 V (10 us mean, from 1 ms) 48.000-48.001 V (E22 47.977-48.030, band 47.04-48.96); Stage C 100 us max 0.1 A, secondary peak 2.6 A
+    Stage C ZVS: primary 0.21 V (280 edges), secondary 0.06 V (280 edges)
+    Stage A pre: ZCS max 0.39 % (ref 0.67 %), Ipk max 74.0 A (ref 74.2 A), sharing 1.23 %, V_A 320.846 V (ref 320.845 V), i_A -374.9 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 200, violations 0, worst 0.29 A; phase peak 74.2 A (P_rated 74.5 A, fault limit 111.8 A)
+    modules: events zeros(0,2) (model zeros(0,2)), end 4 (model 4), cancels 0
+    Stage A forced cut currents [67.3 73.2 71.6 58.3 32.9 0 23.2 44.1] A, phase max 50 us after cut 0.00 A
+A30_640V_noload_Rmax done (222 s): FAIL
+TB30 = TB28 circuit (A25R) with re-selected V_A clamp (E38 Q1: 2 x 1.6 ohm SP branches, resistance corners), reference E26 (same corner) / E22 / E35 model
+case                   result vA_max    ref       E_cl[J]   ref       vo_min    failed
+A30_640V_noload_Rmax   FAIL   328.97    468.20    0.0       228.2     48.000    C1r_e26
+TB30 overall: FAIL
+[prism_run] smoke_TB30 finished (229.7 s)
