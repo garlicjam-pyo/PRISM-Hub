@@ -1,0 +1,5 @@
+TB31 Stage C pause (P6) and 400 V load stop (F2), R2-W460, SALS time scale 0.15, DAB design limit 1.387x rated, C_A 2.4 mF
+run  case                         limits   failed
+A31  A31_930V_MX_S5_pause         PASS     
+E31  E31_1008V_dab_double_stop    PASS     
+TB31 overall: PASS

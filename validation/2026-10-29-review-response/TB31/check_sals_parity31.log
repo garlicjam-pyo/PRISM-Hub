@@ -1,0 +1,3 @@
+[prism_run] check_sals_parity31 start 2026-10-29 15:24:07
+prism_sals_loads vs sals_loads.SalsLoads: 40 scenarios, 32040 samples, max |dP| = 6e-08 W (scenario 6) -> PASS
+[prism_run] check_sals_parity31 finished (1.8 s)

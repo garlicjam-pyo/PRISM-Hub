@@ -234,11 +234,11 @@ for k = 1:size(cmp, 1)
     o2(fid, '    %-44s %11.5g %11.5g %+9.3g %9s\n', cmp{k, 1}, a, b, a - b, r);
 end
 o2(fid, '    final state: %s; brake energy %.2f J; path current |i_p| <= 1 A after Stage A stop: %.3f ms\n', final_state, sum(pr(:, 11))*T, ip_zero_ms);
-o2(fid, '    (P6) soft-bypass device EPC2305 (one device, 1 us mean power): T_J %.1f C, peak power %.1f W\n', P6.Tj_C, P6.P_pk_1us_W);
+if ~exist('P6', 'var'), P6 = struct('Tj_C', NaN, 'P_pk_1us_W', NaN); end   % 이중 고장 사례에는 소프트 투입이 없다(1차 실행의 출력 단계 오류 수정)
+if isfinite(P6.Tj_C), o2(fid, '    (P6) soft-bypass device EPC2305 (one device, 1 us mean power): T_J %.1f C, peak power %.1f W\n', P6.Tj_C, P6.P_pk_1us_W); end
 if isfield(M, 'ip_zero_ms'), o2(fid, '    E38 model: |i_p| <= 1 A after Stage A stop %.3f ms\n', M.ip_zero_ms); end
 if isfield(M, 'P6_Tj'), o2(fid, '    E38 model: P6 T_J %.1f C, peak %.1f W\n', M.P6_Tj, M.P6_P_pk_W); end
 fclose(fid);
-if ~exist('P6', 'var'), P6 = struct('Tj_C', NaN, 'P_pk_1us_W', NaN); end
 S = struct('case', cn, 'event', TB.event, 'limits', L, 'P6', P6, 'verdict', ternary(lpass, 'PASS', 'FAIL'), 'failed', {failed}, ...
     'transitions', ev, 'final_state', final_state, 'clamp_err_V', clamp_err, 'dab', dab, 'soft', soft, ...
     'peaks', struct('ip_A', max(abs(ip(post))), 'ih_A', max(abs(ih(post))), 'vs_V', max(abs(vs(post))), 'vlink_max_V', max(vl(post)), ...
