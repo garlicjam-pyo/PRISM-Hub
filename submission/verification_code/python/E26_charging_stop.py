@@ -132,6 +132,10 @@ def run_event(Vbat, P400, PC, arch="R2", clamp=True, prof="hold", t_comm=0., nmo
         x[1] = 0.
     t = 0.; n = int(tend / DT)
     clamp_on = False; pend = None              # 클램프 스위치 지연
+    # (E40) 선택: CL["t_on_max"] 최대 연속 켜짐 시간(이 시간 켜져 있으면 끈다, 그 뒤 보통 비교기 논리),
+    #       CL["force_on_at"] 이 시각에 비교기와 무관하게 게이트를 켠다(오동작 사건). 둘 다 없으면 이전과 같은 계산이다.
+    t_on_max = CL.get("t_on_max"); force_at = CL.get("force_on_at"); forced_done = False
+    t_on_start = 0.; t_cont_max = 0.; n_forced = 0; n_on_after_forced = 0
     t_sig = None                               # 비상 정지 신호 시각
     contactor_open = False
     E_cl = 0.; Pcl_pk = 0.; t_cl_on = 0.
@@ -173,12 +177,27 @@ def run_event(Vbat, P400, PC, arch="R2", clamp=True, prof="hold", t_comm=0., nmo
         if t >= t0 and t_sig is None and nmod_after == 0:
             t_sig = t                                          # Stage A 정지 판정 = 비상 정지 신호
         if clamp:
-            want = (x[0] >= CL["on"]) or (clamp_on and x[0] > CL["off"])
+            if force_at is not None and not forced_done and t >= force_at:
+                forced_done = True
+                if not clamp_on:
+                    clamp_on = True; pend = None; t_on_start = t
+                    if t_sig is None:
+                        t_sig = t
+            cut = clamp_on and t_on_max is not None and (t - t_on_start) >= t_on_max
+            want = ((x[0] >= CL["on"]) or (clamp_on and x[0] > CL["off"])) and not cut
             if want != clamp_on:
                 if pend is None or pend[0] != want:
                     pend = (want, t + CL["delay"])
                 elif t >= pend[1]:
                     clamp_on = want; pend = None
+                    if clamp_on:
+                        t_on_start = t
+                        if n_forced:
+                            n_on_after_forced += 1
+                    else:
+                        t_cont_max = max(t_cont_max, t - t_on_start)
+                        if cut:
+                            n_forced += 1
                     if clamp_on and t_sig is None:
                         t_sig = t
             else:
@@ -202,7 +221,11 @@ def run_event(Vbat, P400, PC, arch="R2", clamp=True, prof="hold", t_comm=0., nmo
         if x[0] > 2000.:                                       # 클램프 없음: 발산 확인 뒤 중단
             break
     rec = np.array(rec)
+    if clamp_on:
+        t_cont_max = max(t_cont_max, t - t_on_start)
     return dict(Vbat=Vbat, P400=P400, PC=PC, arch=arch, clamp=clamp, prof=prof, t_comm=t_comm, nmod_after=nmod_after,
+                t_on_cont_max_ms=1e3 * t_cont_max, n_forced_off=n_forced, n_on_after_forced=n_on_after_forced,
+                clamp_on_end=bool(clamp_on),
                 vA0=float(rec[0, 1]), vA_max=float(vA_max), vb_max=float(vb_max), E_clamp_J=E_cl, P_clamp_pk_W=Pcl_pk,
                 t_clamp_on_ms=1e3 * t_cl_on, t_hit_ms={str(int(k)): (None if v is None else 1e3 * v) for k, v in t_hit.items()},
                 ok_C1=bool(vA_max <= V_LIM and vb_max <= V_LIM),
