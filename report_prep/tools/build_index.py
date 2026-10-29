@@ -1,8 +1,8 @@
 """보고서 정리 브랜치의 검증 현황표(02_검증_현황표.md)와 그림 전체 목록(06_그림_목록.md의 부록)을 저장소에서 다시 만든다.
 
-- 검증 시험(E1–E38, 선행기술 검색, 검증 정리): docs/20 6절 "검증 결과 이력" 표의 행을 그대로 옮기고, 시험 번호마다 근거 문서·근거 폴더를 붙인다.
+- 검증 시험(E1–E39, 선행기술 검색, 검증 정리): docs/20 6절 "검증 결과 이력" 표의 행을 그대로 옮기고, 시험 번호마다 근거 문서·근거 폴더를 붙인다.
   결과·판정 문구는 docs/20의 것을 바꾸지 않는다(수치의 출처를 하나로 두기 위해).
-- 회로 테스트벤치(TB01–TB31): simulink/README.md의 "테스트벤치 진행 상태" 표에서 이름·상태를 옮기고 근거 문서를 붙인다.
+- 회로 테스트벤치(TB01–TB32): simulink/README.md의 "테스트벤치 진행 상태" 표에서 이름·상태를 옮기고 근거 문서를 붙인다.
 - 그림: validation/ 아래 PNG와 simulink/tb/*/results/ 아래 응답 그림(*_response.png, *_waveforms.png)을 폴더별로 모은다.
 
 실행: python report_prep/tools/build_index.py   (저장소 최상위에서)
@@ -50,6 +50,7 @@ E_SRC = {
     "E36": ("docs/41", "validation/2026-10-28-a25r-impact"),
     "E37": ("docs/42", "validation/2026-10-29-parts-rating-2"),
     "E38": ("docs/43", "validation/2026-10-29-review-response"),
+    "E39": ("docs/44", "validation/2026-10-29-clamp-switch"),
     "검증 정리": ("docs/20", "—"),
     "TB08": ("docs/23", "simulink/tb/TB08_R2_WindowModule"),
     "선행기술": ("docs/33", "—"),
@@ -59,7 +60,7 @@ TB_DOC = {"TB01": "docs/19", "TB02": "docs/19", "TB03": "docs/19", "TB04": "docs
           "TB12": "docs/26", "TB13": "docs/26", "TB14": "docs/27", "TB15": "docs/27", "TB16": "docs/28", "TB17": "docs/28",
           "TB18": "docs/29", "TB19": "docs/29", "TB20": "docs/31", "TB21": "docs/32", "TB22": "docs/34", "TB23": "docs/35",
           "TB24": "docs/36", "TB25": "docs/37", "TB26": "docs/38", "TB27": "docs/40", "TB28": "docs/41", "TB29": "docs/42",
-          "TB30": "docs/43", "TB31": "docs/43"}
+          "TB30": "docs/43", "TB31": "docs/43", "TB32": "docs/44"}
 DOC_FILES = {p.name[:2]: p.name for p in (ROOT / "docs").glob("[0-9][0-9]_*")}
 
 
@@ -123,12 +124,12 @@ def build_status():
     out = ["# 검증 현황표(자동 생성)", "",
            "> `report_prep/tools/build_index.py`가 docs/20 6절과 simulink/README.md에서 만든다. 결과·판정 문구는 원문 그대로다(수치를 고칠 때는 원문을 고치고 다시 생성).",
            "> 시험 이름의 상세 결과는 원문 표(docs/20 6절)에 있다. 여기서는 판정과 근거 위치를 한눈에 보도록 줄였다.", "",
-           "## 1. 검증 시험(E1–E38)", "",
+           "## 1. 검증 시험(E1–E39)", "",
            "| 날짜 | 시험 | 판정(docs/20 원문) | 근거 문서 | 근거 폴더 |", "|---|---|---|---|---|"]
     for r in er:
         src = E_SRC.get(r["key"], ("", "—"))
         out.append("| %s | %s | %s | %s | %s |" % (r["date"], r["test"], r["verdict"], doc_link(src[0]) if src[0] else "—", folder_link(src[1])))
-    out += ["", "## 2. 회로 테스트벤치(TB01–TB31)", "",
+    out += ["", "## 2. 회로 테스트벤치(TB01–TB32)", "",
             "| TB | 내용(요약) | 기준 | 상태(simulink/README 원문 요약) | 근거 문서 |", "|---|---|---|---|---|"]
     for r in tr:
         out.append("| [%s](../%s/README.md) | %s | %s | %s | %s |" % (r["tb"], r["path"], short(r["what"], 110), short(r["ref"], 70),
