@@ -60,6 +60,22 @@ RA_MOD = 10.2e-3                   # 모듈 출력저항(E16)
 BUS = dict(CA=400e-6, Rw=3e-3, Lw=1.5e-6, Cb=400e-6, Rd=48.6e-3, Cd=1.6e-3, vmin=200.)
 V_LIM = 470.; V_CONN = 600.; V_GAN = 650.
 CL = dict(on=468., off=463., R=1.0, delay=1e-6)
+
+
+def _cl_i(v):
+    """클램프 전류. (E39) CL["branches"] = [(R, 강하, 개수), ...]이면 가지별 합, 없으면 이전 식(가지 수 n, 강하 vdrop)."""
+    br = CL.get("branches")
+    if br:
+        return sum(m * max(v - vd, 0.) / R for R, vd, m in br)
+    return CL.get("n", 1) * max(v - CL.get("vdrop", 0.), 0.) / CL["R"]
+
+
+def _cl_p(v):
+    """클램프 저항 전력(강하 제외)."""
+    br = CL.get("branches")
+    if br:
+        return sum(m * max(v - vd, 0.) ** 2 / R for R, vd, m in br)
+    return CL.get("n", 1) * max(v - CL.get("vdrop", 0.), 0.) ** 2 / CL["R"]
 T_STOP = 30e-3                     # 충전기 5 A 이하까지(IEEE 2030.1.1)
 T0 = 1e-3                          # 사건 시각
 DT = 0.25e-6
@@ -137,7 +153,7 @@ def run_event(Vbat, P400, PC, arch="R2", clamp=True, prof="hold", t_comm=0., nmo
     def deriv(xx, tt, running, nmod, cl):
         vA, iw, vb, vd = xx
         iA = (vA - Vbat / 2) / (RA_MOD / nmod) if running else 0.
-        icl = CL.get("n", 1) * max(vA - CL.get("vdrop", 0.), 0.) / CL["R"] if cl else 0.   # (E38) 가지 수 n·스위치 강하(기본 1·0 V)
+        icl = _cl_i(vA) if cl else 0.   # (E38) 가지 수 n·스위치 강하(기본 1·0 V), (E39) 가지별 저항·강하
         if has_bus:
             iload = (P400 + PC) / max(vb, b["vmin"])
             id_ = (vb - vd) / b["Rd"]
@@ -176,7 +192,7 @@ def run_event(Vbat, P400, PC, arch="R2", clamp=True, prof="hold", t_comm=0., nmo
         x = x + DT / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
         t += DT
         if clamp_on:
-            p = CL.get("n", 1) * max(x[0] - CL.get("vdrop", 0.), 0.) ** 2 / CL["R"]; E_cl += p * DT; Pcl_pk = max(Pcl_pk, p); t_cl_on += DT
+            p = _cl_p(x[0]); E_cl += p * DT; Pcl_pk = max(Pcl_pk, p); t_cl_on += DT
         vA_max = max(vA_max, x[0]); vb_max = max(vb_max, x[2])
         for lim in t_hit:
             if t_hit[lim] is None and x[0] >= lim:
