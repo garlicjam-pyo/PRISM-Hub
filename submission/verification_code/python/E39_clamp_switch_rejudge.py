@@ -40,6 +40,13 @@
   모델·같은 모서리 저항이고(모서리 저항이 E38과 1e-9 Ω 안에서 같은지 확인한다), 부분 reg에서 두 사건을 새로 실행해 같은 값인지
   확인한다. 모서리가 다르면(R3 반복) 새로 실행한다. W460은 E38이 사건 기록을 남기지 않아 모두 새로 실행한다.
 
+■ 실행 경과
+  1차 실행(2026-10-29): reg가 불통과였다. 두 가지 구현 오류다. (1) 같은 프로세스에서 앞의 E39 호출이 E26.CL에 남긴 가지 목록이 다음
+  E38 _ev 호출에 섞였다(E38 재실행 차 8.7e7). (2) 가지 전류를 기록 시점의 V_A로 계산했는데 E26(과 E38 icl)은 그 간격의 미분 계산에
+  쓴 앞 V_A로 계산한다(상대 차 약 1e-4). 가지 목록을 지우고, 가지 전류·저항 에너지 정의를 E26과 같게 고쳤다. 같은 식의 부동소수점
+  차를 위해 가지 목록 확인을 절대 차 1e-9에서 상대 차 1e-9로 바꿨다(판정 기준이 아니라 구현 확인 기준). spec은 첫 변형 6개(n = 1,
+  모두 C1 불통과)까지 진행한 뒤 멈추고 처음부터 다시 실행했다. 1차 기록: results/E39/E39_run1_reg_fail.log.
+
 ■ 실행   python E39_clamp_switch_rejudge.py reg spec hv tr table
 ■ 결과   results/E39/*.json
 """
@@ -138,11 +145,15 @@ def _branch_rows(tr, kw, br, n):
     k_off = np.flatnonzero(on_[:-1] & ~on_[1:]) + 1
     dt = float(t[1] - t[0])
     span = float(t[k_off[-1] - 1] - t[k_on[0]]) if len(k_on) and len(k_off) else float(on_.sum() * dt)
+    # 가지 전류는 E26이 그 간격의 미분 계산에 쓴 V_A(= 앞 기록)로, 저항 에너지는 E26 적분과 같이 간격 끝 V_A로 계산한다
+    # (E38 _ev의 icl/n, E_clamp/n과 같은 정의).
+    vprev = np.concatenate(([vA[0]], vA[:-1]))
     rows = {}
     for kind, R, vd, m in br:
-        i = np.where(on_, np.maximum(vA - vd, 0.) / R, 0.)
+        i = np.where(on_, np.maximum(vprev - vd, 0.) / R, 0.)
         rows[kind] = dict(kind=kind, R=R, vdrop=vd, count=m, **{k: kw[k] for k in ("Vbat", "P400", "PC", "arch", "prof", "t_comm")},
-                          vA_max=float(vA.max()), vb_max=float(vb.max()), E_branch_J=float(np.sum(np.maximum(vA - vd, 0.) * i) * dt),
+                          vA_max=float(vA.max()), vb_max=float(vb.max()),
+                          E_branch_J=float(np.sum(np.where(on_, np.maximum(vA - vd, 0.) ** 2 / R, 0.)) * dt),
                           n_on=int(len(k_on)), span_s=span, i_max=float(i.max()),
                           S_on=float(np.sum(vA[k_on] * i[k_on])), S_off=float(np.sum(vA[k_off - 1] * i[k_off - 1])),
                           S_i=float(np.sum(i[on_]) * dt), S_i2=float(np.sum(i[on_] ** 2) * dt))
@@ -277,22 +288,25 @@ def reg():
     import E26_charging_stop as E26
     raw = json.load(open(E38_CLAMP, encoding="utf-8"))["raw"]
     evs = [e for e in E26.EVENTS if e["clamp"] and not e.get("nmod_after")]
+    keys = ("vA_max", "vb_max", "E_branch_J", "S_on", "S_off", "S_i", "S_i2", "i_max", "span_s")
+    rel = lambda a, b: abs(a - b) / max(abs(b), 1e-12)
     out = []
     for key, k_ev in (("2_1.6_463_max", 0), ("2_1.6_463_min", 5)):
         n, Rb, off, cn = key.split("_"); n = int(n); Rb = float(Rb); off = float(off)
         c = E38.corners(n, Rb)[cn]
+        E26.CL.pop("branches", None)                       # (실행 경과) 같은 프로세스의 앞 E39 호출이 남긴 가지 목록을 지운다
         new = E38._ev((n, c["R"], c["vdrop"], 468., off, evs[k_ev]))
         old = raw[key][k_ev]
-        d = max(abs(new[k] - old[k]) for k in ("vA_max", "vb_max", "E_branch_J", "S_on", "S_off", "S_i", "S_i2", "i_max", "span_s"))
+        d = max(abs(new[k] - old[k]) for k in keys)
         c39 = corners39(n, Rb); R39 = c39["Rmax"] if cn == "max" else c39["Rmin"]
         row39 = _ev39(([("x", R39, c["vdrop"], n)], 468., off, evs[k_ev]))["x"]
-        d39 = max(abs(row39[k] - old[k]) for k in ("vA_max", "vb_max", "S_on", "S_off", "S_i", "S_i2", "i_max", "span_s"))
-        dE = abs(row39["E_branch_J"] - old["E_branch_J"]) / max(old["E_branch_J"], 1.)
-        out.append(dict(key=key, ev=k_ev, R_E38=c["R"], R_E39=R39, diff_E38_rerun=d, diff_E39_branches=d39, dE_rel=dE))
-        print("  %s 사건 %d: E38 재실행 차 %.3g, E39 가지 목록 차 %.3g(에너지 상대 %.2g), 모서리 R E38 %.9f / E39 %.9f"
-              % (key, k_ev, d, d39, dE, c["R"], R39))
-    ok = all(o["diff_E38_rerun"] == 0. and abs(o["R_E38"] - o["R_E39"]) < 1e-9 and o["diff_E39_branches"] < 1e-9 for o in out)
-    verdict("재사용 근거(E38 raw 재실행 차 0, 모서리 같음, 가지 목록 식 같음)", ok)
+        E26.CL.pop("branches", None)
+        d39 = max(rel(row39[k], old[k]) for k in keys)
+        out.append(dict(key=key, ev=k_ev, R_E38=c["R"], R_E39=R39, diff_E38_rerun=d, rel_E39_branches=d39))
+        print("  %s 사건 %d: E38 재실행 차 %.3g, E39 가지 목록 상대 차 %.3g, 모서리 R E38 %.9f / E39 %.9f"
+              % (key, k_ev, d, d39, c["R"], R39))
+    ok = all(o["diff_E38_rerun"] == 0. and abs(o["R_E38"] - o["R_E39"]) < 1e-9 and o["rel_E39_branches"] < 1e-9 for o in out)
+    verdict("재사용 근거(E38 raw 재실행 차 0, 모서리 같음, 가지 목록 식 상대 차 ≤ 1e-9)", ok)
     save_json(EID, "reg", dict(rows=out, ok=ok))
 
 
