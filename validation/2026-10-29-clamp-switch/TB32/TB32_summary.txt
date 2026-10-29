@@ -1,0 +1,5 @@
+TB32 = TB30 circuit with separate V_A clamp branches (E39 mix: one branch at the low resistance corner, the others at the high corner), reference E26 (per-branch) / E22 / E35 model
+case                   result vA_max    ref       i1[A]     ref       E1[J]     ref       vo_min    failed
+A32_640V_noload_mix    PASS   468.13    468.24    393.0     393.4     153.0     150.2     47.983    
+B32_920V_noload_mix    PASS   468.13    468.24    393.0     393.4     341.6     343.2     47.995    
+TB32 overall: PASS
