@@ -17,7 +17,10 @@ E40은 전형값만 있는 손실 인자에 규칙 L을 적용해 사양 팩 클
                        유지 뒤 0. 최대 연속 켜짐 시간이 클램프를 끄는지 본다
 결과: TB33_<사례>_init.json, _ref.csv(t vA vb ich iA icl icl1 icl2), _stageC.csv, _metrics.json(가지별 1 µs 최고 전류·저항 에너지 포함),
       _stageA.json, TB33_ref_summary.json
-실행: python make_ref_TB33.py <검증 코드 python 폴더> [E40 결과 폴더]
+실행: python make_ref_TB33.py <검증 코드 python 폴더> [E40 결과 폴더] [--diag]
+      --diag: 진단 D33(판정 아님)만 만든다. C33과 같은 사건에서 끔 문턱만 456.06 V(463 V × 0.985)로 낮춘다(켬 468 V).
+              스모크에서 사례 C는 회로의 V_A가 끔 문턱 아래로 내려가 클램프가 비교기로 꺼져, 최대 켜짐 시간이 동작하지 않았다.
+              이 진단은 회로에서 클램프가 켜진 채 남을 때 최대 켜짐 시간이 끊는지와 Stage A 전류를 본다.
 """
 import json
 import math
@@ -73,6 +76,9 @@ CASES = {
     "C33_920V_spurious": dict(vbat=920., Q=0., PC=0., tI=_t, II=[I0, I0, I0, 0., 0., 0.], mask=[1] * 8, fm=0, chg=[0., 1.], nmod_after=4,
                               t_ev=T_EV, t_end=T_EV + T_STOP_TB + 1e-3, kind="spurious", combo=COMBO_C, eps=EPS_C, force=T_EV),
 }
+DIAG = "--diag" in sys.argv                 # 진단 D33(판정 아님, 2026-10-30 스모크 뒤 추가): C33과 같은 사건, 켬 문턱 468 V 그대로·끔 문턱만
+if DIAG:                                    # 463 × 0.985 = 456.06 V로 낮춰 회로에서도 클램프가 켜진 채 남게 한다(최대 켜짐 시간을 회로에서 동작시킴)
+    CASES = {"D33_920V_latch_diag": dict(CASES["C33_920V_spurious"], eps_on=0., eps_off=-0.015)}
 W_HOLD = (2.6e-3, 2.9e-3)                   # D28 충전 유지 중 판정 창(램프 끝 2.2 ms + 10주기 뒤)
 
 
@@ -126,7 +132,8 @@ def main():
     for name, cs in CASES.items():
         PC = cs["PC"]; p48 = R.p48_for_input(c, eq, PC) if PC else 0.
         BR = branches(cs["combo"])
-        C26.CL = dict(C26.CL, on=468. * (1 + cs["eps"]), off=_sel["off"] * (1 + cs["eps"]), branches=[(R, vd, m) for _, R, vd, m in BR],
+        C26.CL = dict(C26.CL, on=468. * (1 + cs.get("eps_on", cs["eps"])), off=_sel["off"] * (1 + cs.get("eps_off", cs["eps"])),
+                      branches=[(R, vd, m) for _, R, vd, m in BR],
                       t_on_max=T_ON_MAX)
         C26.CL.pop("force_on_at", None)
         if cs["force"] is not None:
@@ -192,7 +199,8 @@ def main():
                     II=cs["II"], mask=cs["mask"], chg=cs["chg"], Q=cs["Q"], P=p48, PC=PC,
                     clamp=dict(von=C26.CL["on"], voff=C26.CL["off"], delay=C26.CL["delay"], R1=BR[0][1], vdrop1=BR[0][2],
                                R2=BR[1][1] / BR[1][3], vdrop2=BR[1][2], n_hi=BR[1][3], n_branch=NBR, R_b=_sel["R_b"],
-                               switch=_sel["switch"], combo=cs["combo"], eps=cs["eps"], t_on_max=T_ON_MAX,
+                               switch=_sel["switch"], combo=cs["combo"], eps=cs["eps"], eps_on=cs.get("eps_on", cs["eps"]),
+                               eps_off=cs.get("eps_off", cs["eps"]), t_on_max=T_ON_MAX,
                                force_on_at=0. if cs["force"] is None else cs["force"]),
                     n=n, fr=c["fr"], Lr=c["Lr"], Cr=c["Cr"], Lm=c["Lm"], Rw=Rw, L=c["L"], RL=RL, CI=E.CI, CO=E.CO, fb=E.FS_CTRL,
                     td_b=50e-9, td_p=c["td_p"], td_s=c["td_s"], td_sb=c["td_sb"], P_in=c["P_in"], P_out=c["P_out"],
@@ -229,7 +237,7 @@ def main():
                  sa["turnoffs"]["bad"]))
     out["_selection"] = dict(selected=_sel, vdrop=V_DROP, t_on_max=T_ON_MAX, combo_C=COMBO_C, R_min=_row["R_min"], R_max=_row["R_max"],
                              source="E40 p5.json, thr.json")
-    json.dump(out, open("TB33_ref_summary.json", "w"), indent=1, default=float)
+    json.dump(out, open("TB33_diag_ref_summary.json" if DIAG else "TB33_ref_summary.json", "w"), indent=1, default=float)
 
 
 if __name__ == "__main__":

@@ -52,6 +52,8 @@
   "switch": "FF2MR12KM1P",
   "combo": "min",
   "eps": -0.01,
+  "eps_on": -0.01,
+  "eps_off": -0.01,
   "t_on_max": 0.0005,
   "force_on_at": 0.0015
  },

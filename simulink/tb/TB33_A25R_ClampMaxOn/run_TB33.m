@@ -30,8 +30,11 @@ mdl  = 'TB33_A25R_ClampMaxOn';
 refDir = fullfile(here, 'ref');
 resDir = fullfile(here, 'results');
 if ~exist(resDir, 'dir'), mkdir(resDir); end
-R = {'A33_640V_noload_mix', 'B33_920V_noload_mix', 'C33_920V_spurious'};
+R = {'A33_640V_noload_mix', 'B33_920V_noload_mix', 'C33_920V_spurious', 'D33_920V_latch_diag'};   % 4 = 진단(diag_TB33, 판정 아님)
 if nargin < 1 || isempty(runList), runList = 1:3; end
+if any(runList == 4)
+    resDir = fullfile(resDir, 'diag'); if ~exist(resDir, 'dir'), mkdir(resDir); end
+end
 tStop = [];
 if evalin('base', 'exist(''TB33_tend'', ''var'')')
     tStop = evalin('base', 'TB33_tend'); resDir = fullfile(resDir, 'smoke');
@@ -53,6 +56,7 @@ for r = runList
 end
 evalin('base', 'clear TB33_case');
 fid = fopen(fullfile(resDir, 'TB33_summary.txt'), 'w');
+if any(runList == 4), o2(fid, 'DIAGNOSTIC D33 (not a verdict): case C33 with the off threshold lowered so that the clamp latches in the circuit\n'); end
 o2(fid, 'TB33 = TB32 circuit with the E40 clamp (rule L selection, max continuous on-time, spurious turn-on test), reference E26 (per-branch) / E22 / E35 model\n');
 o2(fid, '%-22s %-6s %-9s %-9s %-9s %-9s %-9s %-9s %-9s %s\n', 'case', 'result', 'vA_max', 'ref', 'i1[A]', 'ref', 'E1[J]', 'ref', 'vo_min', 'failed');
 allPass = true;
@@ -96,17 +100,21 @@ w1 = t1 >= 1.0e-3;
 vA_max1 = max(A1(w1, 2)); vb_max1 = max(A1(w1, 3));
 vA_inst = max(X(t4 >= 1.0e-3, 1)); vb_inst = max(X(t4 >= 1.0e-3, 2));
 L.C1_voltage = vA_max1 <= TB.v_lim && vb_max1 <= TB.v_lim;
+% 클램프 지표는 1 ms 이후로 계산한다(다른 판정과 같은 창. 모델 초기 과도를 뺀다. 2026-10-30 스모크 뒤 구현 수정, README 실행 경과)
+wc = t4 >= 1.0e-3;
 % 클램프 저항 에너지(10 ns 순시 (v_A − 가지 강하)·가지 전류 적분, E26의 저항 에너지와 같은 정의)
-E1 = sum(max(X(:, 1) - TB.Vdrop1, 0).*X(:, 13))*dt4;          % 가지 1(작은 저항)
-E2 = sum(max(X(:, 1) - TB.Vdrop2, 0).*X(:, 14))*dt4;          % 가지 2(큰 저항 n−1개 합)
+E1 = sum(max(X(wc, 1) - TB.Vdrop1, 0).*X(wc, 13))*dt4;        % 가지 1(작은 저항)
+E2 = sum(max(X(wc, 1) - TB.Vdrop2, 0).*X(wc, 14))*dt4;        % 가지 2(큰 저항 n−1개 합)
 E_cl = E1 + E2;
-t_on = sum(gcl > 0.5)*dt4;
-P_cl_pk = max(max(X(:, 1) - TB.Vdrop1, 0).*X(:, 13) + max(X(:, 1) - TB.Vdrop2, 0).*X(:, 14));
-n_sw = sum(diff(gcl) > 0.5);
+gcl_w = gcl.*wc;                                             % 1 ms 이전 게이트는 0으로 본다
+t_on = sum(gcl_w > 0.5)*dt4;
+P_cl_pk = max(max(X(wc, 1) - TB.Vdrop1, 0).*X(wc, 13) + max(X(wc, 1) - TB.Vdrop2, 0).*X(wc, 14));
+n_sw = sum(diff(gcl_w) > 0.5);
+n_sw_init = sum(diff(gcl.*(~wc)) > 0.5);                     % 정보: 1 ms 이전(초기 과도) 켬 횟수
 eTol = max(0.1*M.E_clamp_J, 10);
 isSpur = strcmp(TB.kind, 'spurious');
 % 클램프 연속 켜짐(10 ns 게이트)
-gon = find(diff([0; gcl > 0.5]) > 0); goff = find(diff([gcl > 0.5; 0]) < 0);
+gon = find(diff([0; gcl_w > 0.5]) > 0); goff = find(diff([gcl_w > 0.5; 0]) < 0);
 ton_run = (goff - gon + 1)*dt4;
 ton_max = max([ton_run; 0]);
 n_reon = max(numel(gon) - 1, 0);
@@ -118,7 +126,7 @@ else
     L.C6e_e26 = abs(E_cl - M.E_clamp_J) <= max(0.15*M.E_clamp_J, 10) && abs(t_on - 1e-3*M.t_clamp_on_ms) <= 5e-6;
 end
 % (C2b) 가지 대조
-i1m = max(A1(:, 14)); i2m = max(A1(:, 15))/TB.n_hi;            % 1 µs 평균 최고: 가지 1, 큰 저항 가지 하나
+i1m = max(A1(w1, 14)); i2m = max(A1(w1, 15))/TB.n_hi;            % 1 µs 평균 최고: 가지 1, 큰 저항 가지 하나
 E2b = E2/TB.n_hi;
 tolI = @(r) max(0.02*r, 5); tolE = @(r) max(0.1*r, 10);
 if ~isSpur
@@ -231,6 +239,10 @@ elseif isSpur
     post = struct('phase_max_during_A', max(max(abs(I(m, :)))), 'phase_max_after1ms_A', pkA, 'lim_A', pk_lim_dev, ...
         'iAo_max_1us', max(A1(t1 >= te, 4)), 'iAo_min_1us', min(A1(t1 >= te, 4)), 'vA_min_1us', min(A1(t1 >= te, 2)), ...
         'vA_min_ref', M.vA_min_after_ev, 'iA_max_ref', -M.iA_min, 'iA_min_ref', -M.iA_max);   % E26 i_A는 배터리 쪽이 +, 회로 iAo는 V_A 쪽이 +
+    if isempty(goff), toff = te; else, toff = t4(goff(end)); end   % 정보: 마지막 클램프 끔 뒤 V_A 최고(다시 켬 여유, 판정 아님)
+    post.t_last_off_ms = 1e3*toff;
+    post.vA_max_after_off_1us = max([A1(t1 > toff, 2); -Inf]);
+    post.vA_max_after_off_inst = max([X(t4 > toff, 1); -Inf]);
     L.C8_stageA_peak = pkA <= pk_lim_dev;
 else
     m = tA > te + 50e-6;
@@ -241,10 +253,10 @@ failed = fn(~cellfun(@(f) L.(f), fn))';
 % ---- 요약 ---------------------------------------------------------------------------------------------------
 S = struct('case', cn, 'verdict', ternary(pass, 'PASS', 'FAIL'), 'failed', {failed}, 'limits', L, 'wall_s', wall, ...
     'vA_max_1us', vA_max1, 'vbus_max_1us', vb_max1, 'vA_max_inst', vA_inst, 'vbus_max_inst', vb_inst, ...
-    'E_clamp_J', E_cl, 't_clamp_on_ms', 1e3*t_on, 'P_clamp_pk_W', P_cl_pk, 'clamp_on_count', n_sw, ...
+    'E_clamp_J', E_cl, 't_clamp_on_ms', 1e3*t_on, 'P_clamp_pk_W', P_cl_pk, 'clamp_on_count', n_sw, 'clamp_on_count_before_1ms', n_sw_init, ...
     'clamp_on_max_ms', 1e3*ton_max, 'clamp_reon', n_reon, 'clamp_forced_off_ref', M.n_forced_off, 'clamp_on_max_ref_ms', M.t_on_cont_max_ms, ...
     'branch', struct('i1_max_1us', i1m, 'i2_max_1us', i2m, 'E1_J', E1, 'E2_J', E2b, 'E1_share', share, 'R1', TB.Rcl1, ...
-                     'R2_branch', TB.Rcl2*TB.n_hi, 'n_hi', TB.n_hi, 'i1_max_inst', max(X(:, 13)), 'i2_max_inst', max(X(:, 14))/TB.n_hi), ...
+                     'R2_branch', TB.Rcl2*TB.n_hi, 'n_hi', TB.n_hi, 'i1_max_inst', max(X(wc, 13)), 'i2_max_inst', max(X(wc, 14))/TB.n_hi), ...
     'vo_min', vo_min, 'vo_max', vo_max, 'ix_avg100_max', ix_avg_max, 'dev_peak_A', dev_pk, ...
     'zvs', struct('primary_max_V', zp, 'primary_n', np1, 'secondary_max_V', zs, 'secondary_n', ns1), ...
     'stageA_pre', SAc.pre, 'stageA_post', post, 'turnoffs', struct('n', T1n, 'bad', T1bad, 'worst_A', T1worst, 'violations', badlist), ...
@@ -259,7 +271,7 @@ for k = 1:numel(fn), o2(fid, '    %-20s %s\n', fn{k}, ternary(L.(fn{k}), 'PASS',
 o2(fid, '    V_A 1 us max %.2f V (E26 %.2f), bus %.2f V (E26 %.2f); instantaneous V_A %.2f V, bus %.2f V (limit %.0f V)\n', ...
     vA_max1, M.vA_max, vb_max1, M.vb_max, vA_inst, vb_inst, TB.v_lim);
 o2(fid, '    clamp: energy %.1f J (E26 %.1f J), on %.3f ms (E26 %.3f ms), peak %.0f kW, turn-ons %d (E26 %d), clamp current max %.1f A\n', E_cl, M.E_clamp_J, 1e3*t_on, ...
-    M.t_clamp_on_ms, P_cl_pk/1e3, n_sw, M.n_on, max(X(:, 4)));
+    M.t_clamp_on_ms, P_cl_pk/1e3, n_sw, M.n_on, max(X(wc, 4)));
 o2(fid, '    branch 1 (low R %.4f ohm, drop %.2f V): 1 us max %.1f A (E26 %.1f A), energy %.1f J (E26 %.1f J)\n', TB.Rcl1, TB.Vdrop1, ...
     i1m, M.i1_max_1us, E1, M.E1_J);
 o2(fid, '    one high-R branch (%.4f ohm, drop %.2f V, %d of them): 1 us max %.1f A (E26 %.1f A), energy %.1f J (E26 %.1f J); branch 1 energy share %.3f (E26 %.3f)\n', ...
@@ -276,8 +288,8 @@ o2(fid, '    modules: events %s (model %s), end %d (model %d), cancels %d\n', ma
 for q = 1:size(badlist, 1)
     o2(fid, '      violation: %.4f ms, phase %d, i_off %.3f A, half-cycle peak %.2f A\n', badlist(q, :));
 end
-o2(fid, '    clamp longest continuous on %.4f ms (E26 %.4f ms, max on-time %.2f ms), turn-ons after the first %d, E26 forced offs %d\n', ...
-    1e3*ton_max, M.t_on_cont_max_ms, 1e3*TB.t_on_max, n_reon, M.n_forced_off);
+o2(fid, '    clamp longest continuous on %.4f ms (E26 %.4f ms, max on-time %.2f ms), turn-ons after the first %d, E26 forced offs %d (from 1 ms; turn-ons before 1 ms, model start transient, info: %d)\n', ...
+    1e3*ton_max, M.t_on_cont_max_ms, 1e3*TB.t_on_max, n_reon, M.n_forced_off, n_sw_init);
 if isFault || isSlow
     o2(fid, '    Stage A after event: ZCS max %.2f %% (ref %.2f %%), Ipk max %.1f A (ref %.1f A), sharing %.2f %% (ref %.2f %%)\n', ...
         100*max(post.zcs), 100*post.zcs_ref, max(post.Ipk), post.Ipk_ref, 100*post.sharing, 100*post.sharing_ref);
@@ -285,6 +297,8 @@ elseif isSpur
     o2(fid, '    spurious: phase max during clamp %.1f A, after 1 ms %.1f A (limit %.1f A); Stage A output 1 us %.1f..%.1f A (E26 %.1f..%.1f A); V_A min %.2f V (E26 %.2f V)\n', ...
         post.phase_max_during_A, post.phase_max_after1ms_A, post.lim_A, post.iAo_min_1us, post.iAo_max_1us, post.iA_min_ref, post.iA_max_ref, ...
         post.vA_min_1us, post.vA_min_ref);
+    o2(fid, '    after the last clamp off (%.4f ms): V_A max 1 us %.2f V, instantaneous %.2f V (on threshold %.2f V; info)\n', ...
+        post.t_last_off_ms, post.vA_max_after_off_1us, post.vA_max_after_off_inst, TB.clamp_prm(2));
 else
     o2(fid, '    Stage A forced cut currents %s A, phase max 50 us after cut %.2f A\n', mat2str(round(cut, 1)), post.phase_max_after_50us_A);
 end
