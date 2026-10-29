@@ -10,8 +10,8 @@
 - 이 항목은 어떤 판정에도 쓰이지 않는다(가치 지도의 최선 구조는 보조 경로 손실로 고른다).
   문서 docs/23의 저장에너지 수치와 비율 문장만 바뀐다.
 
-입력: validation/2026-10-28-a25r-impact/E36/e18_A25R_value_map.json
-출력: validation/2026-10-28-a25r-impact/E36/e18_A25R_magnetics_fix.json
+입력: results/E36/e18_A25R_value_map.json(E36 e18)
+출력: results/E36/e18_A25R_magnetics_fix.json (근거 사본: validation/2026-10-28-a25r-impact/E36)
 
 결과(2026-10-29 실행)
 - Stage A 공진 L(8위상): 3.15 mJ → 18.91 mJ(모든 팩. R1 표의 3.18 mJ는 150 kHz 위상 첨두 값)
@@ -24,8 +24,7 @@ import json
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-D = os.path.join(ROOT, "validation", "2026-10-28-a25r-impact", "E36")
+D = os.path.join(HERE, "..", "results", "E36")   # (2026-10-29 정리) 제출 폴더 안 결과에서 읽고 쓴다(이전에는 저장소 validation/에 썼다)
 KEY = "Stage A 공진 L(8위상)"
 L_OLD = 144e-9      # E18.magnetics() 상수
 L_NEW = 864.6e-9    # A25R

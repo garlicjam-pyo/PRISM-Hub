@@ -60,6 +60,14 @@ RA_MOD = 10.2e-3                   # 모듈 출력저항(E16)
 BUS = dict(CA=400e-6, Rw=3e-3, Lw=1.5e-6, Cb=400e-6, Rd=48.6e-3, Cd=1.6e-3, vmin=200.)
 V_LIM = 470.; V_CONN = 600.; V_GAN = 650.
 CL = dict(on=468., off=463., R=1.0, delay=1e-6)
+# (2026-10-29 정리) 처음 값. 다른 시험(E35–E40)이 같은 프로세스에서 BUS·RA_MOD·CL을 바꾸므로, 클램프 설정은 이 값에서 새로 만들고
+# event()·overload()는 시작할 때 처음 값으로 되돌린다(최종 검토 R5).
+CL_DEFAULT = dict(CL); BUS_DEFAULT = dict(BUS); RA_DEFAULT = RA_MOD
+
+
+def reset():
+    global CL, RA_MOD
+    CL = dict(CL_DEFAULT); BUS.clear(); BUS.update(BUS_DEFAULT); RA_MOD = RA_DEFAULT
 
 
 def _cl_i(v):
@@ -94,6 +102,7 @@ def _ovl(args):
 
 
 def overload():
+    reset()
     jobs = [(V, n) for V in (640., 800., 920.) for n in (4, 3, 2)]
     with Pool(workers()) as p:
         rows = p.map(_ovl, jobs)
@@ -251,9 +260,12 @@ def _ev(kw):
 
 
 def event():
+    reset()
     with Pool(workers()) as p:
         rows = p.map(_ev, EVENTS)
     save_json(EID, "event", dict(rows=rows, CL=CL, BUS=BUS, T_STOP=T_STOP))
+    # (2026-10-29 정리) 이력을 뺀 요약. E36 e26이 이 파일을 읽는다(이전에는 따로 만든 파일이었다)
+    save_json(EID, "event_summary", dict(rows=[{k: v for k, v in r.items() if k != "trace"} for r in rows], CL=CL, BUS=BUS, T_STOP=T_STOP))
     print("사건(배터리 경로 상실 또는 모듈 고장):")
     for r in rows:
         tag = "%s %4.0f V 부하 %2.0f+%1.0f kW %s %s t_comm %2.0f ms 모듈 %d" % (

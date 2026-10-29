@@ -1,6 +1,6 @@
 # PRISM-Hub 검증 코드
 
-800 V 전기자동차용 통합 직류 전력 허브(PRISM-Hub) 중간보고서의 **부록 C 검증 근거(E1–E10)** 와, 보고서 이후 진행한 **추가 검증(E11 채택 제어기 MATLAB 교차검증, E12 Stage B 스위칭 모델 검증, E13 기준 구조 ③′·④ 평균모델 비교, E14 Stage B 보호·기동, E15 기준 구조 손실·정격 비교, E16 충전 중 보조버스, E17 보호 상태기계 결합, E18 팩 등급별 가치 지도, E19 R2 창 조정 모듈, E20 DAB 고장 모드 변조, E21 고장 모드 변조의 회로 여유, E22 조정형 Stage C 5 kW, E23 R2 기본형 통합, E24 Stage A 경부하 위상 셰딩, E25 모터 승압·800 V 부품 구조 비교, E26 충전 중 Stage A 정지 협조, E27 Stage A 영교차 게이트 방향 반전 처리, E28 Stage A 4모듈 경부하 운전, E29 보호 상태기계–SALS 연동)** 을 계산한 MATLAB·Python 코드다. 근거 번호별로 스크립트를 하나씩 두었고, 각 스크립트 머리말에 **목적 · 왜 필요한가 · 방법 · 판정 기준 · 실행 방법 · 결과 파일 · 보고서 수치**를 한글로 적었다. 본문 주석도 한글이다.
+800 V 전기자동차용 통합 직류 전력 허브(PRISM-Hub) 중간보고서의 **부록 C 검증 근거(E1–E10)** 와, 보고서 이후 진행한 **추가 검증(E11 채택 제어기 MATLAB 교차검증, E12 Stage B 스위칭 모델 검증, E13 기준 구조 ③′·④ 평균모델 비교, E14 Stage B 보호·기동, E15 기준 구조 손실·정격 비교, E16 충전 중 보조버스, E17 보호 상태기계 결합, E18 팩 등급별 가치 지도, E19 R2 창 조정 모듈, E20 DAB 고장 모드 변조, E21 고장 모드 변조의 회로 여유, E22 조정형 Stage C 5 kW, E23 R2 기본형 통합, E24 Stage A 경부하 위상 셰딩, E25 모터 승압·800 V 부품 구조 비교, E26 충전 중 Stage A 정지 협조, E27 Stage A 영교차 게이트 방향 반전 처리, E28 Stage A 4모듈 경부하 운전, E29 보호 상태기계–SALS 연동, E30 Stage A 모듈 고장, E31 Stage A 출력용량 손실 재평가, E32·E33 Stage A 25 kHz 설계, E34·E37 부품 정격 표, E35 Stage A 수정안 A25R, E36 A25R 재계산, E38 외부 검토 대응·설계 변경, E39 클램프 스위치 재판정, E40 전형값 규칙 재판정·클램프 최대 켜짐 시간, E41 ④ 대 ⑤·⑥ 공정 비교)** 을 계산한 MATLAB·Python 코드다. 근거 번호별로 스크립트를 하나씩 두었고, 각 스크립트 머리말에 **목적 · 왜 필요한가 · 방법 · 판정 기준 · 실행 방법 · 결과 파일 · 보고서 수치**를 한글로 적었다. 본문 주석도 한글이다.
 
 모든 결과는 **시뮬레이션**(스위칭 ODE 모델, 스위칭 주기 평균모델, 1 ms 축약 부하 모델)이며 하드웨어 측정이 아니다.
 
@@ -55,7 +55,20 @@ PRISM-Hub_verification_code/
 │  │  ├─ E28_stage_a_modules.py       [E28] Stage A 4모듈 경부하 운전: 모듈 관리기 + 모듈별 위상 셰딩 + 부품 공차(보고서 이후)
 │  │  ├─ E29_sals_degradation.py      [E29] 보호 상태기계–SALS 연동: 400 V 부하 분리·감발의 지연·손실·계약 응답, 이중 고장 Stage A 정지(보고서 이후)
 │  │  ├─ sals_loads.py                (공용) 400 V 부하 등급별 계약 응답(SALS 메시지 지연·손실·워치독, E29)
-│  │  └─ run_all.py                   전체 실행
+│  │  ├─ E30_module_fault.py          [E30] Stage A 모듈 고장과 모듈 관리기 연동
+│  │  ├─ E31_stage_a_coss.py          [E31] Stage A 출력용량 손실 재평가와 설계 수정안
+│  │  ├─ E32_stage_a_25k.py           [E32] Stage A 25 kHz 설계(A25) 정상상태·문턱
+│  │  ├─ E33_stage_a_25k_dynamics.py  [E33] A25 동특성(진단 E33_diag_transient.py)
+│  │  ├─ E34_parts_rating.py          [E34] 부품 정격 표
+│  │  ├─ E35_a25r_design.py, E35_a25r_verify.py  [E35] A25 수정안 A25R 설계 단계·판정
+│  │  ├─ E36_a25r_impact.py           [E36] A25R로 이전 결론 재계산(정정 E36_breakeven_grid.py, E36_magnetics_fix.py)
+│  │  ├─ E37_parts_round2.py          [E37] 부품 정격 표 2차(진단 E37_diag_fs.py)
+│  │  ├─ E38_review_response.py       [E38] 외부 검토 대응·설계 변경(재현 진단 E38_review_repro.py)
+│  │  ├─ E39_clamp_switch_rejudge.py  [E39] V_A 클램프 스위치 재판정(최대 열저항, 가지 저항 섞임)
+│  │  ├─ E40_typ_rule_rejudge.py      [E40] 전형값 손실 인자 규칙 L 재판정, 클램프 최대 켜짐 시간·문턱 오차 예산
+│  │  ├─ E41_fair_aux_comparison.py   [E41] ④ 대 ⑤·⑥ 공정 비교(보조 강압기 셰딩, 민감도)
+│  │  └─ run_all.py                   전체 실행(E1–E41, 진단은 --diag)
+├─ data/datasheets/              부품 데이터시트 표 값(JSON, 출처·열람일 포함. E31·E34·E37–E40이 읽는다)
 ├─ matlab/
 │  ├─ prism_sim_array.m          Stage A 어레이 스위칭 ODE(Python model_stage_a.py와 같은 알고리즘)
 │  ├─ prism_two_stage_case.m     Stage B 평균모델 + 비교 설계 제어기의 독립 구현
@@ -73,7 +86,7 @@ PRISM-Hub_verification_code/
 
 | 항목 | 확인한 환경 |
 |---|---|
-| Python | 3.11, NumPy 2.4, SciPy 1.17, Matplotlib 3.10, Numba 0.68 (`pip install -r requirements.txt`) |
+| Python | 3.11, NumPy 2.4, SciPy 1.17, Matplotlib 3.10, Numba 0.68 (`pip install -r requirements.txt`). 2026-10-29 재현: 3.13·NumPy 2.5에서도 E38·E39 핵심 수치가 같았다(차 0) |
 | MATLAB | R2024b(보고서 수치). 추가 툴박스 불필요 |
 | GNU Octave | 8.4 (MATLAB 스크립트 호환 확인용) |
 
@@ -83,7 +96,8 @@ PRISM-Hub_verification_code/
 
 ```bash
 cd python
-python run_all.py                 # E1–E29 전체(2코어 기준 약 10시간, 그중 E12 약 3시간, E17 약 1.5시간, E28 약 75분, E29 약 60분, E20·E21·E24 각 약 10분, E22·E27 각 약 15분, E23 약 2분)
+python run_all.py                 # E1–E41 전체(2코어 기준 약 25시간. E12 약 3시간, E17 약 1.5시간, E28 약 75분, E29 약 60분, E33 약 2시간, E35 약 5시간, E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
+python run_all.py E40 E41         # 일부만(앞 시험의 results/가 있어야 한다, 아래 표)
 python E3_steady_state.py         # 개별 실행 예
 python E5_E7_controller.py grid --design reference   # 제어기 파트·설계 선택
 ```
@@ -99,6 +113,25 @@ E11_controller_crosscheck % [E11]  python/E11_controller_crosscheck.py export �
 ```
 
 그다음 `python E2c_compare_matlab.py`, `python E11_controller_crosscheck.py compare`로 두 구현을 대조한다. 병렬 작업 수는 환경변수 `PRISM_WORKERS`로 바꿀 수 있다.
+
+**의존과 실행 순서(2026-10-29 정리).** 뒤 시험이 앞 시험의 `results/<근거>/*.json`을 읽는다. `run_all.py`의 순서(번호 순, E19는 E17보다 먼저)를 지키면 의존이 맞는다. `results/`는 저장소에 넣지 않으므로 처음부터 재현하려면 전체를 순서대로 실행한다. 이미 있는 `results/`는 빠진 단계를 가릴 수 있으니, 전체 재현 때는 `results/`를 비우고 시작한다. 모든 입력과 출력은 이 폴더(`data/`, `results/`) 안에 있다. 이전에는 일부 스크립트가 저장소의 `validation/` 사본을 읽거나 썼다. 지금은 E17·E28·E36 정정·E38 재현·E39가 모두 `results/`(앞 시험의 결과) 또는 `data/reference/`(고정 기준)를 읽는다.
+
+| 시험 | 직접 읽는 앞 결과 |
+|---|---|
+| E30 | E28 모델(관리기), E24·E27 |
+| E31 | E15 stage_a_grid, E25 comparison |
+| E32 | E31 coss, E25 comparison |
+| E33 | E32 thresholds·rated |
+| E34 | E29 seq·failsafe, E32 rated, E33 static·transient·fault |
+| E35 | E35 design_dev*(설계 단계), E32·E33 |
+| E36 | E15 comparison, E18 stage_a_grid_ext, E25 comparison, E26 event_summary, E29 failsafe, E32 loss_grid_raw |
+| E37 | E29 failsafe, E34 prot |
+| E38 | E29 failsafe, E36 e15_comparison·e25_statements·e18_A25R_value_map·a25_grid, E22 design·zvs·both |
+| E39 | E38 clamp |
+| E40 | E34 stagea, E37 ca, E38 clamp·p6·f2, E39 spec |
+| E41 | E36 a25_grid·a25_grid_Rpass_x2, E38 l1_e25_comparison·l2, E22 |
+
+E22의 `zvs.json`·`both.json`이 없으면 조정형 Stage C를 처음 설계로 계산한다(손실 값이 달라진다). 지금은 이때 경고를 낸다.
 
 ## 4. 검증 근거와 코드의 대응
 
@@ -134,6 +167,18 @@ E11_controller_crosscheck % [E11]  python/E11_controller_crosscheck.py export �
 | **E27** | Stage A 영교차 게이트 방향 반전 처리(보고서 이후) | TB20 사례 D(충전기 0 → 375 A)에서 모듈 전류가 0을 지나는 반주기의 첨두(2.44 A)가 무장 문턱(2.5 A)보다 작아 최대 도통시간(1.12·t\_on)에 꺼졌고, 턴오프 전류가 1.010 A로 기준 1.0 A를 넘었다 | Stage A 스위칭 ODE(dead\_fix)에 무장 못 한 반주기를 공칭 도통시간 t\_on에 끄는 선택(`unarmed_stop`). repro: TB20 사례 D 조건(4모듈 8위상 + R2 버스, 램프 시작 6가지 + 공차). stress: 모듈 하나 방향 반전 48사례(배터리 3 × 램프 2 × 방향 2 × 공차 4). regress: E1 공차 표본, E24 정상·과도 | (G1) 새 게이트의 모든 턴오프 ≤ max(5 %·첨두, 1 A), (G2) 회귀: E1 차 ≤ 1e-6, E24 판정 같음·턴오프 비율 ≤ 0.1 %p·위상 첨두 ±0.5 A·V\_A ±0.05 V | `E27_zcp_reversal.py` | `results/E27` |
 | **E28** | Stage A 4모듈 경부하 운전(보고서 이후) | Stage A는 모듈 4개다. E24는 모듈 하나만 다뤘고, 주행 경부하에서 모듈 넷을 돌리면 ZCS·고정 손실이 나빠진다. 모듈을 줄이면 부하 증가·충전 시작·모듈 재시작 과도가 생기고, 부품 공차의 영향도 확인하지 않았다 | Stage A 스위칭 ODE 4모듈 8위상에 모듈 관리기(`mgr`, 충전 요청 `chg`), 무장 전 부호 없는 영교차 검출(`unarmed_stop='mag'`). design(모듈 수별 손실·첨두), rated(공차 표본별 정격점 첨두), static 144번, transient 7사례 × 공칭·공차 3(전부 켬 비교), restart(플라잉 커패시터 전압 오차), regress | static (S1)–(S4), transient (T1) 턴오프 ≤ max(5 %·첨두, 1 A), (T2) 첨두 ≤ 같은 표본의 정격점 첨두, (T3) V\_A 전부 켬과 1 V 안, (T4) 모듈 수 전환. regress (G)·(G2)·(G3) | `E28_stage_a_modules.py` | `results/E28` |
 | **E29** | 보호 상태기계–SALS 연동(보고서 이후) | 강등 순서(E17·E20·E21)는 "400 V 부하가 20 ms 뒤 5 kW로 준다"고 가정했다. 실제 감발은 SALS 메시지(지연·손실·워치독)와 부하 계약(0.5 kW/ms, M0는 줄지 않음)을 거치고, 48 V 회생과 이중 고장(Stage A 협조 정지)은 모델 밖이었다 | E17 `r2_run`에 `sals`(등급별 부하 `sals_loads.SalsLoads`, 부하전류 추정 유지 종료, 접촉기 대체, 되돌림), `p_c`, `event2`, `astop`, `fs_brake`. contract(몬테카를로), resid(남는 부하 문턱 → I\_COL), seq 74사례, regen·regen\_sens, failsafe(F0·F1·F2), regress | E17 고장 판정 + DAB 첨두 ≤ 1.5배 + 제동 ≤ 64 J. failsafe: 링크·직렬 ≤ 120 V, 경로 ≤ 100 A, 제동 ≤ 64 J, Stage A 정지 뒤 5 ms 안에 \|i\_p\| ≤ 1 A. contract: 손실 없는 최대 ≤ 19 ms. regress: 저장 결과와 차 0 | `E29_sals_degradation.py` | `results/E29` |
+| **E30** | Stage A 모듈 고장과 모듈 관리기 연동(보고서 이후) | 관리기가 고장 모듈을 후보에서 빼지 않았고, 충전 중 고장(4 → 3모듈)의 위상 첨두가 부품 정격 조건이 된다 | 고장 신호 → 그 모듈 위상 즉시 정지·관리기 목록에서 영구 제외(`mgr_fault`). 주행·충전 중 고장 사례 × 공칭·공차 표본, 회귀 | 턴오프 ≤ max(5 %·첨두, 1 A), 첨두 ≤ 1.5 × 정격점, V\_A, 모듈 수 | `E30_module_fault.py` | `results/E30` |
+| **E31** | Stage A 출력용량 손실 재평가(보고서 이후) | 영전류 스위칭에서도 노드 용량은 하드 스위칭되어 Q\_oss·V를 잃는다. 원 모델(4·E\_oss·f)은 3–4배·한 자릿수 작았다 | 노드 용량을 넣은 한 위상의 구간선형 해, 데이터시트 C\_o(tr)·C\_o(er) 근사, 후보 소자 × 공진주파수 격자로 E15·E25 재계산 | (해석·설계 수정안 비교) | `E31_stage_a_coss.py` | `results/E31` |
+| **E32** | Stage A 25 kHz 설계(A25) 정상상태(보고서 이후) | 공진을 6배 느리게 하면 손실·첨두·셰딩 문턱이 바뀐다 | 모듈·위상 손실 격자, 공차 표본 정격점 첨두, 같은 규칙의 문턱, E15 격자 재계산 | (D0) E31 예측과 5 % 안, 문턱 규칙 | `E32_stage_a_25k.py` | `results/E32` |
+| **E33** | A25 동특성(보고서 이후) | E28·E30 판정을 A25 시간 상수로 다시 해야 한다 | E28·E30 사례(시각 +0.6 ms) × 공칭·표본 1, 느린 충전 | E28·E30과 같음 | `E33_stage_a_25k_dynamics.py`(진단 `E33_diag_transient.py`) | `results/E33` |
+| **E34** | 부품 정격 표(보고서 이후) | 모의의 소자 스트레스가 실제 부품 정격으로 성립하는지 | P1–P9: 정격점·사건 기록을 데이터시트 표 값과 대조(열은 정상 열저항, EPC2305는 Z\_th Foster) | 전압 0.8·전류 0.5 여유, 단발 T\_J ≤ T\_J,max, 정상 ≤ T\_J,max − 25 °C | `E34_parts_rating.py` | `results/E34` |
+| **E35** | A25 수정안 A25R(보고서 이후) | A25가 과도 판정을 대부분 통과하지 못했다 | 설계 단계(`E35_a25r_design.py`)에서 C\_A 6배를 고르고, E33과 같은 기준으로 정상점·과도·고장·클램프 판정 | E33과 같음 | `E35_a25r_verify.py` | `results/E35` |
+| **E36** | A25R로 이전 결론 재계산(보고서 이후) | 손실·가치 지도·H3·버스·충전 중 정지·이중 고장이 Stage A 모델에 기댄다 | E15·E25·E18·E16·E23·E26·E29를 A25R 표로 다시. 정정 스크립트 `E36_breakeven_grid.py`·`E36_magnetics_fix.py` | 원 시험과 같은 판정, 결론 문장 대조 | `E36_a25r_impact.py` | `results/E36` |
+| **E37** | 부품 정격 표 2차(보고서 이후) | E34 불통과 4건과 이중 고장 C\_A 방전 | 후보 부품·설계 변경을 E34 규칙으로(진단 `E37_diag_fs.py`) | E34와 같음 | `E37_parts_round2.py` | `results/E37` |
+| **E38** | 외부 검토 대응·설계 변경(보고서 이후) | 클램프 저항 공차·Stage C 모델·충전 손실 표기 지적, 남은 불통과 2건 | 클램프 재선정(공차·온도계수·노화·자기 가열·스위치 강하), 고전압 팩 설정, Stage C 모델 교체 재계산, Stage C 일시 정지·400 V 부하 정지(재현 진단 `E38_review_repro.py`) | E34·E29 기준 | `E38_review_response.py` | `results/E38` |
+| **E39** | 클램프 스위치 재판정(보고서 이후) | 열저항 전형값 판정과 가지 저항 섞임 누락 | 최대 열저항(없으면 × 1.2), max·min·mix 조합, 자기 가열 갱신 | E38 기준 | `E39_clamp_switch_rejudge.py` | `results/E39` |
+| **E40** | 전형값 규칙 L 재판정·클램프 최대 켜짐 시간(보고서 이후) | 전형값만 있는 손실 인자(R\_DS(on), 스위칭 에너지)에 규칙이 없었고, 문턱 오차가 낮으면 정상 충전 중 클램프가 켜진 채 남을 수 있다 | 규칙 L(최대/전형 비 또는 × 1.2), 최대 켜짐 시간 0.5 ms로 클램프 재선정, 문턱 오차 예산·오동작 사건, P1·P6·P7·P8·C\_A 재판정 | E39 기준 + (M1)(M2)(M3) | `E40_typ_rule_rejudge.py` | `results/E40` |
+| **E41** | ④ 대 ⑤·⑥ 공정 비교(보고서 이후) | ⑤의 보조 강압기에 경부하 셰딩이 없어 비교가 공정하지 않았다 | 보조 강압기 이상적 셰딩, 계수 민감도 10종, 승압기 16–50 kHz | 문구 규칙 W1–W3(실행 전 고정) | `E41_fair_aux_comparison.py` | `results/E41` |
 | **E10** | Stage C CLLC 3 kW | Stage C를 고정이득으로 둘 수 있어야 400 V 정밀 조정(파생 요구)의 가치가 성립한다 | 스위칭 ODE(1차 환산 6상태), 0.3–3 kW × f_s/f_r 0.9–1.1 이득과 FHA 비교, 입력 ±2 %, ZVS 여유 | 공진점 이득 1 ± 3 %, ZVS 여유 > 1 | `E10_stage_c_cllc.py`, `E10_stage_c_cllc.m` | `results/E10` |
 
 ## 5. 공통 모델 요약

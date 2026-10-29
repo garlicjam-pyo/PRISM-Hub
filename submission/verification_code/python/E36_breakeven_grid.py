@@ -10,7 +10,7 @@
 - 판정 기준을 바꾸는 시험이 아니다. E25·E36의 결론 문장 4개(e25_statements)는 그대로 두고, 문서의 상저항 문장만 고친다.
 
 입력: E36 e25_comparison.json의 Stage A 충전 손실(A25R), 150 kHz 원 설계는 E25 결과(497 W, 전압 무관)
-출력: validation/2026-10-28-a25r-impact/E36/e25_breakeven_grid.json
+출력: results/E36/e25_breakeven_grid.json (근거 사본: validation/2026-10-28-a25r-impact/E36)
 
 결과(2026-10-29 실행, E36_breakeven_grid.log)
 - 격자 손익분기 상저항 640·800·920 V: A25R 3.93·4.57·5.12 mΩ, 150 kHz 원 설계(497 W) 3.45·2.75·2.24 mΩ
@@ -27,8 +27,7 @@ sys.path.insert(0, HERE)
 import E25_motor_boost_comparison as E25  # noqa: E402
 from scipy.optimize import brentq  # noqa: E402
 
-ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-D = os.path.join(ROOT, "validation", "2026-10-28-a25r-impact", "E36")
+D = os.path.join(HERE, "..", "results", "E36")   # (2026-10-29 정리) 제출 폴더 안 결과에서 읽고 쓴다(이전에는 저장소 validation/에 썼다)
 COMBOS = [dict(L0=L0, f=f, n=n) for L0, f, n in itertools.product(E25.GRID["L0"], E25.GRID["f"], E25.GRID["n"])]
 
 
