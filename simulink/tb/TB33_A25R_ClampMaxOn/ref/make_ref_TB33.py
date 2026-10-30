@@ -18,6 +18,7 @@ E40은 전형값만 있는 손실 인자에 규칙 L을 적용해 사양 팩 클
 결과: TB33_<사례>_init.json, _ref.csv(t vA vb ich iA icl icl1 icl2), _stageC.csv, _metrics.json(가지별 1 µs 최고 전류·저항 에너지 포함),
       _stageA.json, TB33_ref_summary.json
 실행: python make_ref_TB33.py <검증 코드 python 폴더> [E40 결과 폴더] [--diag]
+      --diag2: 진단 D33b(판정 아님)만 만든다. 끔 문턱 400 V(비교기로는 꺼지지 않음), 최대 켜짐 시간으로만 끝나는 래치.
       --diag: 진단 D33(판정 아님)만 만든다. C33과 같은 사건에서 끔 문턱만 456.06 V(463 V × 0.985)로 낮춘다(켬 468 V).
               스모크에서 사례 C는 회로의 V_A가 끔 문턱 아래로 내려가 클램프가 비교기로 꺼져, 최대 켜짐 시간이 동작하지 않았다.
               이 진단은 회로에서 클램프가 켜진 채 남을 때 최대 켜짐 시간이 끊는지와 Stage A 전류를 본다.
@@ -79,6 +80,9 @@ CASES = {
 DIAG = "--diag" in sys.argv                 # 진단 D33(판정 아님, 2026-10-30 스모크 뒤 추가): C33과 같은 사건, 켬 문턱 468 V 그대로·끔 문턱만
 if DIAG:                                    # 463 × 0.985 = 456.06 V로 낮춰 회로에서도 클램프가 켜진 채 남게 한다(최대 켜짐 시간을 회로에서 동작시킴)
     CASES = {"D33_920V_latch_diag": dict(CASES["C33_920V_spurious"], eps_on=0., eps_off=-0.015)}
+DIAG2 = "--diag2" in sys.argv               # 진단 D33b(판정 아님, 2026-10-30 D33 뒤 추가): D33에서도 회로 V_A가 455.86 V까지 내려가 비교기가 클램프를
+if DIAG2:                                   # 껐다. 끔 문턱을 400 V(463 V × 0.864)로 두어 비교기로는 꺼지지 않게 하고, 최대 켜짐 시간만으로 끝나는 래치를 본다
+    CASES = {"D33b_920V_latch_off400": dict(CASES["C33_920V_spurious"], eps_on=0., eps_off=400. / 463. - 1.)}
 W_HOLD = (2.6e-3, 2.9e-3)                   # D28 충전 유지 중 판정 창(램프 끝 2.2 ms + 10주기 뒤)
 
 
@@ -237,7 +241,8 @@ def main():
                  sa["turnoffs"]["bad"]))
     out["_selection"] = dict(selected=_sel, vdrop=V_DROP, t_on_max=T_ON_MAX, combo_C=COMBO_C, R_min=_row["R_min"], R_max=_row["R_max"],
                              source="E40 p5.json, thr.json")
-    json.dump(out, open("TB33_diag_ref_summary.json" if DIAG else "TB33_ref_summary.json", "w"), indent=1, default=float)
+    json.dump(out, open("TB33_diag2_ref_summary.json" if DIAG2 else "TB33_diag_ref_summary.json" if DIAG else "TB33_ref_summary.json", "w"),
+              indent=1, default=float)
 
 
 if __name__ == "__main__":

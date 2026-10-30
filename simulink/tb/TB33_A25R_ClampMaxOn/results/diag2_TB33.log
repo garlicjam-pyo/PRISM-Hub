@@ -1,0 +1,38 @@
+[prism_run] diag2_TB33 start 2026-10-30 09:08:01
+TB33 case D33b_920V_latch_off400, V_bat 920 V, event 1.50 ms, dt 2.50 ns, wall 535 s
+(1) criteria:
+    C1_voltage           PASS
+    C6_max_on            PASS
+    C6e_e26              PASS
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           FAIL
+    C8_stageA_peak       PASS
+    V_A 1 us max 466.89 V (E26 460.84), bus 466.27 V (E26 461.28); instantaneous V_A 466.90 V, bus 466.27 V (limit 470 V)
+    clamp: energy 177.0 J (E26 177.6 J), on 0.501 ms (E26 0.501 ms), peak 359 kW, turn-ons 1 (E26 1), clamp current max 776.3 A
+    branch 1 (low R 1.7852 ohm, drop 0.00 V): 1 us max 258.9 A (E26 258.1 A), energy 59.0 J (E26 59.2 J)
+    one high-R branch (1.7852 ohm, drop 0.00 V, 2 of them): 1 us max 258.7 A (E26 258.1 A), energy 59.0 J (E26 59.2 J); branch 1 energy share 0.333 (E26 0.333)
+    48 V (10 us mean, from 1 ms) 47.985-48.015 V (E22 47.996-48.004, band 47.04-48.96); Stage C 100 us max 0.6 A, secondary peak 2.6 A
+    Stage C ZVS: primary 0.21 V (2250 edges), secondary 0.06 V (2250 edges)
+    Stage A pre: ZCS max 0.39 % (ref 0.67 %), Ipk max 74.0 A (ref 74.2 A), sharing 1.15 %, V_A 460.846 V (ref 460.845 V), i_A -374.9 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 1826, violations 7, worst 7.78 A; phase peak 155.2 A (P_rated 74.5 A, fault limit 111.8 A)
+    modules: events zeros(0,2) (model zeros(0,2)), end 4 (model 4), cancels 0
+      violation: 1.5313 ms, phase 5, i_off -4.402 A, half-cycle peak 10.64 A
+      violation: 2.1531 ms, phase 5, i_off -2.133 A, half-cycle peak 32.52 A
+      violation: 1.5403 ms, phase 6, i_off -7.785 A, half-cycle peak 10.15 A
+      violation: 2.0363 ms, phase 6, i_off -6.817 A, half-cycle peak 6.82 A
+      violation: 1.5424 ms, phase 7, i_off -2.567 A, half-cycle peak 15.21 A
+      violation: 2.0436 ms, phase 7, i_off -5.832 A, half-cycle peak 9.33 A
+      violation: 2.0442 ms, phase 8, i_off -4.039 A, half-cycle peak 11.57 A
+    clamp longest continuous on 0.5010 ms (E26 0.5013 ms, max on-time 0.50 ms), turn-ons after the first 0, E26 forced offs 1 (from 1 ms; turn-ons before 1 ms, model start transient, info: 0)
+    spurious: phase max during clamp 155.2 A, after 1 ms 155.2 A (limit 562.7 A); Stage A output 1 us -961.3..1013.9 A (E26 -375.5..397.0 A); V_A min 453.48 V (E26 459.11 V)
+    after the last clamp off (2.0010 ms): V_A max 1 us 466.89 V, instantaneous 466.90 V (on threshold 468.00 V; info)
+D33b_920V_latch_off400 done (535 s): FAIL
+DIAGNOSTIC D33b (not a verdict): case C33 with the off threshold at 400 V, so only the max on-time ends the latch
+TB33 = TB32 circuit with the E40 clamp (rule L selection, max continuous on-time, spurious turn-on test), reference E26 (per-branch) / E22 / E35 model
+case                   result vA_max    ref       i1[A]     ref       E1[J]     ref       vo_min    failed
+D33b_920V_latch_off400 FAIL   466.89    460.84    258.9     258.1     59.0      59.2      47.985    C5_turnoff
+TB33 overall: FAIL
+[prism_run] diag2_TB33 finished (540.9 s)

@@ -1,0 +1,22 @@
+TB33 case C33_920V_spurious, V_bat 920 V, event 1.50 ms, dt 2.50 ns, wall 269 s
+(1) criteria:
+    C1_voltage           PASS
+    C6_max_on            FAIL
+    C6e_e26              FAIL
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           PASS
+    C8_stageA_peak       PASS
+    V_A 1 us max 462.80 V (E26 460.84), bus 462.35 V (E26 461.28); instantaneous V_A 462.80 V, bus 462.35 V (limit 470 V)
+    clamp: energy 17.5 J (E26 177.6 J), on 0.049 ms (E26 0.501 ms), peak 361 kW, turn-ons 3 (E26 1), clamp current max 778.0 A
+    branch 1 (low R 1.7852 ohm, drop 0.00 V): 1 us max 259.3 A (E26 258.1 A), energy 5.8 J (E26 59.2 J)
+    one high-R branch (1.7852 ohm, drop 0.00 V, 2 of them): 1 us max 259.1 A (E26 258.1 A), energy 5.8 J (E26 59.2 J); branch 1 energy share 0.333 (E26 0.333)
+    48 V (10 us mean, from 1 ms) 47.997-48.007 V (E22 47.996-48.004, band 47.04-48.96); Stage C 100 us max 0.2 A, secondary peak 2.6 A
+    Stage C ZVS: primary 0.21 V (550 edges), secondary 0.06 V (550 edges)
+    Stage A pre: ZCS max 0.42 % (ref 0.67 %), Ipk max 76.7 A (ref 74.2 A), sharing 4.92 %, V_A 460.848 V (ref 460.845 V), i_A -375.0 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 438, violations 0, worst 0.42 A; phase peak 100.3 A (P_rated 74.5 A, fault limit 111.8 A)
+    modules: events zeros(0,2) (model zeros(0,2)), end 4 (model 4), cancels 0
+    clamp longest continuous on 0.0220 ms (E26 0.5013 ms, max on-time 0.50 ms), turn-ons after the first 2, E26 forced offs 1
+    spurious: phase max during clamp 100.3 A, after 1 ms 100.3 A (limit 562.7 A); Stage A output 1 us -586.0..-140.8 A (E26 -375.5..397.0 A); V_A min 458.09 V (E26 459.11 V)

@@ -1,0 +1,5 @@
+DIAGNOSTIC D33 (not a verdict): case C33 with the off threshold lowered so that the clamp latches in the circuit
+TB33 = TB32 circuit with the E40 clamp (rule L selection, max continuous on-time, spurious turn-on test), reference E26 (per-branch) / E22 / E35 model
+case                   result vA_max    ref       i1[A]     ref       E1[J]     ref       vo_min    failed
+D33_920V_latch_diag    FAIL   464.42    460.84    257.9     258.1     2.1       59.2      47.993    C6e_e26, C5_turnoff
+TB33 overall: FAIL

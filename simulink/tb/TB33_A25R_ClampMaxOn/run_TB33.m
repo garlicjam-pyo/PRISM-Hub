@@ -30,10 +30,12 @@ mdl  = 'TB33_A25R_ClampMaxOn';
 refDir = fullfile(here, 'ref');
 resDir = fullfile(here, 'results');
 if ~exist(resDir, 'dir'), mkdir(resDir); end
-R = {'A33_640V_noload_mix', 'B33_920V_noload_mix', 'C33_920V_spurious', 'D33_920V_latch_diag'};   % 4 = 진단(diag_TB33, 판정 아님)
+R = {'A33_640V_noload_mix', 'B33_920V_noload_mix', 'C33_920V_spurious', 'D33_920V_latch_diag', 'D33b_920V_latch_off400'};   % 4·5 = 진단(판정 아님)
 if nargin < 1 || isempty(runList), runList = 1:3; end
 if any(runList == 4)
     resDir = fullfile(resDir, 'diag'); if ~exist(resDir, 'dir'), mkdir(resDir); end
+elseif any(runList == 5)
+    resDir = fullfile(resDir, 'diag2'); if ~exist(resDir, 'dir'), mkdir(resDir); end
 end
 tStop = [];
 if evalin('base', 'exist(''TB33_tend'', ''var'')')
@@ -57,6 +59,7 @@ end
 evalin('base', 'clear TB33_case');
 fid = fopen(fullfile(resDir, 'TB33_summary.txt'), 'w');
 if any(runList == 4), o2(fid, 'DIAGNOSTIC D33 (not a verdict): case C33 with the off threshold lowered so that the clamp latches in the circuit\n'); end
+if any(runList == 5), o2(fid, 'DIAGNOSTIC D33b (not a verdict): case C33 with the off threshold at 400 V, so only the max on-time ends the latch\n'); end
 o2(fid, 'TB33 = TB32 circuit with the E40 clamp (rule L selection, max continuous on-time, spurious turn-on test), reference E26 (per-branch) / E22 / E35 model\n');
 o2(fid, '%-22s %-6s %-9s %-9s %-9s %-9s %-9s %-9s %-9s %s\n', 'case', 'result', 'vA_max', 'ref', 'i1[A]', 'ref', 'E1[J]', 'ref', 'vo_min', 'failed');
 allPass = true;
