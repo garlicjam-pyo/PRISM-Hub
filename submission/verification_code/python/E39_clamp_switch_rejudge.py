@@ -36,7 +36,7 @@
        — 켬·끔 에너지는 그 순간에, 도통은 R_DS(on)·i² — 로 접합 온도 최고. 계수 그대로와 × 1.2), E38 선정의 E39 규칙 판정.
 
 ■ 계산 재사용
-  max·min 조합(사양 팩)의 사건 기록은 E38 근거 파일(validation/2026-10-29-review-response/E38/clamp.json의 raw)을 다시 쓴다. 같은 E26
+  max·min 조합(사양 팩)의 사건 기록은 E38 결과(results/E38/clamp.json의 raw, 근거 사본 validation/2026-10-29-review-response/E38)를 다시 쓴다. 같은 E26
   모델·같은 모서리 저항이고(모서리 저항이 E38과 1e-9 Ω 안에서 같은지 확인한다), 부분 reg에서 두 사건을 새로 실행해 같은 값인지
   확인한다. 모서리가 다르면(R3 반복) 새로 실행한다. W460은 E38이 사건 기록을 남기지 않아 모두 새로 실행한다.
 
@@ -63,8 +63,7 @@ import E34_parts_rating as E34
 import E38_review_response as E38
 
 EID = "E39"
-ROOT = Path(__file__).resolve().parents[3]
-E38_CLAMP = ROOT / "validation" / "2026-10-29-review-response" / "E38" / "clamp.json"
+E38_CLAMP = Path(__file__).resolve().parent.parent / "results" / "E38" / "clamp.json"   # (2026-10-29 정리) 제출 폴더 안 결과(E38 clamp 실행이 만든다)
 F_RTH = 1.2                                   # 값이 하나만 있는 열저항의 배수(가정)
 E_STEP = 50.                                  # 자기 가열 가정 갱신 단위 [J]
 N_ITER = 2
@@ -164,7 +163,7 @@ def _ev39(args):
     br, on, off, kw = args
     import E26_charging_stop as E26
     E26.BUS["CA"] = E38.CA_R; E26.RA_MOD = E38.RA_A25
-    E26.CL = dict(E26.CL, on=on, off=off, branches=[(R, vd, m) for _, R, vd, m in br])
+    E26.CL = dict(E26.CL_DEFAULT, on=on, off=off, branches=[(R, vd, m) for _, R, vd, m in br])
     r = E26.run_event(**kw, rec_every=1, full_trace=True)
     tr = np.array(r.pop("trace"))
     rows = _branch_rows(tr, kw, br, sum(m for *_, m in br))
@@ -381,7 +380,7 @@ def _foster_peak(args):
     br, on, off, kw, sw, kind = args
     import E26_charging_stop as E26
     E26.BUS["CA"] = E38.CA_R; E26.RA_MOD = E38.RA_A25
-    E26.CL = dict(E26.CL, on=on, off=off, branches=[(R, vd, m) for _, R, vd, m in br])
+    E26.CL = dict(E26.CL_DEFAULT, on=on, off=off, branches=[(R, vd, m) for _, R, vd, m in br])
     r = E26.run_event(**kw, rec_every=1, full_trace=True)
     tr = np.array(r["trace"]); t, vA, icl = tr[:, 0], tr[:, 1], tr[:, 5]
     on_ = icl > 0; dt = float(t[1] - t[0])

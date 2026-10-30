@@ -61,7 +61,10 @@ from common import save_json, verdict, workers, outdir
 import E12_switching_verification as E12
 
 EID = "E17"
-VAL_E12 = "../../../validation/2026-10-11-matlab-switching/E12"
+# (2026-10-29 정리) E12 결과(감시 없음)는 제출 폴더 안 results/E12에서 읽는다(E12를 먼저 실행). 이전에는 저장소 validation/의 사본을 읽었다
+#   (근거 사본: validation/2026-10-11-matlab-switching/E12).
+from common import RESULTS  # noqa: E402
+VAL_E12 = str(RESULTS / "E12")
 
 
 # ----------------------------------------------------------------------------------------------

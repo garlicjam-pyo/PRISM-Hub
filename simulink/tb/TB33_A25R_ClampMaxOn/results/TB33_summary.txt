@@ -1,0 +1,6 @@
+TB33 = TB32 circuit with the E40 clamp (rule L selection, max continuous on-time, spurious turn-on test), reference E26 (per-branch) / E22 / E35 model
+case                   result vA_max    ref       i1[A]     ref       E1[J]     ref       vo_min    failed
+A33_640V_noload_mix    PASS   468.14    468.24    262.1     262.3     112.2     112.3     47.983    
+B33_920V_noload_mix    PASS   468.14    468.21    262.1     262.3     252.2     252.3     47.993    
+C33_920V_spurious      FAIL   462.80    460.84    257.9     258.1     1.1       59.2      47.993    C6e_e26
+TB33 overall: FAIL

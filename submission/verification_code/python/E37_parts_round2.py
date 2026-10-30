@@ -200,7 +200,7 @@ def _clamp_ev(args):
     R, voff, kw = args
     import E26_charging_stop as E26
     E26.BUS["CA"] = CA_R; E26.RA_MOD = RA_A25
-    E26.CL = dict(E26.CL, R=R, off=voff)
+    E26.CL = dict(E26.CL_DEFAULT, R=R, off=voff)
     r = E26.run_event(**kw, rec_every=1, full_trace=True)
     tr = np.array(r.pop("trace"))
     t, vA, vb, icl = tr[:, 0], tr[:, 1], tr[:, 2], tr[:, 5]

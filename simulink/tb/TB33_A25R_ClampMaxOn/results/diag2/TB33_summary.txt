@@ -1,0 +1,5 @@
+DIAGNOSTIC D33b (not a verdict): case C33 with the off threshold at 400 V, so only the max on-time ends the latch
+TB33 = TB32 circuit with the E40 clamp (rule L selection, max continuous on-time, spurious turn-on test), reference E26 (per-branch) / E22 / E35 model
+case                   result vA_max    ref       i1[A]     ref       E1[J]     ref       vo_min    failed
+D33b_920V_latch_off400 FAIL   466.89    460.84    258.9     258.1     59.0      59.2      47.985    C5_turnoff
+TB33 overall: FAIL

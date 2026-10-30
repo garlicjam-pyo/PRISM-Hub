@@ -152,7 +152,7 @@ def _ev(args):
     n, Rc, vdrop, on, off, kw = args
     import E26_charging_stop as E26
     E26.BUS["CA"] = CA_R; E26.RA_MOD = RA_A25
-    E26.CL = dict(E26.CL, on=on, off=off, R=Rc, n=n, vdrop=vdrop)
+    E26.CL = dict(E26.CL_DEFAULT, on=on, off=off, R=Rc, n=n, vdrop=vdrop)   # (2026-10-29 정리) 처음 값에서(앞 호출의 가지 목록 등이 남지 않게)
     r = E26.run_event(**kw, rec_every=1, full_trace=True)
     tr = np.array(r.pop("trace"))
     t, vA, icl = tr[:, 0], tr[:, 1], tr[:, 5] / n                 # 가지 전류

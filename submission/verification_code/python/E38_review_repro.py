@@ -21,10 +21,9 @@ from pathlib import Path
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[2]
 OUT = HERE.parent / "results" / "E38"
-E36D = ROOT / "validation" / "2026-10-28-a25r-impact" / "E36"
-E37D = ROOT / "validation" / "2026-10-29-parts-rating-2" / "E37"
+E36D = HERE.parent / "results" / "E36"        # (2026-10-29 정리) 제출 폴더 안 결과(이전에는 저장소 validation/의 사본을 읽었다)
+E37D = HERE.parent / "results" / "E37"
 
 
 def _a25r(E26):
@@ -36,7 +35,7 @@ def _r2_ev(args):
     R, e = args
     import E26_charging_stop as E26
     _a25r(E26)
-    E26.CL = dict(E26.CL, on=468., off=463., R=R)
+    E26.CL = dict(E26.CL_DEFAULT, on=468., off=463., R=R)
     r = E26.run_event(**e)
     return dict(R=R, vA_max=r["vA_max"], vb_max=r["vb_max"])
 
@@ -76,7 +75,7 @@ def r3():
 def r4():
     import E26_charging_stop as E26
     _a25r(E26)
-    E26.CL = dict(E26.CL, on=468., off=463., R=1.2)
+    E26.CL = dict(E26.CL_DEFAULT, on=468., off=463., R=1.2)
     out = {}
     for V in (936., 960., 1008.):
         r = E26.run_event(V, 20e3, 5e3, arch="R2W", clamp=True, t0=10e-3, tend=2e-3)

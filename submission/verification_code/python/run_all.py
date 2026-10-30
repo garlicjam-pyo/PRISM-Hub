@@ -1,7 +1,9 @@
-"""모든 Python 검증을 근거 번호 순서로 실행한다.
+"""모든 Python 검증을 근거 번호 순서로 실행한다(E19는 E17보다 먼저. 뒤 시험이 앞 시험의 results/를 읽는다).
 
-  python run_all.py            전체(2코어 기준 약 7시간, 그중 E12 약 3시간, E17 약 1.5시간)
+  python run_all.py            전체 E1–E41(2코어 기준 약 25시간. E12 약 3시간, E17 약 1.5시간, E33 약 2시간, E35 약 5시간,
+                               E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
   python run_all.py E3 E4      일부만
+  python run_all.py --diag     실행 뒤 진단 스크립트(E33_diag_transient, E37_diag_fs, E38_review_repro)도 실행(판정 아님)
 
 E2-c·E11 대조는 MATLAB/Octave에서 matlab/E2_two_stage_crosscheck.m, E11_controller_crosscheck.m 을 먼저
 실행해야 하므로 MATLAB 결과 파일이 있을 때만 실행한다.
@@ -40,21 +42,48 @@ STEPS = [
     ("E27", ["E27_zcp_reversal.py"]),            # Stage A 영교차 게이트 방향 반전 처리(repro stress regress figures, 2코어 약 15분)
     ("E28", ["E28_stage_a_modules.py"]),         # Stage A 4모듈 경부하 운전(design rated static transient restart regress figures, 2코어 약 75분)
     ("E29", ["E29_sals_degradation.py"]),        # 보호 상태기계–SALS 연동(E17·E20·E21 결과 필요. contract resid seq regen regen_sens failsafe regress figures, 2코어 약 60분)
+    # (2026-10-29 정리) E30–E41: 스크립트마다 부분 이름을 넘긴다(인자가 없으면 아무것도 하지 않는 스크립트가 있다)
+    ("E30", [("E30_module_fault.py", ["fault", "regress", "figures"])]),
+    ("E31", [("E31_stage_a_coss.py", [])]),                                            # E15·E25 결과
+    ("E32", [("E32_stage_a_25k.py", ["design", "rated", "thresholds", "loss", "figures"])]),   # E31 결과
+    ("E33", [("E33_stage_a_25k_dynamics.py", ["static", "transient", "slow", "fault", "figures"])]),
+    ("E34", [("E34_parts_rating.py", ["clamp", "prot", "stagea", "table", "figures"])]),       # E29·E32·E33 결과
+    ("E35", [("E35_a25r_design.py", ["dev", "dev2", "dev3", "dev4"]),                   # 설계 단계(판정 아님) → E35 verify가 읽는다
+             ("E35_a25r_verify.py", ["static", "transient", "beyond", "fault", "clamp"])]),
+    ("E36", [("E36_a25r_impact.py", ["tables", "e15", "e25", "e18", "e16", "e23", "e26", "e29", "dropout"]),
+             ("E36_breakeven_grid.py", []), ("E36_magnetics_fix.py", [])]),             # E36 정정 두 가지(results/E36에 씀)
+    ("E37", [("E37_parts_round2.py", ["ca", "fs", "clamp", "cfly", "bypass", "ctc", "lr", "req", "table"])]),
+    ("E38", [("E38_review_response.py", ["clamp", "hv", "l1", "l2", "p6", "f2", "table"])]),
+    ("E39", [("E39_clamp_switch_rejudge.py", ["reg", "spec", "hv", "tr", "table"])]),        # results/E38/clamp.json
+    ("E40", [("E40_typ_rule_rejudge.py", ["reg", "p5", "thr", "p1", "p6p7", "p8", "ca", "table"])]),
+    ("E41", [("E41_fair_aux_comparison.py", ["run", "table"])]),
 ]
 
+DIAG = [("E33_diag_transient.py", []), ("E37_diag_fs.py", []), ("E38_review_repro.py", [])]
+
+
+def _run(item):
+    script, args = (item, []) if isinstance(item, str) else item
+    print(f"\n==== {script} {' '.join(args)} ====", flush=True)
+    subprocess.run([sys.executable, script, *args], check=True)
+
+
 if __name__ == "__main__":
-    want = set(sys.argv[1:])
+    diag = "--diag" in sys.argv
+    want = set(a for a in sys.argv[1:] if a != "--diag")
     t0 = time.time()
     for eid, scripts in STEPS:
         if want and eid not in want and not (eid == "E5" and want & {"E6", "E7"}):
             continue
         for s in scripts:
-            print(f"\n==== {s} ====", flush=True)
-            subprocess.run([sys.executable, s], check=True)
+            _run(s)
         if eid == "E2" and (RESULTS / "E2" / "reference_matrix_matlab.json").exists():
             print("\n==== E2c_compare_matlab.py ====", flush=True)
             subprocess.run([sys.executable, "E2c_compare_matlab.py"], check=True)
         if eid == "E11" and (RESULTS / "E11" / "matlab_gain.json").exists():
             print("\n==== E11_controller_crosscheck.py compare ====", flush=True)
             subprocess.run([sys.executable, "E11_controller_crosscheck.py", "compare"], check=True)
+    if diag:
+        for d in DIAG:
+            _run(d)
     print(f"\n전체 {time.time() - t0:.0f} s")

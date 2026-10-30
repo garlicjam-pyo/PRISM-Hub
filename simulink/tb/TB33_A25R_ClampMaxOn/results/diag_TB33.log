@@ -1,0 +1,51 @@
+[prism_run] diag_TB33 start 2026-10-30 08:57:32
+TB33 case D33_920V_latch_diag, V_bat 920 V, event 1.50 ms, dt 2.50 ns, wall 535 s
+(1) criteria:
+    C1_voltage           PASS
+    C6_max_on            PASS
+    C6e_e26              FAIL
+    C3_vo                PASS
+    C3_stageC_current    PASS
+    C3_zvs               PASS
+    C4_stageA_pre        PASS
+    C5_turnoff           FAIL
+    C8_stageA_peak       PASS
+    V_A 1 us max 464.42 V (E26 460.84), bus 463.62 V (E26 461.28); instantaneous V_A 464.43 V, bus 463.63 V (limit 470 V)
+    clamp: energy 6.2 J (E26 177.6 J), on 0.018 ms (E26 0.501 ms), peak 357 kW, turn-ons 1 (E26 1), clamp current max 773.7 A
+    branch 1 (low R 1.7852 ohm, drop 0.00 V): 1 us max 257.9 A (E26 258.1 A), energy 2.1 J (E26 59.2 J)
+    one high-R branch (1.7852 ohm, drop 0.00 V, 2 of them): 1 us max 257.8 A (E26 258.1 A), energy 2.1 J (E26 59.2 J); branch 1 energy share 0.333 (E26 0.333)
+    48 V (10 us mean, from 1 ms) 47.993-48.011 V (E22 47.996-48.004, band 47.04-48.96); Stage C 100 us max 0.3 A, secondary peak 2.6 A
+    Stage C ZVS: primary 0.21 V (2250 edges), secondary 0.06 V (2250 edges)
+    Stage A pre: ZCS max 0.39 % (ref 0.67 %), Ipk max 74.0 A (ref 74.2 A), sharing 1.15 %, V_A 460.846 V (ref 460.845 V), i_A -374.9 A
+    Stage A turn-offs after 1 ms (excluding forced cuts): 1827, violations 20, worst 15.61 A; phase peak 120.9 A (P_rated 74.5 A, fault limit 111.8 A)
+    modules: events zeros(0,2) (model zeros(0,2)), end 4 (model 4), cancels 0
+      violation: 1.5419 ms, phase 1, i_off -6.773 A, half-cycle peak 6.77 A
+      violation: 1.5579 ms, phase 1, i_off 1.763 A, half-cycle peak 12.77 A
+      violation: 1.5803 ms, phase 1, i_off -1.782 A, half-cycle peak 20.28 A
+      violation: 1.5443 ms, phase 2, i_off -6.152 A, half-cycle peak 6.80 A
+      violation: 1.5603 ms, phase 2, i_off 4.334 A, half-cycle peak 8.27 A
+      violation: 1.5474 ms, phase 3, i_off -6.305 A, half-cycle peak 6.86 A
+      violation: 1.5698 ms, phase 3, i_off 12.762 A, half-cycle peak 12.76 A
+      violation: 1.5353 ms, phase 4, i_off 1.868 A, half-cycle peak 24.49 A
+      violation: 1.5513 ms, phase 4, i_off -7.466 A, half-cycle peak 7.47 A
+      violation: 1.5737 ms, phase 4, i_off 7.189 A, half-cycle peak 12.85 A
+      violation: 1.5377 ms, phase 5, i_off 7.625 A, half-cycle peak 17.85 A
+      violation: 1.5537 ms, phase 5, i_off -7.125 A, half-cycle peak 7.12 A
+      violation: 1.5761 ms, phase 5, i_off 3.773 A, half-cycle peak 18.35 A
+      violation: 1.5403 ms, phase 6, i_off 11.570 A, half-cycle peak 13.19 A
+      violation: 1.5627 ms, phase 6, i_off -14.884 A, half-cycle peak 14.88 A
+      violation: 1.5425 ms, phase 7, i_off 13.874 A, half-cycle peak 13.87 A
+      violation: 1.5649 ms, phase 7, i_off -13.441 A, half-cycle peak 13.44 A
+      violation: 4.5560 ms, phase 7, i_off 2.166 A, half-cycle peak 2.17 A
+      violation: 1.5447 ms, phase 8, i_off 15.608 A, half-cycle peak 15.61 A
+      violation: 1.5671 ms, phase 8, i_off -11.658 A, half-cycle peak 11.66 A
+    clamp longest continuous on 0.0176 ms (E26 0.5013 ms, max on-time 0.50 ms), turn-ons after the first 0, E26 forced offs 1 (from 1 ms; turn-ons before 1 ms, model start transient, info: 0)
+    spurious: phase max during clamp 120.9 A, after 1 ms 120.9 A (limit 562.7 A); Stage A output 1 us -661.9..200.3 A (E26 -375.5..397.0 A); V_A min 455.86 V (E26 459.11 V)
+    after the last clamp off (1.5176 ms): V_A max 1 us 464.42 V, instantaneous 464.43 V (on threshold 468.00 V; info)
+D33_920V_latch_diag done (535 s): FAIL
+DIAGNOSTIC D33 (not a verdict): case C33 with the off threshold lowered so that the clamp latches in the circuit
+TB33 = TB32 circuit with the E40 clamp (rule L selection, max continuous on-time, spurious turn-on test), reference E26 (per-branch) / E22 / E35 model
+case                   result vA_max    ref       i1[A]     ref       E1[J]     ref       vo_min    failed
+D33_920V_latch_diag    FAIL   464.42    460.84    257.9     258.1     2.1       59.2      47.993    C6e_e26, C5_turnoff
+TB33 overall: FAIL
+[prism_run] diag_TB33 finished (541.4 s)

@@ -314,6 +314,10 @@ def selected(apply_zvs=True):
     c = dict(r["params"]); c.update(nsw=sel["nsw"], np=sel["np"], ns=sel["ns"], L=r["front"]["L"], front=r["params"]["front"])
     c.update(td_p=TD, td_s=TD, Lm0=c["Lm"], zvs_applied=False)
     fz = outdir(EID) / "zvs.json"
+    if apply_zvs and not fz.exists():
+        # (2026-10-29 정리) 이전에는 경고 없이 처음 설계로 계산했다. 결과가 달라지므로(④ 보조 손실 등) 알린다
+        print("  [경고] results/E22/zvs.json이 없어 처음 설계(L_m·데드타임)로 계산한다. 'python E22_stage_c_regulated.py zvs both'를 먼저 실행하라.",
+              flush=True)
     if apply_zvs and fz.exists():
         ch = json.loads(fz.read_text(encoding="utf-8")).get("choice")
         if ch:
