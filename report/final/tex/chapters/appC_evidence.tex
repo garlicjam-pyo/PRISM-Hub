@@ -1,11 +1,10 @@
-% 원제: 부록 C. 검증 근거 목록
 \chapter{검증 근거 목록}
 
-본문의 수치는 다음 검증 근거에서 얻었다. 각 근거는 입력 조건, 판정 기준과 결과를 함께 보관하며 같은 조건에서 재현할 수 있다. 검증 코드(MATLAB, Python)와 Simulink 테스트벤치는 같은 번호 체계로 정리했다.
+본문의 수치는 다음 검증 근거에서 얻었다. 각 근거는 입력 조건, 실행 전에 정한 판정 기준, 결과와 실행 경과(1차 결과·설정 오류·구현 수정)를 함께 보관하며 같은 조건에서 재현할 수 있다. 검증 코드(MATLAB, Python)와 Simulink 테스트벤치는 같은 번호 체계로 정리했다. 부품 데이터시트 값은 출처와 열람일을 함께 보관했다.
 
 {\footnotesize
-\begin{longtable}{L{\dimexpr 0.0877\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.4561\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1579\linewidth-2\tabcolsep\relax}}
-\caption{검증 근거 목록}\\
+\begin{longtable}{L{\dimexpr 0.11\linewidth-2\tabcolsep\relax}L{\dimexpr 0.27\linewidth-2\tabcolsep\relax}L{\dimexpr 0.44\linewidth-2\tabcolsep\relax}L{\dimexpr 0.18\linewidth-2\tabcolsep\relax}}
+\caption{검증 근거 목록(E1–E41, TB01–TB33)}\\
 \toprule
 \tabhead \textbf{번호} & \textbf{근거} & \textbf{내용} & \textbf{도구} \\
 \midrule
@@ -40,6 +39,21 @@ E23 & R2 통합 회로 & 기본형 버스 + 조정형 Stage C 평균모델, Midd
 E24 & Stage A 경부하 위상 셰딩 & 문턱 설계, 데드타임 전류 소멸 처리, 정상 운전점 26점, 전환 과도 10사례 & Python(Numba) \\
 E25 & 산업 방식 대비 구조 비교 & 모터·인버터 승압 충전 손실(96조합), 800 V급 보조부품 구조, 손실 에너지 예시, Stage A 손실 감도 & Python \\
 E26 & 충전 중 Stage A 정지 협조 & 모듈 과부하(스위칭 모델), V\textsubscript{A} 노드 사건 32건(클램프 유무, 충전기 반응, 통신 지연) & Python(Numba) \\
+E27 & 영교차 게이트 방향 반전 & 무장하지 못한 반주기 처리, TB20 사례 D 재현, 방향 반전 격자 48, 회귀 & Python(Numba) \\
+E28 & Stage A 4모듈 관리기 & 모듈 추가·줄임·사전 기동, 공차 표본 3개, 정상점 36·과도 7, 재시작 C\textsubscript{fly} 오차 & Python(Numba) \\
+E29 & 보호 상태기계–SALS 연동 & 부하 등급 계약 응답, 메시지 지연·손실, 연동 강등 74, 48 V 회생, 이중 고장 & Python \\
+E30 & 모듈 고장 처리 & 주행·충전 중 고장 8사례 × 공칭·공차 표본 & Python(Numba) \\
+E31 & Stage A 출력용량 손실 & Q\textsubscript{oss}·V 손실, 소자 4종 설계 격자 90안, 정확해 대조, 선택 규칙 & Python \\
+E32 & A25 손실·문턱 & 25 kHz 직접 모의 손실 격자, 셰딩·관리기 문턱, 보조·충전 손실 & Python(Numba) \\
+E33 & A25 동특성 & 정상점·과도·느린 충전·모듈 고장 & Python(Numba) \\
+E34 & 부품 정격 1차 & 9개 부품의 데이터시트 대조 & Python \\
+E35 & A25R 설계와 판정 & 설계 단계 후보, C\textsubscript{A} 2.4 mF, 요구 안·밖 과도, 모듈 고장, 정상점 & Python(Numba) \\
+E36 & A25R 영향 재확인 & 손실·기존 방식·가치 지도 재계산, 충전 중 보조버스·R2 버스·충전 중 정지·이중 고장·충전기 급정지 & Python(Numba) \\
+E37 & 부품 정격 2차 & C\textsubscript{fly}·클램프·이중 고장 방전·소프트 투입 소자·접촉기·C\textsubscript{A}·L\textsubscript{r} & Python \\
+E38 & 외부 검토 대응·설계 변경 & 클램프 저항 모서리 재선정, 고전압 팩 설정, Stage C 모델 교체 재계산, 충전 손실 직접 계산, Stage C 일시 정지, 400 V 부하 정지 & Python(Numba) \\
+E39 & 클램프 스위치 재판정 & 최대 열저항, 가지 저항 섞임 & Python \\
+E40 & 규칙 L 재판정 & 클램프 재선정, 최대 연속 켜짐 시간, 문턱 오차와 오동작, P1·P6·P7·P8·C\textsubscript{A} & Python(Numba) \\
+E41 & ④ 대 ⑤·⑥ 공정 비교 & 보조 강압기 이상적 셰딩, 민감도 10종, 충전 경로(전용 승압기 16–50 kHz) & Python \\
 TB01–TB05 & 단별 회로 & Stage A 1위상, Stage B 개루프·폐루프(출력용량·게이트 격자), Stage C & Simulink \\
 TB06–TB07 & 통합 회로 & 주행(Stage A 모듈 1 + B + C), 충전(8위상 + 충전기) & Simulink \\
 TB08–TB13 & 창 조정 모듈 회로 & 창 조정·전환·DAB 고장 강등, 보호 상태기계, 고장 모드 변조, 데드타임 반영 첨두 표, EPS 지령 전이, 전이 여유 & Simulink \\
@@ -47,5 +61,15 @@ TB14–TB15 & 조정형 Stage C 회로 & 동기 벅 + CLLC 직류변압기, 영�
 TB16–TB17 & R2 통합 회로 & 기본형(Stage A + 감쇠기 + 조정형 Stage C), R2-W460 강등 중 48 V & Simulink \\
 TB18–TB19 & Stage A 위상 셰딩 회로 & 셰딩 게이트의 전환 과도, R2-W460 강등 중 셰딩 & Simulink \\
 TB20 & 충전 중 정지 회로 & Stage A 4모듈 + 충전기 + V\textsubscript{A} 클램프, 경로 상실·모듈 고장·충전기 램프 & Simulink \\
+TB21 & 게이트 방향 반전 회로 & TB20 + 방향 반전 처리 & Simulink \\
+TB22 & Stage A 4모듈 회로 & 관리기 + 위상 셰딩(150 kHz) & Simulink \\
+TB23 & SALS 연동 회로 & TB13 + 부하 블록·상태기계 확장 & Simulink \\
+TB24 & 모듈 고장 회로 & Stage A 4모듈 고장 처리 & Simulink \\
+TB25 & 출력용량 손실 회로 & Stage A 1위상 + 등가 출력용량(150·75·25 kHz) & Simulink \\
+TB26–TB27 & A25·A25R 통합 회로 & 25 kHz Stage A 4모듈, 느린 충전·모듈 고장·부하 계단·정격 충전 손실 & Simulink \\
+TB28–TB30 & A25R 충전 중 정지 회로 & 클램프 1 Ω·1.2 Ω·가지 2개 × 1.6 Ω(저항 모서리) & Simulink \\
+TB31 & 보호 설계 변경 회로 & Stage C 일시 정지, 400 V 부하 정지 & Simulink \\
+TB32 & 클램프 가지 저항 섞임 회로 & 작은 저항 가지 전류·에너지 몫 & Simulink \\
+TB33 & 최종 클램프 회로 & 가지 3개 × 2.4 Ω, 최대 연속 켜짐 0.5 ms, 경로 상실·오동작, 진단 2건 & Simulink \\
 \end{longtable}
 }

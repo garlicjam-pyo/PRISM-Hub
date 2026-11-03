@@ -2,7 +2,7 @@
 
 \section{비교 대상과 방법}
 
-E15·E18은 Stage A 기반 구조를 전용 승압기(①)와 전전력 조정기(②)와 비교했다. 두 가지 비교가 빠져 있었다. 첫째, 800 V급 차량이 400–500 V급 충전기를 쓰는 가장 흔한 산업 방식은 구동 인버터와 모터 권선으로 승압하는 것이다\cite{b24}, \cite{b25}. 이 방식은 충전용 반도체를 더하지 않으므로, Stage A의 32개 스위치 위치를 정당화하려면 이 방식과 비교해야 한다. 둘째, 보조부품을 800 V급으로 두면 400 V 중간버스가 필요 없다. R2의 다기능 이점이 이 설계보다 나은지 확인해야 한다. 
+E15·E18은 Stage A 기반 구조를 전용 승압기(①)와 전전력 조정기(②)와 비교했다. 두 가지 비교가 빠져 있었다. 첫째, 800 V급 차량이 400–500 V급 충전기를 쓰는 가장 흔한 산업 방식은 구동 인버터와 모터 권선으로 승압하는 것이다\cite{b24,b25}. 모터 권선과 인버터를 쓰는 승압 충전과 구동계 통합 충전기는 시제품으로도 보고되었다\cite{b27,b28}. 이 방식은 충전용 반도체를 더하지 않으므로, Stage A의 32개 스위치 위치를 정당화하려면 이 방식과 비교해야 한다. 둘째, 보조부품을 800 V급으로 두면 400 V 중간버스가 필요 없다. R2의 다기능 이점이 이 설계보다 나은지 확인해야 한다. 
 
 {\footnotesize
 \begin{longtable}{L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2807\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2105\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}}
@@ -17,7 +17,7 @@ E15·E18은 Stage A 기반 구조를 전용 승압기(①)와 전전력 조정�
 \endhead
 \bottomrule
 \endlastfoot
-① & 전용 승압기(하드 스위칭 6상 부스트) & 800 → 400 V 강압기 & 고정이득 CLLC & 400 V급 \\
+① & 전용 승압기(하드 스위칭 6상 부스트)\cite{b29,b26} & 800 → 400 V 강압기 & 고정이득 CLLC & 400 V급 \\
 ⑤ & 모터·인버터 승압 & 800 → 400 V 강압기 & 고정이득 CLLC & 400 V급 \\
 ④ R2 기본형 & Stage A(2:1, 8위상) & 버스 = V\textsubscript{A}(RC 감쇠기) & 조정형 Stage C & 400 V급(B\textsubscript{470}) \\
 ⑥ & 모터·인버터 승압 & 없음(배터리 직결) & 입력 직렬·출력 병렬 조정형 Stage C 2개 & 800 V급 \\
