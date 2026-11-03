@@ -1,0 +1,135 @@
+% 원제: 2. 아키텍처
+\chapter{아키텍처}
+
+\section{기존 구성과 구조적 한계}
+
+기존 구성(이하 ③)에서는 Stage B가 V\textsubscript{A}와 400 V 보조버스 사이에 항상 직렬로 동작하며 버스를 배터리 640–920 V 전 범위에서 400±8 V로 조정했다. 직렬 H-브리지(±90 V)와 절연 DAB(8 kW, 100 V 링크)로 이루어진 2단 부분전력 조정기다. 기존 보고까지의 검증은 이 조정기가 공차와 지연을 포함한 조건에서 전압 품질과 포트 정격을 지킨다는 것이었다. 이번 단계의 비교·적용 범위 분석에서 네 가지 한계가 드러났다(표 \ref{t:limits}). 네 한계는 모두 Stage B가 보조 전력 경로에 항상 직렬로 동작한다는 데서 나온다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2105\linewidth-2\tabcolsep\relax}L{\dimexpr 0.4737\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3158\linewidth-2\tabcolsep\relax}}
+\caption{기존 구성(③)의 구조적 한계}\label{t:limits}\\
+\toprule
+\tabhead \textbf{한계} & \textbf{근거 수치} & \textbf{결과} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{한계} & \textbf{근거 수치} & \textbf{결과} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+경부하 고정 손실 & 직렬전압이 0 근처여도 Stage B가 약 65 W를 쓴다(DAB 무부하 45.8 W, H-브리지 약 19.5 W). 주행 대표 평균 보조 경로 손실 133.8 W, 비조정 구조 85.0 W & 손실·스위치 VA(1,074 대 953 kVA)·스위치 위치(52 대 44) 모두 비조정 구조에 뒤져 H5 기각(E15) \\
+좁은 적용 팩 범위 & 직렬 ±90 V로는 V\textsubscript{A} 약 310–490 V만 400 V로 맞춘다. 셀 180–240s 가운데 216·224s에서만 성립 & 800 V급 주력 192s는 저 SOC에서, 1000 V급 240s는 고 SOC에서 조정 불가(E18) \\
+정밀 조정의 수요 부재 & 400 V 부하가 요구하는 것은 하한과 부품 등급 상한(B\textsubscript{420} 420 V, B\textsubscript{470} 470 V) 사이의 창이다. 고정이득 Stage C로 아끼는 손실은 약 18 W & 400±8 V는 파생 요구이고, 그 대가(약 65 W)가 이득보다 크다 \\
+48 V 공급의 직렬 고장점 & 배터리 840 V 초과에서 Stage B를 멈추면 버스(= V\textsubscript{A})가 420 V를 넘는다 & Stage A 협조 정지가 필요하고, 그동안 400 V 버스와 48 V Stage C가 함께 멈춘다(E14) \\
+\end{longtable}
+}
+
+\section{개선 구조 R2}
+
+R2는 기능별로 블록을 다시 나눈다(그림 \ref{f:r2}, 표 \ref{t:r2}). 핵심은 조정단이 필요한 팩에만, 필요한 구간에서만 동작하게 하는 것이다.
+
+\begin{itemize}
+\item \textbf{기본형(모든 팩).} Stage A + 버스 RC 감쇠기 + 조정형 Stage C. 400 V 버스는 V\textsubscript{A}를 그대로 따른다. 충전기는 V\textsubscript{A} 노드에 붙는다(H1·H3 결과 그대로).
+\item \textbf{선택 모듈 R2-W.} V\textsubscript{A}가 부품 등급 상한을 넘는 팩에만 둔다. 창 기준 V\textsubscript{W} 아래에서는 바이패스 스위치가 직렬 포트를 단락하고 Stage B는 정지한다(고정 손실 0). V\textsubscript{A} > V\textsubscript{W}에서만 Stage B가 버스를 V\textsubscript{W}로 깎는다.
+\item \textbf{고장 시 우회.} Stage B 고장에서는 바이패스로 우회해 Stage A와 48 V 공급을 유지한다(9장, 10.3절).
+\item \textbf{충전 중 정지 보호.} 충전기는 V\textsubscript{A} 노드에 붙으므로, 충전 중 Stage A가 멈추면 V\textsubscript{A} 클램프가 충전기 전류를 받는 동안 충전기를 멈춘다(2.6절, 12장).
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15.5cm]{\repo/docs/fig/report/fig12b_r2_architecture.png}
+\caption{개선 구조 R2의 전력 경로}\label{f:r2}
+\srcnote{주: 점선 상자는 V\textsubscript{A}가 400 V급 부품 상한을 넘는 팩에만 두는 창 조정 모듈이다. 그 밖의 팩에서는 버스 = V\textsubscript{A}이며 Stage B가 없다. V\textsubscript{A} 클램프는 충전 중 배터리 경로를 잃었을 때만 동작한다.}
+\end{figure}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.1491\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3509\linewidth-2\tabcolsep\relax}L{\dimexpr 0.5000\linewidth-2\tabcolsep\relax}}
+\caption{기존 구성(③)과 개선 구조(R2)의 블록 비교}\label{t:r2}\\
+\toprule
+\tabhead \textbf{블록} & \textbf{기존 ③} & \textbf{R2} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{블록} & \textbf{기존 ③} & \textbf{R2} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+Stage A & 2:1 RSC 4모듈(8위상), 충전 150 kW & 같음. 경부하 위상 셰딩 추가(모듈 출력 15 A 미만에서 위상 하나). 충전 225 kW는 12–16위상으로 확장(손실 0.61–0.81 kW, E18 추정) \\
+400 V 버스 & Stage B가 전 범위에서 400±8 V로 조정 & 기본형: 버스 = V\textsubscript{A}(RC 감쇠기 1.6 mF·48.6 mΩ). 창 조정 모듈이 있으면 V\textsubscript{A} > V\textsubscript{W}에서만 V\textsubscript{W}로 제한 \\
+Stage B & DAB 8 kW + H-브리지 ±90 V, 항상 동작 & 선택 모듈. V\textsubscript{W} 410 V(B\textsubscript{420} 부품)·460 V(B\textsubscript{470}), DAB 1–5 kW(정적 최대 링크전력 × 1.8), 바이패스 스위치, 히스테리시스 ±5 V \\
+Stage C & 고정이득 CLLC 3 kW(입력 400±8 V) & 조정형 5 kW: 동기 벅(100 kHz) + 공진점 CLLC 직류변압기 4.8:1(250 kHz), 입력 270–504 V, +5 / −3 kW \\
+모드·보호 & Stage B 고장 시 Stage A 협조 정지(840 V 초과) & 측정 기반 상태기계: DAB 고장은 기준 램프 후 바이패스, H-브리지 고장은 다이오드 클램프 유지 → 링크 붕괴 → 전류 조절 투입. Stage A는 계속 동작. 충전 중 Stage A 정지는 충전기 전류 차단과 협조(V\textsubscript{A} 클램프) \\
+\end{longtable}
+}
+\srcnote{주: ③은 기존 보고의 기준선이다. V\textsubscript{W}는 창 기준전압이다.}
+
+\section{창 조정 모듈(R2-W)}
+
+창 조정 모듈은 기존 Stage B의 회로와 채택 제어기를 그대로 쓰고, 다음 값만 바꾼다.
+
+\begin{itemize}
+\item \textbf{창 기준 V\textsubscript{W}.} B\textsubscript{420} 부품용 410 V, B\textsubscript{470} 부품용 460 V. 부품 상한보다 10 V 낮게 두어 Tier-2 상향 과도 여유를 둔다.
+\item \textbf{DAB 권선비와 누설 인덕턴스.} 권선비는 V\textsubscript{W}/100(4.1·4.6), 누설 인덕턴스는 11.1 µH·(V\textsubscript{W}/400)\textsuperscript{2}으로 두어 400 V 설계와 같은 위상·전류 비를 쓴다.
+\item \textbf{DAB 정격.} 정적 최대 링크전력의 1.8배다. 처음 후보였던 1.25배는 최대 배터리 전압의 Tier-2 과도에서 DAB가 정격에 포화되었다(7.2절). 권장 구성의 정격은 1–5 kW다(③은 8 kW).
+\item \textbf{바이패스 스위치.} 150 V GaN 2병렬 × 역직렬(3.3 mΩ). 창 조정이 필요 없는 구간과 고장 시 직렬 포트를 단락한다.
+\end{itemize}
+
+모드 논리는 표 \ref{t:modes}와 같다. ±5 V 히스테리시스 안에서는 어느 모드든 버스가 V\textsubscript{W} + 5 V를 넘지 않는다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.5088\linewidth-2\tabcolsep\relax}}
+\caption{창 조정 모듈의 모드 논리}\label{t:modes}\\
+\toprule
+\tabhead \textbf{상태} & \textbf{진입 조건} & \textbf{동작} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{상태} & \textbf{진입 조건} & \textbf{동작} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+바이패스 & V\textsubscript{bat}/2 ≤ V\textsubscript{W} − 5 V & 바이패스 스위치 닫힘, Stage B 정지, 버스 = V\textsubscript{A} \\
+창 조정 & V\textsubscript{bat}/2 ≥ V\textsubscript{W} + 5 V & 바이패스 전류를 H-브리지 영벡터로 옮긴 뒤(전류 조향) 바이패스를 열고, 버스 기준을 V\textsubscript{A} → V\textsubscript{W}로 1 ms 램프 \\
+끄기 & 바이패스 진입 조건 & 버스 기준을 V\textsubscript{W} → V\textsubscript{A}로 1 ms 램프, 직렬전압 조향 0.2 ms 뒤 바이패스 \\
+고 SOC 기동 & Stage A 소프트스타트 중 V\textsubscript{A} = V\textsubscript{W} & Stage B가 영벡터에서 인계해 버스를 V\textsubscript{W}로 유지 \\
+DAB 고장 강등 & 링크전압 창 이탈 & 링크 제동 저항으로 링크 ≤ 110 V 유지 → 400 V 부하 분리 → 기준을 V\textsubscript{A}로 램프 → 바이패스. 버스 = V\textsubscript{A} \\
+H-브리지 고장 강등 & 구동기 고장 신호·하드웨어 비교기 & 다이오드 클램프 유지 → 분리·감발 → 링크 붕괴 → 경로전류 조절 소프트 투입(9장) \\
+\end{longtable}
+}
+
+\section{Stage B 제어기와 변조기}
+
+채택 제어기(재설계 R1)는 모든 운전점에서 같은 고정 이득을 쓰는 표본화 상태궤환 제어기다. 제어주기는 5 µs이고, 계산한 지령을 5 µs 뒤에 적용한다. 한 번의 계산은 기존 보고와 같이 ① 1주기 예측\cite{b7}, ② 상태궤환과 버스전압 적분, ③ 내부 전류 법칙, ④ 링크전압 PI와 소비전류 앞먹임, ⑤ DAB 위상 산정과 측정 기반 보정($\hat{\rho}$, $\hat{\varepsilon}$), ⑥ H-브리지 데드타임 부분 보상으로 이루어진다. 창 조정 모듈에서는 기준전압·권선비·누설 인덕턴스·DAB 정격만 바꾸고 이득과 예측 구조는 그대로 쓴다.
+
+이번 보고에서 변조기에 두 가지를 더했다.
+
+\begin{itemize}
+\item \textbf{무충격 재초기화.} 바이패스에서 창 조정으로 넘어갈 때 적분기와 예측 상태를 측정값으로 다시 맞춘다.
+\item \textbf{DAB 고장 모드 변조.} H-브리지 고장 강등 상태에서 DAB를 단일 위상천이(SPS)에서 1차 내부 위상천이(EPS)\cite{b2}로 바꾼다. 1차 브리지의 두 레그 사이에 위상차를 주어 1차 전압에 영구간을 넣고, 링크 쪽 순시 첨두가 정격점의 1.5배를 넘지 않는 전류까지만 지령한다(9.3절).
+\end{itemize}
+
+\section{보호 상태기계와 부하 승인 계층}
+
+보호 상태기계는 측정값으로 고장을 판단하고 위 모드 사이를 전환한다. 상태는 14개다(바이패스, 켬 준비·대기·창 조정, 끔 램프·유지·영벡터, DAB 고장 유지·램프, H-브리지 고장 유지·붕괴·소프트 투입, 강등, 이중 고장). 판단에 쓰는 신호는 다음과 같다.
+
+\begin{itemize}
+\item 하드웨어 비교기: 경로·필터 전류 110 A, 링크 115 V, 직렬전압 100 V, 정상 조정 중 버스 > 부품 상한. 1.2 µs 지속 시 H-브리지 차단 래치
+\item 게이트 구동기 고장 신호(H-브리지 개방)와 링크전압 창(DAB 고장)
+\item 링크 붕괴 정체 감지, 소프트 투입 중 경로전류
+\end{itemize}
+
+SALS는 빠른 전압제어기가 아니라 안정화된 제어기 위에서 제약을 지키는 상위 부하 승인 계층이다\cite{b8}. 부하를 상시 예약(M0), 승인 후 기동(M1), 지연·감축 가능(D)의 세 등급으로 나누고, 향후 160 ms의 최악 합이 예산 이하일 때만 승인한다. R2에서는 보호 상태기계가 SALS에 \textbf{400 V 부하 분리·감발 명령}을 내린다. 강등 뒤 버스가 V\textsubscript{A}가 되어 부품 상한을 넘거나, H-브리지 고장 강등 중 DAB가 감당할 수 없는 경로전류를 줄여야 할 때다.
+
+\section{Stage A·조정형 Stage C의 제어와 충전 중 정지 순서}
+
+R2에서는 Stage B가 없는 팩이 많으므로 Stage A와 Stage C의 제어가 시스템 동작을 정한다. 이번 보고에서 정한 내용은 다음과 같다.
+
+\begin{itemize}
+\item \textbf{Stage A 영교차 추종 게이트.} 위상마다 공진전류의 영교차를 검출(문턱 0.5 A, 지연 20 ns)해 데드타임 100 ns 뒤 다음 구간을 켠다. 검출하지 못하면 공칭 도통시간의 1.12배에서 끈다. 4모듈 8위상은 반주기의 1/8씩 엇갈려 구동한다.
+\item \textbf{Stage A 경부하 위상 셰딩.} 모듈 출력전류가 15 A 아래로 100 µs 이어지면 위상 하나를 지금 구간의 자연 턴오프 뒤 멈추고, 22 A를 넘거나 남은 위상의 순시 전류가 36 A를 넘으면 바로 되살린다. 측정은 게이트가 이미 보는 공진전류로 만들어 전류 센서를 더하지 않는다(11장).
+\item \textbf{조정형 Stage C.} 동기 벅의 듀티를 100 kHz 디지털 제어로 정한다. 안쪽은 인덕터 전류 PI(교차 5 kHz), 바깥은 48 V 전압 PI(교차 1 kHz) + 부하전류 앞먹임이고, 48 V 배터리 충전전류 루프와 출력전류 제한(과도 130 A, 2 ms 뒤 105 A) 가운데 작은 지령을 쓴다. CLLC는 공진점 고정 주파수의 직류변압기로, 전력이 0.7 kW를 넘으면 보내는 쪽 브리지만, 0.6 kW 아래에서는 두 브리지를 같은 위상으로 구동한다(10.1–10.2절).
+\item \textbf{충전 중 정지 순서.} 계획 정지는 충전기 전류를 먼저 0으로 요청하고 5 A 이하에서 접촉기를 연다. Stage A 모듈 1개 고장은 그 모듈만 차단하고 나머지 3개로 충전을 이어 간다. 배터리 경로 상실이나 모듈 2개 이상 고장은 V\textsubscript{A} 클램프(468 V 켬·463 V 끔, 1 Ω)를 켜고 비상 정지 신호를 보내, 충전기가 5 A 이하가 된 뒤 접촉기를 연다(12장).
+\end{itemize}

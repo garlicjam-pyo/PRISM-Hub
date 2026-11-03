@@ -1,0 +1,55 @@
+% 원제: 6. 검증 결과(2): 기준 구조 대비 손실·정격(E15, H5)
+\chapter{검증 결과(2): 기준 구조 대비 손실·정격(E15, H5)}
+
+\section{비교 방법}
+
+400±8 V 조정이 파생 요구이므로, Stage B의 존재 이유는 조정 없는 구조나 다른 조정 방식보다 손실·정격·부품 수에서 나은지로만 입증된다. 손실 비교가 공정하려면 세 가지가 필요하다.
+
+\begin{itemize}
+\item 같은 소자 기술, 같은 자성체 손실 규칙, 같은 부하 분포를 모든 구조에 적용한다. 한 구조만 자세히 모델링하면 그 구조만 손실이 크게 나온다.
+\item 손실을 정격점 효율이 아니라 운전 프로파일로 가중한다. 보조부하는 대부분의 시간을 경부하에서 보내므로 고정 손실이 평균 손실을 좌우한다\cite{b11}.
+\item 판정 기준(H5)은 시험 전에 고정한다.
+\end{itemize}
+
+다섯 구조가 같은 서비스(400 V급 충전기 375 A, 400 V 보조부하 최대 23 kW, 48 V 평균 1.5 kW)를 제공하도록 구성했다. 소자는 위치마다 같은 기술의 상용 소자 데이터시트 값\cite{b12,b13,b14,b15}을 쓰고, Stage A 손실은 E1 스위칭 모델 값을 썼다. 주행 대표 프로파일(배터리 760–900 V)로 평균 손실을 가중했다.
+
+\section{결과와 판정}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.3025\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1513\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1429\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1429\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1261\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1345\linewidth-2\tabcolsep\relax}}
+\caption{기준 구조의 손실·정격 비교(사양 팩, 주행 대표 프로파일)}\label{t:e15}\\
+\toprule
+\tabhead \textbf{구조} & \textbf{보조 경로 평균 손실} & \textbf{150 kW 충전 경로 손실} & \textbf{스위치 위치 / 소자 수} & \textbf{스위치 VA} & \textbf{설치 변환기 정격} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{구조} & \textbf{보조 경로 평균 손실} & \textbf{150 kW 충전 경로 손실} & \textbf{스위치 위치 / 소자 수} & \textbf{스위치 VA} & \textbf{설치 변환기 정격} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+① 전전력 승압기 + 800→400 V 강압기 & 114.6 W & 1.78 kW & 24 / 28 & 789 kVA & 178.0 kW \\
+② Stage A + 전전력 조정기 & 123.8 W & 0.50 kW & 44 / 80 & 1,070 kVA & 178.0 kW \\
+③ 기존 구성(Stage A + Stage B) & 133.8 W & 0.50 kW & 52 / 96 & 1,074 kVA & 161.0 kW \\
+③′ 창 조정(버스 ≤ 410 V) & 114.1 W & 0.50 kW & 58 / 100 & 1,075 kVA & 161.3 kW \\
+④ 비조정(Stage A + 조정형 Stage C) & 85.0 W & 0.50 kW & 44 / 80 & 953 kVA & 156.3 kW \\
+\end{longtable}
+}
+\srcnote{주: 설계 단계 손실 추정(데이터시트 소자값, 일정 비율 자성체 손실 규칙). 열 결합과 하드웨어 측정은 포함하지 않는다.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15.5cm]{\repo/validation/2026-10-22-baseline-loss-rating/E15/E15_comparison.png}
+\caption{기준 구조의 손실 분해와 정격 지표}\label{f:e15}
+\srcnote{주: 평균 손실은 주행 대표 프로파일 가중값이다.}
+\end{figure}
+
+\textbf{H5 판정: 지표 기준 불충족(기각).} ③은 ④에 손실·스위치 VA·반도체 수 세 지표 모두 뒤졌고, ③′에 대해서는 반도체 수만 앞섰다. 결론은 운전 프로파일 3종과 손실 계수 감도 7종에서 바뀌지 않았다. 세 가지가 확인되었다.
+
+\begin{itemize}
+\item \textbf{Stage A 충전 경로의 이점은 분명하다.} 375 A·150 kW에서 충전 경로 손실은 Stage A 8위상 0.50 kW, 전전력 승압기 1.78 kW로 72 \% 작다. 이 이점은 Stage A를 쓰는 ②·③·③′·④에 공통이다.
+\item \textbf{Stage B의 400 V 조정은 손실·정격의 개선 수단이 아니다.} H-브리지가 경로에 직렬이라 직렬전압이 0이어도 경로전류 전체를 흘리며 스위칭하고, DAB는 링크전력이 0 근처에서 영전압 스위칭을 잃는다. 그 결과 경부하에서도 약 65 W의 고정 손실이 생긴다. 같은 조정을 Stage C 앞단(④)으로 옮기면 대가는 약 18 W다.
+\item \textbf{평균모델의 손실 가정은 이 비교에 쓸 수 없다.} 동특성 검증에 쓴 DAB 고정 효율 가정(무부하 손실 0)으로 계산하면 ③이 81.8 W로 순위가 뒤집힌다. 손실 순위는 경부하 고정 손실로 결정되므로 고정 손실을 포함한 계산이 필요하다.
+\end{itemize}
+
+따라서 Stage B는 손실 개선 수단이 아니라 \textbf{서비스 요구가 있을 때 선택하는 기능}으로 위치를 다시 정했다. 다음 질문은 그 서비스가 실제로 필요한 차량이 어디인지였다(7장).

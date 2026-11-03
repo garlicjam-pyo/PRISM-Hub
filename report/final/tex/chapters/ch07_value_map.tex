@@ -1,0 +1,110 @@
+% 원제: 7. 검증 결과(3): 적용 범위와 창 조정 모듈(E18, E19, TB08)
+\chapter{검증 결과(3): 적용 범위와 창 조정 모듈(E18, E19, TB08)}
+
+\section{팩 등급별 가치 지도(E18)}
+
+H5 기각은 사양 팩(640–920 V, 약 219s)에 대한 결론이다. 실제 차량의 팩 등급은 하나가 아니어서, 800 V급 주력 팩은 V\textsubscript{bat}/2가 400 V급 부품 범위 안에 있지만 900–1000 V급 팩은 그렇지 않다. 그래서 E15와 같은 소자·손실 규칙으로 셀 직렬수 180–240s × 부품 등급 B\textsubscript{420}·B\textsubscript{470} 전체를 다시 계산했다. 성립 조건은 계산 전에 고정했다. 정적 운전점의 버스가 [260 V, 부품 상한] 안에 있고, 조정 구간 정상점이 Stage B 포트 한계 안이며, 소자 직류 전압 사용률이 80 \% 이하인 것이다. 사양 팩을 같은 방법으로 다시 계산한 값은 E15와 0 W 차이로 같았다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.0877\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}}
+\caption{팩 등급별 성립 구조와 보조 경로 평균 손실}\label{t:e18}\\
+\toprule
+\tabhead \textbf{팩} & \textbf{①} & \textbf{②} & \textbf{③} & \textbf{R2-W410} & \textbf{R2-W460} & \textbf{④(R2 기본형)} & \textbf{최선(B\textsubscript{420} / B\textsubscript{470})} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{팩} & \textbf{①} & \textbf{②} & \textbf{③} & \textbf{R2-W410} & \textbf{R2-W460} & \textbf{④(R2 기본형)} & \textbf{최선(B\textsubscript{420} / B\textsubscript{470})} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+180s & 105.3 & 129.6 & (불가) & = ④ & = ④ & \textbf{87.8} & ④ / ④ \\
+192s & 108.1 & 126.8 & (불가) & = ④ & = ④ & \textbf{86.5} & ④ / ④ \\
+200s & 110.0 & 126.8 & (불가) & \textbf{91.3} & = ④ & 86.5(B\textsubscript{470}) & R2-W410 / ④ \\
+216s & 113.8 & 124.0 & 134.4 & \textbf{110.9} & = ④ & 85.1(B\textsubscript{470}) & R2-W410 / ④ \\
+224s & \textbf{115.8} & 123.6 & 132.5 & 121.7 & \textbf{86.0} & (불가) & ① / R2-W460 \\
+240s & (불가) & \textbf{121.7} & (불가) & (불가) & \textbf{106.2} & (불가) & ② / R2-W460 \\
+\end{longtable}
+}
+\srcnote{주: 단위 W. 굵은 값은 부품 등급별로 성립하는 구조 가운데 최소다. “= ④”는 V\textsubscript{A}가 V\textsubscript{W}를 넘지 않아 Stage B를 두지 않는 경우다.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15.5cm]{\repo/validation/2026-10-22-industry-value-r2/E18/E18_value_map.png}
+\caption{팩 등급 × 부품 등급의 구조 성립성과 손실}\label{f:e18}
+\end{figure}
+
+결과에서 세 가지를 확인했다.
+
+\begin{itemize}
+\item \textbf{③(전 범위 400 V 조정)은 216–224s에서만 성립하고, 어느 팩에서도 최소 손실이 아니다.} 직렬 ±90 V로는 V\textsubscript{A} 약 310–490 V만 400 V로 맞출 수 있다.
+\item \textbf{창 조정 모듈은 V\textsubscript{A}가 부품 상한을 넘는 팩에서 최소 손실이다.} B\textsubscript{420}의 200·216s(91.3·110.9 W), B\textsubscript{470}의 224·240s(86.0·106.2 W). 1000 V급 240s에서는 전전력 조정기(②)보다 15.5 W(13 \%) 작다. 창 조정이 필요 없는 구간에서는 바이패스로 고정 손실이 없기 때문이다. 800 V급 주력 팩(≤ 199s)에서는 Stage B가 필요 없다.
+\item \textbf{Stage A는 500 V급 충전기와도 호환된다.} 2:1 비는 1000 V급 팩을 500 V급 충전기 범위로 옮긴다. 500 V 충전기로 237s까지 만충할 수 있고, 375 A(8위상)의 충전전력은 셀 3.7 V에서 126–167 kW다. 인덕터 저장에너지는 Stage A 3.2 mJ, 150 kW 승압기 약 3.3 J로 약 1/1000이다.
+\end{itemize}
+
+이로써 Q3의 답은 “전 범위 조정으로는 이점이 없고, 팩 등급에 맞춰 붙이는 창 조정 모듈로는 V\textsubscript{A}가 부품 상한을 넘는 팩에서 성립 구조 가운데 최소 손실”로 정리된다. 이 범위는 좁지만, 그 안에서는 충전 경로 손실과 자성체에서도 큰 이점을 함께 가진다.
+
+\section{창 조정 모듈 검증(E19)}
+
+Stage B가 필요한 대표 두 사례를 평균모델과 채택 제어기로 시험했다. R2-W460은 1000 V급 240s(720–1008 V)·B\textsubscript{470} 부품, R2-W410은 사양 팩(640–920 V)·B\textsubscript{420} 부품이다. 판정 기준은 E13과 같은 Tier 기준에 부품 등급 상한을 적용했다.
+
+처음에는 DAB 정격을 정적 최대 링크전력의 1.25배(③과 같은 여유)로 잡았다. 그러자 최대 배터리 전압의 Tier-2(1→25 kW) 스텝에서 DAB가 정격에 포화되어 순시 전력이 정격을 넘었다(R2-W460 71/72, R2-W410 68/72). 포화 없는 과도 첨두는 정적 최대의 1.77–1.78배였으므로 정격 규칙을 1.8배로 바꿨다. 최종 정격의 결과는 표 \ref{t:e19}와 같다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3509\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3509\linewidth-2\tabcolsep\relax}}
+\caption{창 조정 모듈의 검증 결과(평균모델, 최종 정격)}\label{t:e19}\\
+\toprule
+\tabhead \textbf{시험} & \textbf{R2-W460(4.0 kW)} & \textbf{R2-W410(5.0 kW)} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{시험} & \textbf{R2-W460(4.0 kW)} & \textbf{R2-W410(5.0 kW)} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+Tier-1·Tier-2(공차 16종, 지연 +3.0 µs 포함) & 456/456, 최대 81.65 A, 버스 455.7–464.3 V & 264/264, 최대 85.35 A, 버스 405.1–414.8 V \\
+켬(영벡터 → 창 조정, 램프 0–2 ms × 부하 3종) & 12/12, 최대 53.9 A, 버스 ≤ 465.0 V & 12/12, 최대 60.4 A, 버스 ≤ 415.0 V \\
+고 SOC 기동 인계 & 9/9, 최대 77.9 A & 9/9, 최대 84.8 A \\
+끔(→ 바이패스) & 6/6, 바이패스 직전 직렬 ≤ 0.17 V & 6/6, ≤ 0.19 V \\
+DAB 고장 → 기준 램프 1 ms → 바이패스 & 2/2, 경로 ≤ 69.8 A, 링크 ≤ 109.7 V & 2/2, 경로 ≤ 78.2 A, 링크 ≤ 112.2 V \\
+같은 대응, 램프 0.5 ms & 1/2(25 kW에서 125.1 A) & 1/2(220.2 A) \\
+H-브리지 전 소자 차단 → 50 µs 후 바이패스 & 0/2, 최대 740.5 A & 0/2, 838.2 A \\
+\end{longtable}
+}
+
+\textbf{DAB 고장은 Stage A를 멈추지 않고 강등할 수 있다.} 링크가 직렬 포트의 전력을 흡수하는 동안 직렬전압을 0으로 줄인 뒤 바이패스한다. ③에서는 같은 상황(배터리 840 V 초과)에 Stage A 협조 정지가 필요했다. 강등 뒤 버스는 V\textsubscript{A}(503.9·459.9 V)로 부품 상한을 넘으므로 400 V 부하는 분리해야 하며, 조정형 Stage C는 이 전압을 받아 48 V 공급을 이어 간다. \textbf{H-브리지 전 소자 차단 고장에서는 바로 바이패스하면 안 된다.} 다이오드가 직렬 커패시터를 링크 쪽으로 충전한 상태(직렬 45.8–52.1 V)에서 단락하기 때문이다. 이 고장의 강등 순서는 9장에서 정했다.
+
+\section{창 조정 모듈의 회로 확인(TB08)}
+
+R2-W460을 소자 수준 회로에서 다시 확인했다. 회로는 기존 Stage B 회로(TB04B, 후보 소자 출력용량)에서 DAB 권선비(4.6:1)와 누설 인덕턴스(14.68 µH)만 바꾸고 바이패스 스위치, 모드 시퀀서, 게이트 재정의, 제어기 무충격 재초기화를 더했다. 결과는 5/5 통과다(표 \ref{t:tb08}).
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.1754\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}L{\dimexpr 0.5965\linewidth-2\tabcolsep\relax}}
+\caption{TB08 창 조정 모듈 회로 모델의 판정(R2-W460)}\label{t:tb08}\\
+\toprule
+\tabhead \textbf{사례} & \textbf{조건} & \textbf{결과} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{사례} & \textbf{조건} & \textbf{결과} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+A 창 조정 Tier-2 & 1008 V, 1 → 25 kW & 버스 455.95–460.79 V(≤ B\textsubscript{470}), 경로 69.66 A, 링크전력 3.22 kW. 스위칭 ODE 대비 최대 경로 +1.84 A(허용 2.03 A). 게이트 격자 0.625 ns에서 리플 0.050 V \\
+B 창 조정 Tier-1 & 930 V, 15 → 25 kW & 버스 458.31–460.73 V, DAB 저전류 영역에서도 링크 99.94–100.02 V \\
+C 끔 & 910 V, 25 kW & 경로 ≤ 57.2 A, 바이패스 직전 직렬 −0.22 V(평균모델 −0.17 V) \\
+D DAB 고장 강등 & 1008 V, 25 kW & 링크 최대 109.76 V(평균모델 109.72 V), 경로 ≤ 69.7 A, 강등 뒤 버스 503.2 V \\
+E 켬 & 930 V, 25 kW & 경로 ≤ 73.4 A, 버스 ≤ 465.4 V, 최종 460.02 V \\
+\end{longtable}
+}
+
+회로에서 새로 드러난 것은 두 가지이고, 둘 다 한계 안이다. 첫째, 영벡터 상태에서도 직렬 포트에 0.2–0.6 V가 남아 바이패스를 닫는 순간 직렬 커패시터가 방전된다(최대 −173 A, 약 1 µs, 소자당 바이패스 소자 펄스 정격 329 A\cite{b15}의 0.26배). 둘째, 바이패스를 열면 바이패스가 나르던 경로전류 40 \%가 영벡터 경로로 옮겨 가며 19.6 kHz로 출렁인다(경로 ≤ 73.4 A). 둘째 현상은 보호 상태기계의 켬 순서(전류 조향)에서 없앴다(9.1절).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15.5cm]{\repo/docs/fig/tb08_bypass_transitions.png}
+\caption{TB08 바이패스 투입·열림 순시 파형}\label{f:tb08}
+\srcnote{주: (a) DAB 고장 강등의 바이패스 투입, (b) 켬 전환의 바이패스 열림. 기생 인덕턴스가 없는 이상 루프 값이다.}
+\end{figure}

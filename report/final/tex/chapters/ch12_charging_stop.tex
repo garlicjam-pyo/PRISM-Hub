@@ -1,0 +1,144 @@
+% 원제: 12. 검증 결과(8): 충전 중 Stage A 정지 협조(E26, TB20)
+\chapter{검증 결과(8): 충전 중 Stage A 정지 협조(E26, TB20)}
+
+\section{필요성과 정지 순서}
+
+R2에서 400·500 V급 충전기는 Stage A 출력 노드 V\textsubscript{A}에 붙는다. 충전 중 배터리 경로가 끊기면(배터리 접촉기 개방, Stage A 전 위상 차단) 충전기 전류 375 A가 V\textsubscript{A} 노드로 들어간다. 충전기는 정지 신호를 받은 뒤 30 ms 안에 5 A 이하가 되면 되므로\cite{b16}, 그동안 약 11 C(400 V에서 약 4.5 kJ)를 받을 곳이 필요하고 커패시터로는 받을 수 없다. Stage A 스위치가 모두 꺼지면 바디 다이오드는 V\textsubscript{A}가 배터리 전압을 넘어서야 도통하므로 470 V를 지키는 자연 클램프도 없다. R2 기본형에서는 400 V 부품이 V\textsubscript{A}에 직접 붙으므로 V\textsubscript{A} 상승이 곧 부품 과전압이다. 클램프가 없을 때 V\textsubscript{A}가 부품 상한에 닿는 시간은 표 \ref{t:e26a}와 같다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2018\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2018\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2456\linewidth-2\tabcolsep\relax}}
+\caption{배터리 경로 상실 뒤 V\textsubscript{A}가 각 전압에 닿는 시간(E26, 클램프 없음, 충전 375 A)}\label{t:e26a}\\
+\toprule
+\tabhead \textbf{구조} & \textbf{배터리} & \textbf{470 V(B\textsubscript{470})} & \textbf{600 V(커넥터)} & \textbf{650 V(Stage C 소자)} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{구조} & \textbf{배터리} & \textbf{470 V(B\textsubscript{470})} & \textbf{600 V(커넥터)} & \textbf{650 V(Stage C 소자)} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+R2 기본형 & 640 V & 0.90–1.09 ms & 1.73–2.04 ms & 2.05–2.40 ms \\
+R2 기본형 & 920 V & 0.010–0.012 ms & 0.83–0.96 ms & 1.15–1.32 ms \\
+R2-W(V\textsubscript{A} 노드 400 µF만) & 640 V & 0.16–0.19 ms & 0.30–0.35 ms & 0.35–0.41 ms \\
+R2-W(V\textsubscript{A} 노드 400 µF만) & 920 V & 0.010–0.012 ms & 0.15–0.17 ms & 0.20–0.23 ms \\
+\end{longtable}
+}
+\srcnote{주: 범위는 보조부하 0·25 kW. 920 V 충전에서는 정상 V\textsubscript{A}가 461 V라 10 µs 만에 470 V에 닿는다.}
+
+Stage A 모듈 과부하도 함께 계산했다(스위칭 모델). 충전 375 A를 모듈 3개가 받으면 위상 첨두가 101.8 A로 기준(정격 첨두의 1.5배, 114.6 A) 안이고 턴오프 전류/피크는 0.46 \%였다. 모듈 2개가 받으면 153.8 A로 기준을 넘는다. 이 결과로 정지 순서를 표 \ref{t:e26p}와 같이 정했다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2807\linewidth-2\tabcolsep\relax}L{\dimexpr 0.7193\linewidth-2\tabcolsep\relax}}
+\caption{충전 중 Stage A 정지 순서}\label{t:e26p}\\
+\toprule
+\tabhead \textbf{상황} & \textbf{순서} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{상황} & \textbf{순서} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+(가) 계획 정지(충전 완료·사용자 정지) & 충전 전류 0 요청 → 충전기가 줄임 → 5 A 이하에서 접촉기 개방 → Stage A는 주행 모드(모듈 셰딩) \\
+(나) 모듈 1개 고장 & 고장 모듈만 게이트 차단. 나머지 3개가 375 A를 받고, 충전 전류 지령을 3/4로 다시 요청(비상 정지 아님) \\
+(다) 배터리 경로 상실, 모듈 2개 이상 고장 & V\textsubscript{A} 클램프(468 V 켬·463 V 끔, 1 Ω, 지연 ≤ 1 µs) + 비상 정지 신호 → 충전기 5 A 이하 → 차량 접촉기 개방 → 클램프 끔 \\
+\end{longtable}
+}
+
+\section{결과}
+
+V\textsubscript{A} 노드 평균모델(E26)로 R2 기본형과 R2-W, 배터리 640·920 V, 보조부하 0·25 kW, 충전기 반응 두 가지(30 ms 유지 뒤 정지, 30 ms 선형 감소), 통신 지연 0·10 ms의 32사례를 계산했다(표 \ref{t:e26b}). 판정 기준은 V\textsubscript{A}·버스 ≤ 470 V, 커넥터 ≤ 600 V다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2456\linewidth-2\tabcolsep\relax}}
+\caption{V\textsubscript{A} 클램프를 둔 배터리 경로 상실(E26, 32사례)}\label{t:e26b}\\
+\toprule
+\tabhead \textbf{충전기 반응} & \textbf{통신 지연} & \textbf{V\textsubscript{A} 최고} & \textbf{흡수 에너지} & \textbf{클램프 동작 시간} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{충전기 반응} & \textbf{통신 지연} & \textbf{V\textsubscript{A} 최고} & \textbf{흡수 에너지} & \textbf{클램프 동작 시간} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+30 ms 유지 뒤 정지 & 0 ms & 469.1–469.4 V & 4.3–5.2 kJ & 19.9–24.1 ms \\
+30 ms 유지 뒤 정지 & 10 ms & 469.1–469.4 V & 5.8–7.0 kJ & 26.8–32.2 ms \\
+30 ms 선형 감소 & 0 ms & 469.1–469.4 V & 1.8–2.6 kJ & 8.1–12.1 ms \\
+30 ms 선형 감소 & 10 ms & 469.1–469.4 V & 3.3–4.4 kJ & 15.0–20.1 ms \\
+\end{longtable}
+}
+\srcnote{주: 32사례 모두 통과. 첨두 전력 220 kW. V\textsubscript{A} 최고는 문턱 + 스위치 지연 동안의 상승으로 정해져 구조·배터리·부하와 거의 무관하고, 흡수 에너지는 충전기 반응이 정한다.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=16.0cm]{\repo/validation/2026-10-26-charging-stop/E26/E26_charging_stop.png}
+\caption{충전 중 배터리 경로 상실과 V\textsubscript{A} 클램프(E26)}\label{f:e26}
+\srcnote{주: (a) 920 V 충전, 클램프 없음, (b) 클램프 468/463 V·1 Ω, 충전기 30 ms 유지 뒤 정지, (c) 충전 375 A를 받는 모듈 수별 위상 첨두.}
+\end{figure}
+
+회로 모델(TB20)은 Stage A 4모듈 8위상, 충전기(제어 전류원), V\textsubscript{A} 클램프, 400 V 버스와 조정형 Stage C를 한 회로로 이었다. 계산 시간 때문에 충전기 정지 시간을 3 ms로 줄였고, 기준값도 같은 3 ms로 계산했다. 흡수 에너지는 시간에 비례하므로 30 ms의 값은 E26에서 얻는다. 결과는 4사례 중 3사례 통과다(표 \ref{t:tb20}).
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}}
+\caption{TB20 회로 모델의 판정}\label{t:tb20}\\
+\toprule
+\tabhead \textbf{항목} & \textbf{A 920 V 경로 상실} & \textbf{B 640 V 경로 상실(감소)} & \textbf{C 800 V 모듈 고장} & \textbf{D 800 V 충전기 램프} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{항목} & \textbf{A 920 V 경로 상실} & \textbf{B 640 V 경로 상실(감소)} & \textbf{C 800 V 모듈 고장} & \textbf{D 800 V 충전기 램프} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+판정 & \textbf{통과} & \textbf{통과} & \textbf{통과} & \textbf{불통과} \\
+V\textsubscript{A} 1 µs 최고, 회로(E26) & 468.69(469.13) V & 468.17(468.40) V & 401.88(401.06) V & 401.11(400.86) V \\
+클램프 흡수, 동작 시간 회로(E26) & 443.2(444.0) J, 2.046(2.047) ms & 21.5(22.9) J, 0.100(0.106) ms & 0 & 0 \\
+48 V(10 µs 평균) & 47.994–48.018 V & 47.988–48.065 V & 48.000–48.014 V & 47.997–48.013 V \\
+턴오프(위반), 최대 |i\textsubscript{off}| & 1,158(0), 0.75 A & 1,159(0), 0.66 A & 4,633(0), 1.42 A & 7,027(\textbf{1}), 1.01 A \\
+위상 첨두 & 65.2 A & 60.3 A & 98.0 A(고장 순간), 이후 85.6 A & 71.9 A \\
+\end{longtable}
+}
+\srcnote{주: 턴오프 기준은 |i\textsubscript{off}| ≤ max(5 \% × 반주기 첨두, 1.0 A)(사건 순간의 강제 차단 제외). 사례 D는 충전기 0 → 375 A(100 µs) → 0 A(100 µs, 계획 정지)다.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14.0cm]{\repo/simulink/tb/TB20_R2_Charging_Stop/results/TB20_A_920V_pathloss_response.png}
+\caption{TB20 사례 A(920 V 충전 중 배터리 경로 상실)의 회로 응답}\label{f:tb20}
+\srcnote{주: 위에서부터 V\textsubscript{A}·버스 전압(회로 1 µs 평균과 E26), 충전기·Stage A·클램프 전류, 48 V 출력, Stage C 입력과 400 V 부하 전류.}
+\end{figure}
+
+\begin{itemize}
+\item \textbf{클램프 동작이 모델과 같았다.} 클램프는 수십 µs 주기로 켜고 끄며 V\textsubscript{A}를 463–469 V 사이에 두었고, 흡수 에너지와 동작 시간은 모델과 1–6 \% 안이었다. 게이트를 끊는 순간 위상 전류(최대 64.8 A)는 바디 다이오드로 수 µs 안에 사라졌고, 순시 V\textsubscript{A}는 문턱 위로 0.8 V까지만 올랐다.
+\item \textbf{모듈 고장은 충전을 멈추지 않는다.} 나머지 6위상의 첨두는 85.6 A(모델 85.1 A)였고, 고장 순간 과도 첨두 98.0 A도 기준(114.6 A) 안이었다.
+\item \textbf{사례 D의 불통과는 게이트 문제다.} 충전 시작 때 모듈 전류는 주행 방향 경부하(모듈당 약 9 A)에서 충전 방향으로 바뀐다. 그 사이 한 반주기의 첨두가 2.44 A로 영교차 검출기의 무장 문턱(5 × 0.5 A = 2.5 A)보다 작아, 검출 없이 최대 도통시간(공칭의 1.12배)에 꺼졌다. 그때 전류는 이미 반대 방향 1.01 A였다. 크기는 검출 문턱 수준이라 소자 스트레스는 아니지만 기준을 넘었으므로 판정을 바꾸지 않았다. 무장하지 못한 반주기를 공칭 도통시간에 끄거나, 무장 문턱을 직전 반주기 첨두에 비례시키는 게이트 개선을 남은 과제로 둔다.
+\end{itemize}
+
+\section{설계 요구}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}L{\dimexpr 0.5263\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2456\linewidth-2\tabcolsep\relax}}
+\caption{충전 중 정지 협조에서 도출한 설계 요구}\label{t:e26r}\\
+\toprule
+\tabhead \textbf{항목} & \textbf{값} & \textbf{근거} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{항목} & \textbf{값} & \textbf{근거} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+V\textsubscript{A} 클램프 저항 & 1.0 Ω(468 V에서 468 A ≥ 충전 최대 375 A) & E26 \\
+클램프 펄스 정격 & 7 kJ, 첨두 220 kW, 동작 32 ms(충전 1회 고장당) & E26 최악(30 ms 유지 + 통신 10 ms) \\
+클램프 문턱·지연 & 468 V 켬, 463 V 끔, 지연 ≤ 1 µs, 비교기 정확도 약 ±0.1 \% & 920 V 충전 정상 V\textsubscript{A} 461 V, B\textsubscript{470} 470 V \\
+비상 정지 신호 & 차량 → 충전기 하드웨어 신호가 유리. 통신 지연 10 ms면 흡수 에너지 +1.7 kJ & E26 \\
+모듈 고장 처리 & 모듈 단위 게이트 차단, 나머지로 계속. 충전 전류 지령을 남은 모듈 수에 맞춰 다시 요청 & E26, TB20 \\
+계획 정지 & 충전기 전류 ≤ 5 A를 확인한 뒤 Stage A 정지 & E16, E26 \\
+\end{longtable}
+}
+
+여유가 작다는 점을 함께 기록한다. 920 V 충전의 정상 V\textsubscript{A}(461 V)와 부품 상한(470 V) 사이가 9 V뿐이라, 클램프 문턱의 공차와 지연 여유는 0.6 V 수준이다. 충전기는 이상 전류원으로 두었고, 충전기 반응 시간은 IEEE Std 2030.1.1의 30 ms를 썼다. 실제 충전기의 출력 과전압 보호가 더 빨리 멈출 수 있지만 이 설계는 그것에 기대지 않는다.

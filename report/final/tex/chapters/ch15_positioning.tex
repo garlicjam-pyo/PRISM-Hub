@@ -1,0 +1,130 @@
+% 원제: 13. 선행연구·산업 방식 대비 위치(E25)
+\chapter{선행연구·산업 방식 대비 위치(E25)}
+
+\section{비교 대상과 방법}
+
+E15·E18은 Stage A 기반 구조를 전용 승압기(①)와 전전력 조정기(②)와 비교했다. 두 가지 비교가 빠져 있었다. 첫째, 800 V급 차량이 400–500 V급 충전기를 쓰는 가장 흔한 산업 방식은 구동 인버터와 모터 권선으로 승압하는 것이다\cite{b24}, \cite{b25}. 이 방식은 충전용 반도체를 더하지 않으므로, Stage A의 32개 스위치 위치를 정당화하려면 이 방식과 비교해야 한다. 둘째, 보조부품을 800 V급으로 두면 400 V 중간버스가 필요 없다. R2의 다기능 이점이 이 설계보다 나은지 확인해야 한다. 또 R2로 구조를 바꾼 뒤 기여를 다시 정리해야 했다. 이전 정리는 충전 모드 바이패스를 근거로 들었지만 R2에는 그 바이패스가 없다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2807\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2105\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}}
+\caption{비교한 구조(E25)}\label{t:e25s}\\
+\toprule
+\tabhead \textbf{구조} & \textbf{충전(400–500 V급 충전기)} & \textbf{400 V급 보조부하} & \textbf{48 V} & \textbf{보조부품} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{구조} & \textbf{충전(400–500 V급 충전기)} & \textbf{400 V급 보조부하} & \textbf{48 V} & \textbf{보조부품} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+① & 전용 승압기(하드 스위칭 6상 부스트) & 800 → 400 V 강압기 & 고정이득 CLLC & 400 V급 \\
+⑤ & 모터·인버터 승압 & 800 → 400 V 강압기 & 고정이득 CLLC & 400 V급 \\
+④ R2 기본형 & Stage A(2:1, 8위상) & 버스 = V\textsubscript{A}(RC 감쇠기) & 조정형 Stage C & 400 V급(B\textsubscript{470}) \\
+⑥ & 모터·인버터 승압 & 없음(배터리 직결) & 입력 직렬·출력 병렬 조정형 Stage C 2개 & 800 V급 \\
+\end{longtable}
+}
+\srcnote{주: E15와 같은 소자·손실 규칙과 운전 프로파일(주행 대표 760–900 V)을 쓴다. ⑥은 보조부품 등급이 달라 서비스가 같지 않고, 800 V급 보조부품 자체의 효율 차와 비용은 넣지 않았다.}
+
+모터·인버터 승압은 충전기(V\textsubscript{bat}/2, 375 A)를 모터 중성점에 두고 구동 인버터 세 레그를 120° 엇갈린 동기 부스트로 운전하는 모델이다. 세 상 전류가 같아 회전 자계가 생기지 않으므로 상마다 영상(누설) 인덕턴스 L\textsubscript{0}가 보인다. 인버터는 1200 V SiC 규칙(E15와 같음)으로 도통, 하드 스위칭, 데드타임, 게이트 손실을 넣고, 리플이 0을 지나면 켜짐을 영전압으로 본다. 모터 권선 손실은 직류 동손에 리플 성분(교류 저항 계수 3)을 더했다. 리플에 의한 철손과 자석 와전류 손실은 넣지 않았으므로 모터 승압 손실은 하한 쪽이고, 비교는 모터 승압에 유리하다. 양산 차량의 상저항과 영상 인덕턴스 공개 값을 찾지 못해 상저항 0–15 mΩ, L\textsubscript{0} 50–400 µH, 주파수 10·20 kHz, 병렬 4–6의 96조합을 계산하고, 그 범위에서 바뀌지 않는 결론만 쓴다.
+
+\section{결과}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.1754\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2632\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1754\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}}
+\caption{산업 방식 대비 손실과 반도체(E25)}\label{t:e25}\\
+\toprule
+\tabhead \textbf{구조} & \textbf{보조 경로 평균 손실} & \textbf{충전 손실(800 V, 375 A)} & \textbf{스위치 위치(충전 + 보조)} & \textbf{손실 에너지 예시} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{구조} & \textbf{보조 경로 평균 손실} & \textbf{충전 손실(800 V, 375 A)} & \textbf{스위치 위치(충전 + 보조)} & \textbf{손실 에너지 예시} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+① & 114.6 W & 1.78 kW & 24(12 + 12) & 126.4 kWh \\
+⑤ & 114.6 W & 1.17 kW(상저항 ≥ 5 mΩ 범위 0.61–3.14 kW) & 12(0 + 12) & 122.3 kWh \\
+④ R2 & \textbf{85.0 W} & \textbf{0.50 kW} & 44(32 + 12) & 88.3 kWh \\
+⑥ & \textbf{70.1 W} & 1.17 kW(⑤와 같음) & 24(0 + 24) & \textbf{77.8 kWh} \\
+\end{longtable}
+}
+\srcnote{주: 손실 에너지 예시는 주행 1,000시간 + 400–500 V급 충전 1,000 kWh(가정). 구동 인버터는 모든 구조에 공통이라 세지 않았다. ①·④는 E15와 같은 값이다.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=16.0cm]{\repo/validation/2026-10-26-positioning/E25/E25_motor_boost.png}
+\caption{모터·인버터 승압과의 비교(E25)}\label{f:e25}
+\srcnote{주: (a) 충전 경로 손실(오차막대: 상저항 ≥ 5 mΩ 범위), (b) 800 V 충전에서 모터 승압 파라미터 한 개씩의 영향, (c) 보조 경로 손실과 스위치 위치 수.}
+\end{figure}
+
+\begin{itemize}
+\item \textbf{④ 대 ⑤(같은 400 V급 부품): R2가 유리하다.} 보조 경로 손실이 29.6 W(26 \%) 작다. ⑤는 400 V급 부품을 위해 800 → 400 V 강압기(하드 스위칭)를 두고, R2는 그 일을 영전류 스위칭 2:1 단이 한다. 충전 손실도 작다. 모터 승압과 Stage A의 충전 손실이 같아지는 상저항은 약 1.9 mΩ이고, 100–200 kW급 모터의 정격 동손으로 가늠한 상저항(약 4–26 mΩ, 이 보고의 추정)에서는 순서가 바뀌지 않는다. 대가는 스위치 위치가 32개 많다는 것이다.
+\item \textbf{④ 대 ⑥(800 V급 부품): 손실 이점이 없다.} ⑥은 보조부하를 변환 없이 배터리에서 받아 보조 경로 손실이 14.9 W 작고 스위치 위치도 20개 적다. R2가 앞서는 것은 400–500 V급 충전 손실뿐이며, 이것으로 보조 손실의 차를 메우려면 주행 1시간당 3.4 kWh 이상(모터 승압 하한이면 20.5 kWh)을 400–500 V급 충전기로 충전해야 한다.
+\item \textbf{⑤ 대비 이점의 손실 예산이 작다.} 주행 중에는 Stage A 모듈 하나(2위상)만 운전하므로, 위상당 고정 손실이 14.8 W 늘면 보조 손실 이점 29.6 W가 사라진다. 현재 모델의 위상당 고정 손실은 15.6 W이고, 철심 공진 인덕터의 손실 규칙(정격의 0.1 \%, 위상당 18.8 W)을 더하면 이점이 없어진다. 그래서 공심 공진 인덕터와 낮은 출력용량 소자를 설계 요구로 둔다(표 \ref{t:req}). 수동소자 저항을 두 배로 해도 보조 경로는 +1.0 W, 충전은 +0.09 kW라 결론이 같다.
+\item \textbf{모든 손실은 같은 규칙의 상대 비교로만 쓴다.} 2:1 스위치드 탱크 100 kW 시제품의 측정 효율은 전부하 97.4 \%\cite{b3}, 공진 차지 펌프 승압기의 제조사 공개 효율은 97 \%\cite{b26}이고, 이 보고의 Stage A 모델은 150 kW 충전에서 99.7 \%(8위상)다. 기판·버스바 손실, 커패시터 유전 손실, 측정 손실이 차이를 만든다.
+\end{itemize}
+
+\section{선행연구 비교}
+
+문헌 6건, 특허 2건(패밀리 기준), 제조사·산업 자료 4건, 모두 12건을 비교했다(표 \ref{t:prior}). 특허 청구항 비교와 IEEE Xplore·특허 전수 검색은 하지 않았으므로, 아래의 ‘찾지 못한 것’은 신규성이나 권리 범위의 판단이 아니다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.1917\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2833\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2167\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1667\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1417\linewidth-2\tabcolsep\relax}}
+\caption{선행연구·산업 방식과 R2의 비교}\label{t:prior}\\
+\toprule
+\tabhead \textbf{구분} & \textbf{대표} & \textbf{400–500 V급 충전 호환} & \textbf{주행 중 400 V·48 V} & \textbf{검증 수준(공개)} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{구분} & \textbf{대표} & \textbf{400–500 V급 충전 호환} & \textbf{주행 중 400 V·48 V} & \textbf{검증 수준(공개)} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+모터·인버터 승압 & 현대차그룹 E-GMP\cite{b24}, Lucid Gravity(500 V에서 225 kW)\cite{b25}, 500 W 시제품\cite{b27} & 구동 인버터 + 모터 권선 & 400 V 버스 없음(800 V 부품) & 양산(효율 비공개)·시제품 \\
+구동계 통합 충전(교류) & Eull 등: 11 kW, 충전 최고 99.4 \%\cite{b28} & 직류 승압·강압 가능성 언급 & — & 측정 \\
+전용 승압기·차지 펌프 & Porsche Taycan 50/150 kW\cite{b29}, Preh HV 부스터 100–150 kW, 97 \%\cite{b26} & 별도 변환기, 800 V 충전·주행 중 바이패스 & 없음 & 양산·제조사 공개 \\
+공진 스위치드 커패시터 충전 조정(특허) & NIO USA US 10,363,828·10,632,863\cite{b30} & 800 V 충전기 → 400 V 차량(방향 반대), 출력 조정 & 400 V 파워트레인·보조 공급 & 특허 \\
+2:1 스위치드 탱크 대전력 & Ni 등: 100 kW, 전부하 97.4 \%\cite{b3} & 원리 같음 & — & 측정 \\
+고정비 + 부분전력 조정 & He 등(48 → 12 V, 500 W, 98.4 \%)\cite{b4}, Ni 등(GaN, 부분전력 강압)\cite{b5} & — & 조정 버스(단일 출력) & 측정(학회) \\
+결합 변환기 & Karma US 11,235,676\cite{b31}, Chen 등(구동계 복합 DC–DC)\cite{b11} & — & 충전 변환 + 보조 전원 결합 & 특허·측정 \\
+\textbf{R2(본 과제)} & Stage A + 조정형 Stage C(+ 팩 등급 조건부 창 조정 모듈) & Stage A 2:1(충전기는 V\textsubscript{A} 노드) & \textbf{Stage A가 주행 중 계속 공급, 강등 중에도 48 V 공급} & 모델·소자 수준 회로 \\
+\end{longtable}
+}
+
+\textbf{새롭지 않은 것.} 2:1 공진 차지 펌프로 400 V급 충전기와 800 V 차량을 잇는 것은 제품\cite{b26}과 특허\cite{b30}(반대 방향)가 있고, 100 kW급 스위치드 탱크도 측정되었다\cite{b3}. 고정비 공진 변환 + 부분전력 조정\cite{b4}, \cite{b5}과 한 장치에 충전 변환과 보조 전원을 결합하는 것\cite{b31}도 선행이 있다. R2의 창 조정 모듈은 같은 원리를 직렬 절연 셀로 구현한 것이다.
+
+\textbf{이 조사 범위에서 찾지 못한 것.} (1) 충전용 2:1 공진 단을 주행 중에도 계속 운전해 400 V급 보조부하와 48 V의 공급원으로 쓰고, 충전기를 그 출력 노드에 두어 충전 중에도 보조버스가 유지되는 구조. 승압기·차지 펌프는 800 V 충전과 주행 중에 바이패스되거나 쉰다. (2) V\textsubscript{A}가 400 V급 부품 상한을 넘는 팩에만 쓰는 창 조정 모듈과 그 고장 강등 순서(다이오드 클램프 → 부하 분리 → EPS 링크 붕괴 → 경로전류 조절 소프트 투입). (3) 이 두 가지가 성립하는 팩 등급·부품 등급 조건을 같은 손실 규칙으로 계산한 정량 결과.
+
+\section{기여와 이점이 성립하는 조건}
+
+이상을 종합해 이 과제가 기여로 내세울 수 있는 것을 네 가지로 정리한다.
+
+\begin{itemize}
+\item \textbf{다기능 2:1 단 구조와 그 성립 조건.} 영전류 스위칭 2:1 공진 스위치드 커패시터 단 하나가 500 V급 충전기 호환, 주행 중 400 V급 보조버스, 48 V 공급원을 함께 맡는다. 400 V급 보조부품 조건에서 모터·인버터 승압 구조보다 보조 경로 손실이 26 \% 작고 충전 손실도 작다. 800 V급 보조부품 설계 대비 손실 이점은 없다.
+\item \textbf{팩 등급 조건부 창 조정 모듈과 고장 강등.} B\textsubscript{420}의 200–216s, B\textsubscript{470}의 224–240s 팩에서 성립 구조 가운데 손실이 가장 작고(240s에서 전전력 조정기보다 13 \% 작음), 고장 강등 순서를 소자 수준 회로에서 48 V 공급과 함께 확인했다.
+\item \textbf{검증으로 도출한 설계 규칙.} 충전전류 증가 램프 ≥ 100 µs, 창 조정 DAB 정격 = 정적 최대 링크전력 × 1.8, 게이트 시간 분해능 ≤ 0.625 ns, 강등 중 DAB 첨두 설계 상한 1.387배, Stage C 데드타임 창, Stage A 위상 셰딩 문턱 15·22·36 A, V\textsubscript{A} 클램프 468/463 V·1 Ω·7 kJ, Stage A 위상당 고정 손실 증가 < 14.8 W.
+\item \textbf{부정적 결과.} 직렬 부분전력 변환으로 400 V를 전 범위에서 정밀 조정하는 원래 구조(③)는 보조부하 주행 프로파일에서 조정 없는 구조보다 손실·반도체 수·스위치 VA가 모두 컸다(H5 기각). 원인은 정격점 효율이 아니라 경부하 고정 손실(약 65 W)이었다. 부분전력 변환의 이점을 정격점 효율로만 판단하면 안 된다는 정량 근거다.
+\end{itemize}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.3860\linewidth-2\tabcolsep\relax}L{\dimexpr 0.6140\linewidth-2\tabcolsep\relax}}
+\caption{R2의 이점이 성립하는 조건}\label{t:cond}\\
+\toprule
+\tabhead \textbf{조건} & \textbf{R2의 위치} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{조건} & \textbf{R2의 위치} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+400 V급 보조부품을 그대로 쓴다(400·800 V 플랫폼 공용, 1000 V급 팩의 400 V급 부품) & \textbf{유리.} 보조·충전 손실이 ①·⑤보다 작다. 반도체 위치는 많다 \\
+800 V급 보조부품을 쓴다 & \textbf{불리하거나 비슷하다.} 보조 손실과 반도체 수에서 ⑥이 낫고, 충전 손실만 R2가 작다 \\
+400–500 V급 충전 비중이 매우 크다 & ⑥과의 차가 줄지만, 주행 1시간당 3.4 kWh 이상이어야 같아진다 \\
+Stage A 공진 인덕터가 철심이거나 위상당 고정 손실이 약 30 W 이상 & ⑤ 대비 보조 손실 이점이 사라진다 \\
+비용·무게·부피 & 본 과제 범위 밖이다. 반도체 위치 수(44 대 12·24)만 비교했다 \\
+\end{longtable}
+}

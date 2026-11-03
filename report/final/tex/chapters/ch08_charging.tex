@@ -1,0 +1,65 @@
+% 원제: 8. 검증 결과(4): 통합 회로와 충전 중 보조버스(TB06, E16, TB07, H3)
+\chapter{검증 결과(4): 통합 회로와 충전 중 보조버스(TB06, E16, TB07, H3)}
+
+\section{통합 회로 모델: 주행(TB06)}
+
+Stage B·C를 설계할 때 Stage A는 이상 2:1 전압원과 경로 저항(13.2 mΩ)으로, Stage C는 정전력 부하로 두었다. 이 두 등가가 실제 회로에서도 성립하는지 확인하려고 세 단을 한 회로로 이었다. 회로는 배터리 → Stage A 모듈 1(2위상, 영교차 추종 게이트) → V\textsubscript{A}(400 µF) → Stage B → 400 V 버스 → Stage C 3 kW + 정전력 부하다. 세 사례(640 V 15→25 kW, 788 V 5→15 kW, 920 V 25→15 kW)가 모두 통과했다(표 \ref{t:tb06}).
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.4912\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3158\linewidth-2\tabcolsep\relax}}
+\caption{TB06 통합 회로 모델(주행)의 판정}\label{t:tb06}\\
+\toprule
+\tabhead \textbf{단} & \textbf{결과} & \textbf{기준} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{단} & \textbf{결과} & \textbf{기준} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+Stage B & 판정 지표 전부 스위칭 ODE와 일치: 최저 버스 차 ≤ 0.38 V, 최대 경로전류 차 ≤ 1.2 A, 버스 궤적 RMS ≤ 0.08 V & 단별 회로(TB04)의 좁은 허용폭 \\
+Stage A & V\textsubscript{A} 강하 출력전류당 10.6 mΩ(경로 3 mΩ 더해 13.6 mΩ, 제어기 공칭 13.2 mΩ), 영교차 추종 턴오프 전류 0.06–2.9 \%, 위상 전류 차 ≤ 0.6 \% & 턴오프 전류 ≤ 5 \% \\
+Stage C & 48 V 출력 47.24–48.06 V(±2 \% 안) & ±2 \% \\
+\end{longtable}
+}
+
+\section{충전 중 보조버스(E16, H3)}
+
+400 V급 급속충전 중에는 경로 전원이 주행과 두 가지 점에서 다르다. Stage A 4모듈이 모두 동작해 경로저항이 공칭의 42 \%(5.55 mΩ)가 되고, 충전기 전류가 V\textsubscript{A}를 움직인다(375 A 변화에 약 0.96 V). 이 조건에서 같은 제어기가 보조버스를 지키는지 평균모델과 스위칭 모델로 시험했다(표 \ref{t:e16}).
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3333\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3684\linewidth-2\tabcolsep\relax}}
+\caption{충전 중 보조버스 시험 결과(E16)}\label{t:e16}\\
+\toprule
+\tabhead \textbf{시험} & \textbf{조건} & \textbf{결과} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{시험} & \textbf{조건} & \textbf{결과} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+정적 범위 & 640–920 V × 보조부하 −3.2–25 kW, 충전 375 A(150 kW 제한) & 4,118점 모두 성립. 링크 ≤ 6.68 kW, 경로 ≤ 79.9 A \\
+동시 운전 Tier-1 & 460건(공차·지연 +3.0 µs 포함) & 460/460, 최대 87.43 A(주행 모드 87.62 A) \\
+동시 운전 Tier-2 & 78건 & 78/78, 최대 92.74 A \\
+모드 전환 & 충전기 접속·해제(10 µs, 1 ms), 모듈 기동·셰딩, 240건 & 240/240(Tier-2), Tier-1 전압 품질도 240/240 \\
+전체 순서 & 주행 → 모듈 기동 → 충전 → +10 kW → 비상 정지 → 셰딩, 30건 & 30/30, 최대 87.04 A, 버스 397.8–401.6 V \\
+스위칭 모델 & 충전 중 Tier-1·Tier-2 40건, 접속·비상 정지 8건 & 48/48, 순시 최대 96.26 A \\
+\end{longtable}
+}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15.5cm]{\repo/validation/2026-10-22-charging-integration/E16/E16_charging_transients.png}
+\caption{충전 중 부하 스텝과 충전기 접속·해제 응답(평균모델)}\label{f:e16}
+\end{figure}
+
+\section{충전 통합 회로 모델(TB07)}
+
+TB06에 Stage A 모듈 2–4(8위상)와 400 V급 충전기(제어 전류원)를 더했다. 기본 3사례(640 V 충전 중 15→25 kW, 920 V 충전 비상 정지, 788 V 충전기 접속)와 추가 4실행(변화 시간 100 µs·1 ms, 640 V·25 kW 접속·정지)을 계산했다. \textbf{회로 한계는 7/7 통과}했다. Stage A 8위상은 역방향 대전류에서도 영전류 스위칭(턴오프 전류 ≤ 1.1 A)과 전류 분담(≤ 0.9 \%)을 유지했다.
+
+검증 모델과의 일치는 조건부다. 충전 중 계단과 100 µs 이상의 충전전류 변화는 일치했지만, 10 µs 변화 3개 실행은 경로전류 첨두가 3.3–13.4 A 커서 일치 기준을 넘었다. 원인은 V\textsubscript{A} 노드 공진(주기 약 30 µs)으로, Stage A 정적 등가가 이보다 느린 외란에서만 회로와 맞기 때문이다. 가장 불리한 640 V·25 kW 접속에서 회로 경로전류는 98.49 A(한계 100 A)였다. 그래서 \textbf{충전전류 증가 램프 ≥ 100 µs}(375 A 기준 ≤ 3.75 A/µs)를 설계 요구로 두었다. 충전전류는 차량 요청을 따르므로 차량 쪽 요청 램프로 만족시킬 수 있다.
+
+\textbf{H3 판정: 충족(조건 1개).} \textbf{H1 충전 부분: 충족.} 회로에서도 충전전류는 V\textsubscript{A} 노드에서 Stage A로 바로 들어가며, 경로전류는 보조부하만큼만 흐른다(375 A 충전 중 13–79 A). 충전 중 링크전력은 정적 최대 6.68 kW, 과도 최대 7.49 kW로 8 kW 안이다.

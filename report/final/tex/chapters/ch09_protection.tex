@@ -1,0 +1,264 @@
+% 원제: 9. 검증 결과(5): R2 보호와 고장 강등(E17, E20, E21, TB09–TB13)
+\chapter{검증 결과(5): R2 보호와 고장 강등(E17, E20, E21, TB09–TB13)}
+
+\section{측정 기반 보호 상태기계(E17)}
+
+실제 장치는 고장을 측정으로 판단하고, 판단과 차단에 지연이 있다. 창 조정 모듈의 H-브리지 고장은 바로 바이패스하면 수백 A가 흘러(7.2절) 강등 방식이 정해지지 않았다. 그래서 평균모델에 버스 RC 감쇠기, 링크 제동 저항, 바이패스 소프트 투입(선형 영역 구동), 400 V 부하 분리를 넣고, 측정 기반 상태기계를 결합했다. 링크전류 센서 감시(P6)를 켠 기존 시험 격자도 다시 판정했다(1,080건, 판정 변화·오경보 0).
+
+H-브리지 고장의 강등 순서는 H-브리지가 꺼졌을 때 생기는 성질을 쓴다. 꺼진 소자의 역방향 도통이 다이오드 정류기를 이루어 직렬전압이 −(v\textsubscript{link} + 2V\textsubscript{D})로 묶이므로, DAB로 링크전압을 조절하면 버스를 붙잡을 수 있다(그림 \ref{f:seq}).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15.5cm]{\repo/docs/fig/report/fig13b_fault_sequence.png}
+\caption{H-브리지 고장 강등 순서}\label{f:seq}
+\srcnote{주: 9.3–9.4절의 고장 모드 변조를 포함한 최종 순서다.}
+\end{figure}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.4035\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}}
+\caption{보호 상태기계의 정책 비교와 추천 순서(평균모델)}\label{t:e17}\\
+\toprule
+\tabhead \textbf{시험} & \textbf{R2-W460} & \textbf{R2-W410} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{시험} & \textbf{R2-W460} & \textbf{R2-W410} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+H-브리지 개방, 즉시 바이패스 & 0/4, 최대 766 A & 0/4, 최대 869 A \\
+H-브리지 개방, 클램프 유지 + 제동(추천) & 4/4, 경로 ≤ 90.0 A, 연결 중 버스 ≤ 467.1 V & 4/4, 경로 ≤ 90.3 A, 버스 ≤ 417.1 V \\
+DAB 고장, 제동 유지 → 분리 → 램프 → 바이패스(추천) & 8/8, 링크 ≤ 110.1 V, 제동 ≤ 49.6 J & 8/8, 제동 ≤ 63.5 J \\
+켬(전류 조향)·끔(직렬전압 조향) & 켬 6/6·끔 4/4 & 켬 6/6·끔 4/4 \\
+추천 순서 전체 & 44/44(켬 12, 끔 8, DAB 고장 16, H-브리지 고장 8) &  \\
+H-브리지 변조율 고착(±0.95) & 0/16, 필터 128–147 A(비교기 지연 1.2 µs) &  \\
+\end{longtable}
+}
+\srcnote{주: 추천 순서 전체는 두 모듈을 합한 건수다.}
+
+켬 순서에서는 바이패스 전류를 H-브리지 영벡터로 먼저 옮긴 뒤(전류 조향) 바이패스를 열어, TB08에서 본 열림 과도를 없앴다(경로 70.3·78.9 A → 57.0·63.8 A). H-브리지 변조율 고착은 하드웨어 비교기 지연 동안 필터전류가 128–147 A까지 올라, 필터 인덕터 포화 전류 ≥ 150 A 또는 더 빠른 비교기가 필요하다.
+
+\section{보호 상태기계의 회로 확인(TB09)}
+
+TB08 회로에 소자 역방향 도통(2 V), 링크 제동 저항(3 Ω), 바이패스 소프트 투입 가변 저항, 버스 RC 감쇠기, 분리 신호를 받는 부하를 더하고, E17과 같은 논리의 상태기계와 보호 게이트(하드웨어 비교기 래치, 고장 주입)를 넣었다. 사례는 1008·930 V H-브리지 개방, 930 V 켬, 1008 V DAB 고장이다(모두 25 kW).
+
+\textbf{첫 실행에서는 H-브리지 고장 2사례가 불통과였다.} 평균모델에 없던 두 현상 때문이다. 전압비가 극단(n·v\textsubscript{link} ≪ v\textsubscript{bus})인 DAB는 링크를 0.5 V까지 내리지 못하고 3.5–22 V에서 멈췄고, 남은 직렬전압을 로그 램프 저항으로 닫자 버스 감쇠기를 충전하는 전류로 경로전류가 177 A까지 올랐다. 붕괴 정체 감지와 경로전류 조절 소프트 투입을 상태기계에 넣고 두 모델을 다시 계산해 \textbf{최종 실행 4/4가 통과}했다. 상태 전이 시각은 E17과 0–20 µs 안이었고, 다이오드 클램프 식은 회로에서 평균 −0.011·−0.050 V 오차로 성립했다.
+
+회로에서만 드러난 부품 스트레스가 하나 남았다. \textbf{강등 중 DAB 순환전류가 정격점의 4.2배}였다(링크 쪽 순시 192 A, 1차 41.7 A, 정격점 45.8 A·약 10 A). 평균 궤적에서 단일 위상천이(SPS) 식으로 계산한 197 A와 같다. 누설 인덕터를 정격점에 맞춰 설계하면 포화할 수 있고, 하드웨어를 4배 정격으로 키우면 창 조정 모듈을 4–5 kW로 줄인 이점이 사라진다.
+
+\section{DAB 고장 모드 변조(E20, TB10)}
+
+원인은 SPS의 전압비 불일치다. 링크전압이 1차 환산 전압(v\textsubscript{bus}/n)보다 크게 낮으면, 전달 전류와 상관없이 누설 인덕터에 큰 전압이 반주기 동안 걸린다. 링크가 0 V에 가까우면 링크 쪽 첨두는 v\textsubscript{bus}/(4·n·f\textsubscript{s}·L′)에 가까워진다(1008 V 팩에서 약 197 A, L′ = L\textsubscript{dab}/n\textsuperscript{2}). 강등 순서를 다음 네 가지로 함께 바꿨다. 하나만으로는 부족했다(표 \ref{t:e20}).
+
+\begin{itemize}
+\item \textbf{1차 내부 위상천이(EPS).} 1차 브리지 두 레그 사이에 위상차 D1·π를 주면 1차 전압에 영구간이 생겨 펄스 폭이 (1 − D1)·π가 된다\cite{b2}. 링크 5 V·11 A에서 첨두가 189 A에서 20 A로 줄어든다. 정상상태 파형을 꺾이는 점에서 정확히 계산해, (전압비 r, 정규화 전류 j)마다 첨두가 가장 작은 (D1, 위상) 지령표를 만들었다. SPS(D1 = 0)는 그 특수 경우라 해석식과 오차 없이 같았다.
+\item \textbf{전압비 정합 유지.} 버스를 V\textsubscript{W}에 붙잡지 않고 n·v\textsubscript{link} = v\textsubscript{bus}가 되도록 링크를 둔다(1008 V에서 링크 약 89 V, 버스 약 410 V). DAB 정격 밖 링크전력은 제동 저항이 받는다.
+\item \textbf{첨두 상한.} 강등 상태에서 DAB 지령을 EPS 첨두 ≤ 1.5 × 정격점(R2-W460 68.7 A, R2-W410 90.0 A)이 되는 전류까지만 낸다.
+\item \textbf{일시 감발과 이중 고장 전환.} H-브리지 고장이면 배터리 전압과 상관없이 400 V 부하 출력을 잠시 줄인 뒤 링크를 내린다. 소프트 투입이 5 ms 안에 끝나지 않으면 주 스위치를 강제로 닫지 않고 이중 고장(Stage A 협조 정지)으로 넘긴다(강제로 닫으면 693 A).
+\end{itemize}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.3860\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1316\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1316\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3509\linewidth-2\tabcolsep\relax}}
+\caption{강등 방식별 DAB 첨두와 판정(E20, 평균모델 + 정확 해석)}\label{t:e20}\\
+\toprule
+\tabhead \textbf{방식} & \textbf{R2-W460} & \textbf{R2-W410} & \textbf{DAB 해석 첨두 최대(W460 / W410)} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{방식} & \textbf{R2-W460} & \textbf{R2-W410} & \textbf{DAB 해석 첨두 최대(W460 / W410)} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+P0 기존 추천(버스 V\textsubscript{W} 유지, SPS) & 0/4 & 0/4 & 197.3 / 202.0 A \\
+P1 P0 궤적 + EPS(상한 없음) & 0/2 & 0/2 & 135.7 / 136.4 A \\
+P3n 정합 유지 + EPS 상한, 감발 없음 & 1/2 & 2/2 & 68.8 / 90.0 A. W460 930 V는 링크 61 V 정체 → 이중 고장 \\
+\textbf{P3 P3n + 일시 감발(추천)} & \textbf{4/4} & \textbf{4/4} & \textbf{68.8 / 90.0 A} \\
+\end{longtable}
+}
+\srcnote{주: 판정은 E17 고장 판정에 DAB 첨두(해석) ≤ 1.5 × 정격점을 더한 것이다. P3 감도 6종 중 W410 감쇠기 없음(경로 100.2 A)만 불통과.}
+
+P3의 비용은 유지 중 버스가 V\textsubscript{W}보다 50–80 V 낮고(최저 373·337 V), 고장당 제동 에너지가 6.8 J에서 21.4 J로 늘며(분리 20 ms), V\textsubscript{A}가 상한 이하인 팩에서도 400 V 부하가 약 30 ms 감발된다는 것이다.
+
+회로 확인(TB10)은 TB09 회로에 EPS 지령 블록과 1차 레그 2를 D1·T/2 늦추는 게이트 생성기를 넣어 했다. 세 사례(1008·930 V H-브리지 개방, 930 V 켬)가 모두 회로 판정을 통과했다. \textbf{DAB 링크 쪽 첨두는 192.0·178.1 A에서 79.4·75.3 A로 줄었다}(정격점의 1.73·1.64배). 링크는 0.49 V까지 붕괴해 TB09의 정체가 없어졌고, 소프트 투입 소자 에너지는 0.024·0.026 J(TB09 930 V는 1.22 J), 경로 순시 최대는 57.2·57.9 A였다. 다만 미리 정한 회로 기준(2배, 91.7 A)은 지켰으나 \textbf{해석 설계 목표 1.5배(68.7 A)는 링크 붕괴 구간에서 10–16 \% 넘었다.} 지령표 보간은 원인이 아니었다(상한에 붙인 보간 첨두 ≤ 1.0007배).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=16.0cm]{\repo/validation/2026-10-24-dab-fault-modulation/E20/E20_dab_fault_modulation.png}
+\caption{DAB 고장 모드 변조}\label{f:e20}
+\srcnote{주: (a) 버스 504 V에서 링크전압에 따른 SPS·EPS 첨두, (b) 링크 5 V·11 A의 한 주기 인덕터 전류, (c) 1008 V·25 kW H-브리지 개방의 해석 첨두와 회로 첨두(TB09·TB10).}
+\end{figure}
+
+\section{회로 여유: 데드타임을 반영한 첨두 표(E21, TB11)}
+
+TB10에서 남은 초과의 원인을 확인하려고, 회로와 같은 소자 조건으로 DAB 한 운전점의 주기 정상상태를 시간 영역에서 계산하는 스위칭 모의를 만들었다. 1차·2차 풀브리지, 누설 인덕터(1차 14.68 µH, 20 mΩ), 이상 변압기(4.6:1)로 구성하고 레그마다 데드타임 100 ns, 소자 출력용량(1차 335 pF, 2차 1,371 pF), 역방향 도통 2 V를 넣었다. 확인 결과는 표 \ref{t:e21a}와 같다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.3860\linewidth-2\tabcolsep\relax}L{\dimexpr 0.6140\linewidth-2\tabcolsep\relax}}
+\caption{스위칭 모의의 확인과 TB10 초과의 원인(E21)}\label{t:e21a}\\
+\toprule
+\tabhead \textbf{확인} & \textbf{결과} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{확인} & \textbf{결과} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+소자 효과를 끈 모의 = 정확 해석 & 6개 운전점에서 첨두·전류 오차 ≤ 0.10 \% \\
+TB10 회로 첨두 재현(붕괴 구간, 링크 ≥ 6 V) & 1008 V: 150주기, 회로/모의 최대 1.029·평균 1.003. 930 V: 136주기, 최대 1.020·평균 1.001. 같은 주기의 회로/해석은 최대 1.131·1.098 \\
+효과별 기여(버스 447 V, 링크 52.8 V) & 해석 67.6 A → 데드타임 74.6 A → + 출력용량 74.0 A → + 역방향 도통 74.4 A \\
+효과별 기여(버스 476 V, 링크 23.6 V) & 해석 68.0 A → 데드타임 64.6 A → + 출력용량 72.3 A → + 역방향 도통 72.3 A \\
+\end{longtable}
+}
+\srcnote{주: 데드타임 100 ns는 붕괴 막바지의 1차 펄스 폭(125–150 ns)과 비슷한 크기라, 펄스 폭과 위상이 실질적으로 바뀐다.}
+
+모의가 회로 첨두를 평균 0.1–0.3 \%, 최대 2.9 \% 안에서 재현했으므로, 초과의 원인은 \textbf{데드타임과 그 동안의 출력용량 충방전}이다(역방향 도통의 기여는 작다). 이 결과로 대책을 정했다. 회로 지령 블록의 (D1, 위상) 지령표는 그대로 두고, \textbf{첨두 표만 같은 칸의 스위칭 정상상태 값}으로 바꾼다. 칸마다 버스 380·440·500 V에서 계산해 그 가운데 최댓값을 쓰고, 설계 상한은 모의와 회로의 최대 차(2.9 \%)를 덮도록 1.5배 / 1.03 = 1.455배(R2-W460 66.7 A)로 둔다. 같은 표에서 실제 링크전류도 얻어 평균모델이 회로 DAB의 실제 전류로 계산하게 했다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.4035\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}}
+\caption{데드타임 반영 첨두 표의 확인(E21, 평균모델 P3s)}\label{t:e21b}\\
+\toprule
+\tabhead \textbf{시험} & \textbf{R2-W460} & \textbf{R2-W410} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{시험} & \textbf{R2-W460} & \textbf{R2-W410} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+첨두 표로 정한 지령의 실제 첨두(버스 337–505 V × 링크 1–95 V, 각 273점) & 최대 1.466배(≤ 1.5배) & 최대 1.462배(≤ 1.5배) \\
+기본 사례(930·1008 V / 860·920 V × 5·25 kW) & 4/4, DAB 첨두 66.8 A, 경로 ≤ 71.2 A & 4/4, 87.4 A, 경로 ≤ 66.4 A \\
+버스 최저 / 제동 에너지(분리 20 ms) / 소프트 투입 & 373 V / ≤ 19.2 J / ≤ 0.029 J & 342 V / ≤ 5.6 J / ≤ 0.025 J \\
+링크 붕괴 시간 & ≤ 10.0 ms(시간 상한에 닿음) & ≤ 7.6 ms \\
+감도(감쇠기 없음, V\textsubscript{D} 1.4·3.0 V, 분리 50·3 ms) & 5/5 & 4/5(감쇠기 없음 100.3 A, 기존과 같음) \\
+\end{longtable}
+}
+\srcnote{주: 판정은 E17 고장 판정 + 스위칭 반영 DAB 첨두 ≤ 1.5 × 정격점(68.7·90.0 A).}
+
+회로 확인(TB11)은 TB10과 같은 회로·게이트 생성기·지령 블록에 첨두 표 값과 상한만 바꾼 새 테스트벤치로 했다. 판정 기준은 시험 전에 TB10의 2배에서 \textbf{1.5배(68.7 A)}로 좁혀 고정했다(표 \ref{t:tb11}).
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}}
+\caption{TB11 회로 모델의 판정(R2-W460, 분리·감발 3 ms)}\label{t:tb11}\\
+\toprule
+\tabhead \textbf{항목} & \textbf{A 1008 V, H-브리지 개방} & \textbf{B 930 V, H-브리지 개방} & \textbf{TB10(A / B)} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{항목} & \textbf{A 1008 V, H-브리지 개방} & \textbf{B 930 V, H-브리지 개방} & \textbf{TB10(A / B)} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+회로 판정(1.5배 기준 포함) & 불통과 & 불통과 & 통과 / 통과 \\
+DAB 링크 쪽 첨두(유지 / 붕괴 / 소프트 투입) & 58.5 / 88.5 / 22.1 A & 62.7 / 68.9 / 17.6 A & 최대 79.4 / 75.3 A \\
+1.5배(68.7 A) 초과 주기 / 강등 상태 주기 & 7 / 2801 & 3 / 2688 & 1082 / 916 \\
+1차 첨두 & 19.2 A & 15.0 A & 17.3 / 16.4 A \\
+경로·필터 순시 최대 & 57.3 A & 57.9 A & 57.3 / 57.9 A \\
+버스 최저(5 µs 평균) & 409.6 V & 380.6 V & 409.6 / 380.6 V \\
+소프트 투입 진입 링크 / 소자 에너지 & 1.06 V / 0.028 J & 0.49 V / 0.026 J & 0.49·0.49 V / 0.024·0.026 J \\
+제동 저항 에너지(분리 3 ms) & 7.6 J & 6.2 J & 6.9 / 5.8 J \\
+강등 완료(사건 0.5 ms 기준 시각) & 14.51 ms & 13.95 ms & 13.80 / 13.18 ms \\
+\end{longtable}
+}
+\srcnote{주: 판정은 TB10의 회로 한계에 강등 상태(9–11)의 DAB 링크 쪽 순시 첨두 ≤ 1.5 × 정격점(68.7 A)을 더한 것이다.}
+
+\textbf{TB11은 두 사례 모두 1.5배 기준에서 불통과였다.} 다만 실패의 성격이 TB10과 다르다. 1.5배를 넘은 주기가 TB10의 1,082·916주기에서 TB11의 7·3주기로 줄었고, 정상 주기의 회로 첨두는 같은 (버스, 링크)의 스위칭 모의와 0.3 A 안에서 같았다. 넘은 주기는 모두 지령표의 칸이 바뀌는 순간이었다. 사례 A의 5.215 ms에서는 허용 전류 탐색의 정지 칸이 바뀌어 EPS 지령이 (위상, D1) = (−0.029 rad, 0.278)에서 (0.199 rad, 0.379)로 한 주기 만에 옮겨 갔고, 그 주기의 첨두가 88.5 A였다(앞 주기 66.9 A). 두 지령은 정상상태로는 첨두(66.6·66.5 A)와 실제 링크전류(−32.5·−32.4 A)가 거의 같은 운전점이다. 즉 \textbf{남은 초과는 정상상태가 아니라 지령 전이의 과도}다. 평균모델(E21)은 이 과도를 다루지 않으므로, 상태 전이 시각은 회로와 0.02 ms 안에서 맞았지만(데드타임 반영 실제 전류의 효과) 첨두 판정은 회로에서만 드러났다.
+
+\section{EPS 지령 전이의 직류 편류(TB12)}
+
+원인을 게이트 생성기 수준에서 확인했다. 게이트 생성기만 떼어 내 이상 스위칭과 누설 인덕터로 같은 지령 계단을 계산하면, 계단 주기의 첨두가 92.6 A가 되고 누설 전류에 −16.6 A의 직류 편류가 남는다(표 \ref{t:gate}). SPS 위상 변화에는 전이 반주기에 이전·새 위상의 평균을 쓰는 직류 편류 방지가 있었지만, EPS의 레그 2 지연(D1)은 상향 에지에서 한 주기 동안 그대로 잡았기 때문이다. 구형파 레그 하나의 에지가 Δ만큼 옮겨질 때 첫 에지를 Δ/2만 옮기면 그 레그가 만드는 인덕터 전류에 직류 편류가 남지 않는다. 이를 레그 2에도 적용하고, 지령표의 큰 칸 전환은 위상 반주기당 0.01 rad, D1 에지당 0.005로 나눠 옮기도록 게이트 생성기를 고쳤다. 정상 붕괴 중의 지령 변화(주기당 D1 약 0.0006)보다 충분히 커서 평소 동작에는 영향이 없다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2105\linewidth-2\tabcolsep\relax}}
+\caption{지령 계단에서 게이트 생성기의 직류 편류(이상 스위칭, 버스 432 V·링크 67.5 V)}\label{t:gate}\\
+\toprule
+\tabhead \textbf{게이트 생성기} & \textbf{계단 전 첨두} & \textbf{계단 뒤 주기 첨두(1–4주기)} & \textbf{남은 직류 편류} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{게이트 생성기} & \textbf{계단 전 첨두} & \textbf{계단 뒤 주기 첨두(1–4주기)} & \textbf{남은 직류 편류} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+TB10·TB11(D1 한 주기 유지) & 70.1 A & 92.6, 76.9, 76.8, 76.7 A & −16.6 A(지속) \\
+TB12(레그 2 반 이동 + 변화율 상한) & 70.1 A & 70.6, 69.6, 69.7, 68.6 A & ≤ 2.7 A \\
+\end{longtable}
+}
+\srcnote{주: 이상 모델에는 데드타임 감쇠가 없어 편류가 R/L(0.73 ms)로만 줄어든다. 회로에서는 TB11 A의 계단 뒤 첨두가 88.5 → 69.4 → 68.2 A로 수 주기 안에 줄었다.}
+
+TB12는 TB11과 같은 회로·지령 블록·첨두 표에 고친 게이트 생성기만 넣은 새 테스트벤치다. 판정 기준은 TB11과 같다(표 \ref{t:tb12}).
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}}
+\caption{TB12 회로 모델의 판정(R2-W460, 분리·감발 3 ms)}\label{t:tb12}\\
+\toprule
+\tabhead \textbf{항목} & \textbf{A 1008 V, H-브리지 개방} & \textbf{B 930 V, H-브리지 개방} & \textbf{TB11(A / B)} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{항목} & \textbf{A 1008 V, H-브리지 개방} & \textbf{B 930 V, H-브리지 개방} & \textbf{TB11(A / B)} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+회로 판정(1.5배 기준 포함) & 불통과 & 통과 & 불통과 / 불통과 \\
+DAB 링크 쪽 첨두(유지 / 붕괴 / 소프트 투입) & 58.0 / 70.0 / 22.2 A & 58.0 / 68.5 / 17.6 A & 최대 88.5 / 68.9 A \\
+1.5배(68.7 A) 초과 주기 / 강등 상태 주기 & 3 / 2801 & 0 / 2694 & 7 / 3 \\
+1차 첨두 & 15.2 A & 14.9 A & 19.2 / 15.0 A \\
+경로·필터 순시 최대 & 57.1 A & 57.9 A & 57.3 / 57.9 A \\
+버스 최저(5 µs 평균) & 409.5 V & 380.4 V & 409.6 / 380.6 V \\
+소프트 투입 진입 링크 / 소자 에너지 & 1.07 V / 0.028 J & 0.49 V / 0.026 J & 1.06·0.49 V / 0.028·0.026 J \\
+제동 저항 에너지(분리 3 ms) & 7.6 J & 6.3 J & 7.6 / 6.2 J \\
+강등 완료(사건 0.5 ms 기준 시각) & 14.51 ms & 13.98 ms & 14.51 / 13.95 ms \\
+\end{longtable}
+}
+\srcnote{주: 판정 기준은 TB11과 같다.}
+
+\textbf{TB12는 사례 B만 통과했다(1/2).} 전이 첨두는 TB11의 88.5·68.9 A에서 70.0·68.5 A로 줄었고, 1.5배를 넘은 주기도 7·3개에서 3·0개로 줄었다. 사례 A는 5.26 ms에 시작한 한 전이의 끝 세 주기에서 최대 70.0 A로 기준(68.7 A)을 1.3 A 넘었다. 남은 초과는 변화율 상한으로 나눠 옮긴 전이의 끝에 생긴다: 전이 경로 중간의 (D1, 위상)은 정상 상한 칸보다 첨두가 조금 높고, D1 변화의 직류 편류가 몇 A 남는다(표 \ref{t:gate}의 ≤ 2.7 A). 두 사례에서 전이 주기 첨두는 정상 주기 상한(66.7 A) 위로 최대 4.9 \%였다. 경로전류(57.1·57.9 A), 소프트 투입 에너지(0.028·0.026 J), 강등 완료 시각(14.51·13.98 ms)은 TB11과 같은 수준이다.
+
+\section{지령 전이 여유를 넣은 설계 상한(TB13)}
+
+TB12에 남은 초과를 없애는 길은 두 가지다. 전이를 더 매끄럽게 만들거나, 설계 상한에 전이 여유를 넣는 것이다. 앞의 방법으로 상한 탐색을 두 행에서 따로 해 버스·링크 전압비에 연속이 되게 하는 안을 TB11 사례 A의 궤적에서 오프라인으로 점검했다. 주기당 지령 도약은 위상 0.227 → 0.202 rad로 11 \%만 줄었다. 큰 도약은 상한 탐색이 아니라 지령표 자체에서 나온다. 같은 전압비에서 전류 방향으로 이웃한 칸의 최적 (D1, 위상)이 최대 0.41 rad 차이 나기 때문이다. 그래서 TB13은 회로에서 잰 전이 첨두를 여유로 넣었다. 정상 상한 위로 최대 4.9 \%였으므로 여유를 5 \%로 두고, 설계 상한을 1.5배 / (1.03 × 1.05) = \textbf{1.387배(63.6 A)}로 낮췄다. 회로·지령 블록·표·게이트 생성기는 TB12와 같고 상한 값만 다르다.
+
+평균모델(E21 P3t)에서는 기본 사례가 모두 통과했다(R2-W460 4/4, R2-W410 4/4, 스위칭 반영 첨두 63.7·83.4 A). 상한을 낮추면 붕괴 구간의 DAB 전류가 줄어 링크가 시간 상한(10 ms) 안에 덜 붕괴한다. 그래서 소프트 투입 소자 에너지가 R2-W460에서 최대 0.058 J로 늘었다(P3s 0.029 J). 그래도 TB09 이전 방식(1.22 J)보다 한 자릿수 작다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2368\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}}
+\caption{TB13 회로 모델의 판정(R2-W460, 분리·감발 3 ms)}\label{t:tb13}\\
+\toprule
+\tabhead \textbf{항목} & \textbf{A 1008 V, H-브리지 개방} & \textbf{B 930 V, H-브리지 개방} & \textbf{TB12(A / B)} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{항목} & \textbf{A 1008 V, H-브리지 개방} & \textbf{B 930 V, H-브리지 개방} & \textbf{TB12(A / B)} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+회로 판정(1.5배 기준 포함) & 통과 & 통과 & 불통과 / 통과 \\
+DAB 링크 쪽 첨두(유지 / 붕괴 / 소프트 투입) & 58.0 / 66.4 / 58.3 A & 58.0 / 64.4 / 19.2 A & 최대 70.0 / 68.5 A \\
+1.5배(68.7 A) 초과 주기 / 강등 상태 주기 & 0 / 2801 & 0 / 2801 & 3 / 0 \\
+1차 첨두 & 14.4 A & 14.0 A & 15.2 / 14.9 A \\
+경로·필터 순시 최대 & 57.1 A & 57.9 A & 57.1 / 57.9 A \\
+버스 최저(5 µs 평균) & 409.5 V & 380.4 V & 409.5 / 380.4 V \\
+소프트 투입 진입 링크 / 소자 에너지 & 4.27 V / 0.048 J & 0.68 V / 0.027 J & 1.07·0.49 V / 0.028·0.026 J \\
+제동 저항 에너지(분리 3 ms) & 8.1 J & 6.7 J & 7.6 / 6.3 J \\
+강등 완료(사건 0.5 ms 기준 시각) & 14.51 ms & 14.51 ms & 14.51 / 13.98 ms \\
+\end{longtable}
+}
+\srcnote{주: 판정 기준은 TB11·TB12와 같다(강등 상태 DAB 링크 쪽 순시 첨두 ≤ 68.7 A). 설계 상한만 66.7 → 63.6 A로 바꿨다.}
+
+\textbf{TB13은 두 사례 모두 1.5배 기준을 포함한 회로 판정을 통과했다.} 강등 중 DAB 링크 쪽 첨두는 66.4·64.4 A(정상 주기 상한 63.6 A 위로 최대 4.4 \%), 1.5배를 넘은 주기는 0·0개였다. 경로전류는 57.1·57.9 A, 소프트 투입 진입 링크는 4.27·0.68 V, 소자 에너지는 0.048·0.027 J(TB12 0.028·0.026 J), 강등 완료는 14.51·14.51 ms였다. 기준까지 여유는 2.4 A다. 이로써 강등 중 DAB 첨두는 해석(정상상태 최적 지령표) → 스위칭 정상상태(데드타임·출력용량, 3 \%) → 지령 전이(변화율 상한과 여유 5 \%)의 세 단계를 거쳐 회로에서 설계 목표 안에 들었다. 대가는 붕괴 구간의 DAB 전류가 약 5 \% 줄어 링크가 시간 상한(10 ms) 안에 덜 내려간 것이다. 사례 A는 소프트 투입 진입 링크가 4.27 V(TB12 1.07 V)여서 소자 에너지가 0.048 J로 늘었고, 소프트 투입 중 DAB 첨두도 58.3 A가 되었다. 사례 B는 붕괴가 시간 상한에 닿아 강등 완료가 13.98 ms에서 14.51 ms로 늦어졌다.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=16.0cm]{\repo/validation/2026-10-25-dab-switching-margin/E21/E21_dab_switching_margin.png}
+\caption{데드타임 반영 첨두 표(E21)와 회로 확인(TB10–TB13)}\label{f:e21}
+\srcnote{주: (a) 첨두 상한이 허용하는 DAB 전류(이상 표 1.5배, 스위칭 표 1.455배·1.387배), (b) TB10 사례 A의 붕괴 구간 첨두: 해석·스위칭 모의·회로, (c) 1008 V·25 kW H-브리지 개방의 링크전압과 회로 DAB 첨두(TB10–TB13).}
+\end{figure}

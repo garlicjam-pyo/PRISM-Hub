@@ -1,0 +1,69 @@
+% 원제: 11. 검증 결과(7): Stage A 경부하 위상 셰딩(E24, TB18, TB19)
+\chapter{검증 결과(7): Stage A 경부하 위상 셰딩(E24, TB18, TB19)}
+
+\section{필요성과 설계}
+
+공진 스위치드 커패시터는 공진전류의 영교차에서 꺼 스위칭 손실을 줄인다\cite{b22}. 영교차 추종 게이트는 전류가 검출 문턱(0.5 A) 아래로 돌아온 뒤 검출 지연(20 ns)만큼 늦게 끄므로, 공진전류 첨두가 작으면 이 문턱·지연이 반주기에서 차지하는 몫이 커져 턴오프 전류/피크가 오른다. 같은 출력을 위상 하나가 맡으면 첨두가 두 배가 되어 비율이 절반 아래로 내려가고, 위상당 고정 손실(출력용량·게이트, 약 15.6 W)도 준다. 다상 변환기에서 경부하 효율을 위해 위상 수를 줄이는 것은 널리 쓰는 방법이다\cite{b23}. 문턱은 운전점 계산(표 \ref{t:e24d})으로 정했다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.3019\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1132\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1132\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1132\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1132\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1132\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1321\linewidth-2\tabcolsep\relax}}
+\caption{모듈 출력전류별 영전류 스위칭 품질과 손실(E24, 1008 V)}\label{t:e24d}\\
+\toprule
+\tabhead \textbf{모듈 출력전류} & \textbf{5 A} & \textbf{7.5 A} & \textbf{10 A} & \textbf{15 A} & \textbf{22 A} & \textbf{46.9 A} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{모듈 출력전류} & \textbf{5 A} & \textbf{7.5 A} & \textbf{10 A} & \textbf{15 A} & \textbf{22 A} & \textbf{46.9 A} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+2위상 턴오프 전류/피크 & 12.3 \% & 7.19 \% & \textbf{5.51 \%} & 3.78 \% & 2.14 \% & 0.46 \% \\
+위상 하나 턴오프 전류/피크 & 4.97 \% & 3.27 \% & 1.58 \% & 1.58 \% & 0.11 \% & 0.11 \% \\
+위상 하나 첨두 & 8.0 A & 12.1 A & 16.2 A & 24.3 A & 35.9 A & \textbf{76.4 A} \\
+모듈 손실 2위상 / 위상 하나 & 31.6 / 15.8 W & 31.4 / 16.4 W & 31.7 / 17.2 W & 32.8 / 19.7 W & 35.2 / 25.1 W & 52.6 / 60.6 W \\
+\end{longtable}
+}
+\srcnote{주: 46.9 A는 충전 정격점(788 V)의 위상 전류로, 이때 위상 하나의 첨두 76.4 A를 위상 정격 첨두로 둔다. 540 V도 거의 같다.}
+
+\begin{itemize}
+\item \textbf{멈춤 문턱 15 A(100 µs 지속).} 2위상은 12 A 이상에서 기준 5 \% 안이므로 3 A 여유를 둔다.
+\item \textbf{복귀 문턱 22 A 또는 남은 위상의 순시 전류 36 A.} 15–22 A는 히스테리시스 폭이고 두 운전 모두 기준 안이다. 필터한 평균전류는 부하 계단을 늦게 보므로 순시 전류도 본다. 위상 하나의 정상 첨두는 20 A 이하에서 32.6 A 이하라 36 A는 정상 운전에서 잘못 복귀시키지 않는다.
+\item \textbf{멈출 때는 도통 중인 구간을 자르지 않는다.} 지금 구간이 자연 턴오프로 끝난 뒤 막으므로 멈추는 순간도 영전류다. 복귀는 바로 한다.
+\end{itemize}
+
+확인 과정에서 Stage A 스위칭 모델의 데드타임 처리 오차를 찾아 고쳤다. 데드타임 동안 다이오드가 환류하는 전류가 적분 간격 안에 0으로 가지 않고 남았고, 멈춘 위상에서는 이 잔류 전류가 진동해 재시작 위상의 영교차 검출을 흔들었다. 고친 처리로 회로(TB16·TB17) V\textsubscript{A}와의 최대 차가 0.094 V에서 0.014 V로 줄었다. 이전 처리는 턴오프 비율을 높게(보수 쪽으로) 계산했으므로 E1–E23의 판정은 바뀌지 않고, E24 이후의 기준값은 고친 처리로 계산했다.
+
+\section{결과}
+
+셰딩은 2위상 정상 운전에 없던 과도(멈추는 순간, 위상 하나의 부하 계단, 멈춰 있던 위상의 재시작, 문턱 근처의 반복 전환)를 만든다. 그래서 정상 운전점과 함께 전환 과도를 시험 전에 정한 기준(모든 턴오프 |i\textsubscript{off}| ≤ max(5 \% × 반주기 첨두, 1.0 A), 위상 첨두 ≤ 76.4 A, 반복 전환 없음)으로 판정했다(표 \ref{t:e24}).
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2885\linewidth-2\tabcolsep\relax}L{\dimexpr 0.5962\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1154\linewidth-2\tabcolsep\relax}}
+\caption{Stage A 경부하 위상 셰딩의 판정(E24, TB18, TB19)}\label{t:e24}\\
+\toprule
+\tabhead \textbf{시험} & \textbf{결과} & \textbf{판정} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{시험} & \textbf{결과} & \textbf{판정} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+E24 정상 운전점(1008·540 V × −10–75 A) & 7.5 A 이상 턴오프 전류/피크 ≤ 3.27 \%(셰딩 없는 10 A 5.51 \%). 7.5 A 미만은 턴오프 전류 ≤ 0.48 A & 26/26 \\
+E24 과도(계단·램프·역방향·충전기 주입 10사례) & 턴오프 위반 0, 반복 전환 없음. V\textsubscript{A} 노드 직접 계단에서 위상 첨두 72.9 A(셰딩 없는 60.5 A). 사례 E(모듈당 충전 램프 요구의 4배)는 셰딩 없이도 82.5 A, 셰딩 93.6 A로 정격 초과 & 9/10 \\
+TB18 회로(R2 버스 뒤 부하 계단·램프, 충전기 주입, 역방향 5사례) & 턴오프 3,547번 위반 0(최대 0.77 A), 위상 첨두 ≤ 52.5 A(셰딩 없는 회로보다 ≤ 5.1 A 큼). E24와 전환 시각 2.3 µs, 첨두 0.23 A, V\textsubscript{A} 0.005 V 안 & 5/5 \\
+TB19 회로(TB17 + 셰딩 게이트) & 1008 V 강등 뒤 10 A의 턴오프 전류/피크 4.44 → 1.31 \%. 턴오프 17,561번 위반 0, 위상 첨두 ≤ 48.6 A. 멈춤·복귀(3·2번, 4·4번)가 모두 실제 전류 변화를 따랐고 취소 0. 강등·48 V·Stage C 결과는 TB17과 같음 & 2/2 \\
+\end{longtable}
+}
+\srcnote{주: 7.5 A 미만에서는 턴오프 전류/피크 비율이 뜻이 없어 절대값(≤ 1.0 A, 검출 문턱의 두 배)으로 판정했다.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15.5cm]{\repo/validation/2026-10-26-stage-a-shedding/E24/E24_stage_a_shedding.png}
+\caption{Stage A 경부하 위상 셰딩(E24)}\label{f:e24}
+\srcnote{주: (a) 모듈 출력전류별 턴오프 전류/피크, (b) 모듈 손실, (c) 54 → 10 → 54 A 계단의 위상 전류와 셰딩 모드, (d) 사례 E(모듈당 충전 램프 요구의 4배)의 위상 전류.}
+\end{figure}
+
+불통과 1건(사례 E)은 셰딩이 없어도 위상 정격을 넘는 조건이다. 셰딩은 복귀 지연만큼 첨두를 11.1 A 더했다. 충전전류 증가 램프 요구(전체 3.75 A/µs, 모듈당 0.94 A/µs, 8.3절)에서는 위상 첨두가 52.6 A로 셰딩 없는 경우(53.1 A)와 같았다. 따라서 충전기 쪽 램프 제한이 위상 정격도 지킨다. TB19에서는 강등 중 클램프 유지 구간(약 3 A)의 반주기별 턴오프 비율도 약 24 \%에서 약 10 \%로 내려갔다(턴오프 전류 ≤ 0.43 A). 남은 것은 모듈 4개(위상 8개)에서 모듈 셰딩과 위상 셰딩의 조합, 부품 공차(위상별 공진주파수 차)에서의 문턱 확인, 멈춘 위상 플라잉 커패시터의 누설에 따른 재시작 첫 펄스다.

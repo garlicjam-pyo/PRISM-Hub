@@ -1,0 +1,75 @@
+% PRISM-Hub 최종 보고서 조판 설정(XeLaTeX + xetexko)
+\usepackage[a4paper,top=25mm,bottom=25mm,left=25mm,right=22mm,headheight=14pt]{geometry}
+\usepackage{fontspec}
+\usepackage{xetexko}
+\setmainfont{Noto Serif CJK KR}[BoldFont={Noto Serif CJK KR Bold}]
+\setsansfont{Noto Sans CJK KR}[BoldFont={Noto Sans CJK KR Bold}]
+\setmonofont{DejaVu Sans Mono}[Scale=0.85]
+\setmainhangulfont{Noto Serif CJK KR}[BoldFont={Noto Serif CJK KR Bold}]
+\setsanshangulfont{Noto Sans CJK KR}[BoldFont={Noto Sans CJK KR Bold}]
+\linespread{1.32}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\setlist{itemsep=0.15em,topsep=0.2em,parsep=0.1em,leftmargin=1.6em}
+\usepackage[table]{xcolor}
+\definecolor{prismblue}{HTML}{1F4E79}
+\definecolor{rowgray}{HTML}{F2F2F2}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,labelsep=period,justification=centering,singlelinecheck=false}
+\captionsetup[table]{position=top,skip=4pt}
+\captionsetup[figure]{position=bottom,skip=4pt}
+\usepackage{titlesec}
+\titleformat{\chapter}[hang]{\sffamily\bfseries\LARGE\color{prismblue}}{\thechapter.}{0.6em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{1.2em}
+\titleformat{\section}[hang]{\sffamily\bfseries\large}{\thesection}{0.6em}{}
+\titleformat{\subsection}[hang]{\sffamily\bfseries\normalsize}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.2em}{0.4em}
+\titlespacing*{\subsection}{0pt}{0.9em}{0.3em}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\sffamily\color{gray}PRISM-Hub 최종 보고서}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\thepage}\renewcommand{\headrulewidth}{0pt}}
+\usepackage{tocloft}
+\renewcommand{\cftchapfont}{\sffamily\bfseries}
+\renewcommand{\cftchapaftersnum}{.}
+\setlength{\cftchapnumwidth}{2.4em}
+\setlength{\cftsecnumwidth}{3.0em}
+\renewcommand{\contentsname}{목차}
+\renewcommand{\listfigurename}{그림 목차}
+\renewcommand{\listtablename}{표 목차}
+\renewcommand{\bibname}{참고문헌}
+\usepackage[hidelinks,unicode,bookmarksnumbered]{hyperref}
+
+% 표·그림 번호: 장-순번(예: 표 2-1)
+\renewcommand{\thetable}{\thechapter-\arabic{table}}
+\renewcommand{\thefigure}{\thechapter-\arabic{figure}}
+\captionsetup[table]{name=표}
+\captionsetup[figure]{name=그림}
+
+% 저장소 최상위(그림 경로용. 본문에는 쓰지 않는다)
+\newcommand{\repo}{../../..}
+
+% 표 아래 주·자료 줄
+\newcommand{\srcnote}[1]{\par\vspace{-0.2em}{\footnotesize\raggedright #1\par}\vspace{0.6em}}
+% 표 칸 정렬
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcommand{\tabhead}{\rowcolor{prismblue!12}}
+% 판정 강조
+\newcommand{\pass}{\textbf{통과}}
+\newcommand{\fail}{\textbf{불통과}}
+\setlength{\LTpre}{0.4em}
+\setlength{\LTpost}{0.2em}
+\renewcommand{\arraystretch}{1.18}
+\newfontfamily\fallbackfont{DejaVu Serif}

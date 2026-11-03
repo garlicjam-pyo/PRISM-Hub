@@ -1,0 +1,145 @@
+% 원제: 10. 검증 결과(6): 조정형 Stage C와 R2 통합 회로(E22, E23, TB14–TB17)
+\chapter{검증 결과(6): 조정형 Stage C와 R2 통합 회로(E22, E23, TB14–TB17)}
+
+\section{조정형 Stage C 설계(E22)}
+
+R2 기본형에서는 400 V 버스가 V\textsubscript{A}를 그대로 따른다. 따라서 Stage C 입력은 팩 등급, 충전 상태와 고장 강등 여부에 따라 270–504 V로 1.87배 바뀐다. 기존 Stage C(고정이득 CLLC, 권선비 400/48)에 이 전압을 넣으면 48 V 출력이 32.4–60.5 V가 되어 48 V 전원망의 무제한 운전 범위(36–52 V)\cite{b10}를 벗어난다. 또 48 V 쪽에는 배터리가 연결되므로 Stage C가 출력전압과 배터리 충전전류를 스스로 조정해야 하고, 48 V 3 kW와 12 V 1.5 kW의 동시 공급(약 5 kW)과 48 V 회생(−3 kW)을 받아야 한다.
+
+공진형 변환기 하나로 1.87배 이득 범위를 양방향으로 내려면 자화 인덕턴스를 작게 두어야 해 순환전류가 커진다. 그래서 전단 조정기와 공진점 고정 주파수 CLLC 직류변압기(DCX)의 2단 구성을 택했다. 공진점 CLLC는 양방향 이득이 1에 가깝고\cite{b17}, 2단 구성은 넓은 출력 범위에서 쓰인다\cite{b18}. 전단의 두 후보를 E15와 같은 소자·자성체 손실 규칙으로 비교했다(표 \ref{t:e22}).
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3509\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3509\linewidth-2\tabcolsep\relax}}
+\caption{조정형 Stage C 후보 비교(E22)}\label{t:e22}\\
+\toprule
+\tabhead \textbf{항목} & \textbf{A: 동기 벅 + CLLC 4.8:1(선택)} & \textbf{B: 4스위치 벅부스트 + CLLC 25/3:1} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{항목} & \textbf{A: 동기 벅 + CLLC 4.8:1(선택)} & \textbf{B: 4스위치 벅부스트 + CLLC 25/3:1} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+중간전압 V\textsubscript{I} & 173–250 V(항상 강압) & 300–433 V(입력의 6.2 \%에서 벅부스트 모드) \\
+스위치 위치 / 소자 수 & 10 / 20 & 12 / 24 \\
+전단 인덕터 & 204 µH, 첨두 29.8 A, 0.120 J & 236 µH, 첨두 19.1 A, 0.057 J \\
+48 V 1.5 kW, 다섯 입력 평균 손실 & 47.1 W(10.2절 재설계 뒤 50.8 W) & 49.3 W \\
+5 kW 최악 손실(효율) & 166.8 W(96.8 \%) & 154.8 W(97.0 \%) \\
+\end{longtable}
+}
+\srcnote{주: 선택 규칙은 E15와 같다. 대표 부하 손실이 작은 쪽을 고르고, 차가 5 \% 이하면 모드 경계가 없고 스위치 위치가 적은 쪽을 고른다. 재설계 뒤 차는 3.2 \%라 선택은 그대로다. 열 설계는 A의 5 kW 값으로 한다.}
+
+선택한 구성은 벅 100 kHz(L\textsubscript{b} 204 µH, C\textsubscript{I} 20 µF), CLLC 권선비 4.8, 공진 2.19 µH·184.9 nF(250 kHz), 출력 커패시터 2.2 mF다. CLLC는 보내는 쪽 브리지만 구동하고 받는 쪽은 동기정류한다. 두 브리지를 같은 위상으로 구동하면 자화 전류가 두 브리지로 나뉘어 중부하에서 영전압 스위칭이 깨지기 때문이다. 직류변압기의 이득은 −3–5 kW에서 0.975–1.020이었다. 제어(2.6절)는 평균모델의 시험 8종을 모두 통과했다(표 \ref{t:e22c}).
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.3860\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2632\linewidth-2\tabcolsep\relax}L{\dimexpr 0.3509\linewidth-2\tabcolsep\relax}}
+\caption{조정형 Stage C의 제어 시험(E22, 평균모델, 입력 270·330·400·460·504 V)}\label{t:e22c}\\
+\toprule
+\tabhead \textbf{시험} & \textbf{판정 기준} & \textbf{결과} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{시험} & \textbf{판정 기준} & \textbf{결과} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+T1 정상 조정(입력 5점 × 전력 4점) & 오차 ≤ 0.1 \% & 0.000 \% \\
+T2 계약 부하 변화 4 kW/ms & 48 V ±2 \% & 최대 0.49 \% \\
+T3 계단(배터리 없음, 0.1 ↔ 5 kW, −3 ↔ +5 kW) & 36–52 V, 출력 100 µs 평균 ≤ 136.5 A & 40.64–50.91 V, 128.0 A(2.5 ms 뒤 104.2 A) \\
+T4 버스 계단 ±50 V/10 µs & 48 V ±2 \% & 최대 0.59 \% \\
+T5 배터리 연결(충전 제한 30 A) & 36–52 V, 1 ms 뒤 충전 ≤ 31.5 A & 43.28–48.98 V, 30.0 A \\
+T6 방향 전환 −3 → +3 → −3 kW & 48 V ±2 \% & 최대 0.22 \% \\
+T7 입력·버스 임피던스(Middlebrook) & |Z\textsubscript{bus}| ≤ |Z\textsubscript{in}|/2 & 최소 여유 49.1 dB \\
+T8 경부하 두 브리지 구동(10.2절) & 계단 36–52 V, ±1 kW 램프 ±2 \% & 46.74–48.29 V, 최대 0.21 \% \\
+\end{longtable}
+}
+\srcnote{주: 직류변압기 계단 직후의 순간 전류는 제어로 막을 수 없는 커패시터 사이 전하 이동이라, 전류 제한은 100 µs 이동평균으로 판정하고 순간값은 2차 소자 펄스 정격(329 A\cite{b15})과 비교했다(순간 최대 135 A).}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=16.0cm]{\repo/validation/2026-10-25-stage-c-regulated/E22/E22_stage_c_regulated.png}
+\caption{조정형 Stage C의 후보 손실, 직류변압기 이득과 48 V 계단 응답(E22)}\label{f:e22}
+\srcnote{주: (a) 후보 구조 손실(재설계 전), (b) 직류변압기 이득과 보내는 쪽 영전압 스위칭 여유, (c)–(e) 48 V 계단 응답(입력 270·400·504 V), (f) Stage C 입력 임피던스와 R2 기본형 버스 임피던스.}
+\end{figure}
+
+\section{조정형 Stage C의 회로 확인(TB14, TB15)}
+
+소자 수준 회로(Simscape Electrical, 2.5 ns)에서 대표 사례를 확인했다. 회로 확인은 세 번 걸렸고, 두 번의 실패는 모두 원인을 검증 모델로 재현한 뒤 고쳤다(표 \ref{t:tb14}).
+
+\begin{itemize}
+\item \textbf{TB14 1차 실행: 영전압 스위칭 실패.} 48 V 조정과 전류 제한은 평균모델과 0.1 V 안에서 같았다. 그러나 다섯 사례 모두 켜짐 직전 소자 전압이 51.8–68.5 V로 남았다. 1차가 보낼 때는 보내는 쪽 레그가 데드타임 안에 전이를 끝내지 못했고, 2차가 보낼 때는 전이를 마친 노드가 공진전류 반전으로 되돌아갔다. 처음 스위칭 모델은 데드타임 동안 브리지 전압을 다이오드가 바로 정해 이 현상을 볼 수 없었다.
+\item \textbf{대책 1: 레그 출력용량 모델.} 스위칭 모델에 레그 노드 네 개와 출력용량을 넣어 회로 결과를 재현했다(5 kW에서 67.9 V 대 회로 66.7–68.5 V). 이 모델로 출력용량 ±20 \%에서도 통과하는 창을 찾아 자화 인덕턴스를 62.2 µH에서 33 µH로, 데드타임을 1차 100 ns·2차 40 ns(창 90–110·25–55 ns의 가운데)로 정했다. 데드타임이 길면 오히려 되돌아감이 생기므로, 데드타임은 하한(전이 시간)과 상한(전류 반전) 사이의 창으로 정해야 한다. 대가는 1.5 kW 손실 +3.7 W다.
+\item \textbf{새로 찾은 문제: 역방향 경부하의 이득 상승.} 받는 쪽 1차 브리지를 다이오드 정류로만 두면, 1차 레그 출력용량 때문에 48 V에서 0.63 kW보다 가벼운 회생은 V\textsubscript{I}가 n·V\textsubscript{o}보다 3 \% 넘게 높아야 했다. 1차 레그 용량을 1/100로 줄이면 현상이 사라졌고, 독립 회로 해석기(ngspice)가 같은 전력을 8 \% 안에서 재현했다. 초경부하 LLC의 출력 상승\cite{b19}과 같은 계열의 현상이다. 270 V 버스에서는 벅 듀티가 상한에 붙어 조정이 깨질 수 있다.
+\item \textbf{대책 2: 경부하 두 브리지 구동.} 출력 전력 0.6 kW 아래에서는 받는 쪽 브리지도 같은 위상으로 구동한다. 받는 쪽 노드를 게이트가 정하므로 이득 상승이 없다. 2차 데드타임은 자화 전류가 나뉘어 전이가 느려지므로 90 ns로 따로 둔다.
+\end{itemize}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.1491\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2632\linewidth-2\tabcolsep\relax}L{\dimexpr 0.0877\linewidth-2\tabcolsep\relax}L{\dimexpr 0.5000\linewidth-2\tabcolsep\relax}}
+\caption{조정형 Stage C 회로 모델의 판정(TB14, TB15)}\label{t:tb14}\\
+\toprule
+\tabhead \textbf{실행} & \textbf{설계} & \textbf{판정} & \textbf{결과} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{실행} & \textbf{설계} & \textbf{판정} & \textbf{결과} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+TB14 1차 & 자화 62.2 µH, 데드타임 100 ns & 0/5 & 48 V는 E22와 0.1 V 안. 켜짐 직전 소자 전압 51.8–68.5 V(기준 레일의 5 \%)로 영전압 스위칭 불통과 \\
+TB14 2차 & 자화 33 µH, 데드타임 1차 100·2차 40 ns. 역방향 경부하 사례 F·G 추가 & 6/7 & 켜짐 직전 ≤ 0.19 V. F·G의 끝 이득 0.910·0.911(실행 전 예상 약 0.91). 270 V 사례 G는 벅 듀티 상한, 보내는 쪽 전환 41번으로 불통과 \\
+TB15 & TB14 2차 + 경부하 두 브리지 구동(2차 90 ns) & 5/5 & F·G 끝 이득 1.001·1.000, 보내는 쪽 전환 0·2번, 켜짐 직전 1차 ≤ 0.22 V·2차 ≤ 0.08 V. 모드 전환 중 48 V 47.79–48.07 V, E22와 0.02 V 안 \\
+\end{longtable}
+}
+\srcnote{주: 판정 묶음은 48 V 범위, 출력·소자 전류, 켜짐 직전 소자 전압(레일의 5 \% 이하), 끝 직류변압기 이득(1 ± 3 \%), E22 대조다.}
+
+남은 것은 두 가지다. 첫째, 데드타임 창의 폭이 20–30 ns라 하드웨어의 비선형 출력용량과 게이트 구동 지연 편차로 다시 정해야 한다. 둘째, 보내는 쪽 하나로 운전하는 역방향 하한(0.6–0.74 kW)에서 이득이 0.96–0.97로 기준 1 ± 3 \%를 최대 약 1 \%p 벗어난다. 이 구간에서도 48 V 조정은 유지되었다.
+
+\section{R2 통합 회로(E23, TB16, TB17)}
+
+지금까지는 각 단을 다른 단의 등가로 두고 확인했다. Stage B 설계·보호 검증(E12–E21, TB04–TB13)은 Stage A를 정적 등가(V\textsubscript{bat}/2 + 13.2 mΩ)로, Stage C를 정전력 부하로 두었고, 조정형 Stage C(E22, TB14·TB15)는 이상 버스 전원에서 확인했다. 실제 세 단을 한 회로로 이어야 하는 이유는 세 가지다.
+
+\begin{itemize}
+\item \textbf{R2 기본형에는 버스를 붙잡는 조정기가 없다.} 정전력 부하인 Stage C(5 kW)와 400 V 부하가 Stage A 출력저항·C\textsubscript{A}·감쇠기에 직접 물리므로, 안정성은 Stage C 입력 임피던스와 버스 임피던스의 관계로 정해진다\cite{b20}, \cite{b21}.
+\item \textbf{강등 중 48 V 공급은 R2의 요구다.} 창 조정 모듈의 H-브리지 개방 강등 동안 Stage C 입력은 460 → 380 → 504 V로 최대 약 130 V/ms로 움직인다.
+\item \textbf{Stage A가 극단 전류 변화를 겪는다.} 고장 직후 경로전류가 약 50 A에서 수 A로 떨어지고 잠시 역방향이 된다. 지금까지 Stage A 영전류 스위칭은 주행·충전 정상 운전점(TB06·TB07)에서만 판정했다.
+\end{itemize}
+
+TB16은 배터리 → Stage A 모듈 1(2위상, 영교차 추종 게이트) → V\textsubscript{A} 노드(400 µF) → 배선(3 mΩ·1.5 µH) → 버스(400 µF ∥ 감쇠기 48.6 mΩ + 1.6 mF) → 정전력 부하 + 조정형 Stage C(TB15) 회로다. TB17은 TB13 회로(창 조정 모듈, 보호 상태기계, EPS 변조)의 이상 V\textsubscript{A} 전원을 Stage A 모듈 회로로, 정전력 부하를 조정형 Stage C 회로로 바꿨다. 결과는 표 \ref{t:r2int}와 같다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2807\linewidth-2\tabcolsep\relax}L{\dimexpr 0.0877\linewidth-2\tabcolsep\relax}L{\dimexpr 0.4386\linewidth-2\tabcolsep\relax}}
+\caption{R2 통합 회로의 판정(E23, TB16, TB17)}\label{t:r2int}\\
+\toprule
+\tabhead \textbf{시험} & \textbf{조건} & \textbf{판정} & \textbf{결과} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{시험} & \textbf{조건} & \textbf{판정} & \textbf{결과} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+E23 기본형(평균모델) & 540·806·907 V. Stage C 0.1 → 5 kW 계단, 400 V 부하 15 → 25 kW(10 µs), Stage C 5 → −3 kW 계단 & 3/3 & 48 V 44.31–48.18 / 48.00–48.03 / 47.75–50.91 V. 버스 변동 0.43–0.83 V. Middlebrook 여유 최소 49.3 dB \\
+TB16 기본형(회로) & 같음 & 3/3 & 48 V 44.16–48.19 / 48.00–48.04 / 47.73–50.73 V(E23과 최저·최고 0.18 V, 끝 0.000 V 안). 버스 끝 차 ≤ 0.016 V. Stage A 턴오프 전류/피크 ≤ 2.27 \%, Stage C 켜짐 직전 ≤ 0.21 V \\
+E23 강등(평균모델) & E17 버스 궤적, Stage C 입력 5 kW & 2/2 & 48 V 47.992–48.012 V(±0.03 \%) \\
+TB17 강등(회로) & R2-W460 1008·930 V, H-브리지 개방(1.5 ms), 400 V 부하 20 kW + Stage C 5 kW & 2/2 & 버스 409.4–503.9 / 380.3–464.9 V 동안 48 V 47.995–48.008 / 47.996–48.011 V. DAB 첨두 66.4·64.5 A(≤ 68.7 A), 상태 전이 E17과 0.01 ms 안(TB13과 같음). Stage C 켜짐 8,500번 모두 ≤ 0.11 V \\
+\end{longtable}
+}
+\srcnote{주: 48 V 범위 기준은 계단 사례 36–52 V, 계약 과도·강등 ±2 \%. TB16은 10 µs 평균(벅 한 주기, Stage A 리플 6주기)으로 판정했다.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15.5cm]{\repo/validation/2026-10-25-r2-integrated/E23/E23_degrade.png}
+\caption{R2-W460 H-브리지 개방 강등 중 400 V 버스와 조정형 Stage C의 48 V(E23)}\label{f:e23}
+\srcnote{주: 같은 조건의 회로(TB17)에서 48 V는 평균모델과 0.004 V 안이었다.}
+\end{figure}
+
+결과에서 세 가지를 확인했다.
+
+\begin{itemize}
+\item \textbf{설계에 쓴 등가가 회로와 맞는다.} 실제 Stage A·Stage C를 넣어도 TB17의 강등은 TB13과 같았다(순시 경로·필터 −3.3 – +0.2 A, DAB 첨두 ≤ 0.1 A, 소프트 투입 에너지 ≤ +0.002 J 차). 실제 Stage C 입력은 5.01–5.12 kW로 등가의 5 kW보다 최대 2.4 \% 컸지만 상태 전이 시각은 바뀌지 않았다. 유효 범위는 V\textsubscript{A} 노드 공진(주기 약 30 µs)보다 느린 외란이다.
+\item \textbf{강등이 48 V에 준 영향은 ±0.01 V 수준이다.} Stage C 제어기가 버스 전압으로 듀티를 나눠 쓰고(입력 앞먹임), CLLC 입력은 벅이 조정한 중간전압(약 235 V)이라 버스 궤적과 무관하다.
+\item \textbf{새로 확인한 한계: Stage A 경부하 영전류 스위칭.} 1008 V 강등 뒤 400 V 부하가 분리되고 Stage C만 남으면 Stage A 모듈 출력은 약 10 A다. 이 점에서 스위칭 모델(E1)의 턴오프 전류/피크는 5.40–5.47 \%로 기준 5 \%를 넘었고, 회로는 4.44 \%로 통과했지만 여유가 작았다. 11장에서 해결했다.
+\end{itemize}

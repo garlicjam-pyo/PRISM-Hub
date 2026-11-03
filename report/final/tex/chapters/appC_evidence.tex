@@ -1,0 +1,51 @@
+% 원제: 부록 C. 검증 근거 목록
+\chapter{검증 근거 목록}
+
+본문의 수치는 다음 검증 근거에서 얻었다. 각 근거는 입력 조건, 판정 기준과 결과를 함께 보관하며 같은 조건에서 재현할 수 있다. 검증 코드(MATLAB, Python)와 Simulink 테스트벤치는 같은 번호 체계로 정리했다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.0877\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.4561\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1579\linewidth-2\tabcolsep\relax}}
+\caption{표 C-1. 검증 근거 목록}\\
+\toprule
+\tabhead \textbf{번호} & \textbf{근거} & \textbf{내용} & \textbf{도구} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{번호} & \textbf{근거} & \textbf{내용} & \textbf{도구} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+E1 & Stage A 스위칭 시험 & 8위상 RSC, 고정 타이밍과 영교차 추종의 부품 공차 표본, 손실·모듈 셰딩·프리차지 & MATLAB, Python \\
+E2 & Stage B 평균모델 정합성 & 에너지 보존, 평형점 잔차, 적분간격 수렴, 이중 구현 대조 & Python, MATLAB \\
+E3 & 25 kW 정상상태 전력수지 & 640–920 V 평형점의 경로전류, 직렬전압, 링크전력 & Python \\
+E4 & 요구사항 분석 & 부하 입력범위와 규격 대조, 보장 최소 배터리 전압 & Python \\
+E5–E7 & 제어기 검증·지연 여유·추가 강건성 & Tier-1·Tier-2 552건, 표본화 선형화, 복합 공차 128개 코너, 부하 계약 최악 시퀀스 & Python \\
+E8 & 부하 승인 시험 & 무작위 시나리오 200개, 메시지 지연·손실, 관리 방식 3종 비교 & Python \\
+E9 & 제어기 설계 대안 비교 & 대역폭·극 배치 변경과 전압항 포화 & Python \\
+E10 & Stage C 스위칭 시험 & 3 kW CLLC의 전압이득, 입력 변동, ZVS 여유 & MATLAB, Python \\
+E11 & 채택 제어기 독립 구현 & MATLAB 재구현과 1,542건 대조 & MATLAB(Octave), Python \\
+E12 & Stage B 스위칭 모델 & PWM·데드타임·출력용량·DAB SPS, DAB 전류 제한, 데드타임 보상, 센서 사양, 게이트 시간 분해능 & Python(Numba) \\
+E13 & 기준 구조 예비 비교 & ③·③′·④의 정적 범위, Tier 시험, 감쇠기 설계 & Python \\
+E14 & Stage B 보호·기동 & 정지·기동 전이, 링크 프리차지, 센서 고장과 타당성 감시 & Python \\
+E15 & 기준 구조 손실·정격 & ①–④의 손실(프로파일 가중), 반도체 수, 스위치 VA, H5 판정, 감도 7종 & Python \\
+E16 & 충전 중 보조버스 & 정적 범위, 동시 운전, 모드 전환, 전체 순서, 스위칭 모델 & Python(Numba) \\
+E17 & 보호 상태기계 결합 & 감시 회귀, R2 측정 기반 상태기계 117건, 정책 비교와 감도 & Python \\
+E18 & 팩 등급별 가치 지도 & 180–240s × B\textsubscript{420}·B\textsubscript{470}의 성립성·손실·정격, 500 V 충전기 호환 & Python \\
+E19 & 창 조정 모듈 & DAB 정격 규칙, 공차 포함 Tier, 모드 전환, 고장 강등 & Python \\
+E20 & DAB 고장 모드 변조 & SPS·EPS 정확 해석과 지령표, 강등 방식 비교 40건 & Python \\
+E21 & 고장 모드 변조의 회로 여유 & 데드타임·출력용량·역방향 도통 스위칭 정상상태, TB10 재현, 첨두 표, 강등 방식 P3s·P3t(전이 여유) & Python(Numba) \\
+E22 & 조정형 Stage C 5 kW & 후보 손실 비교, 직류변압기 정상상태, 레그 출력용량 모델(자화 인덕턴스·데드타임), 역방향 경부하 이득, 제어 시험 8종 & Python, ngspice \\
+E23 & R2 통합 회로 & 기본형 버스 + 조정형 Stage C 평균모델, Middlebrook 임피던스, 강등 버스 궤적의 48 V, Stage A 경부하 영전류 스위칭 & Python \\
+E24 & Stage A 경부하 위상 셰딩 & 문턱 설계, 데드타임 전류 소멸 처리, 정상 운전점 26점, 전환 과도 10사례 & Python(Numba) \\
+E25 & 산업 방식 대비 구조 비교 & 모터·인버터 승압 충전 손실(96조합), 800 V급 보조부품 구조, 손실 에너지 예시, Stage A 손실 감도 & Python \\
+E26 & 충전 중 Stage A 정지 협조 & 모듈 과부하(스위칭 모델), V\textsubscript{A} 노드 사건 32건(클램프 유무, 충전기 반응, 통신 지연) & Python(Numba) \\
+TB01–TB05 & 단별 회로 & Stage A 1위상, Stage B 개루프·폐루프(출력용량·게이트 격자), Stage C & Simulink \\
+TB06–TB07 & 통합 회로 & 주행(Stage A 모듈 1 + B + C), 충전(8위상 + 충전기) & Simulink \\
+TB08–TB13 & 창 조정 모듈 회로 & 창 조정·전환·DAB 고장 강등, 보호 상태기계, 고장 모드 변조, 데드타임 반영 첨두 표, EPS 지령 전이, 전이 여유 & Simulink \\
+TB14–TB15 & 조정형 Stage C 회로 & 동기 벅 + CLLC 직류변압기, 영전압 스위칭, 역방향 경부하, 두 브리지 구동 & Simulink \\
+TB16–TB17 & R2 통합 회로 & 기본형(Stage A + 감쇠기 + 조정형 Stage C), R2-W460 강등 중 48 V & Simulink \\
+TB18–TB19 & Stage A 위상 셰딩 회로 & 셰딩 게이트의 전환 과도, R2-W460 강등 중 셰딩 & Simulink \\
+TB20 & 충전 중 정지 회로 & Stage A 4모듈 + 충전기 + V\textsubscript{A} 클램프, 경로 상실·모듈 고장·충전기 램프 & Simulink \\
+\end{longtable}
+}
