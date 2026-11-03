@@ -1,2 +1,111 @@
-\chapter{Stage A 출력용량 손실과 설계 수정}
-작성 중.
+\chapter{검증 결과(9): Stage A 출력용량 손실과 설계 수정}
+
+부품 정격 표를 만들려고 Stage A 스위치 후보의 데이터시트를 확인하다가, 출력용량 값이 손실 모델 값과 맞지 않는 것을 찾았다. 이 장은 그 오류(E31), 원설계(150 kHz)를 대신할 설계를 고른 과정(E31–E33), 최종 설계 A25R의 판정(E35, TB25–TB27)을 다룬다. 판정 기준은 단계마다 실행 전에 정했다.
+
+\section{무엇이 틀렸나}
+
+E1 이후 모든 Stage A 손실은 출력용량 손실을 위상당 4·E\textsubscript{oss}·f\textsubscript{s}(E\textsubscript{oss} 24 µJ, 150 kHz에서 14.1 W)로 두었다. 이 값은 6·7·11장과 15장의 손실 비교에 그대로 들어갔다. 두 가지가 틀렸다.
+
+\begin{itemize}
+\item \textbf{영전류 스위칭에서도 노드 용량은 하드 스위칭된다.} Stage A는 공진전류가 0으로 돌아왔을 때 끈다. 그래서 데드타임에 스위치 노드 전압(V\textsubscript{bat}/2)을 옮길 전류가 없고, 다음 스위치가 켜질 때 노드 용량을 하드 스위칭으로 충·방전한다. 위상당 한 주기에 이런 전이가 네 번 있다.
+\item \textbf{한 전이의 손실은 E\textsubscript{oss}가 아니라 Q\textsubscript{oss}(V)·V다.} 켜지는 소자는 저장 에너지 E\textsubscript{oss}를 잃고, 꺼져 있던 소자는 전원에서 Q\textsubscript{oss}를 받아 충전되며 Q\textsubscript{oss}·V − E\textsubscript{oss}를 잃는다\cite{b32}. E\textsubscript{oss}만 세면 SiC MOSFET에서 3.2–4.2배 작다. 또 24 µJ는 수십 mΩ급 소자 하나의 값이어서, 위치당 6 mΩ를 실제 750 V SiC로 만들면 위치당 Q\textsubscript{oss}(400 V)·400 V는 약 300 µJ로 12.5배다.
+\end{itemize}
+
+따라서 위상당 출력용량 손실은 P\textsubscript{oss} = 4·Q\textsubscript{oss,위치}(V\textsubscript{bat}/2)·(V\textsubscript{bat}/2)·f\textsubscript{s}다. 노드마다 출력용량을 넣은 공진 회로를 행렬 지수로 푼 정확해의 무부하 손실이 이 식과 0.1 \% 안이었다. 영전류 스위칭 공진 스위치드 커패시터에서 턴오프 잔류 전류가 데드타임에 출력용량을 충·방전한다는 관찰은 있으나\cite{b33}, 잔류 전류가 없으면 노드가 그대로 남아 하드 스위칭된다는 것이 이 경우다.
+
+\section{원설계 보정과 설계 격자(E31, TB25)}
+
+소자 4종(Wolfspeed SiC MOSFET 2종, onsemi SiC 캐스코드, GaN Systems GaN)의 데이터시트 표 값으로 Q\textsubscript{oss}(V)를 맞추고\cite{b34}, 도통 손실은 스위칭 모델로 다시 계산했다. 판정 기준(실행 전에 고정)은 다음과 같다. S1: 원설계에서 출력용량·게이트 항만 고쳤을 때 위상당 고정 손실 증가가 당시 손익분기(14.8 W) 이하인가. S2: 수정안이 보조 경로 손실 ≤ 모터 승압 구조(⑤, 당시 114.6 W), 800 V 충전 손실 ≤ 모터 승압 기준점(1.165 kW), 전압·전류 정격을 만족하는가. S3: 합격안 가운데 공진주파수가 가장 높은 안(가)과, 소자 수가 원설계 이하이면서 충전 손실이 가장 작은 안(나)을 고른다.
+
+\begin{itemize}
+\item \textbf{원설계 보정(S1): 불합격.} C4MS008075U2 2병렬이면 800 V에서 위상당 출력용량 손실이 175 W였다(이전 모델 14 W). 위상당 고정 손실 증가는 주행 대표 전압 평균 176.5 W로 손익분기의 12배였다. 원설계를 그대로 두면 R2(④)의 보조 경로 손실은 위상 셰딩을 넣어도 324 W, 800 V 충전 손실은 1.83 kW가 되어, 모터 승압 기준점(1.17 kW)과 전용 승압기(1.78 kW)보다 컸다.
+\item \textbf{영전류 게이트로는 150·100 kHz에서 합격하는 설계가 없다(S2).} 소자 4종 × 병렬 수 × 공진주파수 6개의 90안 가운데 24안이 합격했고, 모두 공진주파수 ≤ 75 kHz였다. 출력용량 손실은 주파수와 소자 크기(Q\textsubscript{oss} ∝ 1/R\textsubscript{on})에 비례하고 도통 손실은 R\textsubscript{on}에 비례하므로, 주파수를 낮추고 소자 크기를 맞춰야 둘 다 줄어든다. 영전압 스위칭 보조 운전으로 노드를 옮기는 방법은 시험하지 않았다.
+\item \textbf{선택 규칙(S3)의 두 안.} (가) C4MS025075K1 2병렬, 75 kHz는 충전 손실이 640–920 V에서 1.02–1.12 kW, (나) C4MS008075U2 2병렬(원설계와 같은 소자), 25 kHz는 0.52–0.64 kW였다. 둘 다 소자 수는 64개로 원설계와 같다. 두 안 가운데 충전 손실이 작은 (나)를 골랐다(이하 A25).
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=15.5cm]{\repo/docs/fig/report/fig13_1_coss.png}
+\caption{Stage A 출력용량 손실 재평가(E31)}\label{f:e31}
+\srcnote{주: (a) 위상당 손실(800 V): 이전 모델, 원설계 보정, 선택안 (가)·(나), (b) 설계 격자의 보조 경로 손실과 800 V 충전 손실(채운 표시 = S2 합격). 기준선의 ⑤·⑥은 E25 당시의 값이며, 최종 비교는 15장이다. 자료: 검증 근거 E31.}
+\end{figure}
+
+회로 확인(TB25)은 Stage A 1위상 회로의 스위치 셀마다 등가 선형 출력용량(Q\textsubscript{oss}(V)/V)을 넣어 했다. \textbf{무부하 출력용량 손실은 세 설계 모두 식과 같았다}(176.34·27.52·29.39 W, 이전 모델의 같은 항 15.29·7.64·2.55 W). 부하 시 기준값 대조 9개 가운데 3개는 불통과였다. 시험용 고정 타이밍 게이트가 낮은 공진주파수에서 턴오프 전류(5.8·8.7 A)를 남겨 데드타임에 노드 전하 일부를 옮겼고, 기준 모델의 적분 간격이 25 kHz에 맞지 않았기 때문이다(실행 뒤 진단). 출력용량 손실이 이전 모델보다 한 자릿수 크다는 결론은 바뀌지 않는다.
+
+\section{25 kHz 설계 A25의 재검증(E32, E33, TB26)}
+
+공진주파수를 6배 낮추면 150 kHz로 한 동특성 검증을 새 값으로 다시 해야 한다. A25의 결과는 표 \ref{t:a25}와 같다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.26\linewidth-2\tabcolsep\relax}L{\dimexpr 0.74\linewidth-2\tabcolsep\relax}}
+\caption{A25(C\textsubscript{A} 400 µF)의 재검증 결과}\label{t:a25}\\
+\toprule
+\tabhead \textbf{항목} & \textbf{결과} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{항목} & \textbf{결과} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+정상 손실(E32) & ④ 보조 경로 94.4 W(위상 셰딩, 당시 Stage C 모델), 375 A 충전 640/800/920 V 520/586/639 W \\
+문턱(E32) & 위상 셰딩 20/30/53 A, 모듈 관리기 70/60 A/모듈·66 A, 시간 상수 6배(11.5절) \\
+정상 운전점(E33) & 공칭 33/36, 공차 표본 31/36 \\
+과도(E33) & \textbf{공칭 1/7, 공차 1/7.} 충전 시작·종료 3사례는 모듈을 모두 켜도 턴오프 위반, 부하 계단 위상 첨두 76.6 A > 74.5 A \\
+느린 충전(E33) & \textbf{0/3, 0/3.} 사전 기동·램프를 600 µs로 늘려도 턴오프 위반 2–15번(최대 1.7–4.4 A) \\
+모듈 고장(E33) & 16/16(3모듈 충전 위상 첨두 최대 119.6 A) \\
+회로(TB26) & 3사례 모두 불통과. 동특성 판정은 모델과 같았고(위상 첨두 차 ≤ 1.6 A, V\textsubscript{A} 차 ≤ 0.18 V), 손실 대조는 손실 추정 방식(저장 에너지 미보정)이 A25에 맞지 않아 불통과 \\
+\end{longtable}
+}
+\srcnote{자료: 검증 근거 E32, E33, 회로 모델 TB26.}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=14cm]{\repo/docs/fig/report/fig13_2_a25_module.png}
+\caption{A25 모듈 손실과 영전류 스위칭 품질(E32)}\label{f:e32}
+\srcnote{주: (a) 모듈 출력전류별 손실(2위상·위상 하나, 540·800·1008 V, 점선은 셰딩 문턱 20·30 A), (b) 턴오프 전류/첨두(실선 2위상, 점선 위상 하나, 기준 5 \%). 자료: 검증 근거 E32.}
+\end{figure}
+
+\textbf{A25는 정상 손실과 모듈 고장 처리에서는 목표를 지켰지만, 150 kHz 설계에서 통과한 과도 판정을 대부분 통과하지 못했다.} 원인은 공진이 6배 느려졌는데 V\textsubscript{A} 노드와 부하·충전기의 시간 척도는 그대로라는 점이다. 그래서 A25를 최종 설계로 두지 않았다.
+
+\section{최종 설계 A25R: V\textsubscript{A} 노드 커패시터 2.4 mF(E35, TB27)}
+
+고칠 내용은 판정 기준을 고정하기 전에 개발 사례로 골랐다(판정 아님). 충전 요청 중 셰딩 정지, 관리기 시간 상수를 150 kHz 값으로 되돌리기, 막혔던 위상의 인터리빙 맞춤 시작은 하나씩이든 함께든 개발 사례를 모두 통과하지 못했다. \textbf{V\textsubscript{A} 노드 커패시터를 6배(400 µF → 2.4 mF)로 키운 안만 느린 충전 3사례와 Tier-1 계단 2사례를 모두 통과했다.} 원인이 관리기 논리보다 V\textsubscript{A} 노드의 시간 척도라는 뜻이다. 공진 한 주기 동안 V\textsubscript{A} 노드가 받는 전하 교란을 C\textsubscript{A}가 150 kHz 설계와 같은 비율로 흡수해야 한다.
+
+부하 계단은 이번 판정부터 요구사항의 계약(1 ms 창 최대 +7.98·−9.3 kW, Tier-1 대표 시험 ±10 kW)으로 판정했다. 150 kHz부터 써 온 20 kW 순간 계단은 계약 밖이라 정보로만 계산했다. 판정 결과는 표 \ref{t:a25r}와 같다.
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.30\linewidth-2\tabcolsep\relax}L{\dimexpr 0.30\linewidth-2\tabcolsep\relax}L{\dimexpr 0.40\linewidth-2\tabcolsep\relax}}
+\caption{A25와 A25R의 판정 비교}\label{t:a25r}\\
+\toprule
+\tabhead \textbf{항목} & \textbf{A25(E33, TB26)} & \textbf{A25R(E35, TB27)} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{항목} & \textbf{A25(E33, TB26)} & \textbf{A25R(E35, TB27)} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+요구 안 과도(Tier-1 ±10 kW 계단 2, 버스 램프, 느린 충전 3) & 느린 충전 0/3·0/3 & \textbf{6/6·6/6}(위상 첨두 45.5–76.1 A, 턴오프 위반 0) \\
+모듈 고장 & 16/16(3모듈 충전 첨두 119.6 A) & \textbf{16/16}(105.5 A) \\
+정상 운전점(공칭 / 표본) & 33/36 / 31/36 & 33/36 / \textbf{36/36} \\
+요구 밖(정보: 20 kW 순간 계단, 100 µs 충전 램프, 사전 기동 없는 충전) & — & 0/6·0/6(첨두 87–88 A, 턴오프 위반 12–22번, 첨두 217–221 A) \\
+회로 & 3/3 불통과 & \textbf{4/4 통과}(첨두 차 ≤ 2.2 A, V\textsubscript{A} 차 ≤ 0.06 V) \\
+손실 회로 대조(정격 충전 정상상태) & 판정 불가 & 회로 510.5 W, 모델 495.8 W(\textbf{+3.0 \%}) \\
+\end{longtable}
+}
+\srcnote{주: 정상 운전점의 공칭 불통과 3점은 정격 충전점 시작 과도(76.7 A, 마지막 10주기 74.3 A)로 150 kHz 설계부터 같은 현상이다. 자료: 검증 근거 E33, E35, 회로 모델 TB26, TB27.}
+
+\textbf{A25R은 요구 안의 동특성 판정을 모델과 회로에서 모두 통과했다.} 회로 손실 대조가 +3.0 \%로 맞아, 출력용량 손실(Q\textsubscript{oss}·V)을 포함한 손실 모델의 근거가 회로 수준에서 확인되었다. 최종 설계값은 위치당 C4MS008075U2 2병렬, 공진주파수 25 kHz, L\textsubscript{r} 864.6 nH, C\textsubscript{fly} 46.875 µF, C\textsubscript{A} 2.4 mF이고, 바뀐 운전 요구는 충전 전 사전 기동과 충전전류 증가 램프 ≥ 600 µs(8장), 셰딩·관리기 문턱과 시간 상수(11.5절)다.
+
+\section{대가와 한계}
+
+\begin{itemize}
+\item \textbf{C\textsubscript{A}의 부피·비용.} 2.4 mF 후보는 필름 커패시터 B32778Z5127 × 20(리플 690 A, 약 2.95 L, 전압 기준 530 V)이다(16장).
+\item \textbf{판정 사례의 일부가 설계 선택에 쓰였다.} 고칠 내용을 고르는 데 쓴 사례(느린 충전 3, Tier-1 계단 2)가 판정 사례에도 들어 있다. 새로 확인한 것은 정상점 72점, 모듈 고장 16, 버스 램프, 공차 표본 1, 회로 4사례다.
+\item \textbf{요구 밖 조건은 여전히 불통과다.} 20 kW 순간 계단, 100 µs 충전 램프, 사전 기동 없는 충전이다. 사전 기동 없는 충전은 C\textsubscript{A}가 커져 오히려 나빠졌다(A25 169 A → A25R 217–221 A).
+\item \textbf{영전압 스위칭 보조 운전은 시험하지 않았다.} 150·100 kHz 불성립은 영전류 게이트를 전제로 한 결과다. 75 kHz는 시험한 격자의 합격 상한일 뿐이며 성립 조건의 경계가 아니다.
+\item \textbf{이전 결론을 A25R로 다시 계산했다.} Stage A 손실이 들어간 결론(H5, 가치 지도, 선행 구조 대비 위치, 충전 중 정지, 이중 고장)이 바뀌는지 14장에서 확인한다.
+\end{itemize}

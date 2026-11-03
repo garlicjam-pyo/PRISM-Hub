@@ -1,2 +1,79 @@
 \chapter{부품 정격 표}
-작성 중.
+
+모델과 회로가 판정 한계 안에서 동작해도, 실제 부품이 그 스트레스를 받지 못하면 설계는 성립하지 않는다. 그래서 모델이 낸 전압·전류·에너지를 상용 부품의 데이터시트와 대조했다(검증 수준 ①′, 4장). 대조는 세 번 하고 두 번 다시 판정했다(E34, E37, E38, E39, E40). 판정 기준은 매번 실행 전에 정했고, 앞 판정이 바뀐 이유를 그대로 남긴다.
+
+\section{공통 가정과 판정 규칙}
+
+\begin{itemize}
+\item \textbf{냉각 기준.} SiC·GaN은 케이스 100 °C, IGBT와 방열판 기준 열저항을 주는 SiC 모듈은 방열판 65 °C.
+\item \textbf{온도 한도.} 정상 운전은 T\textsubscript{J} ≤ T\textsubscript{J,max} − 25 °C, 단발 고장 사건은 T\textsubscript{J} ≤ 데이터시트 SOA의 한계.
+\item \textbf{반도체 공통.} 모델 최대 차단 전압 ≤ 0.8 × 정격(기생 인덕턴스 과전압은 모델에 없음), 소자당 첨두 ≤ 0.5 × 펄스 정격. 병렬 분담은 스위칭이면 같은 몫 × 1.1, 선형 영역(바이패스 소프트 투입)은 분담을 보장할 수 없으므로 소자 1개가 모두 받는 경우로 판정한다.
+\item \textbf{열.} 정상 열저항을 쓰되 최대값이 있으면 최대값, 없으면 전형값 × 1.2로 한다(E39). 사건이 열 시정수보다 짧으면 보수적이다. EPC2305는 데이터시트 단일 펄스 열임피던스를 Foster 회로망으로 맞춰 전력 이력을 겹쳐 계산한다.
+\item \textbf{규칙 L(E40).} 전형값만 있는 손실 인자(R\textsubscript{DS(on)}, 스위칭 에너지, 다이오드 전압 등)는 같은 데이터시트의 다른 온도에 최대값이 있으면 그 최대/전형 비를, 없으면 × 1.2를 곱한다. 예: C4MS008075U2 도통 × 1.30, CAB530M12BM3 R\textsubscript{DS(on)} × 1.33, FF2MR12KM1P R\textsubscript{DS(on)}·스위칭 에너지·열저항 × 1.2.
+\end{itemize}
+
+\section{최종 부품 정격 표}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.08\linewidth-2\tabcolsep\relax}L{\dimexpr 0.16\linewidth-2\tabcolsep\relax}L{\dimexpr 0.22\linewidth-2\tabcolsep\relax}L{\dimexpr 0.27\linewidth-2\tabcolsep\relax}L{\dimexpr 0.27\linewidth-2\tabcolsep\relax}}
+\caption{부품 정격 표(최종)}\label{t:parts}\\
+\toprule
+\tabhead \textbf{번호} & \textbf{부품} & \textbf{후보} & \textbf{스트레스(모의)} & \textbf{판정} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{번호} & \textbf{부품} & \textbf{후보} & \textbf{스트레스(모의)} & \textbf{판정} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+P1 & Stage A 스위치 & Wolfspeed C4MS008075U2 × 2(위치당) & 차단 518 V, 소자 첨두 93.1 A, 정격 충전 가장 뜨거운 위치 소자 손실 12.3 W & \textbf{통과}: 102.4 °C(규칙 L) \\
+P2 & 플라잉 커패시터 46.9 µF & CastorCap CC7.5u1300 × 6(위상당 45.0 µF) & 위상 실효 52.5 A(공차 표본 60.9 A) & \textbf{통과, 단서}: 전류 정격이 30 °C 기준, 용량 −4.0 \%(f\textsubscript{r} +2.1 \%) \\
+P3 & 공진 인덕터 864.6 nH & 공심 코일 지름 60 mm·3.6회·Litz 15.2 mm\textsuperscript{2} & 첨두 169.3 A(금지 조건), 실효 60.9 A & \textbf{요구·설계 추정}: 손실 3.1–4.2 W, 포화 없음 \\
+P4 & V\textsubscript{A} 클램프 저항 & Ohmite 891SP 2.4 Ω × 3(R2-W460 2.7 Ω × 3) & 가지 에너지 ≤ 3,405·3,729 J, 가지 전류 ≤ 262·255 A & \textbf{조건부 통과}: 15 kJ의 23·25 \%. 저항값별 허용치는 제조사 확인 \\
+P5 & V\textsubscript{A} 클램프 스위치 & Infineon FF2MR12KM1P(가지마다), 대체 Wolfspeed CAB530M12BM3 & 사건 평균 손실 최대 481.5 W(스위칭 74 \%) & \textbf{통과}: 125.1·124.9 °C(대체 131.4·131.1 °C), 한도 150 °C. 단서: 열 기준점이 다름, FF2MR12KM1P는 2020년 예비 데이터시트 \\
+P6 & 바이패스 소프트 투입 & EPC2305(바이패스 GaN) 1개 + Stage C 일시 정지 & 최악 0.036 J·104 W(74사례) & \textbf{통과}: 109.6 °C(규칙 L) \\
+P7 & H-브리지 역방향 도통(이중 고장) & EPC2305 × 2 & 소자 최대 32.7 A, 400 V 부하 정지 3 ms & \textbf{통과}: 100.6 °C(규칙 L) \\
+P8 & 링크 제동 저항 3 Ω & Vishay LTO 150H & 제동 에너지 최대 51.9 J & \textbf{조건부 통과}: 반복 펄스 52.8 J(단발 75.5 J × 0.7) 대비 98 \%. 0.1 s보다 짧은 펄스 곡선 대조는 남음 \\
+P9 & 400 V 부하 접촉기 & TE ECK100B(1000 V) & R2-W460 470 V·52.7 A, R2-W410 420 V·70.7 A & \textbf{통과}: 100 A·800 V 1,000회 \\
+C\textsubscript{A} & V\textsubscript{A} 노드 커패시터 2.4 mF & TDK B32778Z5127(600 V, 120 µF) × 20 & 리플 최대 50.6 A(공차 표본), 전압 기준 530 V & \textbf{통과}: 690 A, 2,950 cm\textsuperscript{3} \\
+F2 & 이중 고장 경로전류 5 ms & 400 V 부하 정지 ≤ 3 ms(방전 저항 없음) & 경로전류 1 A 아래까지 1.83–1.98 ms & \textbf{통과}(4/4, 회로 TB31) \\
+\end{longtable}
+}
+\srcnote{주: 모든 판정은 모의 스트레스와 데이터시트 값의 대조이며 부품 시험이 아니다. 자료: 검증 근거 E34, E37–E40, 회로 모델 TB29–TB33, 각 부품 데이터시트\cite{b34,b56,b57,b58,b59,b60,b15}.}
+
+\section{판정의 경과}
+
+{\footnotesize
+\begin{longtable}{L{\dimexpr 0.12\linewidth-2\tabcolsep\relax}L{\dimexpr 0.36\linewidth-2\tabcolsep\relax}L{\dimexpr 0.52\linewidth-2\tabcolsep\relax}}
+\caption{부품 정격 판정의 경과}\label{t:parts_hist}\\
+\toprule
+\tabhead \textbf{단계} & \textbf{결과} & \textbf{처리} \\
+\midrule
+\endfirsthead
+\toprule
+\tabhead \textbf{단계} & \textbf{결과} & \textbf{처리} \\
+\midrule
+\endhead
+\bottomrule
+\endlastfoot
+1차(E34) & 9개 중 불통과 4(P2 C\textsubscript{fly} 전류 밀도, P5 클램프 IGBT 29–40 kHz, P6 소프트 투입 176 °C, P9 W460 접촉기), 조건부 2, 요구만 1 & 2차에서 후보 계열을 넓혀 다시 판정 \\
+2차(E37) & P2 공진용 필름으로 통과, P5 1.2 Ω + IGBT(여유 1 °C), P9 TE ECK100B 통과. P6 불통과, 이중 고장 방전 저항 1 Ω 2/4 & P6·F2는 부품으로 풀지 못해 설계 변경 \\
+3차(E38) & 외부 검토: 클램프 저항 공차·온도계수·노화를 넣으면 한 가지 저항 불성립. 가지 2개 × 1.6 Ω + CAB450M12XM3. P6은 Stage C 일시 정지로 108.0 °C, F2는 400 V 부하 정지 3 ms로 4/4 & 클램프 저항을 가지로 나눔. 새 인터페이스 요구 두 가지 \\
+재판정(E39) & 재검토: CAB450M12XM3를 전형 열저항으로 판정한 구현 누락. 최대 열저항·가지 저항 섞임에서 183.3 °C 불통과 & 스위치를 CAB530M12BM3로(146.5 °C) \\
+재판정(E40) & 최종 검토: R\textsubscript{DS(on)}·스위칭 에너지가 전형값. 규칙 L에서 E39 선정 159.7 °C 불통과. P1·P6·P7 통과, P8 반복 펄스 기준으로 조건부, C\textsubscript{A} 전체 표에서 다시 고름 & 클램프를 가지 3개 × 2.4 Ω + FF2MR12KM1P로, 최대 연속 켜짐 0.5 ms·문턱 검출 정확도 요구 \\
+\end{longtable}
+}
+\srcnote{자료: 검증 근거 E34, E37–E40.}
+
+세 가지를 함께 기록한다.
+
+\begin{itemize}
+\item \textbf{불통과는 모두 설계로 풀었고, 판정 기준을 낮춰 통과시킨 것은 없다.} 바뀐 것은 부품 선택(P2·P5·P9·C\textsubscript{A}), 회로 구성(클램프 가지), 보호 순서(Stage C 일시 정지, 400 V 부하 정지, 최대 연속 켜짐 시간)다.
+\item \textbf{판정 규칙은 검토마다 보수 쪽으로 바뀌었다.} 공칭값 → 저항 모서리 → 최대 열저항 → 규칙 L이다. 규칙을 바꿀 때마다 이전 선정을 새 규칙으로 다시 판정했고, 불통과가 된 선정은 그대로 기록했다.
+\item \textbf{조건부 부품이 셋 남는다.} 클램프 저항(저항값별 허용 에너지의 제조사 확인), 제동 저항(여유 2 \%, 짧은 펄스 곡선 대조), 클램프 스위치의 열 기준점과 예비 데이터시트다. C\textsubscript{fly}의 30 °C 전류 정격도 단서다. 하드웨어 단계에서 확인한다(19장).
+\end{itemize}
+
+\section{그 밖의 요구값}
+
+부품 후보를 정하지 않고 요구값만 정한 것은 다음과 같다. H-브리지 필터 인덕터 포화 전류 ≥ 150 A, DAB 누설 인덕터·변압기 1차 15.2 A(포화 근거), 강등 중 DAB 첨두 상한 1.387 × 정격점, 창 조정 DAB 정격 = 정적 최대 링크전력 × 1.8, 조정형 Stage C 데드타임 1차 100·2차 40 ns(창 폭 20–30 ns), Stage C 회생 차단 ≤ 0.5–1.0 ms·≥ 4 kW/ms, Stage B 게이트 분해능 ≤ 0.625 ns.
