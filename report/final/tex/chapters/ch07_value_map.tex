@@ -1,52 +1,55 @@
 % 원제: 7. 검증 결과(3): 적용 범위와 창 조정 모듈(E18, E19, TB08)
-\chapter{검증 결과(3): 적용 범위와 창 조정 모듈(E18, E19, TB08)}
+\chapter{검증 결과(3): 적용 범위와 창 조정 모듈}
 
 \section{팩 등급별 가치 지도(E18)}
 
-H5 기각은 사양 팩(640–920 V, 약 219s)에 대한 결론이다. 실제 차량의 팩 등급은 하나가 아니어서, 800 V급 주력 팩은 V\textsubscript{bat}/2가 400 V급 부품 범위 안에 있지만 900–1000 V급 팩은 그렇지 않다. 그래서 E15와 같은 소자·손실 규칙으로 셀 직렬수 180–240s × 부품 등급 B\textsubscript{420}·B\textsubscript{470} 전체를 다시 계산했다. 성립 조건은 계산 전에 고정했다. 정적 운전점의 버스가 [260 V, 부품 상한] 안에 있고, 조정 구간 정상점이 Stage B 포트 한계 안이며, 소자 직류 전압 사용률이 80 \% 이하인 것이다. 사양 팩을 같은 방법으로 다시 계산한 값은 E15와 0 W 차이로 같았다.
+H5 기각은 사양 팩(640–920 V, 약 219s)에 대한 결론이다. 실제 차량의 팩 등급은 하나가 아니어서, 800 V급 주력 팩은 V\textsubscript{bat}/2가 400 V급 부품 범위 안에 있지만 900–1000 V급 팩은 그렇지 않다. 그래서 6장과 같은 소자·손실 규칙으로 셀 직렬수 180–240s × 부품 등급 B\textsubscript{420}·B\textsubscript{470} 전체를 다시 계산했다. 성립 조건은 계산 전에 고정했다. 정적 운전점의 버스가 [260 V, 부품 상한] 안에 있고, 조정 구간 정상점이 Stage B 포트 한계 안이며, 소자 직류 전압 사용률이 80 \% 이하인 것이다. 사양 팩을 같은 방법으로 다시 계산한 값은 6장의 값과 0 W 차이로 같았다. 처음 계산(E18)은 150 kHz Stage A로 했고, 표 \ref{t:e18}은 A25R과 최종 Stage C로 다시 계산한 값이다(E36, E38).
 
 {\footnotesize
-\begin{longtable}{L{\dimexpr 0.0877\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1404\linewidth-2\tabcolsep\relax}}
-\caption{팩 등급별 성립 구조와 보조 경로 평균 손실}\label{t:e18}\\
+\begin{longtable}{L{\dimexpr 0.15\linewidth-2\tabcolsep\relax}L{\dimexpr 0.09\linewidth-2\tabcolsep\relax}L{\dimexpr 0.09\linewidth-2\tabcolsep\relax}L{\dimexpr 0.09\linewidth-2\tabcolsep\relax}L{\dimexpr 0.11\linewidth-2\tabcolsep\relax}L{\dimexpr 0.11\linewidth-2\tabcolsep\relax}L{\dimexpr 0.16\linewidth-2\tabcolsep\relax}L{\dimexpr 0.20\linewidth-2\tabcolsep\relax}}
+\caption{팩 등급별 성립 구조와 보조 경로 평균 손실(최종 설계)}\label{t:e18}\\
 \toprule
-\tabhead \textbf{팩} & \textbf{①} & \textbf{②} & \textbf{③} & \textbf{R2-W410} & \textbf{R2-W460} & \textbf{④(R2 기본형)} & \textbf{최선(B\textsubscript{420} / B\textsubscript{470})} \\
+\tabhead \textbf{팩(V\textsubscript{bat})} & \textbf{①} & \textbf{②} & \textbf{③} & \textbf{R2-W410} & \textbf{R2-W460} & \textbf{④(R2 기본형)} & \textbf{최선(B\textsubscript{420} / B\textsubscript{470})} \\
 \midrule
 \endfirsthead
 \toprule
-\tabhead \textbf{팩} & \textbf{①} & \textbf{②} & \textbf{③} & \textbf{R2-W410} & \textbf{R2-W460} & \textbf{④(R2 기본형)} & \textbf{최선(B\textsubscript{420} / B\textsubscript{470})} \\
+\tabhead \textbf{팩(V\textsubscript{bat})} & \textbf{①} & \textbf{②} & \textbf{③} & \textbf{R2-W410} & \textbf{R2-W460} & \textbf{④(R2 기본형)} & \textbf{최선(B\textsubscript{420} / B\textsubscript{470})} \\
 \midrule
 \endhead
 \bottomrule
 \endlastfoot
-180s & 105.3 & 129.6 & (불가) & = ④ & = ④ & \textbf{87.8} & ④ / ④ \\
-192s & 108.1 & 126.8 & (불가) & = ④ & = ④ & \textbf{86.5} & ④ / ④ \\
-200s & 110.0 & 126.8 & (불가) & \textbf{91.3} & = ④ & 86.5(B\textsubscript{470}) & R2-W410 / ④ \\
-216s & 113.8 & 124.0 & 134.4 & \textbf{110.9} & = ④ & 85.1(B\textsubscript{470}) & R2-W410 / ④ \\
-224s & \textbf{115.8} & 123.6 & 132.5 & 121.7 & \textbf{86.0} & (불가) & ① / R2-W460 \\
-240s & (불가) & \textbf{121.7} & (불가) & (불가) & \textbf{106.2} & (불가) & ② / R2-W460 \\
+180s\newline(540–756 V) & 106.7 & 134.0 & (불가) & = ④ & = ④ & \textbf{95.6} & ④ / ④ \\
+192s\newline(576–806 V) & 109.5 & 132.4 & (불가) & = ④ & = ④ & \textbf{96.7} & ④ / ④ \\
+200s\newline(600–840 V) & 111.3 & 133.5 & (불가) & \textbf{102.3} & = ④ & 97.6(B\textsubscript{470}) & R2-W410 / ④ \\
+216s\newline(648–907 V) & \textbf{115.2} & 134.0 & 144.4 & 126.5 & = ④ & 100.8(B\textsubscript{470}) & ① / ④ \\
+사양\newline(640–920 V) & \textbf{115.9} & 134.6 & 144.5 & 130.7 & = ④ & 101.5(B\textsubscript{470}) & ① / ④ \\
+224s\newline(672–941 V) & \textbf{117.1} & 135.6 & 144.5 & 139.5 & \textbf{104.0} & (불가) & ① / R2-W460 \\
+240s\newline(720–1008 V) & (불가) & \textbf{137.8} & (불가) & (불가) & \textbf{129.6} & (불가) & ② / R2-W460 \\
 \end{longtable}
 }
-\srcnote{주: 단위 W. 굵은 값은 부품 등급별로 성립하는 구조 가운데 최소다. “= ④”는 V\textsubscript{A}가 V\textsubscript{W}를 넘지 않아 Stage B를 두지 않는 경우다.}
+\srcnote{주: 단위 W, 주행 대표 프로파일. 굵은 값은 부품 등급별로 성립하는 구조 가운데 최소다. “= ④”는 V\textsubscript{A}가 V\textsubscript{W}를 넘지 않아 Stage B를 두지 않는 경우다. “④(B\textsubscript{470})”은 B\textsubscript{470}에서만 성립한다. 사양 팩의 R2-W410(130.7 W)은 가치 지도의 창 조정 계산 값이고, 6장 표의 ③′(130.4 W)은 같은 구조를 E15 방식으로 계산한 값이다. 자료: 검증 근거 E18, E36, E38.}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=15.5cm]{\repo/validation/2026-10-22-industry-value-r2/E18/E18_value_map.png}
-\caption{팩 등급 × 부품 등급의 구조 성립성과 손실}\label{f:e18}
+\includegraphics[width=14cm]{\repo/docs/fig/report/fig7_1_value_map_final.png}
+\caption{팩 등급 × 부품 등급의 구조 성립성과 손실(최종 설계)}\label{f:e18}
+\srcnote{주: (a) 비조정 V\textsubscript{A} 범위, (b)·(c) 부품 등급별 주행 프로파일 평균 보조 경로 손실(채운 표시 = 성립), (d) 500 V급 충전기 호환. 자료: 검증 근거 E38.}
 \end{figure}
 
-결과에서 세 가지를 확인했다.
+결과에서 네 가지를 확인했다.
 
 \begin{itemize}
-\item \textbf{③(전 범위 400 V 조정)은 216–224s에서만 성립하고, 어느 팩에서도 최소 손실이 아니다.} 직렬 ±90 V로는 V\textsubscript{A} 약 310–490 V만 400 V로 맞출 수 있다.
-\item \textbf{창 조정 모듈은 V\textsubscript{A}가 부품 상한을 넘는 팩에서 최소 손실이다.} B\textsubscript{420}의 200·216s(91.3·110.9 W), B\textsubscript{470}의 224·240s(86.0·106.2 W). 1000 V급 240s에서는 전전력 조정기(②)보다 15.5 W(13 \%) 작다. 창 조정이 필요 없는 구간에서는 바이패스로 고정 손실이 없기 때문이다. 800 V급 주력 팩(≤ 199s)에서는 Stage B가 필요 없다.
-\item \textbf{Stage A는 500 V급 충전기와도 호환된다.} 2:1 비는 1000 V급 팩을 500 V급 충전기 범위로 옮긴다. 500 V 충전기로 237s까지 만충할 수 있고, 375 A(8위상)의 충전전력은 셀 3.7 V에서 126–167 kW다. 인덕터 저장에너지는 Stage A 3.2 mJ, 150 kW 승압기 약 3.3 J로 약 1/1000이다.
+\item \textbf{③(전 범위 400 V 조정)은 216–224s와 사양 팩에서만 성립하고, 어느 팩에서도 최소 손실이 아니다.} 직렬 ±90 V로는 V\textsubscript{A} 약 310–490 V만 400 V로 맞출 수 있다.
+\item \textbf{470 V급 부품(B\textsubscript{470})에서는 800 V급 주력 팩(≤ 216s와 사양 팩)의 최선이 ④ R2 기본형이고, 900–1000 V급 224·240s의 최선이 창 조정 모듈 R2-W460이다(104.0·129.6 W).} 240s에서 R2-W460은 전전력 조정기(②)보다 손실이 8.3 W(6 \%) 작지만, 스위치 VA는 22 kVA 크다(1,118 대 1,096 kVA, 56 대 44위치). 따라서 240s의 이점은 손실 한 지표에 그친다.
+\item \textbf{420 V급 부품(B\textsubscript{420})에서 창 조정 모듈이 최소 손실인 팩은 200s 하나다(102.3 W, ①보다 9.0 W 작음).} 216s와 사양 팩에서는 ①(전전력 승압기 + 보조 강압기)이 R2-W410보다 11.3·14.8 W 작다. 150 kHz Stage A로 계산한 처음 결과에서는 216s·사양 팩도 R2-W410이 최선(사양 팩은 ①과 0.2 W 차)이었으나, A25R의 Stage A 손실 증가로 바뀌었다(14장). 이 두 팩에서 R2-W410을 고르는 이유는 보조 손실이 아니라 충전 경로 손실과 자성체다.
+\item \textbf{Stage A는 500 V급 충전기와도 호환된다.} 2:1 비는 1000 V급 팩을 500 V급 충전기 범위로 옮긴다. 500 V 충전기로 237s까지 만충할 수 있고(240s는 셀 4.15 V까지), 375 A(8위상)의 충전전력은 셀 3.7 V에서 126–167 kW다. 150 kW 충전 경로 손실은 팩마다 실제 위상 전류로 계산해 565–632 W(사양 팩 582 W)다. Stage A 공진 인덕터의 저장에너지(8위상)는 18.9 mJ로, 150 kW 승압기(약 3.3 J)의 약 1/175이다.
 \end{itemize}
 
-이로써 Q3의 답은 “전 범위 조정으로는 이점이 없고, 팩 등급에 맞춰 붙이는 창 조정 모듈로는 V\textsubscript{A}가 부품 상한을 넘는 팩에서 성립 구조 가운데 최소 손실”로 정리된다. 이 범위는 좁지만, 그 안에서는 충전 경로 손실과 자성체에서도 큰 이점을 함께 가진다.
+이로써 Q3의 이 부분에 대한 답은 “전 범위 조정으로는 이점이 없고, 팩 등급에 맞춰 붙이는 창 조정 모듈은 V\textsubscript{A}가 부품 상한을 넘는 팩 일부(B\textsubscript{470}의 224·240s, B\textsubscript{420}의 200s)에서 성립 구조 가운데 최소 손실”로 정리된다. 이 범위는 좁다. 그 밖의 팩에서 창 조정 모듈을 쓸 이유는 충전 경로 손실과 자성체이고, 보조 손실은 아니다. 가치 지도는 위상 셰딩을 준 모터·인버터 승압 구조(⑤, 15장)로 다시 계산하지 않았으므로, ⑤가 들어가면 칸 판정이 바뀌는지는 확인하지 않았다(18장).
 
 \section{창 조정 모듈 검증(E19)}
 
-Stage B가 필요한 대표 두 사례를 평균모델과 채택 제어기로 시험했다. R2-W460은 1000 V급 240s(720–1008 V)·B\textsubscript{470} 부품, R2-W410은 사양 팩(640–920 V)·B\textsubscript{420} 부품이다. 판정 기준은 E13과 같은 Tier 기준에 부품 등급 상한을 적용했다.
+Stage B가 필요한 대표 두 사례를 평균모델과 채택 제어기로 시험했다. 이 시험과 다음 절의 회로 시험(TB08)은 Stage A를 150 kHz 설계의 출력저항(경로 저항 13.2 mΩ에 포함)을 가진 전압원으로 두었고, A25R로 다시 시험하지 않았다. A25R의 경로 저항(12.0 mΩ)은 이 시험의 공차 범위(경로 저항 ±10 \%) 안이다. V\textsubscript{A} 노드 커패시터(2.4 mF)는 모델에 없다. R2-W460은 1000 V급 240s(720–1008 V)·B\textsubscript{470} 부품, R2-W410은 사양 팩(640–920 V)·B\textsubscript{420} 부품이다. 판정 기준은 E13과 같은 Tier 기준에 부품 등급 상한을 적용했다.
 
 처음에는 DAB 정격을 정적 최대 링크전력의 1.25배(③과 같은 여유)로 잡았다. 그러자 최대 배터리 전압의 Tier-2(1→25 kW) 스텝에서 DAB가 정격에 포화되어 순시 전력이 정격을 넘었다(R2-W460 71/72, R2-W410 68/72). 포화 없는 과도 첨두는 정적 최대의 1.77–1.78배였으므로 정격 규칙을 1.8배로 바꿨다. 최종 정격의 결과는 표 \ref{t:e19}와 같다.
 
