@@ -59,10 +59,10 @@
 \vspace{4mm}
 \begin{minipage}{0.92\textwidth}
 \small
-\textbf{요\ \ 약}\quad 800 V급 전기자동차는 400–500 V급 충전기 호환, 400 V급 보조부하 공급, 48 V 전원망을 함께 갖춰야 한다. 본 연구는 2:1 공진 스위치드 커패시터 변환기(Stage A), 직렬 부분전력 조정기(Stage B), 48 V 변환기(Stage C)로 이루어진 통합 직류 전력 허브 PRISM-Hub를 설계하고, 해석·평균모델·스위칭 모델, MATLAB/Simulink 소자 수준 회로 모델 33종, 부품 데이터시트 대조로 검증했다. 판정 기준은 모두 실행 전에 정했다. 400 V 버스의 정밀 조정은 조정단의 경부하 고정 손실 때문에 손실·정격 이점이 없어 가설이 기각되었고, 조정을 48 V 단으로 옮긴 개선 구조 R2를 제안했다. 검증 중 Stage A 출력용량 손실 모델의 오류를 찾아 공진주파수를 150 kHz에서 25 kHz로 바꿨다. 최종 설계에서 375 A 충전 경로 손실은 전용 승압기의 0.32–0.51배이고, 보조 경로 손실은 400 V급 보조부품을 쓰는 기존 방식과 같은 수준이다. 충전 중 배터리 경로 상실, Stage A 모듈 고장, 조정단 고장에서도 400 V 버스와 48 V가 유지됨을 회로 모델에서 확인했다.
+\textbf{요\ \ 약}\quad 800 V급 전기자동차는 400–500 V급 충전기 호환, 400 V급 보조부하 공급, 48 V 전원망을 함께 갖춰야 한다. 본 연구는 2:1 공진 스위치드 커패시터 변환기(Stage A), 직렬 부분전력 조정기(Stage B), 48 V 변환기(Stage C)로 이루어진 통합 직류 전력 허브 PRISM-Hub를 설계하고, 해석·평균모델·스위칭 모델, MATLAB/Simulink 소자 수준 회로 모델 33종, 부품 데이터시트 대조로 검증했다. 판정 기준은 시험 전에 정하고 결과를 본 뒤 바꾸지 않았다. 400 V 버스의 정밀 조정은 조정단의 경부하 고정 손실 때문에 손실·정격 이점이 없어 가설이 기각되었고, 조정을 48 V 단으로 옮긴 개선 구조 R2를 제안했다. 검증 중 Stage A 출력용량 손실 모델의 오류를 찾아 공진주파수를 150 kHz에서 25 kHz로 바꿨다. 최종 설계에서 기존 방식 대비 이점은 375 A 충전 경로 손실(전용 승압기의 0.32–0.51배)에 한정되며, 보조 경로 손실은 400 V급 보조부품을 쓰는 기존 방식과 같은 수준이다. 충전 램프, 충전 중 배터리 경로 상실, Stage A 모듈 고장 동안 400 V 버스와 48 V가 유지됨을 회로 모델에서 확인했다.
 
 \vspace{1.5mm}
-\textbf{ABSTRACT}\quad An 800 V electric vehicle must remain compatible with 400–500 V chargers while supplying 400 V-class auxiliary loads and a 48 V network. This work designs PRISM-Hub, an integrated DC power hub built from a 2:1 resonant switched-capacitor converter (Stage A), a series partial-power regulator (Stage B) and a 48 V converter (Stage C), and verifies it with analysis, averaged and switching models, 33 device-level MATLAB/Simulink testbenches and datasheet checks, using acceptance criteria fixed before each run. Tight 400 V regulation brought no loss or rating benefit because of the regulator's light-load fixed loss, so an improved architecture (R2) moves regulation to the 48 V stage. A modeling error in the Stage A output-capacitance loss was found and corrected by lowering the resonant frequency from 150 kHz to 25 kHz. In the final design the 375 A charging-path loss is 0.32–0.51 times that of a dedicated boost converter, while the auxiliary-path loss is on par with conventional 400 V-component architectures. The 400 V bus and 48 V output were maintained through battery-path loss during charging, Stage A module faults and regulator faults in circuit simulation.
+\textbf{ABSTRACT}\quad An 800 V electric vehicle must remain compatible with 400–500 V chargers while supplying 400 V-class auxiliary loads and a 48 V network. This work designs PRISM-Hub, an integrated DC power hub built from a 2:1 resonant switched-capacitor converter (Stage A), a series partial-power regulator (Stage B) and a 48 V converter (Stage C), and verifies it with analysis, averaged and switching models, 33 device-level MATLAB/Simulink testbenches and datasheet checks, with acceptance criteria set before testing and not changed afterwards. Tight 400 V regulation brought no loss or rating benefit because of the regulator's light-load fixed loss, so an improved architecture (R2) moves regulation to the 48 V stage. A modeling error in the Stage A output-capacitance loss was found and corrected by lowering the resonant frequency from 150 kHz to 25 kHz. In the final design the advantage over conventional architectures is limited to the 375 A charging-path loss, 0.32–0.51 times that of a dedicated boost converter; the auxiliary-path loss is on par with conventional 400 V-component architectures. Circuit simulation confirmed that the 400 V bus and the 48 V output are maintained through charging ramps, battery-path loss during charging and Stage A module faults.
 
 \vspace{1.5mm}
 \textbf{주제어}\quad 800 V 전기자동차, 공진 스위치드 커패시터, 부분전력 변환, 충전 호환, 보조전원, 고장 강등
@@ -73,9 +73,9 @@
 
 \section{서론}
 
-800 V급 배터리는 같은 전력을 더 작은 전류로 전달해 급속충전과 배선 손실에 유리하다\cite{r1}. 그러나 차량은 여전히 400–500 V급 충전기와 호환되어야 하고, 컴프레서·히터 같은 400 V급 보조부하와 48 V·12 V 전원망을 공급하며\cite{r10,r13}, 고장 중에도 이를 유지해야 한다. 산업에서는 구동 인버터와 모터 권선을 이용한 승압\cite{r2,r3}, 전용 승압기\cite{r4,r5}, 800 V급 보조부품을 쓰는 방식이 쓰인다.
+800 V급 배터리는 같은 전력을 더 작은 전류로 전달해 급속충전과 배선 손실에 유리하다\cite{r1}. 그러나 차량은 여전히 400–500 V급 충전기와 호환되어야 하고, 컴프레서·히터 같은 400 V급 보조부하와 48 V·12 V 전원망을 공급하며\cite{r10,r13}, 고장 중에도 이를 유지해야 한다. 산업에서는 구동 인버터와 모터 권선을 이용한 승압\cite{r2}, 전용 승압기\cite{r4,r5}, 800 V급 보조부품을 쓰는 방식이 쓰이고, 모터 권선 승압은 시제품으로도 보고되었다\cite{r3}.
 
-2:1 고정비 공진 변환기는 효율이 높고\cite{r6,r14}, 고정비 경로와 소용량 부분전력 조정단의 결합에도 선행연구가 있다\cite{r7,r8}. 고정비 2:1 단 하나를 400 V급 충전 호환과 400 V급 보조부하 공급에 함께 쓰는 개념은 제조사 공개 자료에 있다\cite{r9}. 본 연구는 이 원리를 차량의 충전, 400 V 보조버스, 48 V 전원망에 배치하고, 같은 손실 규칙으로 기존 방식과 비교해 성립 조건을 정량화하며, 고장·충전 과도를 소자 수준 회로에서 검증하는 데 범위를 둔다. 연구 질문은 다음 세 가지다.
+2:1 고정비 공진 변환기는 효율이 높고\cite{r6}, 고정비 경로와 소용량 부분전력 조정단의 결합에도 선행연구가 있다\cite{r7,r8}. 고정비 2:1 단 하나를 400 V급 충전 호환과 400 V급 보조부하 공급에 함께 쓰는 개념은 제조사 공개 자료에 있다\cite{r9}. 본 연구는 이 원리를 차량의 충전, 400 V 보조버스, 48 V 전원망에 배치하고, 같은 손실 규칙으로 기존 방식과 비교해 성립 조건을 정량화하며, 고장·충전 과도를 소자 수준 회로에서 검증하는 데 범위를 둔다. 연구 질문은 다음 세 가지다.
 
 \begin{itemize}
 \item Q1(정격 분리): 충전전력을 조정단에서 분리한 채, 소용량 조정단이 보조버스를 조정할 수 있는가.
@@ -119,10 +119,10 @@ Stage C & 동기 벅 100 kHz + CLLC 직류변압기 4.8:1(250 kHz), 48 V ±2 \%,
 \end{table}
 
 \subsection{조정형 Stage C}
-R2에서는 Stage C 입력이 팩 등급·충전 상태·강등에 따라 270–504 V로 1.87배 바뀌므로, 고정이득 CLLC로는 48 V 전원망의 무제한 운전 범위(36–52 V)\cite{r13}를 지킬 수 없다. 그래서 전단 동기 벅과 공진점 고정 주파수 CLLC 직류변압기의 2단 구성을 택했다\cite{r16}. 회로 모델에서 처음에는 영전압 스위칭이 실패했고(0/5), 레그 출력용량 모델로 자화 인덕턴스(33 µH)와 데드타임 창(20–30 ns)을 다시 정했다. 역방향 경부하의 이득 상승은 0.6 kW 아래에서 두 브리지를 함께 구동해 없앴다(5/5). 대표 부하(1.5 kW)에서 조정형의 손실은 51.2 W로 고정이득(28.9 W)보다 약 22 W 크며, 이것이 조정을 48 V 단으로 옮긴 대가다.
+R2에서는 Stage C 입력이 팩 등급·충전 상태·강등에 따라 270–504 V로 1.87배 바뀌므로, 고정이득 CLLC로는 48 V 전원망의 무제한 운전 범위(36–52 V)\cite{r13}를 지킬 수 없다. 그래서 전단 동기 벅과 공진점 고정 주파수 CLLC 직류변압기의 2단 구성을 택했다. 공진점 CLLC는 양방향 이득이 1에 가깝고\cite{r16}, 2단 구성은 넓은 출력 범위에서 쓰인다\cite{r18}. 회로 모델에서 처음에는 영전압 스위칭이 실패했고(0/5), 레그 출력용량 모델로 자화 인덕턴스(33 µH)와 데드타임(1차 100 ns, 2차 40 ns, 허용 창 폭 20–30 ns)을 다시 정했다. 역방향 경부하의 이득 상승은 0.6 kW 아래에서 두 브리지를 함께 구동해 없앴다(5/5). 대표 부하(1.5 kW)에서 조정형의 손실은 51.2 W로 고정이득(28.9 W)보다 약 22 W 크며, 이것이 조정을 48 V 단으로 옮긴 대가다.
 
 \subsection{창 조정 모듈과 보호 상태기계}
-창 조정 모듈은 V\textsubscript{bat}/2가 V\textsubscript{W} + 5 V를 넘으면 동작하고, 아래에서는 바이패스로 경로를 단락한다. H-브리지 고장 때 바로 바이패스하면 740–869 A가 흘러, 측정 기반 상태기계가 그림~\ref{fig:fault}의 순서로 강등한다. 강등 중 DAB 순환전류는 전압비 정합과 1차 내부 위상천이(EPS) 지령표\cite{r17}, 데드타임과 지령 전이 여유를 넣은 첨두 상한(정격점의 1.387배)으로 줄였다. 400 V 부하의 분리·감발은 부하 승인 계층(SALS)의 메시지로 전하며, 메시지 지연·손실에 대비해 30 ms 뒤 접촉기 분리로 넘어간다.
+창 조정 모듈은 V\textsubscript{bat}/2가 V\textsubscript{W} + 5 V 이상이면 동작하고, V\textsubscript{W} − 5 V 이하이면 바이패스로 경로를 단락한다. H-브리지 고장 때 바로 바이패스하면 740–869 A가 흘러, 측정 기반 상태기계가 그림~\ref{fig:fault}의 순서로 강등한다. 강등 중 DAB 순환전류는 전압비 정합과 1차 내부 위상천이(EPS) 지령표\cite{r17}, 데드타임과 지령 전이 여유를 넣은 첨두 상한(정격점의 1.387배)으로 줄였다. 400 V 부하의 분리·감발은 부하 승인 계층(SALS)의 메시지로 전하며, 메시지 지연·손실에 대비해 30 ms 안에 부하가 줄지 않으면 접촉기 분리로 넘어가고, V\textsubscript{A}가 부품 상한을 넘는 팩은 처음부터 접촉기 분리를 명령한다.
 
 \begin{figure*}[t]
 \centering
@@ -133,7 +133,7 @@ R2에서는 Stage C 입력이 팩 등급·충전 상태·강등에 따라 270–
 
 \section{검증 방법}
 
-검증 수준은 표~\ref{tab:levels}\와 같다. 회로 모델은 검증 단계마다 새로 만들어 남겼고(TB01–TB33), 같은 조건의 검증 모델 결과를 기준값으로 두었다. 모든 판정 기준은 실행 전에 정했으며, 결과를 본 뒤 기준을 바꾸지 않았다. 구현 오류를 고친 경우는 실행 경과로 기록했다. 손실 비교는 대표 소자의 데이터시트 값과 같은 자성체 손실 규칙을 쓴 상대 비교다. 판정할 가설은 H1(링크전력 ≤ 8 kW, 충전전류 조정단 비경유), H2(Tier-1·Tier-2 과도, ±10 \% 공차, 지연 +3 µs), H3(150 kW 충전 중 25 kW 보조부하), H4(부하 승인: 예산 초과 0, 승인 지연 ≤ 25 ms), H5(손실·정격 VA·반도체 수 중 2개 이상에서 우수)다.
+검증 수준은 표~\ref{tab:levels}\와 같다. 회로 모델은 검증 단계마다 새로 만들어 남겼고(TB01–TB33), 같은 조건의 검증 모델 결과를 기준값으로 두었다. 판정 기준은 시험 전에 정하고 결과를 본 뒤 바꾸지 않았다. 후반 시험은 기준과 코드를 실행 전에 기록해 두었으나, 일부 중간 시험은 기준과 결과가 같은 기록에 있어 순서를 기록으로 확인할 수는 없다. 구현 오류를 고친 경우는 실행 경과로 기록했다. 손실 비교는 대표 소자의 데이터시트 값과 같은 자성체 손실 규칙을 쓴 상대 비교다. 판정할 가설은 H1(링크전력 ≤ 8 kW, 충전전류 조정단 비경유), H2(Tier-1·Tier-2 과도, ±10 \% 공차, 지연 +3 µs), H3(150 kW 충전 중 25 kW 보조부하), H4(부하 승인: 예산 초과 0, 승인 지연 ≤ 25 ms), H5(손실·정격 VA·반도체 수 중 2개 이상에서 우수)다.
 
 \begin{table}[t]
 \centering
@@ -144,11 +144,11 @@ R2에서는 Stage C 입력이 팩 등급·충전 상태·강등에 따라 270–
 \toprule
 수준 & 대상과 도구 \\
 \midrule
-해석·데이터시트 & 정상상태 전력수지, 부품 정격 대조(Python) \\
-평균모델 & Stage B 제어, 기준 구조 손실, 보호 상태기계, 부하 승인(Python, 수천 건) \\
+해석·데이터시트 & 정상상태 전력수지, 구조 간 손실 비교, 부품 정격 대조(Python) \\
+평균모델 & Stage B 제어, 창 조정 모듈, 보호 상태기계, 부하 승인(Python, 수천 건) \\
 독립 구현 & 채택 제어기의 MATLAB 재구현(1,542건 대조) \\
 스위칭 모델 & PWM·데드타임·출력용량, Stage A 8위상(Python·Numba) \\
-소자 수준 회로 & Simscape Electrical, 2.5 ns, 테스트벤치 33종 \\
+소자 수준 회로 & Simscape Electrical, 고정 간격(과도 판정 2.5 ns), 테스트벤치 33종 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -167,10 +167,10 @@ TB & 대상 & 판정 \\
 TB07 & 통합 충전(150 kHz, 8위상) & 회로 한계 7/7 \\
 TB13 & 강등 중 DAB 첨두(지령 전이 여유) & 2/2(TB11 불통과, TB12 1/2 거침) \\
 TB15 & 조정형 Stage C 5 kW & 5/5(TB14 0/5 → 6/7 거침) \\
-TB17 & R2-W460 통합 강등 & 2/2, 48 V ±0.03 \% \\
+TB17 & R2-W460 통합 강등(150 kHz) & 2/2, 48 V ±0.03 \% \\
 TB21 & 충전 중 정지(150 kHz) & 4/4(TB20 3/4 거침) \\
-TB24 & Stage A 모듈 고장 처리 & 4/4 \\
-TB25 & 출력용량 손실(150·75·25 kHz) & 무부하 3/3 \\
+TB24 & Stage A 모듈 고장 처리(150 kHz) & 4/4 \\
+TB25 & 출력용량 손실(150·75·25 kHz) & 무부하 3/3, 부하 시 대조 6/9 \\
 TB26 & A25 통합(C\textsubscript{A} 400 µF) & 0/3 \\
 TB27 & A25R 통합(C\textsubscript{A} 2.4 mF) & 4/4, 손실 차 +3.0 \% \\
 TB31 & Stage C 일시 정지·400 V 부하 정지 & 2/2 \\
@@ -182,7 +182,7 @@ TB33 & 최종 클램프 + 최대 연속 켜짐 & 경로 상실 2/2, 오동작 �
 \section{결과}
 
 \subsection{400 V 정밀 조정의 손실·정격(H5)}
-주행 대표 프로파일(배터리 760–900 V)의 보조 경로 평균 손실과 정격을 표~\ref{tab:h5}에 보였다. 처음 구조(③)는 조정 없는 구조(④, R2 기본형)보다 손실·스위치 VA·스위치 위치가 모두 커서 H5가 기각되었다. 직렬 H-브리지는 직렬전압이 0이어도 경로전류 전체를 스위칭하고, DAB는 링크전력 0 근처에서 영전압 스위칭을 잃어 경부하에서 약 65 W의 고정 손실이 생기기 때문이다. ③과 ④가 같아지려면 이 고정 손실이 0.32배 이하여야 한다. 부분전력 변환의 이점을 정격점 효율만으로 판단하면 안 된다는 근거다.
+주행 대표 프로파일(배터리 760–900 V)의 보조 경로 평균 손실과 정격을 표~\ref{tab:h5}에 보였다. 처음 구조(③)는 조정 없는 구조(④, R2 기본형)보다 손실·스위치 VA·스위치 위치가 모두 커서 H5가 기각되었다. 직렬 H-브리지는 직렬전압이 0이어도 경로전류 전체를 스위칭하고, DAB는 링크전력 0 근처에서 영전압 스위칭을 잃어, 경부하에서 Stage B에 약 65 W(DAB 45.8 W, H-브리지 19.5 W)의 고정 손실이 생기기 때문이다. ③과 ④가 같아지려면 이 고정 손실이 0.32배 이하여야 한다. 부분전력 변환의 이점을 정격점 효율만으로 판단하면 안 된다는 근거다.
 
 \begin{table}[t]
 \centering
@@ -205,15 +205,15 @@ TB33 & 최종 클램프 + 최대 연속 켜짐 & 경로 상실 2/2, 오동작 �
 \end{table}
 
 \subsection{Stage A 출력용량 손실과 설계 수정}
-초기 손실 모델은 출력용량 손실을 위상당 4·E\textsubscript{oss}·f\textsubscript{s}로 두었다. 그러나 Stage A는 공진전류 영교차에서 끄므로 데드타임에 노드를 옮길 전류가 없고, 다음 스위치가 켜질 때 노드 용량을 하드 스위칭한다. 한 전이의 손실은 Q\textsubscript{oss}(V)·V로\cite{r11}, E\textsubscript{oss}만 세면 SiC에서 3–4배 작다. 정정하면 150 kHz 원설계의 위상당 출력용량 손실은 175 W(이전 모델 14 W)였다. 소자 4종 × 병렬 수 × 공진주파수 90안을 계산한 결과 영전류 게이트로 150·100 kHz에서 성립하는 설계는 없었다(그림~\ref{fig:loss} 왼쪽). 회로 모델의 무부하 출력용량 손실은 세 설계 모두 이 식과 같았다.
+초기 손실 모델은 출력용량 손실을 위상당 4·E\textsubscript{oss}·f\textsubscript{s}로 두었다. 그러나 Stage A는 공진전류 영교차에서 끄므로 데드타임에 노드를 옮길 전류가 없고, 다음 스위치가 켜질 때 노드 용량을 하드 스위칭한다. 한 전이의 손실은 Q\textsubscript{oss}(V)·V로\cite{r11}, E\textsubscript{oss}만 세면 SiC MOSFET에서 3.2–4.2배 작다. 정정하면 150 kHz 원설계의 위상당 출력용량 손실은 175 W(이전 모델 14 W)였다. 소자 4종 × 병렬 수 × 공진주파수 90안을 계산한 결과 영전류 게이트로 150·100 kHz에서 성립하는 설계는 없었다. 위상당 손실은 그림~\ref{fig:loss}(왼쪽)과 같다. 회로 모델의 무부하 출력용량 손실은 세 설계 모두 이 식과 같았다.
 
-25 kHz 설계(A25)는 정상 손실은 지켰으나 공진이 6배 느려져 충전 과도를 통과하지 못했다(과도 1/7, 느린 충전 0/3). 원인은 관리기 논리가 아니라 V\textsubscript{A} 노드의 시간 척도였고, V\textsubscript{A} 노드 커패시터를 2.4 mF로 키운 A25R이 요구 안의 과도·모듈 고장 판정을 모델(6/6, 16/16)과 회로(4/4)에서 모두 통과했다. 정격 충전점 손실은 회로와 모델이 3.0 \% 안에서 맞았다. 대가는 충전 램프 요구가 100 µs에서 600 µs로 늘고 C\textsubscript{A}가 약 2.95 L(필름 커패시터 20개)가 된 것이다. 영전압 스위칭 보조 운전은 시험하지 않았다.
+25 kHz 설계(A25)는 정상 손실은 지켰으나 공진이 6배 느려져 충전 과도를 통과하지 못했다(과도 1/7, 느린 충전 0/3). 원인은 관리기 논리가 아니라 V\textsubscript{A} 노드의 시간 척도였고, V\textsubscript{A} 노드 커패시터를 2.4 mF로 키운 A25R이 요구 안의 과도·모듈 고장 판정을 모델(6/6, 16/16)과 회로(4/4)에서 모두 통과했다. 다만 수정안을 고르는 데 쓴 사례(느린 충전 3, 부하 계단 2)가 판정 사례에 들어 있고, 요구 밖 조건(20 kW 순간 계단, 100 µs 충전 램프, 사전 기동 없는 충전)은 불통과다. 정격 충전점 손실은 회로와 모델이 3.0 \% 안에서 맞았다. 대가는 충전 램프 요구가 100 µs에서 600 µs로 늘고 C\textsubscript{A}가 약 2.95 L(필름 커패시터 20개)가 된 것이다. 영전압 스위칭 보조 운전은 시험하지 않았다.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.49\textwidth]{\repo/docs/fig/report/fig13_1_coss.png}\hfill
-\includegraphics[width=0.49\textwidth]{\repo/docs/fig/report/fig6_2_loss_final.png}
-\caption{(왼쪽) Stage A 출력용량 손실 재평가: 위상당 손실과 설계 격자(채운 표시 = 합격). (오른쪽) 기존 방식 대비 보조 경로 손실(공정 기준, 오차막대는 민감도 범위)과 375 A 충전 경로 손실(최종 설계).}
+\includegraphics[height=5.0cm]{figs/coss_phase_loss.png}\hfill
+\includegraphics[height=5.0cm]{\repo/docs/fig/report/fig6_2_loss_final.png}
+\caption{(왼쪽) 출력용량 손실을 정정한 Stage A 위상당 손실(800 V): 초기 모델, 150 kHz 원설계, 선택안 (가) 75 kHz와 (나) 25 kHz(최종). (오른쪽) 기존 방식 대비 보조 경로 손실(공정 기준, 오차막대는 민감도 범위)과 375 A 충전 경로 손실(최종 설계).}
 \label{fig:loss}
 \end{figure*}
 
@@ -227,7 +227,7 @@ TB33 & 최종 클램프 + 최대 연속 켜짐 & 경로 상실 2/2, 오동작 �
 \caption{보조 경로 손실의 공정 비교와 민감도(주행 대표 프로파일)}
 \label{tab:fair}
 \footnotesize
-\begin{tabular}{@{}lcccccc@{}}
+\begin{tabular}{@{}lccccc@{}}
 \toprule
 경우 & ④ R2 기본형 & ⑤ 모터 승압 + 400 V 부품 & ⑥ 800 V 부품 & (⑤ − ④)/⑤ & ④ − ⑥ \\
 \midrule
@@ -250,7 +250,7 @@ Stage A 고정 손실 + 20 / + 30 \% & 109.0 / 112.8 W & 102.1 W & 82.7 W & −6
 \end{figure*}
 
 \subsection{팩 등급별 적용 범위}
-셀 180–240s × 부품 등급 B\textsubscript{420}·B\textsubscript{470}의 성립 구조와 손실을 같은 규칙과 같은 경부하 기법으로 계산했다. 칸 판정은 공정 기준과 민감도 7종 모두에서 최소이고 다음 구조보다 3 \%를 넘게 작으면 “최선”, 아니면 “같은 수준”으로 했다(표~\ref{tab:map}, 그림~\ref{fig:map}). 셰딩 없는 처음 계산에서는 창 조정 모듈이 B\textsubscript{420} 200s와 B\textsubscript{470} 224·240s에서 최소 손실이었으나, 공정 기준에서는 세 칸 모두 다른 성립 구조와 같은 수준이었다. 창 조정 모듈은 V\textsubscript{A}가 부품 상한을 넘는 팩에서 400 V급 부품을 쓰게 하는 성립 수단이며, 손실 이점은 없다. 2:1 비는 1000 V급 팩을 500 V급 충전기 범위로 옮겨, 500 V 충전기로 237s 팩까지 만충할 수 있다(375 A에서 126–167 kW).
+셀 180–240s × 부품 등급 B\textsubscript{420}·B\textsubscript{470}의 성립 구조와 손실을 같은 규칙과 같은 경부하 기법으로 계산했다. 칸 판정은 공정 기준과 민감도 7종 모두에서 최소이고 다음 구조보다 3 \%를 넘게 작으면 “최선”, 아니면 “같은 수준”으로 했다(표~\ref{tab:map}, 그림~\ref{fig:map}). 셰딩 없는 처음 계산에서는 창 조정 모듈이 B\textsubscript{420} 200s와 B\textsubscript{470} 224·240s에서 최소 손실이었으나, 공정 기준에서는 세 칸 모두 다른 성립 구조와 같은 수준이었다. 창 조정 모듈은 V\textsubscript{A}가 부품 상한을 넘는 팩에서 400 V급 부품을 쓰게 하는 성립 수단이며, 손실 이점은 없다. 2:1 비는 1000 V급 팩을 500 V급 충전기 범위로 옮겨, 500 V 충전기로 237s 팩까지 만충할 수 있다(셀 3.7 V, 375 A에서 126–167 kW).
 
 \begin{table}[t]
 \centering
@@ -295,7 +295,7 @@ Stage A 고정 손실 + 20 / + 30 \% & 109.0 / 112.8 W & 102.1 W & 82.7 W & −6
 오동작으로 켜진 클램프가 꺼지지 않는 실패 모드를 막으려 최대 연속 켜짐 0.5 ms를 넣었고, 문턱 검출 정확도 요구(−1.0 … +0.10 \%)를 정했다. 최종 클램프 회로에서 경로 상실 2사례는 평균모델과 0.2 A·0.3 J 안에서 같았다. 오동작 사례는 회로의 V\textsubscript{A}가 순간적으로 처져 클램프가 9 µs 만에 꺼져, 평균모델(0.5 ms)과 달라 불통과로 기록했다. 문턱을 바꾼 진단에서는 최대 켜짐 시간이 회로에서도 0.501 ms에 동작했으나, 켜고 끄는 순간 Stage A 위상 첨두가 정격점의 2.1배로 출렁였다.
 
 \subsection{고장 강등과 부하 관리}
-Stage A 모듈 고장 시 고장 모듈을 즉시 빼고 나머지로 운전을 이었다(모델 32/32, 회로 4/4). 창 조정 모듈의 DAB 고장과 H-브리지 고장은 Stage A를 멈추지 않고 강등했고, 실제 Stage A와 조정형 Stage C를 넣은 통합 회로에서 강등 중 48 V는 ±0.03 \% 안이었다. 강등 중 DAB 첨두는 해석 → 데드타임 반영 → 지령 전이 여유의 세 단계를 거쳐 회로에서 설계 목표 안에 들었다. 감발 메시지가 늦거나 손실되어도 강등 순서가 성립했고(74/74), 고장 순간 48 V 회생이 있으면 버스가 527 V까지 오르므로 Stage C 회생 차단을 요구로 두었다. 바이패스 소프트 투입 소자의 과열(176 °C)과 이중 고장 경로전류(5 ms 기준 0/4)는 Stage C 일시 정지와 400 V 부하 3 ms 정지로 풀었다(109.6 °C, 4/4, 회로 2/2).
+Stage A 모듈 고장 시 고장 모듈을 즉시 빼고 나머지로 운전을 이었다(최종 설계 모델 16/16, 회로 4/4. 150 kHz 설계에서는 32/32, 회로 4/4). 창 조정 모듈의 DAB 고장과 H-브리지 고장은 Stage A를 멈추지 않고 강등했다. 강등 뒤 버스는 V\textsubscript{A}가 되어 부품 상한을 넘으므로 400 V 부하는 분리하고, 조정형 Stage C가 48 V 공급을 이어 간다. 150 kHz Stage A와 조정형 Stage C를 넣은 통합 회로에서 강등 중 48 V는 ±0.03 \% 안이었다. 강등 중 DAB 첨두는 해석 → 데드타임 반영 → 지령 전이 여유의 세 단계를 거쳐 회로에서 설계 목표 안에 들었다. 감발 메시지가 늦거나 손실되어도 강등 순서가 성립했고(74/74), 고장 순간 48 V 회생이 있으면 버스가 527 V까지 오르므로 Stage C 회생 차단을 요구로 두었다. 바이패스 소프트 투입 소자의 과열(176 °C)과 이중 고장 경로전류(5 ms 기준 0/4)는 Stage C 일시 정지와 400 V 부하 3 ms 정지로 풀었다(109.6 °C, 4/4, 회로 2/2).
 
 \subsection{부품 정격}
 모델이 낸 전압·전류·에너지를 상용 부품의 데이터시트와 대조했다(표~\ref{tab:parts}). 판정 규칙(정상 운전 T\textsubscript{J} ≤ T\textsubscript{J,max} − 25 °C, 최대 열저항, 전형값만 있는 손실 인자에 최대/전형 비 또는 × 1.2)은 실행 전에 정했고, 검토마다 보수 쪽으로 강화했다. 불통과는 모두 부품 선택, 회로 구성(클램프 가지), 보호 순서(Stage C 일시 정지, 400 V 부하 정지, 최대 연속 켜짐 시간)를 바꿔 풀었고, 판정 기준을 낮춰 통과시킨 것은 없다. 모든 판정은 부품 시험이 아니라 모의 스트레스와 데이터시트 값의 대조다.
@@ -327,7 +327,7 @@ C\textsubscript{A} 2.4 mF & B32778Z5127 × 20 & 통과(리플 50.6 A, 정격 690
 
 판정은 표~\ref{tab:hyp}\와 같다. 모든 결과는 시뮬레이션과 데이터시트 대조이며 하드웨어 시험은 하지 않았다. 손실 비교는 같은 규칙의 상대 비교로, 측정된 100 kW급 2:1 하드웨어(전부하 97.4 \%)\cite{r6}와 모델의 차가 크다. 새 인터페이스 요구(Stage C 일시 정지, 400 V 부하 3 ms 정지), 클램프 문턱 검출 정확도(+0.10 \%)의 실현, 조건부 부품, 충전기별 실제 램프 응답은 하드웨어 단계에서 확인해야 한다. 고전압 팩(224·240s)의 충전 중 정지는 V\textsubscript{A} 수준 모델로만 확인했다.
 
-후속 단계의 과제는 다음과 같다. 첫째, 실시간 시뮬레이터(HIL)와 축소전력 시제품으로 실제 지연·잡음·열·전자기 간섭, 공심 공진 인덕터의 누설 자장, 손실 모델과 측정의 차를 확인한다. 둘째, Stage C 일시 정지(4 kW/ms, ≤ 12.4 ms)와 400 V 부하 정지(≤ 3 ms)의 실제 응답을 차량 부하에서 측정한다. 셋째, 클램프 문턱 검출기(분압기·절연 증폭기·비교기)의 온도·노화 오차 예산을 세우고 오동작 원인과 강제 끔 순간의 과도를 모의한다. 넷째, 150 kHz 설계에서 수행한 Stage B 보호·강등 시험과 Stage A 확장(225 kW)을 최종 설계 A25R로 다시 확인한다.
+후속 단계의 과제는 다음과 같다. 첫째, 실시간 시뮬레이터(HIL)와 축소전력 시제품으로 실제 지연·잡음·열·전자기 간섭, 공심 공진 인덕터의 누설 자장, 손실 모델과 측정의 차를 확인한다. 둘째, Stage C 일시 정지(4 kW/ms, ≤ 12.4 ms)와 400 V 부하 정지(≤ 3 ms)의 실제 응답을 차량 부하에서 측정한다. 셋째, 클램프 문턱 검출기(분압기·절연 증폭기·비교기)의 온도·노화 오차 예산을 세우고 오동작 원인과 강제 끔 순간의 과도를 모의한다. 넷째, 150 kHz 설계나 이상 전원으로 수행한 Stage B 보호·강등 시험과 Stage A 확장(225 kW)을 최종 설계 A25R로 다시 확인한다.
 
 \begin{table}[t]
 \centering
@@ -349,7 +349,7 @@ H5 기준 구조 대비 이점 & 기각: ③ 144.5 W 대 ④ 101.5 W \\
 
 \section{결론}
 
-PRISM-Hub를 설계하고 시뮬레이션과 데이터시트 대조로 검증했다. Q1(정격 분리)은 긍정적이다. Q2(강건 제어와 부하 관리)는 긍정적이며, 새 인터페이스 요구의 실제 응답 확인이 조건이다. Q3(기준 구조 대비 이점)에 대해, 처음 구조는 부정적이고(H5 기각) 개선 구조 R2는 제한적이다. R2의 이점은 375 A 충전 경로 손실(전용 승압기의 0.32–0.51배, 모터 승압 기준점의 약 절반), 충전 대전류의 조정단 분리, 작은 충전 경로 자성체, 충전 중 경로 상실·모듈 고장·조정단 고장에서의 400 V·48 V 유지다. 보조 경로 손실은 기존 방식과 같은 수준이고 800 V급 부품 설계보다 크며, 스위치 위치는 더 많다. 따라서 R2는 400 V급 보조부품을 그대로 쓰는 800–1000 V 차량이 400–500 V급 충전기를 자주 쓰는 경우에 의미가 있는 구조다. 검증 중 찾은 손실 모델 오류와 부정적 결과는 설계 변경과 성립 조건의 근거로 남겼다.
+PRISM-Hub를 설계하고 시뮬레이션과 데이터시트 대조로 검증했다. Q1(정격 분리)은 긍정적이다. Q2(강건 제어와 부하 관리)는 긍정적이며, 새 인터페이스 요구의 실제 응답 확인이 조건이다. Q3(기준 구조 대비 이점)에 대해, 처음 구조는 부정적이고(H5 기각) 개선 구조 R2는 제한적이다. 기준 구조 대비 R2의 이점은 375 A 충전 경로 손실뿐이다(전용 승압기의 0.32–0.51배, 모터 승압 기준점의 0.50–0.51배, 상저항 하한과는 같은 수준). 보조 경로 손실은 400 V급 보조부품을 쓰는 기존 방식과 같은 수준이고 800 V급 부품 설계보다 4–30 W 크며, 스위치 위치는 더 많다(R2 42 대 12–24). 한편 Q1·Q2의 결과로, 충전 대전류는 조정단을 지나지 않고 충전 램프·충전 중 경로 상실·모듈 고장 동안 400 V 버스와 48 V가 유지된다. 따라서 R2는 400 V급 보조부품을 그대로 쓰는 차량에서 충전 손실을 줄이는 선택지이며, V\textsubscript{A}가 부품 상한을 넘는 팩에서는 창 조정 모듈이 성립 수단이 된다. 검증 중 찾은 손실 모델 오류와 부정적 결과는 설계 변경과 성립 조건의 근거로 남겼다.
 
 \begingroup
 \small
@@ -365,7 +365,7 @@ PRISM-Hub를 설계하고 시뮬레이션과 데이터시트 대조로 검증했
 \bibitem{r7} Y. He, S. Jiang, C. Nan, “Switched Tank Converter Based Partial Power Architecture for Voltage Regulation Applications,” \textit{Proc. IEEE APEC}, pp. 91–97, 2018.
 \bibitem{r8} Z. Ni et al., “A GaN Switched Tank Converter with Partial Power Voltage Regulation for Electric Vehicle Applications,” \textit{Proc. IEEE APEC}, pp. 1682–1689, 2019.
 \bibitem{r9} M. Jenks (Vicor), “Adapting 400V and 800V Architectures,” SAE WCX 2023 발표 자료, 2023.
-\bibitem{r10} ISO 21498-1:2021, “Electrically propelled road vehicles — Electrical specifications and tests for voltage class B systems and components — Part 1.”
+\bibitem{r10} ISO 21498-1:2021, “Electrically propelled road vehicles — Electrical specifications and tests for voltage class B systems and components — Part 1: Voltage sub-classes and characteristics.”
 \bibitem{r11} N. Perera et al., “Hard-Switching Losses in Power FETs: The Role of Output Capacitance,” \textit{IEEE Trans. Power Electron.}, vol. 37, no. 7, pp. 7604–7616, 2022.
 \bibitem{r12} IEEE Std 2030.1.1-2015, “IEEE Standard Technical Specifications of a DC Quick Charger for Use with Electric Vehicles.”
 \bibitem{r13} ISO 21780:2020, “Road vehicles — Supply voltage of 48 V — Electrical requirements and tests.”
@@ -373,6 +373,7 @@ PRISM-Hub를 설계하고 시뮬레이션과 데이터시트 대조로 검증했
 \bibitem{r15} Y. Ahn, I. Jeon, J. Roh, “A Multiphase Buck Converter With a Rotating Phase-Shedding Scheme For Efficient Light-Load Control,” \textit{IEEE J. Solid-State Circuits}, vol. 49, no. 11, pp. 2673–2683, 2014.
 \bibitem{r16} J.-H. Jung, H.-S. Kim, M.-H. Ryu, J.-W. Baek, “Design Methodology of Bidirectional CLLC Resonant Converter for High-Frequency Isolation of DC Distribution Systems,” \textit{IEEE Trans. Power Electron.}, vol. 28, no. 4, pp. 1741–1755, 2013.
 \bibitem{r17} B. Zhao, Q. Song, W. Liu, Y. Sun, “Overview of Dual-Active-Bridge Isolated Bidirectional DC–DC Converter for High-Frequency-Link Power-Conversion System,” \textit{IEEE Trans. Power Electron.}, vol. 29, no. 8, pp. 4091–4106, 2014.
+\bibitem{r18} N. Zanatta, T. Caldognetto, D. Biadene, G. Spiazzi, P. Mattavelli, “Design and Implementation of a Two-Stage Resonant Converter for Wide Output Range Operation,” \textit{IEEE Trans. Ind. Appl.}, 2022.
 \end{thebibliography}
 \endgroup
 
