@@ -1,6 +1,6 @@
 """모든 Python 검증을 근거 번호 순서로 실행한다(E19는 E17보다 먼저. 뒤 시험이 앞 시험의 results/를 읽는다).
 
-  python run_all.py            전체 E1–E41(2코어 기준 약 25시간. E12 약 3시간, E17 약 1.5시간, E33 약 2시간, E35 약 5시간,
+  python run_all.py            전체 E1–E42(2코어 기준 약 25시간. E12 약 3시간, E17 약 1.5시간, E33 약 2시간, E35 약 5시간,
                                E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
   python run_all.py E3 E4      일부만
   python run_all.py --diag     실행 뒤 진단 스크립트(E33_diag_transient, E37_diag_fs, E38_review_repro)도 실행(판정 아님)
@@ -57,6 +57,7 @@ STEPS = [
     ("E39", [("E39_clamp_switch_rejudge.py", ["reg", "spec", "hv", "tr", "table"])]),        # results/E38/clamp.json
     ("E40", [("E40_typ_rule_rejudge.py", ["reg", "p5", "thr", "p1", "p6p7", "p8", "ca", "table"])]),
     ("E41", [("E41_fair_aux_comparison.py", ["run", "table"])]),
+    ("E42", [("E42_value_map_fair.py", ["run"])]),
 ]
 
 DIAG = [("E33_diag_transient.py", []), ("E37_diag_fs.py", []), ("E38_review_repro.py", [])]
