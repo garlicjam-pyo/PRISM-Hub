@@ -1,0 +1,12 @@
+
+==== E43 heat ====
+Traceback (most recent call last):
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E43_review2_response.py", line 518, in <module>
+    {"loss": loss, "heat": heat, "sens": sens, "bat": bat}[p]()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E43_review2_response.py", line 427, in heat
+    vd = E40.vdrop40(sws)
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E40_typ_rule_rejudge.py", line 151, in vdrop40
+    return max(s["drop450"] for s in sws.values())
+                                     ^^^^^^^^^^
+AttributeError: 'tuple' object has no attribute 'values'
