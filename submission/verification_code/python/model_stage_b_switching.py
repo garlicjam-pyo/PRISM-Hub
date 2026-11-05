@@ -234,10 +234,16 @@ def _dab_dt_comp(dtg, tc):
 
 @njit(cache=True)
 def _sense(v, s):
-    """센서·ADC 모델: s = [이득, 오프셋, 양자화 간격(0이면 없음), 잡음 표준편차]."""
+    """센서·ADC 모델: s = [이득, 오프셋, 양자화 간격(0이면 없음), 잡음 표준편차(, 하한, 상한)].
+    (E43) 행 길이가 6이고 상한 > 하한이면 측정 범위 밖을 하한·상한으로 포화시킨다(양자화 전). 길이 4(기존)면 포화 없음."""
     y = s[0] * v + s[1]
     if s[3] > 0.:
         y += s[3] * np.random.standard_normal()
+    if s.shape[0] > 5 and s[5] > s[4]:
+        if y < s[4]:
+            y = s[4]
+        elif y > s[5]:
+            y = s[5]
     if s[2] > 0.:
         y = s[2] * math.floor(y / s[2] + .5)
     return y
