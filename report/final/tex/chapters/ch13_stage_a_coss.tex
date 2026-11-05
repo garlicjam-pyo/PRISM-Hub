@@ -8,7 +8,7 @@ E1 이후 모든 Stage A 손실은 출력용량 손실을 위상당 4·E\textsub
 
 \begin{itemize}
 \item \textbf{영전류 스위칭에서도 노드 용량은 하드 스위칭된다.} Stage A는 공진전류가 0으로 돌아왔을 때 끈다. 그래서 데드타임에 스위치 노드 전압(V\textsubscript{bat}/2)을 옮길 전류가 없고, 다음 스위치가 켜질 때 노드 용량을 하드 스위칭으로 충·방전한다. 위상당 한 주기에 이런 전이가 네 번 있다.
-\item \textbf{한 전이의 손실은 E\textsubscript{oss}가 아니라 Q\textsubscript{oss}(V)·V다.} 켜지는 소자는 저장 에너지 E\textsubscript{oss}를 잃고, 꺼져 있던 소자는 전원에서 Q\textsubscript{oss}를 받아 충전되며 Q\textsubscript{oss}·V − E\textsubscript{oss}를 잃는다\cite{b32}. E\textsubscript{oss}만 세면 SiC MOSFET에서 3.2–4.2배 작다. 또 24 µJ는 수십 mΩ급 소자 하나의 값이어서, 위치당 6 mΩ를 실제 750 V SiC로 만들면 위치당 Q\textsubscript{oss}(400 V)·400 V는 약 300 µJ로 12.5배다.
+\item \textbf{한 전이의 손실은 E\textsubscript{oss}가 아니라 Q\textsubscript{oss}(V)·V다.} 켜지는 소자는 자기 출력용량에 저장된 E\textsubscript{oss}를 채널에서 잃는다. 같은 전이에서 꺼져 있던 상보 소자의 출력용량은 켜지는 소자의 채널을 거쳐 전원에서 Q\textsubscript{oss}를 받아 충전되므로, 그 공동 에너지 Q\textsubscript{oss}·V − E\textsubscript{oss}도 켜지는 소자의 채널에서 소모된다(꺼져 있던 소자의 채널에는 전류가 흐르지 않는다)\cite{b32}. 같은 소자 한 쌍이면 전이당 손실은 Q\textsubscript{oss}(V)·V다. E\textsubscript{oss}만 세면 SiC MOSFET에서 3.2–4.2배 작다. 또 24 µJ는 수십 mΩ급 소자 하나의 값이어서, 위치당 6 mΩ를 실제 750 V SiC로 만들면 위치당 Q\textsubscript{oss}(400 V)·400 V는 약 300 µJ로 12.5배다.
 \end{itemize}
 
 따라서 위상당 출력용량 손실은 P\textsubscript{oss} = 4·Q\textsubscript{oss,위치}(V\textsubscript{bat}/2)·(V\textsubscript{bat}/2)·f\textsubscript{s}다. 노드마다 출력용량을 넣은 공진 회로를 행렬 지수로 푼 정확해의 무부하 손실이 이 식과 0.1 \% 안이었다. 영전류 스위칭 공진 스위치드 커패시터에서 턴오프 잔류 전류가 데드타임에 출력용량을 충·방전한다는 관찰은 있으나\cite{b33}, 잔류 전류가 없으면 노드가 그대로 남아 하드 스위칭된다는 것이 이 경우다.

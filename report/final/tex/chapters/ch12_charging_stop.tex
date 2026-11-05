@@ -2,17 +2,17 @@
 
 \section{필요성과 정지 순서}
 
-R2에서 400·500 V급 충전기는 Stage A 출력 노드 V\textsubscript{A}에 붙는다. 충전 중 배터리 경로가 끊기면(배터리 접촉기 개방, Stage A 전 위상 차단) 충전기 전류 375 A가 V\textsubscript{A} 노드로 들어간다. 충전기는 정지 신호를 받은 뒤 30 ms 안에 5 A 이하가 되면 되므로\cite{b16}, 그동안 약 11 C(400 V에서 약 4.5 kJ)를 받을 곳이 필요하고 커패시터로는 받을 수 없다. Stage A 스위치가 모두 꺼지면 바디 다이오드는 V\textsubscript{A}가 배터리 전압을 넘어서야 도통하므로 470 V를 지키는 자연 클램프도 없다. R2 기본형에서는 400 V 부품이 V\textsubscript{A}에 직접 붙으므로 V\textsubscript{A} 상승이 곧 부품 과전압이다. 클램프가 없을 때 V\textsubscript{A}가 부품 상한에 닿는 시간은 표 \ref{t:e26a}와 같다. 12.1–12.3절은 150 kHz Stage A(C\textsubscript{A} 400 µF)로 한 처음 설계와 검증이고, A25R에서 다시 확인한 결과와 클램프 부품의 최종 선정은 12.4–12.6절에 있다.
+R2에서 400·500 V급 충전기는 Stage A 출력 노드 V\textsubscript{A}에 붙는다. 충전 중 배터리 경로가 끊기면(배터리 접촉기 개방, Stage A 전 위상 차단) 충전기 전류 375 A가 V\textsubscript{A} 노드로 들어간다. CHAdeMO 방식 충전기(IEEE Std 2030.1.1-2015 부속서 A, 출력 150–500 V)의 시험 항목은 충전 허가 신호가 꺼진 뒤 30 ms 안에 출력 5 A 이하를 요구하므로\cite{b16}, 이 보고는 30 ms 동안 정격 전류가 유지되는 경우를 보호 포락선으로 둔다. 그동안 약 11 C(400 V에서 약 4.5 kJ)를 받을 곳이 필요하고 커패시터로는 받을 수 없다. 다른 충전 방식의 정지 시간은 확인하지 않았다. Stage A 스위치가 모두 꺼지면 바디 다이오드는 V\textsubscript{A}가 배터리 전압을 넘어서야 도통하므로 설계 상한 470 V를 지키는 자연 클램프도 없다. R2 기본형에서는 400 V급 부품이 V\textsubscript{A}에 직접 붙으므로, V\textsubscript{A}가 설계 상한(사건 중에도 넘지 않기로 정한 보수 값, 3장)을 넘으면 불통과로 판정한다. 부품이 실제로 견디는 과도 전압은 부품 사양으로 따로 확인해야 한다. 클램프가 없을 때 V\textsubscript{A}가 부품 상한에 닿는 시간은 표 \ref{t:e26a}와 같다. 12.1–12.3절은 150 kHz Stage A(C\textsubscript{A} 400 µF)로 한 처음 설계와 검증이고, A25R에서 다시 확인한 결과와 클램프 부품의 최종 선정은 12.4–12.6절에 있다.
 
 {\footnotesize
 \begin{longtable}{L{\dimexpr 0.2281\linewidth-2\tabcolsep\relax}L{\dimexpr 0.1228\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2018\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2018\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2456\linewidth-2\tabcolsep\relax}}
 \caption{배터리 경로 상실 뒤 V\textsubscript{A}가 각 전압에 닿는 시간(E26, 클램프 없음, 충전 375 A)}\label{t:e26a}\\
 \toprule
-\tabhead \textbf{구조} & \textbf{배터리} & \textbf{470 V(B\textsubscript{470})} & \textbf{600 V(커넥터)} & \textbf{650 V(Stage C 소자)} \\
+\tabhead \textbf{구조} & \textbf{배터리} & \textbf{470 V(설계 상한)} & \textbf{600 V(커넥터)} & \textbf{650 V(Stage C 소자)} \\
 \midrule
 \endfirsthead
 \toprule
-\tabhead \textbf{구조} & \textbf{배터리} & \textbf{470 V(B\textsubscript{470})} & \textbf{600 V(커넥터)} & \textbf{650 V(Stage C 소자)} \\
+\tabhead \textbf{구조} & \textbf{배터리} & \textbf{470 V(설계 상한)} & \textbf{600 V(커넥터)} & \textbf{650 V(Stage C 소자)} \\
 \midrule
 \endhead
 \bottomrule
@@ -237,4 +237,4 @@ V\textsubscript{A} 클램프 저항 & 가지 3개 × 891SP 2.4 Ω(R2-W460 2.7 Ω
 \end{longtable}
 }
 
-여유가 작다는 점을 함께 기록한다. 920 V 충전의 정상 V\textsubscript{A}(460.84 V)와 끔 문턱(463 V) 사이는 2.16 V, 최종 클램프의 V\textsubscript{A}·버스 최고(469.33 V)와 부품 상한(470 V) 사이는 0.67 V다. 충전기는 이상 전류원으로 두었고, 충전기 반응 시간은 IEEE Std 2030.1.1의 30 ms를 썼다\cite{b16}. 실제 충전기의 출력 과전압 보호가 더 빨리 멈출 수 있지만 이 설계는 그것에 기대지 않는다.
+여유가 작다는 점을 함께 기록한다. 920 V 충전의 정상 V\textsubscript{A}(460.84 V)와 끔 문턱(463 V) 사이는 2.16 V, 최종 클램프의 V\textsubscript{A}·버스 최고(469.33 V)와 설계 상한(470 V) 사이는 0.67 V다. 충전기는 이상 전류원으로 두었고, 충전기 반응 시간은 IEEE Std 2030.1.1-2015 부속서 A(CHAdeMO) 시험 항목 4.5.2.5.4의 30 ms를 쓰고 그동안 정격 전류 유지를 가정했다\cite{b16}. 다른 충전 방식에서는 따로 확인해야 한다. 실제 충전기의 출력 과전압 보호가 더 빨리 멈출 수 있지만 이 설계는 그것에 기대지 않는다.

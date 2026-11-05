@@ -423,7 +423,7 @@ N_ITER_H = 2
 def heat():
     import E39_clamp_switch_rejudge as E39
     import E40_typ_rule_rejudge as E40
-    sws = E40.switches40()
+    sws, _ = E40.switches40()            # (실행 경과) 1차 실행에서 반환값(튜플) 처리 누락으로 중단 → 고침
     vd = E40.vdrop40(sws)
     parts = {}
     for part, cfg, evf in (("spec", E40.SPEC, E40.spec_events), ("W460", E40.W460, E40.hv_events)):
