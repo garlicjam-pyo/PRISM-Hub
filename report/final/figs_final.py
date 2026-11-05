@@ -77,7 +77,7 @@ def fig9_1():
             ha="center", va="center", fontsize=7.8)
     ax.text(7.4, 1.6, "이중 고장(13): Stage A 협조 정지 + 전용 배선 신호로 400 V 부하 3 ms 안에 0 + 제동 저항 유지(경로전류 5 ms 안에 1 A 아래)",
             ha="center", va="center", fontsize=7.8, color=C["red"])
-    ax.text(7.4, 1.0, "Stage C 일시 정지: 링크 붕괴·소프트 투입 동안 4 kW/ms로 0, 최대 12.4 ms(48 V 배터리가 최대 66 J 공급)",
+    ax.text(7.4, 1.0, "Stage C 일시 정지: 링크 붕괴·소프트 투입 동안 4 kW/ms로 0, 최대 12.4 ms(그동안 48 V는 48 V 배터리 전압, E43)",
             ha="center", va="center", fontsize=7.8, color=C["orange"])
     ax.text(7.4, 0.4, "회로 확인: TB09–TB13(순서·EPS 첨두), TB17·TB19(실제 Stage A·조정형 Stage C), TB23(SALS 연동), TB31(일시 정지·부하 정지)",
             ha="center", va="center", fontsize=7.6, color=C["gray"])
@@ -87,6 +87,11 @@ def fig9_1():
 def fig6_2():
     d = json.loads((RES / "E41" / "fair.json").read_text(encoding="utf-8"))
     cases = d["cases"]; fair = cases["공정 기준(F1)"]["drive_typ"]; old = cases["E38 기준(셰딩 없음)"]["drive_typ"]
+    # (E43) 스위칭 × 0.7·× 1.5는 Stage A 출력용량 항에도 배율을 준 값으로 바꾼다(외부 검토 2026-11-05)
+    e43 = json.loads((RES / "E43" / "loss.json").read_text(encoding="utf-8"))["e41"]["cases"]
+    cases = dict(cases)
+    for tag in ("스위칭 × 0.7", "스위칭 × 1.5"):
+        cases[tag] = e43[tag]["new"]
     sens = [k for k in cases if k not in ("E38 기준(셰딩 없음)",)]
     lo = {s: min(cases[k]["drive_typ"][s] for k in sens) for s in ("4", "5", "6")}
     hi = {s: max(cases[k]["drive_typ"][s] for k in sens) for s in ("4", "5", "6")}

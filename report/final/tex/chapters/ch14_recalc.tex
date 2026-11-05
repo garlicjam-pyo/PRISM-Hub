@@ -41,11 +41,11 @@ R2 버스(E23) & 기본형 3사례, 버스 임피던스 & E23과 같은 기준 \
 \begin{longtable}{L{\dimexpr 0.24\linewidth-2\tabcolsep\relax}L{\dimexpr 0.22\linewidth-2\tabcolsep\relax}L{\dimexpr 0.22\linewidth-2\tabcolsep\relax}L{\dimexpr 0.25\linewidth-2\tabcolsep\relax}L{\dimexpr 0.07\linewidth-2\tabcolsep\relax}}
 \caption{150 kHz 설계 값, A25R 재계산 값(E36), 최종 값}\label{t:recalc}\\
 \toprule
-\tabhead \textbf{항목} & \textbf{150 kHz(중간보고서)} & \textbf{A25R(E36)} & \textbf{최종(E38–E41)} & \textbf{장} \\
+\tabhead \textbf{항목} & \textbf{150 kHz(중간보고서)} & \textbf{A25R(E36)} & \textbf{최종(E38–E43)} & \textbf{장} \\
 \midrule
 \endfirsthead
 \toprule
-\tabhead \textbf{항목} & \textbf{150 kHz(중간보고서)} & \textbf{A25R(E36)} & \textbf{최종(E38–E41)} & \textbf{장} \\
+\tabhead \textbf{항목} & \textbf{150 kHz(중간보고서)} & \textbf{A25R(E36)} & \textbf{최종(E38–E43)} & \textbf{장} \\
 \midrule
 \endhead
 \bottomrule
@@ -91,7 +91,7 @@ A25R 재계산(E36)에서 바뀐 결론은 세 가지였다.
 
 \begin{itemize}
 \item \textbf{H5 기각.} ③은 ④에 손실·VA·위치 세 지표 모두 뒤진다(E36, E38). 손실 계수 감도와 운전 프로파일 3종에서도 같다.
-\item \textbf{충전 중 보조버스(H3)와 R2 버스·48 V.} E16·E23의 원 기준을 모두 통과했다(8.2절, 10.4절). H3의 조건은 사전 기동과 600 µs 램프로 바뀌었다.
+\item \textbf{충전 중 보조버스(H3)와 R2 버스·48 V.} E16·E23의 원 기준을 모두 통과했다(8.2절, 10.4절. E16은 Stage A 정적 등가로 다시 계산했고, 그 보수성은 증명하지 않았다, 18.4절). H3의 조건은 사전 기동과 600 µs 램프로 바뀌었다.
 \item \textbf{충전 중 정지에 클램프가 필요하다는 결론.} 920 V 충전에서는 클램프 없이 0.1 ms 안에 470 V에 닿는다. 회로 TB28은 4/4로 통과했고(12.4절), 새로 넣은 충전기 급정지(10 µs) 사례도 6/6 통과했다.
 \item \textbf{Stage A 충전 경로의 이점.} 375 A 충전 손실(0.52–0.64 kW)은 전용 승압기와 모터 승압 기준점보다 작다(15장).
 \end{itemize}
