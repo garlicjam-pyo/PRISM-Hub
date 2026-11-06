@@ -75,7 +75,7 @@ import itertools
 import json
 import math
 import sys
-from multiprocessing import Pool
+from common import Pool                     # fork 문맥 또는 같은 프로세스 차례 실행(common.py, 2026-11-06)
 from pathlib import Path
 
 import numpy as np
@@ -133,6 +133,10 @@ def epc_foster():
 # ======================================================================================================
 def _clamp(kw):
     import E26_charging_stop as E26
+    kw = dict(kw)
+    bus = kw.pop("_bus", None)            # (2026-11-06) 호출한 시험이 버스 값을 작업 인수로 넘기면 작업자에서 그 값으로 둔다
+    if bus is not None:
+        E26.BUS.clear(); E26.BUS.update(dict(E26.BUS_DEFAULT, **bus))
     r = E26.run_event(**kw, rec_every=1, full_trace=True)
     tr = np.array(r.pop("trace"))
     t, vA, icl = tr[:, 0], tr[:, 1], tr[:, 5]

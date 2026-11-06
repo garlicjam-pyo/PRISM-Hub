@@ -12,7 +12,7 @@ E33 transient·slow에서 A25는 E28 사례 대부분이 불통과였다(위상 
 ■ 실행   python E33_diag_transient.py   (2코어 약 20분)
 ■ 결과   results/E33/diag_transient.json
 """
-from multiprocessing import Pool
+from common import Pool                     # fork 문맥 또는 같은 프로세스 차례 실행(common.py, 2026-11-06)
 
 import E28_stage_a_modules as E28
 import E33_stage_a_25k_dynamics as E33

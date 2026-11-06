@@ -1,5 +1,8 @@
-"""검증 스크립트 공용 도구: 결과 폴더 경로, JSON 저장, 판정 출력."""
+"""검증 스크립트 공용 도구: 결과 폴더 경로, JSON 저장, 판정 출력, 작업자 풀, 입력 해시, 엄격 비교."""
+import hashlib
 import json
+import math
+import multiprocessing as _mp
 import os
 from pathlib import Path
 
@@ -53,3 +56,133 @@ def verdict(label, ok, detail=""):
 def workers():
     """병렬 작업 수. 환경변수 PRISM_WORKERS로 바꿀 수 있다(기본: CPU 수)."""
     return int(os.environ.get("PRISM_WORKERS", os.cpu_count() or 1))
+
+
+# ------------------------------------------------------------------------------------------------------
+# 작업자 풀(2026-11-06 통합 수정안 7절). 여러 시험은 부모 프로세스에서 모듈 전역(설계값, 버스 용량, 모듈 저항 등)을 바꾼 뒤
+# 작업자를 띄운다. spawn(Windows 기본, macOS 기본, Python 3.14 이후 Linux 기본은 forkserver)은 작업자에서 모듈을 새로 읽어
+# 이 설정을 잃는다. 그래서 모든 시험은 이 Pool을 쓴다: fork를 쓸 수 있으면 fork 문맥으로, 없으면 같은 프로세스에서 차례로
+# 실행한다(작업자 초기화 함수도 같은 프로세스에서 한 번 실행). 환경변수 PRISM_POOL=serial이면 어디서나 차례 실행이다.
+# ------------------------------------------------------------------------------------------------------
+class SerialPool:
+    """multiprocessing.Pool과 같은 사용법(map·starmap·imap)으로 같은 프로세스에서 차례로 실행한다."""
+    def __init__(self, processes=None, initializer=None, initargs=(), **kw):
+        if initializer is not None:
+            initializer(*initargs)
+
+    def map(self, f, it, chunksize=None):
+        return [f(x) for x in it]
+
+    def starmap(self, f, it, chunksize=None):
+        return [f(*x) for x in it]
+
+    def imap(self, f, it, chunksize=1):
+        return (f(x) for x in it)
+
+    imap_unordered = imap
+
+    def close(self):
+        pass
+
+    def join(self):
+        pass
+
+    def terminate(self):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+
+def pool_mode():
+    m = os.environ.get("PRISM_POOL", "").strip().lower()
+    have_fork = "fork" in _mp.get_all_start_methods()
+    if m == "serial":
+        return "serial"
+    if m == "fork":
+        if not have_fork:
+            raise RuntimeError("PRISM_POOL=fork 이지만 이 운영체제에는 fork가 없다")
+        return "fork"
+    if m:
+        raise RuntimeError("PRISM_POOL은 fork 또는 serial만 쓸 수 있다: %r" % m)
+    return "fork" if have_fork else "serial"
+
+
+def Pool(processes=None, initializer=None, initargs=(), **kw):
+    if pool_mode() == "serial":
+        return SerialPool(processes, initializer, initargs)
+    return _mp.get_context("fork").Pool(processes, initializer, initargs, **kw)
+
+
+# ------------------------------------------------------------------------------------------------------
+# 입력 출처 기록과 엄격 비교(통합 수정안 8절)
+# ------------------------------------------------------------------------------------------------------
+def sha256_file(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for b in iter(lambda: f.read(1 << 20), b""):
+            h.update(b)
+    return h.hexdigest()
+
+
+def input_record(path, kind):
+    """kind: 'archived'(날짜별 validation·회로 저장 파형) 또는 'fresh'(이번 실행의 results/)."""
+    p = Path(path)
+    if not p.exists():
+        raise FileNotFoundError("입력 없음: %s (먼저 선행 시험을 실행하거나 저장 자료를 준비할 것)" % p)
+    try:
+        rel = str(p.resolve().relative_to(ROOT.parent.parent))
+    except ValueError:
+        rel = str(p)
+    return dict(path=rel, kind=kind, sha256=sha256_file(p), bytes=p.stat().st_size)
+
+
+STRICT_RTOL = 1e-6           # 숫자: |a − b| ≤ 1e-6 × max(1, |a|)
+STRICT_SKIP = ("sec", "wall_s", "elapsed", "time_s")      # 실행 시간 항목만 제외
+
+
+def strict_diff(a, b, path="", out=None, rtol=STRICT_RTOL, skip=STRICT_SKIP):
+    """두 JSON 값을 엄격하게 비교한다: 키 집합, 배열 길이, 형(문자·불리언·숫자·None), 문자열·불리언 값, 유한 수 여부,
+    숫자 상대 차(rtol × max(1, |a|)). 차이 목록 [(경로, 이유, a, b)]를 돌려준다."""
+    out = [] if out is None else out
+    if isinstance(a, dict) and isinstance(b, dict):
+        ka = {k for k in a if k not in skip}; kb = {k for k in b if k not in skip}
+        for k in sorted(ka - kb):
+            out.append((path + "/" + str(k), "키가 앞에만 있음", None, None))
+        for k in sorted(kb - ka):
+            out.append((path + "/" + str(k), "키가 뒤에만 있음", None, None))
+        for k in sorted(ka & kb):
+            strict_diff(a[k], b[k], path + "/" + str(k), out, rtol, skip)
+    elif isinstance(a, list) and isinstance(b, list):
+        if len(a) != len(b):
+            out.append((path, "배열 길이 다름", len(a), len(b)))
+        for i, (x, y) in enumerate(zip(a, b)):
+            strict_diff(x, y, path + "[%d]" % i, out, rtol, skip)
+    elif isinstance(a, bool) or isinstance(b, bool):
+        if not (isinstance(a, bool) and isinstance(b, bool)) or a != b:
+            out.append((path, "불리언 다름", a, b))
+    elif isinstance(a, (int, float)) and isinstance(b, (int, float)):
+        fa, fb = float(a), float(b)
+        if math.isfinite(fa) != math.isfinite(fb) or (not math.isfinite(fa) and not (fa == fb)):
+            out.append((path, "유한 수 여부 다름", a, b))
+        elif math.isfinite(fa) and abs(fa - fb) > rtol * max(1., abs(fa)):
+            out.append((path, "숫자 차", a, b))
+    elif type(a) is not type(b):
+        out.append((path, "형 다름", a, b))
+    elif a != b:
+        out.append((path, "값 다름", a, b))
+    return out
+
+
+def strict_selftest():
+    """비교기 자체 시험: 키 삭제·문자열 변경·NaN·길이·불리언 변경은 차이로 잡혀야 한다."""
+    base = dict(a=1.0, b="최선", c=[1, 2], d=True, e=dict(x=0.5))
+    cases = dict(key_del={k: v for k, v in base.items() if k != "a"}, str_change=dict(base, b="같은 수준"),
+                 nan=dict(base, a=float("nan")), length=dict(base, c=[1, 2, 3]), bool_flip=dict(base, d=False),
+                 num=dict(base, e=dict(x=0.5 + 1e-3)), type_change=dict(base, d=1))
+    res = {k: len(strict_diff(base, v)) > 0 for k, v in cases.items()}
+    res["same"] = len(strict_diff(base, json.loads(json.dumps(base)))) == 0
+    return res

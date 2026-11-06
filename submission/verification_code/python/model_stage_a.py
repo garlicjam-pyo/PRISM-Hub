@@ -60,13 +60,23 @@ DESIGNS = {
 DESIGN = "R1_150k"
 
 
+PLANT = {}       # (2026-11-06) 실제 부품값 덮어쓰기. 제어 주기 FR0는 설계 묶음 값으로 계산한 뒤 BASE에 적용한다(비어 있으면 이전과 같다).
+
+
 def set_design(name):
-    """Stage A 설계 묶음을 바꾼다(BASE를 제자리에서 바꾸므로 BASE를 참조하는 다른 모듈에도 적용된다)."""
+    """Stage A 설계 묶음을 바꾼다(BASE를 제자리에서 바꾸므로 BASE를 참조하는 다른 모듈에도 적용된다).
+    PLANT가 있으면 FR0(제어 주기·판정 시간의 기준)는 설계값으로 두고 BASE의 해당 부품값만 실제 값으로 바꾼다."""
     global FR0, DESIGN
     BASE.clear(); BASE.update(DESIGNS[name])
     FR0 = 1 / (2 * np.pi * np.sqrt(BASE["Lr"] * BASE["Cfly"]))
+    BASE.update(PLANT)
     DESIGN = name
     return FR0
+
+
+def f_plant():
+    """실제 부품값(BASE)의 공진주파수 [Hz]."""
+    return 1 / (2 * np.pi * np.sqrt(BASE["Lr"] * BASE["Cfly"]))
 
 
 def qoss_pos(V):

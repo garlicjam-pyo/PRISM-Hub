@@ -30,7 +30,7 @@ dev4: E33 진단에서 MC 느린 충전을 통과한 두 변경(TM1: 관리기 �
 ■ 실행   python E35_a25r_design.py [dev] [dev2] [dev3] [dev4]   (2코어 각 약 25·35·40·35분)
 ■ 결과   results/E35/design_dev.json, design_dev2.json, design_dev3.json, design_dev4.json
 """
-from multiprocessing import Pool
+from common import Pool                     # fork 문맥 또는 같은 프로세스 차례 실행(common.py, 2026-11-06)
 
 import E28_stage_a_modules as E28
 import E33_stage_a_25k_dynamics as E33

@@ -100,10 +100,13 @@ def ich_max(V):
 
 
 class Source:
-    """경로 전원 프로파일(피클 가능). ich: [(t, i_ch)] 구간 선형, nmod: [(t, n)] 계단, f: 경로저항 공차 배율."""
-    def __init__(self, V, ich, nmod, f=1.0):
+    """경로 전원 프로파일(피클 가능). ich: [(t, i_ch)] 구간 선형, nmod: [(t, n)] 계단, f: 경로저항 공차 배율.
+    ra_mod: 모듈(2위상) 출력저항. 만들 때의 RA_MOD를 저장해 작업자 프로세스의 전역값과 무관하게 소스 계산과 V_A 후처리가
+    같은 값을 쓴다(2026-11-06 통합 수정안 7절: E36이 부모에서 RA_MOD = 9.0 mΩ로 바꿔도 spawn 작업자는 10.2 mΩ였다)."""
+    def __init__(self, V, ich, nmod, f=1.0, ra_mod=None):
         self.V = V; self.ti = np.array([a for a, _ in ich]); self.ii = np.array([b for _, b in ich])
         self.tn = [a for a, _ in nmod]; self.nn = [b for _, b in nmod]; self.f = f
+        self.ra_mod = RA_MOD if ra_mod is None else ra_mod
 
     def ich(self, t):
         return float(np.interp(t, self.ti, self.ii))
@@ -117,7 +120,8 @@ class Source:
 
     def __call__(self, t):
         n = self.n(t)
-        return self.V / 2 + ra(n) * self.f * self.ich(t), (ra(n) + RW) * self.f
+        r = self.ra_mod / n
+        return self.V / 2 + r * self.f * self.ich(t), (r + RW) * self.f
 
 
 class Load:
@@ -199,8 +203,9 @@ def run_case(job):
     t = r["t"]; ip = r["x"][:, 0]
     ich = np.interp(t, src.ti, src.ii)
     nn = np.array(src.nn)[np.searchsorted(src.tn, t, side="right") - 1]        # 시각별 동작 모듈 수
-    vA = V / 2 + RA_MOD / nn * src.f * (ich - ip)                             # 충전기 단자(= V_A)
-    row.update(kind=kind, name=name, tier=tier, V=V, info=info, vA_min=float(vA.min()), vA_max=float(vA.max()),
+    vA = V / 2 + src.ra_mod / nn * src.f * (ich - ip)                         # 충전기 단자(= V_A), 소스와 같은 저항
+
+    row.update(kind=kind, name=name, tier=tier, V=V, info=info, vA_min=float(vA.min()), vA_max=float(vA.max()), ra_mod=src.ra_mod,
                voltage_quality_pass=bool(r["requirements_pass"]), wall_s=time.time() - t0)
     return row
 

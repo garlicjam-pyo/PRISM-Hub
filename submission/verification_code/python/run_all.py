@@ -1,6 +1,6 @@
 """모든 Python 검증을 근거 번호 순서로 실행한다(E19는 E17보다 먼저. 뒤 시험이 앞 시험의 results/를 읽는다).
 
-  python run_all.py            전체 E1–E44(2코어 기준 약 29시간. E12 약 3시간, E17 약 1.5시간, E33 약 2시간, E35 약 5시간,
+  python run_all.py            전체 E1–E45(2코어 기준 약 30시간. E12 약 3시간, E17 약 1.5시간, E33 약 2시간, E35 약 5시간,
                                E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
   python run_all.py E3 E4      일부만
   python run_all.py --diag     실행 뒤 진단 스크립트(E33_diag_transient, E37_diag_fs, E38_review_repro)도 실행(판정 아님)
@@ -11,8 +11,11 @@ E2-c·E11 대조는 MATLAB/Octave에서 matlab/E2_two_stage_crosscheck.m, E11_co
 import subprocess
 import sys
 import time
+from pathlib import Path
 
 from common import RESULTS
+
+HERE = Path(__file__).resolve().parent            # 자식 스크립트와 작업 폴더는 실행 위치와 무관하게 이 폴더(2026-11-06)
 
 STEPS = [
     ("E1", ["E1_stage_a_zcs.py"]),
@@ -60,6 +63,7 @@ STEPS = [
     ("E42", [("E42_value_map_fair.py", ["run"])]),
     ("E43", [("E43_review2_response.py", ["loss", "heat", "sens", "bat"])]),
     ("E44", [("E44_review3_response.py", ["scope", "dev", "bkv", "clamp", "cfly"])]),
+    ("E45", [("E45_review4_response.py", ["h2", "vmap", "power", "s180", "dstrict", "delay", "p5", "brake", "repro", "fcheck"])]),
 ]
 
 DIAG = [("E33_diag_transient.py", []), ("E37_diag_fs.py", []), ("E38_review_repro.py", [])]
@@ -67,13 +71,22 @@ DIAG = [("E33_diag_transient.py", []), ("E37_diag_fs.py", []), ("E38_review_repr
 
 def _run(item):
     script, args = (item, []) if isinstance(item, str) else item
+    path = HERE / script
+    if not path.exists():
+        raise SystemExit(f"스크립트 없음: {path}")
     print(f"\n==== {script} {' '.join(args)} ====", flush=True)
-    subprocess.run([sys.executable, script, *args], check=True)
+    r = subprocess.run([sys.executable, str(path), *args], cwd=str(HERE))
+    if r.returncode != 0:                              # 필수 결과 누락·실행 오류·예기치 않은 판정 차이는 비정상 종료
+        raise SystemExit(f"{script} {' '.join(args)} 실패(종료 코드 {r.returncode})")
 
 
 if __name__ == "__main__":
     diag = "--diag" in sys.argv
     want = set(a for a in sys.argv[1:] if a != "--diag")
+    known = {eid for eid, _ in STEPS} | {"E6", "E7"}
+    bad = sorted(want - known)
+    if bad:
+        raise SystemExit(f"알 수 없는 근거 번호: {', '.join(bad)} (가능: {', '.join(eid for eid, _ in STEPS)}, E6·E7은 E5에 포함)")
     t0 = time.time()
     for eid, scripts in STEPS:
         if want and eid not in want and not (eid == "E5" and want & {"E6", "E7"}):
@@ -82,10 +95,10 @@ if __name__ == "__main__":
             _run(s)
         if eid == "E2" and (RESULTS / "E2" / "reference_matrix_matlab.json").exists():
             print("\n==== E2c_compare_matlab.py ====", flush=True)
-            subprocess.run([sys.executable, "E2c_compare_matlab.py"], check=True)
+            subprocess.run([sys.executable, str(HERE / "E2c_compare_matlab.py")], check=True, cwd=str(HERE))
         if eid == "E11" and (RESULTS / "E11" / "matlab_gain.json").exists():
             print("\n==== E11_controller_crosscheck.py compare ====", flush=True)
-            subprocess.run([sys.executable, "E11_controller_crosscheck.py", "compare"], check=True)
+            subprocess.run([sys.executable, str(HERE / "E11_controller_crosscheck.py"), "compare"], check=True, cwd=str(HERE))
     if diag:
         for d in DIAG:
             _run(d)

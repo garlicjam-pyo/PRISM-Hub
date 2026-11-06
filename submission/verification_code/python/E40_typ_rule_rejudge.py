@@ -85,7 +85,7 @@
 import json
 import math
 import sys
-from multiprocessing import Pool
+from common import Pool                     # fork 문맥 또는 같은 프로세스 차례 실행(common.py, 2026-11-06)
 
 import numpy as np
 

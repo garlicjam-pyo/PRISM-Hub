@@ -52,7 +52,7 @@
 ■ 결과   results/E35/static.json, transient.json, beyond.json, fault.json, clamp.json
 """
 import sys
-from multiprocessing import Pool
+from common import Pool                     # fork 문맥 또는 같은 프로세스 차례 실행(common.py, 2026-11-06)
 
 import E28_stage_a_modules as E28
 import E33_stage_a_25k_dynamics as E33
@@ -131,7 +131,8 @@ def clamp():
     import E26_charging_stop as E26
     import E34_parts_rating as E34
     E26.BUS["CA"] = CA_R
-    evs = [e for e in E26.EVENTS if e["clamp"] and not e.get("nmod_after")]
+    # (2026-11-06 통합 수정안 7절) C_A를 작업 인수로도 넘긴다(작업자 전역에 기대지 않음)
+    evs = [dict(e, _bus=dict(CA=CA_R)) for e in E26.EVENTS if e["clamp"] and not e.get("nmod_after")]
     with Pool(workers()) as p:
         rows = p.map(E34._clamp, evs)
     g = E34.ds("FF450R12ME4P")["igbt"]

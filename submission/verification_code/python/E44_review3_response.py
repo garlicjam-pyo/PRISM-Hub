@@ -62,7 +62,7 @@ import os
 import subprocess
 import sys
 import time
-from multiprocessing import Pool
+from common import Pool                     # fork 문맥 또는 같은 프로세스 차례 실행(common.py, 2026-11-06)
 
 import numpy as np
 
@@ -317,6 +317,20 @@ def _spur(P, part, eps, H, pas_name):
                 E_max_J=max(x["E_branch_J"] for x in rows), T_max=max([x["T"] for x in rows if x["T"] is not None], default=None), rows=rows)
 
 
+def _clamp_config_hash(part, P):
+    """재개 조건: E44·E26·E39·E40 코드, 사건 목록, 문턱·후보, 수동소자 모서리, 적분 간격, 자기 가열 시작 가정의 해시."""
+    import hashlib
+    import E26_charging_stop as E26
+    from pathlib import Path
+    from common import sha256_file
+    here = Path(__file__).resolve().parent
+    blob = dict(code={f: sha256_file(here / f) for f in ("E44_review3_response.py", "E26_charging_stop.py", "E39_clamp_switch_rejudge.py",
+                                                       "E40_typ_rule_rejudge.py")},
+                events=P["evf"](), cfg=P["cfg"], sel=P["sel"], eps=EPS_K1[part], H=H_K2, H_up=H_UP, eps_low=EPS_LOW, H0=H0,
+                passive=PASSIVE, DT=E26.DT, delay=E26.CL_DEFAULT["delay"], E0=[P["Eh"], P["El"]])
+    return hashlib.sha256(json.dumps(blob, sort_keys=True, default=str).encode()).hexdigest()
+
+
 def clamp(parts=("spec", "W460")):
     """(실행 경과) 2시간 실행 한도 때문에 단계(K1, K2, K3 시도)마다 clamp.json에 저장하고, 다시 실행하면 저장된 단계부터 잇는다.
     판정 순서·기준은 위 사전 등록과 같다."""
@@ -330,9 +344,16 @@ def clamp(parts=("spec", "W460")):
         save_json(EID, "clamp", dict(parts=out, passive=PASSIVE))
     for part in parts:
         P = _setup_part(part)
+        h = _clamp_config_hash(part, P)
         st = out.get(part) or {}
+        if st and st.get("config_hash") != h:
+            # (2026-11-06 통합 수정안 8절) 코드·입력·문턱·사건·적분 간격이 다르면 저장 단계를 쓰지 않고 새로 시작한다.
+            # 처음 실행(해시 기록 이전)의 결과는 clamp_prev_<part>로 옮겨 남긴다.
+            print("  %s: 저장된 단계의 설정 해시가 다름 → 새로 실행(이전 결과는 clamp_prev_%s.json)" % (part, part), flush=True)
+            save_json(EID, "clamp_prev_" + part, st)
+            st = {}; out[part] = st
         if st.get("done"):
-            print("  %s: 이미 끝남(건너뜀)" % part); continue
+            print("  %s: 같은 설정으로 이미 끝남(건너뜀, status=%s)" % (part, st.get("status")), flush=True); continue
         t0 = time.time()
         print("  == %s: 가지 %d × %.1f Ω, %s, 가정 E_hi %.0f·E_lo %.0f J ==" % (part, P["sel"]["n"], P["sel"]["R_b"], P["swn"], P["Eh"], P["El"]), flush=True)
         up, down = EPS_K1[part]
@@ -360,7 +381,7 @@ def clamp(parts=("spec", "W460")):
                     if all(r["C1"] and r["E"] for r in rs):
                         X = eps; break
             st = dict(k1=k1, X=X, lim=P["cfg"]["lim"], on0=P["cfg"]["on"], off0=P["cfg"]["off"], n=P["sel"]["n"], R_b=P["sel"]["R_b"],
-                      switch=P["swn"], ok=False, done=X is None)
+                      switch=P["swn"], ok=False, done=X is None, config_hash=h, status="partial" if X is not None else "done-fail")
             out[part] = st; save()
             print("  K1 X = %s (%.0f s)" % (None if X is None else "%+.3f %%" % (100 * X), time.time() - t0), flush=True)
         if X is None:
@@ -439,7 +460,8 @@ def clamp(parts=("spec", "W460")):
                         Hc = nxt[0]
                 else:
                     done = True
-            st.update(k3=k3_hist, next_X=Xc, next_H=Hc, X_final=k3_hist[-1]["X"], H_min_final=k3_hist[-1]["H_min"], ok=ok, done=done)
+            st.update(k3=k3_hist, next_X=Xc, next_H=Hc, X_final=k3_hist[-1]["X"], H_min_final=k3_hist[-1]["H_min"], ok=ok, done=done,
+                      status=("done-pass" if ok else "done-fail") if done else "partial")
             save()
             if done:
                 break
@@ -460,17 +482,14 @@ def cfly():
     import E35_a25r_verify as E35
     import E33_stage_a_25k_dynamics as E33
     base = A.DESIGNS["A25"]["Cfly"]
-    orig_set = A.set_design
     res = {}
+    # (2026-11-06 정리) 처음 실행은 set_design을 바꿔 끼워 같은 일을 했다. 지금은 model_stage_a.PLANT로 실제 부품값을 준다
+    # (계산은 같음. E45 S가 저장 결과와 엄격 비교로 확인). 작업자 풀은 common.Pool(fork 또는 같은 프로세스)이다.
     for tag, C in CFLY_CASES:
         A.DESIGNS["A25"]["Cfly"] = CFLY_DESIGN                           # 제어 주기·판정 시간(FR0)은 설계값으로
-
-        def set_design(name, _C=C):
-            fr = orig_set(name)
-            A.BASE["Cfly"] = _C                                         # 실제 부품값(공차 표본은 이 값 둘레)
-            return fr
-        A.set_design = set_design
-        print("  == %s(해석 %.3f µF, 설계 %.2f µF) ==" % (tag, base * 1e6, CFLY_DESIGN * 1e6), flush=True)
+        A.PLANT.clear(); A.PLANT["Cfly"] = C                            # 실제 부품값(공차 표본은 이 값 둘레)
+        fr_ctrl = A.set_design("A25"); fr_plant = A.f_plant()
+        print("  == %s(해석 %.3f µF, 설계 %.2f µF, 제어 %.2f Hz, 실제 공진 %.2f Hz) ==" % (tag, base * 1e6, CFLY_DESIGN * 1e6, fr_ctrl, fr_plant), flush=True)
         t0 = time.time()
         captured = {}
         E35.save_json = lambda eid, name, obj: captured.__setitem__(name, obj)
@@ -479,10 +498,10 @@ def cfly():
             E35.transient()
             E35.fault()
         finally:
-            A.set_design = orig_set; A.DESIGNS["A25"]["Cfly"] = base
+            A.PLANT.clear(); A.DESIGNS["A25"]["Cfly"] = base
         tr = captured["transient"]["cases"]; fl = captured["fault"]["cases"]
         okT = all(x["passed"] for x in tr); okF = all(x["passed"] for x in fl)
-        res[tag] = dict(C=C, C_design=CFLY_DESIGN, transient=tr, fault=fl, okT=okT, okF=okF, sec=time.time() - t0,
+        res[tag] = dict(C=C, C_design=CFLY_DESIGN, f_control_Hz=fr_ctrl, f_plant_Hz=fr_plant, transient=tr, fault=fl, okT=okT, okF=okF, sec=time.time() - t0,
                         phase_peak_T=max(x["phase_peak"] for x in tr), phase_peak_F=max(x["phase_peak"] for x in fl),
                         vA_T=[min(x["vA"][0] for x in tr), max(x["vA"][1] for x in tr)])
         verdict("(F) %s: 요구 안 과도 %d/%d, 모듈 고장 %d/%d" % (tag, sum(x["passed"] for x in tr), len(tr), sum(x["passed"] for x in fl), len(fl)),
@@ -494,16 +513,29 @@ def cfly():
 # (R) 재분석
 # ======================================================================================================
 def scope():
+    """(R) 재분석. 입력은 모두 저장 자료(archived: 날짜별 validation과 TB28 저장 파형)이며, 이번 실행에서 새로 계산한 값이 아니다.
+    (2026-11-06 통합 수정안 8절) 입력마다 경로·SHA-256·크기를 기록한다. 새 계산을 검증하려면 해당 시험을 다시 실행해 results/와
+    엄격 비교한다(E45 S)."""
     from pathlib import Path
+    from common import input_record
     root = Path(__file__).resolve().parents[3]
     val = root / "validation"
-    out = {}
+    out = {"source": "archived"}
+    ins = [val / "2026-09-28-requirements" / "sals_contract.json", val / "2026-10-28-a25r-impact" / "E36" / "e16_static.json",
+           val / "2026-10-28-a25r-impact" / "E36" / "e16_concurrent.json", val / "2026-10-29-review-response" / "E38" / "l2.json"]
+    ins += [root / "simulink" / "tb" / "TB28_A25R_Charging_Stop" / "results" / ("TB28_%s_avg1us.csv" % cn)
+            for cn in ("A28_920V_pathloss", "B28_640V_pathloss_ramp", "C28_800V_module_fault")]
+    ins += [val / "2026-10-28-stage-a-25k" / "E35" / ("%s.json" % f) for f in ("transient", "fault", "beyond")]
+    out["inputs"] = [input_record(p, "archived") for p in ins]
     # H4
     s = json.loads((val / "2026-09-28-requirements" / "sals_contract.json").read_text(encoding="utf-8"))["summary"]["sals"]
+    ss = json.loads((val / "2026-09-28-requirements" / "sals_contract.json").read_text(encoding="utf-8"))["summary"]
+    static_unmet = ss.get("static", {}).get("d_unmet_fraction", {}).get("total")
     out["H4"] = dict(noloss=s["grant_latency_ms_noloss"], loss=s["grant_latency_ms_loss"], budget_exceed_ms=s["budget_exceed_ms_total"],
-                     peak_kW=s["peak_kW"], unmet_total=s["d_unmet_fraction"]["total"], starts=s["compressor_starts"],
-                     crit=dict(noloss_max_ms=25, loss_p99_ms=50),
-                     ok=bool(s["grant_latency_ms_noloss"]["max"] <= 25 and s["grant_latency_ms_loss"]["p99"] <= 50 and s["budget_exceed_ms_total"] == 0))
+                     peak_kW=s["peak_kW"], unmet_total=s["d_unmet_fraction"]["total"], unmet_static=static_unmet, starts=s["compressor_starts"],
+                     crit=dict(noloss_max_ms=25, loss_p99_ms=50, unmet_below_static=True),
+                     ok=bool(s["grant_latency_ms_noloss"]["max"] <= 25 and s["grant_latency_ms_loss"]["p99"] <= 50 and s["budget_exceed_ms_total"] == 0
+                             and static_unmet is not None and s["d_unmet_fraction"]["total"] < static_unmet))
     # H1
     st = json.loads((val / "2026-10-28-a25r-impact" / "E36" / "e16_static.json").read_text(encoding="utf-8"))
     co = json.loads((val / "2026-10-28-a25r-impact" / "E36" / "e16_concurrent.json").read_text(encoding="utf-8"))
