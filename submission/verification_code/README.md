@@ -69,7 +69,8 @@ PRISM-Hub_verification_code/
 │  │  ├─ E41_fair_aux_comparison.py   [E41] ④ 대 ⑤·⑥ 공정 비교(보조 강압기 셰딩, 민감도)
 │  │  ├─ E42_value_map_fair.py        [E42] 가치 지도 공정 기준 재계산(①의 보조 강압기 셰딩, 칸 판정)
 │  │  ├─ E43_review2_response.py      [E43] 제출 전 외부 검토 대응(측정 사양, 민감도 배율, 클램프 자기 가열, 48 V 배터리)
-│  │  └─ run_all.py                   전체 실행(E1–E43, 진단은 --diag)
+│  │  ├─ E44_review3_response.py      [E44] 제출 전 재검토 대응(비교 소자 E_oss 조건 정정 연쇄, 클램프 구현 요구, C_fly 후보, 판정 범위)
+│  │  └─ run_all.py                   전체 실행(E1–E44, 진단은 --diag)
 ├─ data/datasheets/              부품 데이터시트 표 값(JSON, 출처·열람일 포함. E31·E34·E37–E40이 읽는다)
 ├─ matlab/
 │  ├─ prism_sim_array.m          Stage A 어레이 스위칭 ODE(Python model_stage_a.py와 같은 알고리즘)
@@ -98,7 +99,7 @@ PRISM-Hub_verification_code/
 
 ```bash
 cd python
-python run_all.py                 # E1–E43 전체(2코어 기준 약 25시간. E12 약 3시간, E17 약 1.5시간, E28 약 75분, E29 약 60분, E33 약 2시간, E35 약 5시간, E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
+python run_all.py                 # E1–E44 전체(2코어 기준 약 29시간. E44 약 3.5시간, E12 약 3시간, E17 약 1.5시간, E28 약 75분, E29 약 60분, E33 약 2시간, E35 약 5시간, E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
 python run_all.py E41 E42         # 일부만(앞 시험의 results/가 있어야 한다, 아래 표)
 python E3_steady_state.py         # 개별 실행 예
 python E5_E7_controller.py grid --design reference   # 제어기 파트·설계 선택
@@ -134,6 +135,7 @@ E11_controller_crosscheck % [E11]  python/E11_controller_crosscheck.py export �
 | E41 | E36 a25_grid·a25_grid_Rpass_x2, E38 l1_e25_comparison·l2, E22 |
 | E42 | E36 a25_grid, E38 l1_e15_comparison·l1_e18_A25R_value_map, E41 fair, E18 stage_a_grid_ext, E22 |
 | E43 | E41 fair, E42 cases·cells(와 그 앞 시험), E40 p5·switches, E38·E39 클램프 모델, E19·E12 스위칭 설정 |
+| E44 | E38 l1·E41·E42·E43 L의 입력(E36, E38 l2, E25), E40 p5·E43 heat(클램프), E35·E33·E32(Stage A 동특성), validation의 sals_contract·E36·E38 l2·E35·TB28 CSV(범위 재분석) |
 
 E22의 `zvs.json`·`both.json`이 없으면 조정형 Stage C를 처음 설계로 계산한다(손실 값이 달라진다). 지금은 이때 경고를 낸다.
 
@@ -185,6 +187,7 @@ E22의 `zvs.json`·`both.json`이 없으면 조정형 Stage C를 처음 설계�
 | **E41** | ④ 대 ⑤·⑥ 공정 비교(보고서 이후) | ⑤의 보조 강압기에 경부하 셰딩이 없어 비교가 공정하지 않았다 | 보조 강압기 이상적 셰딩, 계수 민감도 10종, 승압기 16–50 kHz | 문구 규칙 W1–W3(실행 전 고정) | `E41_fair_aux_comparison.py` | `results/E41` |
 | **E42** | 가치 지도 공정 기준 재계산(보고서 이후) | 가치 지도의 ①에 경부하 셰딩이 없어 창 조정 모듈 칸의 판정이 공정하지 않았다 | ①의 보조 강압기 이상적 셰딩, 민감도 7종, 칸 판정(3 % 동등범위) | 창 조정 모듈·④가 최선이던 칸 모두 "같은 수준", ① 최선은 B\_420 216·224s·사양 팩 |
 | **E43** | 제출 전 외부 검토 대응(보고서 이후) | 버스 측정 범위가 ③의 값, 손실 민감도의 스위칭 배율이 Stage A 출력용량 항에 빠짐, 클램프 자기 가열 가정 부족, 일시 정지 동안 48 V 배터리 없음 | 측정 사양 S1 + 포화 센서 스위칭 모델 144건 × 4변형, Stage A Q_oss 항 배율, 정확도 범위 전체 자기 가열 갱신, 48 V 배터리 등가 | S1 채택, 민감도 −25 … +11 %·4–33 W(칸 판정 불변), 클램프 재통과, 48 V 36–52 V 안(±2 % 미유지)·배터리 요구 도출 |
+| **E44** | 제출 전 재검토 대응(보고서 이후) | 비교 소자 C3M0016120K의 E_oss 127 µJ가 1000 V 값, 클램프의 버스 수동소자 공차와 문턱 추종 오차, C_fly 후보 −4 %, 판정 범위(H4·H1·충전 위상 수·TB28·첨두 세대) | 정정 값으로 E38 l1 → E41 → E42 → E43 L 연쇄, 클램프 K1–K3(수동소자 ±10 %, 히스테리시스 폭), C_fly 45.0·42.75 µF로 E35 과도·고장 | ④ 대 ⑤ −1.4 %(같은 수준 유지), 클램프 요구 사양 팩 −1.0 … +0.075 %·3.5–6.0 V·W460 −1.0 … +1.0 %·4.0–6.0 V, C_fly 〔F〕 |
 | **E10** | Stage C CLLC 3 kW | Stage C를 고정이득으로 둘 수 있어야 400 V 정밀 조정(파생 요구)의 가치가 성립한다 | 스위칭 ODE(1차 환산 6상태), 0.3–3 kW × f_s/f_r 0.9–1.1 이득과 FHA 비교, 입력 ±2 %, ZVS 여유 | 공진점 이득 1 ± 3 %, ZVS 여유 > 1 | `E10_stage_c_cllc.py`, `E10_stage_c_cllc.m` | `results/E10` |
 
 ## 5. 공통 모델 요약
@@ -320,6 +323,7 @@ E22의 `zvs.json`·`both.json`이 없으면 조정형 Stage C를 처음 설계�
 | E41 | fair / table | ④ 101.5·⑤ 102.1·⑥ 82.7 W(0.5 %), 민감도 −25.0 … +12.9 % → "같은 수준", ④ − ⑥ 4.3–30.1 W, 충전 ④/전용 승압기 0.32–0.51 |
 | E42 | cases / cells | 확인 R0(셰딩 끔 = E38 l1, 차 0 W)·R1(사양 팩 ① 102.07 W = E41 ⑤)·R2 통과, 창 조정 모듈 최선 칸 없음 |
 | E43 | loss / heat / sens / bat | 확인 R1(기존 방식 재현 차 0 W), (S) 4변형 144/144·보호 오동작 없음·범위 통과, (H) 두 팩 통과, (B) E22 등가 36–52 V 안 |
+| E44 | scope / dev / bkv / clamp / cfly | (D-R0) 정정 없이 저장값 재현(차 0), (D) H5·칸 분류·E25 문장 불변, (K) 두 팩 결합 모서리 통과(W460은 최소 폭 4.0 V로), (F) 〔F〕 |
 
 참고 사항
 - **E1 난수**: 공차 표본은 MATLAB의 Mersenne Twister(`rng(0)`, `rng(3)`)와 같은 난수열로 뽑으므로 Python과 MATLAB이 같은 표본을 쓴다. GNU Octave의 `rng`는 초기화 방식이 달라 공차 표본이 다르게 뽑힌다(Octave 실행 시 고정 타이밍 17/20·최대 37.3 %). 난수를 쓰지 않는 셰딩·프리차지와 8위상 공칭 사례는 Octave에서도 같은 값이 나온다.

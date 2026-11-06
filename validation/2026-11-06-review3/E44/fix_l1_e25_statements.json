@@ -1,0 +1,30 @@
+{
+ "A25R": {
+  "aux4_lt_5": true,
+  "aux4_gt_6": true,
+  "charge_lt_motor_base": {
+   "640V": true,
+   "800V": true,
+   "920V": true
+  },
+  "charge_lt_motor_min": {
+   "640V": true,
+   "800V": true,
+   "920V": false
+  }
+ },
+ "E25": {
+  "aux4_lt_5": true,
+  "aux4_gt_6": true,
+  "charge_lt_motor_base": {
+   "640V": true,
+   "800V": true,
+   "920V": true
+  },
+  "charge_lt_motor_min": {
+   "640V": true,
+   "800V": true,
+   "920V": true
+  }
+ }
+}

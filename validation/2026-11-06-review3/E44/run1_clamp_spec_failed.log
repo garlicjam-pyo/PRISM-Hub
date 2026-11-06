@@ -1,0 +1,18 @@
+
+==== E44 clamp:spec ====
+  == spec: 가지 3 × 2.4 Ω, FF2MR12KM1P, 가정 E_hi 2333·E_lo 3450 J ==
+Traceback (most recent call last):
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E44_review3_response.py", line 527, in <module>
+    import E36_breakeven_grid as BG
+            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E44_review3_response.py", line 323, in clamp
+    up, down = EPS_K1[part]
+              ~~~~~~~^^^^^^
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E44_review3_response.py", line 264, in _point
+    jobs = [(cb, br, on, off, e, dict(t_on_max=E40.T_ON_MAX), PASSIVE[pas_name]) for cb, br in cbs.items() for e in P["evf"]()]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E40_typ_rule_rejudge.py", line 195, in judge40
+    j = E39.judge39(recs, sws, vlim)
+  File "/home/claude/PRISM-Hub/submission/verification_code/python/E39_clamp_switch_rejudge.py", line 195, in judge39
+    E_lo = max(r["E_branch_J"] for r in allrows if r["kind"] == "lo")
+ValueError: max() iterable argument is empty
