@@ -50,6 +50,8 @@
       concurrent에서 640–920 V 정식/정보/632 V 경계별 최대, 팩별 150 kW 위상 수(E38 l2), 500 V 충전기 만충 셀 직렬수
       (경로저항 = A25R 4모듈 9.0/4 mΩ + 배선 3 mΩ), TB28 관찰 시간·버스 감소·48 V 범위(CSV), Stage A 위상 첨두(E35 요구 안·고장·금지).
 
+■ 실행 뒤 추가(2026-11-06, dev 결과를 본 뒤; 판정 없는 부속 재계산): bkv = 손익분기 상저항(E36_breakeven_grid와 같은 식·격자)을
+  정정 소자값으로 다시 계산한다. 보고서의 "격자의 모든 모터 승압 조합보다 작아지는 상저항" 숫자를 바꾸기 위한 것이다.
 ■ 실행   python E44_review3_response.py scope dev clamp cfly    (2코어: dev 약 30분, clamp 약 3시간, cfly 약 1–2시간)
          clamp는 clamp:spec, clamp:W460으로 나눠 실행할 수 있다(결과는 같은 clamp.json에 모음).
 ■ 결과   results/E44/*.json
@@ -261,9 +263,18 @@ def _point(P, eps, H, pas_name, combos):
     cbs = {k: v for k, v in E40.combos40(P["sel"]["n"], P["c"], P["vd"]).items() if k in combos}
     jobs = [(cb, br, on, off, e, dict(t_on_max=E40.T_ON_MAX), PASSIVE[pas_name]) for cb, br in cbs.items() for e in P["evf"]()]
     recs = _run44(jobs)
-    j = E40.judge40(recs, P["sw"], P["cfg"]["lim"])
-    s = j["switches"][P["swn"]]
     rows = [r for evs_ in recs.values() for e in evs_ for r in e.values()]
+    if {"hi", "lo"} <= {r["kind"] for r in rows}:
+        j = E40.judge40(recs, P["sw"], P["cfg"]["lim"])
+        s = j["switches"][P["swn"]]
+    else:   # (실행 경과) 1차 실행에서 K1(max 조합만)에 작은 저항 가지가 없어 judge39가 멈춤 → C1·E를 judge39와 같은 식으로 직접 계산
+        import E38_review_response as E38
+        c1 = max(max(r["vA_max"], r["vb_max"]) for r in rows); Eb = max(r["E_branch_J"] for r in rows)
+        hi = [r["E_branch_J"] for r in rows if r["kind"] == "hi"]; lo = [r["E_branch_J"] for r in rows if r["kind"] == "lo"]
+        j = dict(C1_V=c1, C1=bool(c1 <= P["cfg"]["lim"]), E_branch_max_J=Eb, E=bool(Eb <= E38.E_RES), E_hi_obs=max(hi, default=0.),
+                 E_lo_obs=max(lo, default=0.), i_branch_max=max(r["i_max"] for r in rows),
+                 t_on_cont_max_ms=max(r["t_on_cont_max_ms"] for r in rows), n_forced_off_max=max(r["n_forced_off"] for r in rows))
+        s = dict(ok=None, I=None, V=None, T=None, T_vj=None)
     return dict(eps=eps, H=Hv, on=on, off=off, pas=pas_name, combos=list(cbs), C1=j["C1"], C1_V=j["C1_V"],
                 vA_max=max(r["vA_max"] for r in rows), vb_max=max(r["vb_max"] for r in rows), E=j["E"],
                 E_branch_max_J=j["E_branch_max_J"], E_hi_obs=j["E_hi_obs"], E_lo_obs=j["E_lo_obs"], i_branch_max=j["i_branch_max"],
@@ -272,9 +283,10 @@ def _point(P, eps, H, pas_name, combos):
 
 
 def _p(tag, r):
-    print("   %s ε %+.3f %% H %.2f V %-2s %-11s: V_A %.3f·버스 %.3f V(C1 %s), 가지 %.0f J, %.1f A, 스위치 %.2f °C(%s), 최대 켜짐 %.3f ms"
+    sw = "—" if r["T_vj"] is None else "%.2f °C(%s)" % (r["T_vj"], "통과" if r["sw_ok"] else "불통과")
+    print("   %s ε %+.3f %% H %.2f V %-2s %-11s: V_A %.3f·버스 %.3f V(C1 %s), 가지 %.0f J, %.1f A, 스위치 %s, 최대 켜짐 %.3f ms"
           % (tag, 100 * r["eps"], r["H"], r["pas"], "/".join(r["combos"]), r["vA_max"], r["vb_max"], "통과" if r["C1"] else "불통과",
-             r["E_branch_max_J"], r["i_branch_max"], r["T_vj"], "통과" if r["sw_ok"] else "불통과", r["t_on_cont_max_ms"]), flush=True)
+             r["E_branch_max_J"], r["i_branch_max"], sw, r["t_on_cont_max_ms"]), flush=True)
 
 
 def _spur(P, part, eps, H, pas_name):
@@ -517,6 +529,29 @@ def scope():
     print(json.dumps(out, ensure_ascii=False, indent=1, default=float)[:4000])
 
 
+# ======================================================================================================
+# (실행 뒤 추가, 판정 없음) 손익분기 상저항
+# ======================================================================================================
+def bkv():
+    import E15_baseline_loss_rating as E15
+    import E36_breakeven_grid as BG
+    out = {}
+    for tag in ("r0_", "fix_"):
+        if tag == "fix_":
+            for dev, kv in DEV_FIX.items():
+                E15.DEV[dev].update(kv)
+        e25 = load_json(EID, tag + "l1_e25_comparison")
+        rows = {}
+        for key, V in (("640V", 640.), ("800V", 800.), ("920V", 920.)):
+            pA = e25["charge"][key]["stageA"]
+            rA = BG.breakeven(V, pA)
+            lo5, c5 = BG.grid_min(V, 0.005)
+            rows[key] = dict(stageA_W=pA, Rph_grid_mOhm=rA, grid_min_at_5mOhm_W=lo5, combo_at_5mOhm=c5)
+            print("  %s %s: Stage A %.1f W, 격자 손익분기 %.2f mΩ, 5 mΩ 격자 최소 %.1f W" % (tag, key, pA, rA, lo5), flush=True)
+        out[tag] = rows
+    save_json(EID, "bkv", out)
+
+
 if __name__ == "__main__":
     if len(sys.argv) >= 3 and sys.argv[1] == "_chain":
         chain(sys.argv[2]); sys.exit(0)
@@ -525,4 +560,4 @@ if __name__ == "__main__":
         print("\n==== E44 %s ====" % p, flush=True)
         if p.startswith("clamp:"):                                      # 예: clamp:spec, clamp:W460 (2시간 실행 한도 때문에 나눠 실행)
             clamp((p.split(":", 1)[1],)); continue
-        {"dev": dev, "clamp": clamp, "cfly": cfly, "scope": scope}[p]()
+        {"dev": dev, "clamp": clamp, "cfly": cfly, "scope": scope, "bkv": bkv}[p]()
