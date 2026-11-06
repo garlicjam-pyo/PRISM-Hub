@@ -452,8 +452,9 @@ def figure(out, path):
     for y, t, c in [(420, "B_420 상한 420 V", C["blue"]), (470, "B_470 상한 470 V", C["red"]), (260, "부하 하한 260 V", C["gray"]),
                     (CHARGER_VMAX, "500 V급 충전기 최대", C["green"])]:
         ax[0].axhline(y, color=c, ls="--", lw=1); ax[0].text(203, y + 4, t, fontsize=7.5, color=c)
-    ax[0].set_xlabel("셀 직렬수 [s]"); ax[0].set_ylabel("V_A = V_bat/2 (부하 −3.2–25 kW) [V]")
-    ax[0].set_title("(a) 비조정 V_A 범위(셀 3.0–4.2 V)"); ax[0].set_ylim(240, 540); ax[0].set_xlim(175, 245)
+    # (2026-11-07 E47) 막대는 경로 강하를 포함한 비조정 부하 버스 전압(feas bus_V)이므로 축 이름을 'V_A = V_bat/2'에서 바꿈
+    ax[0].set_xlabel("셀 직렬수 [s]"); ax[0].set_ylabel("비조정 부하 버스 전압 [V] (부하 −3.2–25 kW)")
+    ax[0].set_title("(a) 비조정 부하 버스 전압 범위(셀 3.0–4.2 V)"); ax[0].set_ylim(240, 540); ax[0].set_xlim(175, 245)
     # (b)(c) 부품 등급별 평균 손실(성립: 채운 표시, 불가: 빈 표시)
     for a, c in zip(ax[1:3], CLASSES):
         for s in STRUCTS:

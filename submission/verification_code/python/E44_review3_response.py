@@ -67,6 +67,7 @@ from common import Pool                     # fork 문맥 또는 같은 프로�
 import numpy as np
 
 from common import save_json, load_json, verdict, workers
+import common
 
 EID = "E44"
 
@@ -122,7 +123,14 @@ def _diff_tree(a, b, path="", out=None, tol=1e-6):
         for k in a:
             if k in b and k not in SKIP_KEYS:
                 _diff_tree(a[k], b[k], path + "/" + str(k), out, tol)
-    elif isinstance(a, list) and isinstance(b, list) and len(a) == len(b):
+            elif k not in b and k not in SKIP_KEYS:            # (2026-11-07 E47) 공통 키만 보던 비교가 키 삭제를 놓침
+                out.append((path + "/" + str(k), "키가 앞에만 있음", None))
+        for k in b:
+            if k not in a and k not in SKIP_KEYS:
+                out.append((path + "/" + str(k), None, "키가 뒤에만 있음"))
+    elif isinstance(a, list) and isinstance(b, list):
+        if len(a) != len(b):
+            out.append((path, len(a), len(b)))
         for i, (x, y) in enumerate(zip(a, b)):
             _diff_tree(x, y, path + "[%d]" % i, out, tol)
     elif isinstance(a, (int, float)) and isinstance(b, (int, float)) and not isinstance(a, bool):
@@ -144,7 +152,7 @@ def dev():
         d = _diff_tree(load_json(eid, name), load_json(EID, mine))
         r0["%s/%s" % (eid, name)] = dict(n_diff=len(d), first=[list(x) for x in d[:5]])
     ok0 = all(v["n_diff"] == 0 for v in r0.values())
-    verdict("(D-R0) 정정 없이 저장값 재현", ok0, json.dumps({k: v["n_diff"] for k, v in r0.items()}, ensure_ascii=False))
+    verdict("(D-R0) 정정 없이 저장값 재현", ok0, json.dumps({k: v["n_diff"] for k, v in r0.items()}, ensure_ascii=False), gate=True)
     a41, b41 = load_json(EID, "r0_e41_fair"), load_json(EID, "fix_e41_fair")
     a42, b42 = load_json(EID, "r0_e42_cells")["cells"], load_json(EID, "fix_e42_cells")["cells"]
     a15, b15 = load_json(EID, "r0_l1_e15_comparison"), load_json(EID, "fix_l1_e15_comparison")
@@ -645,3 +653,4 @@ if __name__ == "__main__":
         if p.startswith("clamp:"):                                      # 예: clamp:spec, clamp:W460 (2시간 실행 한도 때문에 나눠 실행)
             clamp((p.split(":", 1)[1],)); continue
         {"dev": dev, "clamp": clamp, "cfly": cfly, "scope": scope, "bkv": bkv}[p]()
+    sys.exit(common.exit_status())                                      # (2026-11-07 E47) 필수 판정 실패는 종료 코드 1

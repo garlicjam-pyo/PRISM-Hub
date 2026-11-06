@@ -9,7 +9,8 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent          # 패키지 최상위 폴더
-RESULTS = ROOT / "results"
+RESULTS = Path(os.environ["PRISM_RESULTS_DIR"]).resolve() if os.environ.get("PRISM_RESULTS_DIR") else ROOT / "results"
+# (2026-11-07 E47) PRISM_RESULTS_DIR로 결과 폴더를 바꿀 수 있다(검증기 오류 주입 시험이 복사본에서만 실행하도록).
 
 
 def outdir(eid):
@@ -39,7 +40,11 @@ def save_json(eid, name, obj):
     """results/<eid>/<name>.json 으로 저장한다."""
     path = outdir(eid) / f"{name}.json"
     path.write_text(json.dumps(_clean(obj), indent=1, ensure_ascii=False), encoding="utf-8")
-    print(f"  → 저장: {path.relative_to(ROOT)}")
+    try:
+        shown = path.relative_to(ROOT)
+    except ValueError:
+        shown = path
+    print(f"  → 저장: {shown}")
     return path
 
 
@@ -180,6 +185,14 @@ def sha256_file(path):
     return h.hexdigest()
 
 
+def sha256_file_lf(path):
+    """(2026-11-07 E47) 줄바꿈을 LF로 정규화한 해시(CRLF → LF). 저장소는 텍스트를 LF로 배포하지만(.gitattributes eol=lf)
+    Windows 작업 사본은 CRLF일 수 있어, 원시 바이트 해시(sha256)만으로는 같은 내용이 다르게 보인다. 이진 파일에는 쓰지 않는다."""
+    with open(path, "rb") as f:
+        b = f.read()
+    return hashlib.sha256(b.replace(b"\r\n", b"\n")).hexdigest()
+
+
 def input_record(path, kind):
     """kind: 'archived'(날짜별 validation·회로 저장 파형) 또는 'fresh'(이번 실행의 results/)."""
     p = Path(path)
@@ -189,7 +202,10 @@ def input_record(path, kind):
         rel = str(p.resolve().relative_to(ROOT.parent.parent))
     except ValueError:
         rel = str(p)
-    return dict(path=rel, kind=kind, sha256=sha256_file(p), bytes=p.stat().st_size)
+    rec = dict(path=rel, kind=kind, sha256=sha256_file(p), bytes=p.stat().st_size)
+    if p.suffix.lower() in (".csv", ".json", ".txt", ".log", ".m"):
+        rec["sha256_lf"] = sha256_file_lf(p)          # 줄바꿈 정규화 해시(배포본·Windows 사본 공통)
+    return rec
 
 
 STRICT_RTOL = 1e-6           # 숫자: |a − b| ≤ 1e-6 × max(1, |a|)

@@ -219,8 +219,8 @@ def dstrict():
         res["%s/%s" % (eid, name)] = dict(n=len(d), first=[list(map(str, x)) for x in d[:5]])
     save_json(EID, "dstrict", dict(selftest=st, pairs=res))
     print("  자체 시험:", st); print("  7쌍:", {k: v["n"] for k, v in res.items()})
-    verdict("(dstrict) 비교기 자체 시험", all(st.values()), "")
-    verdict("(dstrict) E44 D 7쌍 엄격 비교 차이 0", all(v["n"] == 0 for v in res.values()), "")
+    verdict("(dstrict) 비교기 자체 시험", all(st.values()), "", gate=True)          # (2026-11-07 E47) 필수 회귀: 차이는 종료 코드 1
+    verdict("(dstrict) E44 D 7쌍 엄격 비교 차이 0", all(v["n"] == 0 for v in res.values()), "", gate=True)
 
 
 # ======================================================================================================
@@ -450,8 +450,13 @@ FCHECK_N = dict(transient=12, fault=16)                  # 사례당 행 수(요
 FCHECK_F_HZ = {"F-a_45.00uF": (25515.627843745686, 25515.627843745686), "F-b_42.75uF": (25515.627843745686, 26178.481807544278)}
 
 
+FCHECK_BASE = ("2026-11-06-review3", "E44", "cfly.json")          # (2026-11-07 E47) 출판 기준값: 날짜별 보관 사본
+FCHECK_BASE_SHA256_LF = "a60f468ff9fc275c9d6cffd937afda2e8b3eba3171039a73390e19212160655b"   # 줄바꿈 정규화 해시(커밋 a681ed3의 사본)
+
+
 def fcheck_judge(old, new):
-    """old·new(JSON에서 읽은 E44 cfly 형식)를 비교해 (ok, 상세)를 돌려준다. 파일 경로와 무관한 순수 함수(E46 gate가 오류 주입에 쓴다)."""
+    """old·new(JSON에서 읽은 E44 cfly 형식)를 비교해 (ok, 상세)를 돌려준다. 파일 경로와 무관한 순수 함수(E46·E47 gate가 오류 주입에 쓴다).
+    (2026-11-07 E47 보완) 사례·표본 이름이 양쪽 모두 고유해야 하고(중복 행으로 개수를 맞추는 경우 차단), 주파수는 유한 수여야 한다."""
     diffs, problems, n_rows = {}, [], 0
     for tag in FCHECK_TAGS:
         if tag not in old or tag not in new:
@@ -464,13 +469,20 @@ def fcheck_judge(old, new):
                 problems.append("%s/%s 행 수 %d·%d(필수 %d)" % (tag, part, len(o), len(w), n))
             if keys_o != keys_w:
                 problems.append("%s/%s 사례·표본 이름 불일치" % (tag, part))
+            for side, ks in (("기준", keys_o), ("새 결과", keys_w)):
+                if len(set(ks)) != len(ks):
+                    problems.append("%s/%s %s 사례·표본 이름 중복(고유 %d / 행 %d)" % (tag, part, side, len(set(ks)), len(ks)))
             n_rows += min(len(o), len(w))
             d = strict_diff(o, w)
             diffs["%s/%s" % (tag, part)] = dict(n=len(d), first=[list(map(str, x)) for x in d[:5]])
         fc, fp = FCHECK_F_HZ[tag]
         for k, ref in (("f_control_Hz", fc), ("f_plant_Hz", fp)):
             v = new[tag].get(k)
-            if v is None or abs(float(v) - ref) > 1e-9 * ref:
+            try:
+                fv = float(v)
+            except (TypeError, ValueError):
+                fv = float("nan")
+            if not math.isfinite(fv) or abs(fv - ref) > 1e-9 * ref:
                 problems.append("%s %s = %s(등록 %.6f)" % (tag, k, v, ref))
     if n_rows != 56:
         problems.append("비교 행 %d(필수 56)" % n_rows)
@@ -478,16 +490,32 @@ def fcheck_judge(old, new):
     return ok, dict(rows=n_rows, diffs=diffs, problems=problems)
 
 
+def fcheck_s2(new, base_path=None):
+    """(2026-11-07 E47) S2: 새 결과를 해시로 확인한 출판 기준 사본과 비교한다. 같은 코드로 다시 만든 results/E44/cfly.json과만 비교하면
+    양쪽을 같이 바꾼 변경을 잡지 못하므로, 기준은 날짜별 보관 사본(줄바꿈 정규화 SHA-256 고정)이다."""
+    from common import sha256_file_lf
+    bp = base_path or _root().joinpath("validation", *FCHECK_BASE)
+    h = sha256_file_lf(bp)
+    old = json.loads(open(bp, encoding="utf-8").read())
+    ok, det = fcheck_judge(old, new)
+    if h != FCHECK_BASE_SHA256_LF:
+        det["problems"].insert(0, "기준 사본 해시 불일치(%s… ≠ 등록 %s…)" % (h[:12], FCHECK_BASE_SHA256_LF[:12]))
+        ok = False
+    det["base"] = dict(path=str(bp), sha256_lf=h, registered=FCHECK_BASE_SHA256_LF)
+    return ok, det
+
+
 def _fcheck_compare(first_run=False):
     """(2026-11-06 실행 경과) 1차 fcheck는 직렬화 전 객체(정수 키·튜플)를 JSON에서 읽은 저장 결과(문자열 키·리스트)와 비교해
     형 차이만으로 실패했다. 판정 기준(엄격 비교 차 0)은 그대로 두고, 저장 결과와 같은 경로(save_json → load_json)로 읽은 새 결과를 비교한다."""
     import common
-    new = load_json(EID, "cfly_refactor"); old = load_json("E44", "cfly")
-    ok, det = fcheck_judge(old, new)
+    new = load_json(EID, "cfly_refactor")
+    ok, det = fcheck_s2(new)
     meta = new.get("_meta", {})
     save_json(EID, "fcheck", dict(rows=det["rows"], diffs=det["diffs"], problems=det["problems"], S2=ok,
                                   compute_pool=meta.get("compute_pool", "기록 없음(1차 실행은 repro가 PRISM_POOL=serial을 되돌리지 않아 같은 프로세스 차례 실행)"),
-                                  judge_pool=common.pool_mode(), compared="save_json → load_json 경로(직렬화 뒤)",
+                                  judge_pool=common.pool_mode(), compared="save_json → load_json 경로(직렬화 뒤), 기준은 해시 확인한 보관 사본",
+                                  base=det.get("base"),
                                   first_run_failed_on_serialization=not first_run,
                                   f_Hz={t: [new[t]["f_control_Hz"], new[t]["f_plant_Hz"]] for t in FCHECK_TAGS if t in new}))
     verdict("(fcheck S2) 고친 E44 cfly가 저장 결과 %d행과 같음(필수 56행·사례 이름·설계/플랜트 주파수 포함)" % det["rows"], ok,
