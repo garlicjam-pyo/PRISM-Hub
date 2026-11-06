@@ -4,7 +4,7 @@
 
 {\footnotesize
 \begin{longtable}{L{\dimexpr 0.11\linewidth-2\tabcolsep\relax}L{\dimexpr 0.27\linewidth-2\tabcolsep\relax}L{\dimexpr 0.44\linewidth-2\tabcolsep\relax}L{\dimexpr 0.18\linewidth-2\tabcolsep\relax}}
-\caption{검증 근거 목록(E1–E43, TB01–TB33)}\\
+\caption{검증 근거 목록(E1–E44, TB01–TB33)}\\
 \toprule
 \tabhead \textbf{번호} & \textbf{근거} & \textbf{내용} & \textbf{도구} \\
 \midrule
@@ -56,6 +56,7 @@ E40 & 규칙 L 재판정 & 클램프 재선정, 최대 연속 켜짐 시간, 문
 E41 & ④ 대 ⑤·⑥ 공정 비교 & 보조 강압기 이상적 셰딩, 민감도 10종, 충전 경로(전용 승압기 16–50 kHz) & Python \\
 E42 & 가치 지도 공정 기준 재계산 & ①의 보조 강압기 이상적 셰딩, 팩 등급 × 부품 등급 칸 판정, 손실 계수 민감도 7종 & Python \\
 E43 & 제출 전 외부 검토 대응 & 창 조정 모듈 측정 사양(포화 센서, 스위칭 모델), Stage A 출력용량 항에도 스위칭 배율을 준 민감도, 클램프 자기 가열 가정 갱신, Stage C 일시 정지 동안 48 V 배터리 & Python \\
+E44 & 제출 전 재검토 대응 & 비교 소자 E\textsubscript{oss} 시험 전압 정정의 연쇄 재계산(E38 l1·E41·E42·E43 L), 클램프 문턱 구현 요구(버스 수동소자 ±10 \%, 히스테리시스 폭, 결합 모서리), C\textsubscript{fly} 후보값 동특성, 판정 범위 재분석 & Python \\
 TB01–TB05 & 단별 회로 & Stage A 1위상, Stage B 개루프·폐루프(출력용량·게이트 격자), Stage C & Simulink \\
 TB06–TB07 & 통합 회로 & 주행(Stage A 모듈 1 + B + C), 충전(8위상 + 충전기) & Simulink \\
 TB08–TB13 & 창 조정 모듈 회로 & 창 조정·전환·DAB 고장 강등, 보호 상태기계, 고장 모드 변조, 데드타임 반영 첨두 표, EPS 지령 전이, 전이 여유 & Simulink \\
