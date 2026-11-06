@@ -72,7 +72,8 @@ PRISM-Hub_verification_code/
 │  │  ├─ E44_review3_response.py      [E44] 제출 전 재검토 대응(비교 소자 E_oss 조건 정정 연쇄, 클램프 구현 요구, C_fly 후보, 판정 범위)
 │  │  ├─ E45_review4_response.py      [E45] 제출 전 통합 수정안 대응(H2 재집계, 가치 지도 판정 정정, 충전전력 정의, 180s, 엄격 비교, 클램프 지연 반례, P5, 제동 펄스열, 실행 방식 재현)
 │  │  ├─ E46_review5_response.py      [E46] 제출 전 두 번째 통합 검토 대응(H2 +3 µs 복합 스위칭, 충전 시작 보조부하, 직결 충전 단자·그림 7-1(d), Stage C CV 경계, 가치 지도 경로·누설 L, 검증기 오류 주입·재개 키)
-│  │  └─ run_all.py                   전체 실행(E1–E46, 진단은 --diag)
+│  │  ├─ E47_final_check.py           [E47] 최종 제출 판정 대응(검증기 오류 주입, 출판 기준 S2, dstrict 종료 코드, 충전 과도 재집계, 줄바꿈 정규화 해시, 그림 7-1(a))
+│  │  └─ run_all.py                   전체 실행(E1–E47, 진단은 --diag)
 ├─ data/datasheets/              부품 데이터시트 표 값(JSON, 출처·열람일 포함. E31·E34·E37–E40이 읽는다)
 ├─ matlab/
 │  ├─ prism_sim_array.m          Stage A 어레이 스위칭 ODE(Python model_stage_a.py와 같은 알고리즘)
@@ -101,7 +102,7 @@ PRISM-Hub_verification_code/
 
 ```bash
 cd python
-python run_all.py                 # E1–E46 전체(2코어 기준 약 30시간. E46 약 15분, E45 약 1.5시간, E44 약 3.5시간, E12 약 3시간, E17 약 1.5시간, E28 약 75분, E29 약 60분, E33 약 2시간, E35 약 5시간, E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
+python run_all.py                 # E1–E47 전체(2코어 기준 약 30시간. E47 약 2분, E46 약 15분, E45 약 1.5시간, E44 약 3.5시간, E12 약 3시간, E17 약 1.5시간, E28 약 75분, E29 약 60분, E33 약 2시간, E35 약 5시간, E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
 python run_all.py E41 E42         # 일부만(앞 시험의 results/가 있어야 한다, 아래 표)
 python E3_steady_state.py         # 개별 실행 예
 python E5_E7_controller.py grid --design reference   # 제어기 파트·설계 선택
@@ -121,7 +122,7 @@ E11_controller_crosscheck % [E11]  python/E11_controller_crosscheck.py export �
 
 **실행 방식과 운영체제(2026-11-06).** 여러 시험이 부모 프로세스에서 설계값을 바꾼 뒤 작업자를 띄운다(예: E44 F-b의 플랜트 C\_fly 42.75 µF·제어 타이밍 45.0 µF, E35 클램프의 C\_A 2.4 mF, E36의 모듈당 R\_A 9.0 mΩ). Windows·macOS의 기본 `spawn`(그리고 Python 3.14 이후 Linux 기본 `forkserver`)은 자식에서 모듈을 새로 읽으므로 이 변경이 사라져, 이전 코드는 Windows에서 E44 F-b가 46.875 µF·C\_A 0.4 mF로, E35→E34 단일 클램프가 C\_A 0.4 mF(5,078.53 J·349.02 °C)로, E36→E16이 10.2 mΩ(7,038.65 W)로 계산되었다(통합 수정안 7절). 지금은 모든 병렬 실행이 `common.Pool`·`common.Executor`를 거치며, `fork`가 있으면 fork 문맥을 명시하고 없으면 같은 프로세스에서 차례로 실행한다. 클램프 사건은 C\_A를 사건 인수(`_bus`)로, E16 충전기 모델은 모듈당 저항을 객체에 저장해 V\_A 후처리까지 같은 값을 쓴다.
 
-**필수 판정과 종료 코드(2026-11-06, E46).** `common.verdict(..., gate=True)`로 표시한 필수 판정이 하나라도 실패하면 실행 끝에 종료 코드 1을 낸다(E45 S1·S2, E46 필수 판정). 기대 실패를 시험하는 오류 주입(E46 `gate`)은 그 자체의 기대 결과로 판정한다. E45 `fcheck`의 판정(`fcheck_judge`)은 필수 56키(두 C\_fly × 요구 안 과도 12·모듈 고장 16), 사례·시드 이름 목록, 등록한 제어·플랜트 주파수, 행별 엄격 비교를 모두 요구하며, 물리 계산 방식(`compute_pool`)과 재판정 방식(`judge_pool`)을 따로 기록한다. `repro`는 끝나면 `PRISM_POOL`을 원래 값으로 되돌린다(E45 1차 실행에서는 되돌리지 않아 F 56행이 serial로 계산됨). E44 클램프 재개 키는 관련 코드(E44·E26·E39·E40·E38·E34·common), `data/` 전체, E43 열 결과, 선택 소자·다이오드·T\_case를 포함하므로 열저항 등 입력이 바뀌면 다시 계산한다.
+**필수 판정과 종료 코드(2026-11-06, E46).** `common.verdict(..., gate=True)`로 표시한 필수 판정이 하나라도 실패하면 실행 끝에 종료 코드 1을 낸다(E45 S1·S2, E46 필수 판정). 기대 실패를 시험하는 오류 주입(E46 `gate`)은 그 자체의 기대 결과로 판정한다. E45 `fcheck`의 판정(`fcheck_judge`)은 필수 56키(두 C\_fly × 요구 안 과도 12·모듈 고장 16), 사례·시드 이름 목록, 등록한 제어·플랜트 주파수, 행별 엄격 비교를 모두 요구하며, 물리 계산 방식(`compute_pool`)과 재판정 방식(`judge_pool`)을 따로 기록한다. `repro`는 끝나면 `PRISM_POOL`을 원래 값으로 되돌린다(E45 1차 실행에서는 되돌리지 않아 F 56행이 serial로 계산됨). **출판 기준과 줄바꿈(2026-11-07, E47).** E45 S2는 같은 코드로 다시 만든 `results/E44/cfly.json`이 아니라 날짜별 보관 사본 `validation/2026-11-06-review3/E44/cfly.json`과 비교하며, 그 사본의 줄바꿈 정규화 SHA-256이 등록값(a60f468f…)과 달라도 실패한다. 사례·표본 이름은 양쪽 모두 고유해야 하고 주파수는 유한 수여야 한다. E45 dstrict와 E44 D-R0은 필수 판정이며 키 삭제·배열 길이 차이도 센다. 저장소는 텍스트를 LF로 배포하므로(`.gitattributes`) 입력 대조에는 `input_record`의 `sha256_lf`(CRLF → LF 정규화)를 쓴다. `PRISM_RESULTS_DIR`로 결과 폴더를 바꿀 수 있다(오류 주입 시험용). E44 클램프 재개 키는 관련 코드(E44·E26·E39·E40·E38·E34·common), `data/` 전체, E43 열 결과, 선택 소자·다이오드·T\_case를 포함하므로 열저항 등 입력이 바뀌면 다시 계산한다.
 
 ```bash
 PRISM_POOL=serial python E45_review4_response.py repro    # 같은 프로세스 차례 실행(Windows와 같은 경로)
@@ -151,6 +152,7 @@ PRISM_POOL=fork   python E44_review3_response.py cfly     # fork 명시(Linux·m
 | E44 | E38 l1·E41·E42·E43 L의 입력(E36, E38 l2, E25), E40 p5·E43 heat(클램프), E35·E33·E32(Stage A 동특성), validation의 sals_contract·E36·E38 l2·E35·TB28 CSV(범위 재분석, `PRISM_SOURCE=fresh`이면 results/의 E8·E35·E36·E38) |
 | E45 | validation의 E5–E7·E12·E36(h2), E44 fix_e42_cases·fix_e43_loss(vmap), E38 l2(power), E44 dev 쌍(dstrict), E44 클램프 모델(delay·p5), E29·E17(brake), E44 cfly·E35 clamp·E36 e16(repro·fcheck) |
 | E46 | validation의 E5–E7 grid·corners, E36 e16, E44 scope·cfly, E45 vmap·cfly\_refactor, E35 transient, E31 coss, E38 p6, E43 bat·sens, sals\_contract, Simulink TB15·TB25·TB28 저장 결과, results/의 E22 control, E44 fix\_e42\_cases·fix\_e43\_loss·fix\_e42\_value\_map\_fair·fix\_e41\_fair·fix\_l1\_*(vmap2·loss·fig) |
+| E47 | validation의 review3 E44 cfly(기준 사본)·review4 E45 cfly\_refactor·E36 e16\_concurrent·review5 E46 power·fig, Simulink TB28 요약·CSV, results/의 E38·E41·E42·E43·E44 r0\_*(dsx), E44 fix\_e42\_value\_map\_fair(fig) |
 
 E22의 `zvs.json`·`both.json`이 없으면 조정형 Stage C를 처음 설계로 계산한다(손실 값이 달라진다). 지금은 이때 경고를 낸다.
 
@@ -205,6 +207,7 @@ E22의 `zvs.json`·`both.json`이 없으면 조정형 Stage C를 처음 설계�
 | **E44** | 제출 전 재검토 대응(보고서 이후) | 비교 소자 C3M0016120K의 E_oss 127 µJ가 1000 V 값, 클램프의 버스 수동소자 공차와 문턱 추종 오차, C_fly 후보 −4 %, 판정 범위(H4·H1·충전 위상 수·TB28·첨두 세대) | 정정 값으로 E38 l1 → E41 → E42 → E43 L 연쇄, 클램프 K1–K3(수동소자 ±10 %, 히스테리시스 폭), C_fly 45.0·42.75 µF로 E35 과도·고장 | ④ 대 ⑤ −1.4 %(같은 수준 유지), 클램프 요구 사양 팩 −1.0 … +0.075 %·3.5–6.0 V·W460 −1.0 … +1.0 %·4.0–6.0 V, C_fly 45.0·42.75 µF 모두 과도 12/12·고장 16/16 |
 | **E45** | 제출 전 통합 수정안 대응(보고서 이후) | H2 표가 평균모델 복합 공차 Tier-2 실패를 빠뜨림, 클램프 판정이 켬·끔 지연 1.0 µs 고정, 가치 지도 판정 함수가 명목 최소와 비교, Windows spawn에서 부모 설정 상실 | 저장 자료 재집계(h2), 경우별 실제 최소 기준 재분류(vmap), 충전전력 두 정의(power), 180s 최저 버스(s180), 엄격 비교(dstrict), 지연 0.5 µs 재계산(delay), P5·제동 펄스열(p5·brake), 같은 프로세스 실행 대표값·F 56행(repro·fcheck) | 실행 전 커밋(5918311): H2 두 기준 동시 충족, D1 1.0 µs·세밀 간격 ≤ 150 °C, S1 상대 차 ≤ 10⁻⁶, S2 엄격 비교 차 0 | `E45_review4_response.py` | `results/E45` |
 | **E46** | 제출 전 두 번째 통합 검토 대응(보고서 이후) | H2 +3 µs의 복합 공차 스위칭 미시험, 600 µs 기동 조건의 보조부하 의존, 충전 단자 정의(별도 3 mΩ), 검증기가 행 삭제·주파수 변경을 통과·실패에도 종료 코드 0, 재개 키에 열저항 없음 | 새 계산(h2d·ramp·c22·vmap2 경로와 누설 L·nc·fig), 저장 자료 재집계(power·h1·h2s·h4·tb25·e31·tb15·prot·loss·ripple), 검증기 오류 주입(gate·cache) | 실행 전 커밋(19e4e6b; nc·fig·h1s·stat 추가 등록 de4a064·d67b7cc·8fd5ebd, vmap2 (c) 점 집합은 1차 실행 뒤 정정): 기준은 원 기준(H2 순시 100 A, E35 공칭 한도 74.53 A, 듀티 0.97 등) 그대로, 필수 판정은 저장값 재현과 오류 주입 기대 결과 | `E46_review5_response.py` | `results/E46` |
+| **E47** | 최종 제출 판정 대응(보고서 이후) | 검증기에 남은 우회(양쪽 같은 행 복제·주파수 NaN 통과, 같은 코드로 다시 만든 기준과만 비교, 공통 키만 비교, 차이가 있어도 종료 0), 입력 해시의 줄바꿈 의존, 원고의 시험 범위 표기 | 오류 주입(inj·dsx), 출판 기준 S2 재판정(s2), 재집계(cnt), 줄바꿈 정규화 해시(hash), 그림 (a) 축 이름(fig) | 실행 전 커밋(b881c83): 오류 주입 모든 경우 기대대로·사유 일치, dstrict 그대로 0·키 삭제 1, S2 통과, 정규화 해시 일치 | `E47_final_check.py` | `results/E47` |
 | **E10** | Stage C CLLC 3 kW | Stage C를 고정이득으로 둘 수 있어야 400 V 정밀 조정(파생 요구)의 가치가 성립한다 | 스위칭 ODE(1차 환산 6상태), 0.3–3 kW × f_s/f_r 0.9–1.1 이득과 FHA 비교, 입력 ±2 %, ZVS 여유 | 공진점 이득 1 ± 3 %, ZVS 여유 > 1 | `E10_stage_c_cllc.py`, `E10_stage_c_cllc.m` | `results/E10` |
 
 ## 5. 공통 모델 요약
@@ -343,6 +346,7 @@ E22의 `zvs.json`·`both.json`이 없으면 조정형 Stage C를 처음 설계�
 | E44 | scope / dev / bkv / clamp / cfly | (D-R0) 정정 없이 저장값 재현(차 0), (D) H5·칸 분류·E25 문장 불변, (K) 두 팩 결합 모서리 통과(W460은 최소 폭 4.0 V로), (F) 45.0·42.75 µF 과도 12/12·고장 16/16 |
 | E45 | h2 / vmap / power / s180 / dstrict / delay / p5 / brake / repro / fcheck | H2 부분 충족(평균모델 102/128, 스위칭 128/128), B\_470 200s ①·④ 같은 수준, 216s P\* 10위상·P\_ch 8위상, 180s 268.77 V, 엄격 비교 차 0, 지연 0.5 µs 사양 팩 151.26 °C 반례(W460 145.84 °C), P5 공칭 125.10·124.86 °C·모서리 147.64·142.58 °C, 제동 30회·57.5 ms, S1 11값 차 0, S2 F 56행 차 0(1차 판정은 직렬화 전 객체 비교 오류로 실패, `fcheck_rejudge`로 재판정) |
 | E46 | power / h1 / h1s / h2s / h4 / tb25 / e31 / tb15 / prot / loss / gate / cache / vmap2 / c22 / ripple / ramp / h2d / nc / ldab / fig / stat | H2 +3 µs 복합 스위칭 114/128(실패 순시 100.05–101.21 A), 640 V 충전 시작 보조 0·1 kW 78.63·78.74 A(한도 74.53 A), 직결 단자 216s 150.166 kW·374.585 A, CV 52 V·270 V·−650 W 듀티 0.980(양측 0.922), Stage C 5 kW 170.3 W, 누설 L 정정 168점 변화 0, 상승 경로 200s/B\_470 R2-W410 같은 수준, 오류 주입 4/4 기대대로·종료 코드 1, 재개 키 변경 확인, 주행 정상 6.436 kW(E3), 180s 정적 최저 268.77·268.88 V, 바이패스 회생 버스 415.12·465.10 V |
+| E47 | inj / dsx / s2 / cnt / hash / fig | 오류 주입 7경우·_diff_tree 3경우 기대대로(행 복제는 ‘중복’, 양쪽 첨두는 ‘해시’로 실패), dstrict 0/1, S2 56행 차 0, Tier-1 460/460(사양 440/440)·Tier-2 78/78(사양 76/76), TB28 D 48 V 47.998–48.013 V, 정규화 해시 일치 |
 
 참고 사항
 - **E1 난수**: 공차 표본은 MATLAB의 Mersenne Twister(`rng(0)`, `rng(3)`)와 같은 난수열로 뽑으므로 Python과 MATLAB이 같은 표본을 쓴다. GNU Octave의 `rng`는 초기화 방식이 달라 공차 표본이 다르게 뽑힌다(Octave 실행 시 고정 타이밍 17/20·최대 37.3 %). 난수를 쓰지 않는 셰딩·프리차지와 8위상 공칭 사례는 Octave에서도 같은 값이 나온다.

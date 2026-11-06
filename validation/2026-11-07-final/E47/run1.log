@@ -1,0 +1,50 @@
+
+==== E47 inj ====
+  → 저장: results/E47/inj.json
+  정상               [fcheck_s2] S2=True(기대 True, 사유 True) {}
+  양쪽 같은 행 삭제       [fcheck_judge] S2=False(기대 False, 사유 True) ['F-a_45.00uF/transient 행 수 11·11(필수 12)', '비교 행 55(필수 56)']
+  양쪽 같은 행 복제       [fcheck_judge] S2=False(기대 False, 사유 True) ['F-a_45.00uF/transient 기준 사례·표본 이름 중복(고유 11 / 행 12)', 'F-a_45.00uF/transient 새 결과 사례·표본 이름 중복(고유 11 / 행 12)']
+  제어 주파수 NaN       [fcheck_judge] S2=False(기대 False, 사유 True) ['F-b_42.75uF f_control_Hz = nan(등록 25515.627844)']
+  제어 주파수 20 kHz    [fcheck_judge] S2=False(기대 False, 사유 True) ['F-b_42.75uF f_control_Hz = 20000.0(등록 25515.627844)']
+  새 결과 첨두 +10 A    [fcheck_judge] S2=False(기대 False, 사유 True) {'F-a_45.00uF/transient': 1}
+  양쪽 같은 첨두 +10 A   [fcheck_s2] S2=False(기대 False, 사유 True) ['기준 사본 해시 불일치(09c63dd31b3b… ≠ 등록 a60f468ff9fc…)']
+  E44 _diff_tree: {'key_del': True, 'len_change': True, 'same': True}
+  [통과] (inj INJ) 오류 주입 일곱 경우와 _diff_tree 세 경우가 기대대로
+
+==== E47 dsx ====
+  → 저장: results/E47/dsx.json
+  그대로: 종료 0 ["  7쌍: {'E38/l1_e15_comparison': 0, 'E38/l1_e25_comparison': 0, 'E38/l1_e18_A25R_value_map': 0, 'E41/fair': 0, 'E42/cases': 0, 'E42/cells': 0, 'E43/loss': 0}", '  [통과] (dstrict) 비교기 자체 시험', '  [통과] (dstrict) E44 D 7쌍 엄격 비교 차이 0']
+  E43 loss 키 하나 삭제: 종료 1 ['  [실패] (dstrict) E44 D 7쌍 엄격 비교 차이 0', '', '필수 판정 실패 1건: (dstrict) E44 D 7쌍 엄격 비교 차이 0']
+  [통과] (dsx DSX) dstrict: 그대로 종료 0, 키 삭제 종료 1
+
+==== E47 s2 ====
+  → 저장: results/E47/s2.json
+  [통과] (s2 S2v2) 보관 E45 cfly_refactor 56행이 해시 확인한 기준 사본과 같음  ({"rows": 56, "problems": []})
+
+==== E47 cnt ====
+  → 저장: results/E47/cnt.json
+  E36 Tier-1: 정식(632 V 포함) [460, 460], 사양 640–920 V [440, 440], 지연 정보 [0, 0], 스텝 [(-3200, 6800), (0, 10000), (5000, 15000), (6800, -3200), (10000, 0), (10000, 20000), (15000, 5000), (15000, 25000), (20000, 10000), (25000, 15000)]
+  E36 Tier-2: 정식(632 V 포함) [78, 78], 사양 640–920 V [76, 76], 지연 정보 [13, 14], 스텝 [(1000, 25000), (25000, 1000)]
+  TB28 A28_920V_pathloss: PASS V_A ≤ 468.12 V, 버스 ≤ 467.60 V, 48 V 47.994–48.019 V
+  TB28 B28_640V_pathloss_ramp: PASS V_A ≤ 407.17 V, 버스 ≤ 407.12 V, 48 V 47.994–48.027 V
+  TB28 C28_800V_module_fault: PASS V_A ≤ 401.66 V, 버스 ≤ 401.48 V, 48 V 47.997–48.012 V
+  TB28 D28_800V_charge_slow: PASS V_A ≤ 401.08 V, 버스 ≤ 400.92 V, 48 V 47.998–48.013 V
+
+==== E47 hash ====
+  → 저장: results/E47/hash.json
+  A28_920V_pathloss: 정규화 a6ec43e9eb7e…, 정규화 같음 True, E46 기록 해시 = CRLF 바이트
+  B28_640V_pathloss_ramp: 정규화 d36daa65898a…, 정규화 같음 True, E46 기록 해시 = CRLF 바이트
+  C28_800V_module_fault: 정규화 ca9f04e0d44f…, 정규화 같음 True, E46 기록 해시 = CRLF 바이트
+  [통과] (hash HS) LF·CRLF 두 형태의 줄바꿈 정규화 해시가 같음
+
+==== E47 fig ====
+  → 저장: results/E47/fig.json
+  180s: 125.655 → 125.191 kW, 최대 팩 995.84 → 998.31 V, 셀 4.2000 → 4.2000 V
+  192s: 133.980 → 133.516 kW, 최대 팩 995.84 → 998.31 V, 셀 4.2000 → 4.2000 V
+  200s: 139.530 → 139.066 kW, 최대 팩 995.84 → 998.31 V, 셀 4.2000 → 4.2000 V
+  216s: 150.630 → 150.166 kW, 최대 팩 995.84 → 998.31 V, 셀 4.2000 → 4.2000 V
+  224s: 156.180 → 155.716 kW, 최대 팩 995.84 → 998.31 V, 셀 4.2000 → 4.2000 V
+  240s: 167.280 → 166.816 kW, 최대 팩 995.84 → 998.31 V, 셀 4.1493 → 4.1596 V
+  → 저장: results/E47/fig_compare.json
+  그림 값이 E46과 같음: True
+exit 0

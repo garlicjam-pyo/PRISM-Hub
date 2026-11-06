@@ -1,0 +1,29 @@
+{
+ "A28_920V_pathloss": {
+  "raw_worktree": "21b42d562a2775fc18bafbec341b9efb91bc6fe87b87eb69027da569d92213be",
+  "worktree_crlf": 5500,
+  "sha256_lf_bytes": "a6ec43e9eb7ebe1639d5f45d8dcbf1e33d61f9ee7663405265e334ab807c31bf",
+  "sha256_crlf_bytes": "21b42d562a2775fc18bafbec341b9efb91bc6fe87b87eb69027da569d92213be",
+  "sha256_lf_normalized": "a6ec43e9eb7ebe1639d5f45d8dcbf1e33d61f9ee7663405265e334ab807c31bf",
+  "normalized_same": true,
+  "e46_recorded_matches": "CRLF"
+ },
+ "B28_640V_pathloss_ramp": {
+  "raw_worktree": "a79a6082d9c890ac0866707f0462e4c74facce41035b0eb863b6379263311a94",
+  "worktree_crlf": 5500,
+  "sha256_lf_bytes": "d36daa65898a00d51c959c14bd9f927e20133b804728aa840bf4ffc7c67f31d1",
+  "sha256_crlf_bytes": "a79a6082d9c890ac0866707f0462e4c74facce41035b0eb863b6379263311a94",
+  "sha256_lf_normalized": "d36daa65898a00d51c959c14bd9f927e20133b804728aa840bf4ffc7c67f31d1",
+  "normalized_same": true,
+  "e46_recorded_matches": "CRLF"
+ },
+ "C28_800V_module_fault": {
+  "raw_worktree": "085ae607bac7cb4ffe18faecd2dbaacb3c173d6cb71d29811879de46b531c6e4",
+  "worktree_crlf": 3500,
+  "sha256_lf_bytes": "ca9f04e0d44fcb9646246bc08191bd4d13be0c1d653403c8f0a0829664853264",
+  "sha256_crlf_bytes": "085ae607bac7cb4ffe18faecd2dbaacb3c173d6cb71d29811879de46b531c6e4",
+  "sha256_lf_normalized": "ca9f04e0d44fcb9646246bc08191bd4d13be0c1d653403c8f0a0829664853264",
+  "normalized_same": true,
+  "e46_recorded_matches": "CRLF"
+ }
+}

@@ -1,0 +1,16 @@
+{
+ "S2": true,
+ "rows": 56,
+ "problems": [],
+ "diffs": {
+  "F-a_45.00uF/transient": 0,
+  "F-a_45.00uF/fault": 0,
+  "F-b_42.75uF/transient": 0,
+  "F-b_42.75uF/fault": 0
+ },
+ "base": {
+  "path": "/home/claude/PRISM-Hub/validation/2026-11-06-review3/E44/cfly.json",
+  "sha256_lf": "a60f468ff9fc275c9d6cffd937afda2e8b3eba3171039a73390e19212160655b",
+  "registered": "a60f468ff9fc275c9d6cffd937afda2e8b3eba3171039a73390e19212160655b"
+ }
+}

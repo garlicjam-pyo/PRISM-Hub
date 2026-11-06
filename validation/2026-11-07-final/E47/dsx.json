@@ -1,0 +1,20 @@
+{
+ "그대로": {
+  "exit": 0,
+  "removed_key": null,
+  "tail": [
+   "  7쌍: {'E38/l1_e15_comparison': 0, 'E38/l1_e25_comparison': 0, 'E38/l1_e18_A25R_value_map': 0, 'E41/fair': 0, 'E42/cases': 0, 'E42/cells': 0, 'E43/loss': 0}",
+   "  [통과] (dstrict) 비교기 자체 시험",
+   "  [통과] (dstrict) E44 D 7쌍 엄격 비교 차이 0"
+  ]
+ },
+ "E43 loss 키 하나 삭제": {
+  "exit": 1,
+  "removed_key": "e41",
+  "tail": [
+   "  [실패] (dstrict) E44 D 7쌍 엄격 비교 차이 0",
+   "",
+   "필수 판정 실패 1건: (dstrict) E44 D 7쌍 엄격 비교 차이 0"
+  ]
+ }
+}

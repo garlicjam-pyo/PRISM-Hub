@@ -1,0 +1,94 @@
+{
+ "cases": [
+  {
+   "case": "정상",
+   "via": "fcheck_s2",
+   "S2": true,
+   "expected": true,
+   "reason_required": null,
+   "reason_ok": true,
+   "problems": [],
+   "diffs": {}
+  },
+  {
+   "case": "양쪽 같은 행 삭제",
+   "via": "fcheck_judge",
+   "S2": false,
+   "expected": false,
+   "reason_required": "행 수",
+   "reason_ok": true,
+   "problems": [
+    "F-a_45.00uF/transient 행 수 11·11(필수 12)",
+    "비교 행 55(필수 56)"
+   ],
+   "diffs": {}
+  },
+  {
+   "case": "양쪽 같은 행 복제",
+   "via": "fcheck_judge",
+   "S2": false,
+   "expected": false,
+   "reason_required": "중복",
+   "reason_ok": true,
+   "problems": [
+    "F-a_45.00uF/transient 기준 사례·표본 이름 중복(고유 11 / 행 12)",
+    "F-a_45.00uF/transient 새 결과 사례·표본 이름 중복(고유 11 / 행 12)"
+   ],
+   "diffs": {}
+  },
+  {
+   "case": "제어 주파수 NaN",
+   "via": "fcheck_judge",
+   "S2": false,
+   "expected": false,
+   "reason_required": "f_control_Hz",
+   "reason_ok": true,
+   "problems": [
+    "F-b_42.75uF f_control_Hz = nan(등록 25515.627844)"
+   ],
+   "diffs": {}
+  },
+  {
+   "case": "제어 주파수 20 kHz",
+   "via": "fcheck_judge",
+   "S2": false,
+   "expected": false,
+   "reason_required": "f_control_Hz",
+   "reason_ok": true,
+   "problems": [
+    "F-b_42.75uF f_control_Hz = 20000.0(등록 25515.627844)"
+   ],
+   "diffs": {}
+  },
+  {
+   "case": "새 결과 첨두 +10 A",
+   "via": "fcheck_judge",
+   "S2": false,
+   "expected": false,
+   "reason_required": null,
+   "reason_ok": true,
+   "problems": [],
+   "diffs": {
+    "F-a_45.00uF/transient": 1
+   }
+  },
+  {
+   "case": "양쪽 같은 첨두 +10 A",
+   "via": "fcheck_s2",
+   "S2": false,
+   "expected": false,
+   "reason_required": "해시",
+   "reason_ok": true,
+   "problems": [
+    "기준 사본 해시 불일치(09c63dd31b3b… ≠ 등록 a60f468ff9fc…)"
+   ],
+   "diffs": {}
+  }
+ ],
+ "diff_tree": {
+  "key_del": true,
+  "len_change": true,
+  "same": true
+ },
+ "peak_key": "phase_peak"
+}

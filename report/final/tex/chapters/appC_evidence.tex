@@ -4,7 +4,7 @@
 
 {\footnotesize
 \begin{longtable}{L{\dimexpr 0.11\linewidth-2\tabcolsep\relax}L{\dimexpr 0.27\linewidth-2\tabcolsep\relax}L{\dimexpr 0.44\linewidth-2\tabcolsep\relax}L{\dimexpr 0.18\linewidth-2\tabcolsep\relax}}
-\caption{검증 근거 목록(E1–E46, TB01–TB33)}\\
+\caption{검증 근거 목록(E1–E47, TB01–TB33)}\\
 \toprule
 \tabhead \textbf{번호} & \textbf{근거} & \textbf{내용} & \textbf{도구} \\
 \midrule
@@ -59,6 +59,7 @@ E43 & 제출 전 외부 검토 대응 & 창 조정 모듈 측정 사양(포화 �
 E44 & 제출 전 재검토 대응 & 비교 소자 E\textsubscript{oss} 시험 전압 정정의 연쇄 재계산(E38 l1·E41·E42·E43 L), 클램프 문턱 구현 요구(버스 수동소자 ±10 \%, 히스테리시스 폭, 결합 모서리), C\textsubscript{fly} 후보값 동특성, 판정 범위 재분석 & Python \\
 E45 & 제출 전 통합 수정안 대응 & H2 두 전류 기준 재집계, 가치 지도 판정 함수 정정(경우별 실제 최소와 비교, 후속 재분류), 충전전력 두 정의와 위상 수, 180s 최저 버스, 손실 연쇄의 엄격 비교, 클램프 켬·끔 지연 0.5 µs 반례, P5 공칭·모서리 평균손실, 제동 펄스열, 실행 방식(fork·같은 프로세스)과 명시적 설정 전달의 대표값·F 56행 대조 & Python \\
 E46 & 제출 전 두 번째 통합 검토 대응 & Tier-2 복합 공차 128개 조합의 +3 µs 스위칭 진단, 충전 시작의 보조부하 0–25 kW·C\textsubscript{fly} 후보 램프 첨두, 216s 직결 충전 단자와 그림 7-1(d), 가치 지도 0 기록·전압 경로(상승·하강)·누설 L 정정 168점, Stage C 52 V CV 경계·열손실, TB15·TB25·E31 재집계, 보호 에너지의 포트별 값·P6·DAB 1차 첨두, 비도통 항 운전점 의존, 검증기 오류 주입(행 삭제·주파수 변경·첨두 변경)과 재개 키 & Python \\
+E47 & 최종 제출 판정 대응 & 검증기 오류 주입(양쪽 행 삭제·복제, 주파수 NaN·20 kHz, 한쪽·양쪽 첨두 변경, 키 삭제·배열 길이), 출판 기준 사본과 S2 재판정, dstrict 종료 코드, 충전 과도시험 분모·부하 스텝과 TB28 기록 재집계, 줄바꿈 정규화 해시, 그림 7-1(a) 축 이름 & Python \\
 TB01–TB05 & 단별 회로 & Stage A 1위상, Stage B 개루프·폐루프(출력용량·게이트 격자), Stage C & Simulink \\
 TB06–TB07 & 통합 회로 & 주행(Stage A 모듈 1 + B + C), 충전(8위상 + 충전기) & Simulink \\
 TB08–TB13 & 창 조정 모듈 회로 & 창 조정·전환·DAB 고장 강등, 보호 상태기계, 고장 모드 변조, 데드타임 반영 첨두 표, EPS 지령 전이, 전이 여유 & Simulink \\
