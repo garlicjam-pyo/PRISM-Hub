@@ -318,67 +318,85 @@ def _spur(P, part, eps, H, pas_name):
 
 
 def clamp(parts=("spec", "W460")):
+    """(실행 경과) 2시간 실행 한도 때문에 단계(K1, K2, K3 시도)마다 clamp.json에 저장하고, 다시 실행하면 저장된 단계부터 잇는다.
+    판정 순서·기준은 위 사전 등록과 같다."""
     import E39_clamp_switch_rejudge as E39
-    try:                                                                # 부분별로 따로 실행해도 한 파일에 모은다(실행 방법만, 판정 같음)
+    try:
         out = load_json(EID, "clamp")["parts"]
     except Exception:
         out = {}
+
+    def save():
+        save_json(EID, "clamp", dict(parts=out, passive=PASSIVE))
     for part in parts:
         P = _setup_part(part)
+        st = out.get(part) or {}
+        if st.get("done"):
+            print("  %s: 이미 끝남(건너뜀)" % part); continue
         t0 = time.time()
         print("  == %s: 가지 %d × %.1f Ω, %s, 가정 E_hi %.0f·E_lo %.0f J ==" % (part, P["sel"]["n"], P["sel"]["R_b"], P["swn"], P["Eh"], P["El"]), flush=True)
-        # (K1)
-        k1 = []
-        X = None
         up, down = EPS_K1[part]
-        for eps in up:
-            rs = [_point(P, eps, None, pn, ("max",)) for pn in ("P-", "P+")]
-            for r in rs:
-                _p("K1", r)
-            k1 += rs
-            if all(r["C1"] and r["E"] for r in rs):
-                X = eps
-            else:
-                break
-        if X is None:
-            for eps in down:
+        # (K1)
+        if "X" in st:
+            k1, X = st["k1"], st["X"]
+            print("  K1 저장값 사용: X = %s" % X, flush=True)
+        else:
+            k1 = []; X = None
+            for eps in up:
                 rs = [_point(P, eps, None, pn, ("max",)) for pn in ("P-", "P+")]
                 for r in rs:
-                    _p("K1-", r)
+                    _p("K1", r)
                 k1 += rs
                 if all(r["C1"] and r["E"] for r in rs):
-                    X = eps; break
-        print("  K1 X = %s (%.0f s)" % (None if X is None else "%+.3f %%" % (100 * X), time.time() - t0), flush=True)
+                    X = eps
+                else:
+                    break
+            if X is None:
+                for eps in down:
+                    rs = [_point(P, eps, None, pn, ("max",)) for pn in ("P-", "P+")]
+                    for r in rs:
+                        _p("K1-", r)
+                    k1 += rs
+                    if all(r["C1"] and r["E"] for r in rs):
+                        X = eps; break
+            st = dict(k1=k1, X=X, lim=P["cfg"]["lim"], on0=P["cfg"]["on"], off0=P["cfg"]["off"], n=P["sel"]["n"], R_b=P["sel"]["R_b"],
+                      switch=P["swn"], ok=False, done=X is None)
+            out[part] = st; save()
+            print("  K1 X = %s (%.0f s)" % (None if X is None else "%+.3f %%" % (100 * X), time.time() - t0), flush=True)
         if X is None:
-            out[part] = dict(k1=k1, X=None, ok=False)
-            save_json(EID, "clamp", dict(parts=out, passive=PASSIVE)); continue
+            continue
         ladder_X = [e for e in sorted(set(up) | set(down)) if e <= X]          # 작은 쪽부터
         # (K2)
-        k2 = []
-        H_min = H0
-        epss = sorted({EPS_LOW, 0., X})
-        stop = False
-        for H in H_K2:
-            if stop and H < H0:
-                break
-            rs = [_point(P, eps, H, "N", ("min", "mix")) for eps in epss]
-            for r in rs:
-                _p("K2", r)
-            k2 += rs
-            okH = all(r["C1"] and r["E"] and r["sw_ok"] for r in rs)
-            if H > H0:
-                continue
-            if okH:
-                H_min = H
-            else:
-                stop = True
-        upper_ok = all(r["C1"] and r["E"] and r["sw_ok"] for r in k2 if r["H"] == 6.0)
-        print("  K2 H_min = %.1f V, 6.0 V %s (%.0f s)" % (H_min, "통과" if upper_ok else "불통과", time.time() - t0), flush=True)
+        if "H_min" in st:
+            k2, H_min, upper_ok = st["k2"], st["H_min"], st["upper6_ok"]
+            print("  K2 저장값 사용: H_min = %.1f V" % H_min, flush=True)
+        else:
+            k2 = []; H_min = H0
+            epss = sorted({EPS_LOW, 0., X})
+            stop = False
+            for H in H_K2:
+                if stop and H < H0:
+                    break
+                rs = [_point(P, eps, H, "N", ("min", "mix")) for eps in epss]
+                for r in rs:
+                    _p("K2", r)
+                k2 += rs
+                okH = all(r["C1"] and r["E"] and r["sw_ok"] for r in rs)
+                if H > H0:
+                    continue
+                if okH:
+                    H_min = H
+                else:
+                    stop = True
+            upper_ok = all(r["C1"] and r["E"] and r["sw_ok"] for r in k2 if r["H"] == 6.0)
+            st.update(k2=k2, H_min=H_min, upper6_ok=upper_ok, next_X=X, next_H=H_min, k3=[])
+            save()
+            print("  K2 H_min = %.1f V, 6.0 V %s (%.0f s)" % (H_min, "통과" if upper_ok else "불통과", time.time() - t0), flush=True)
         # (K3)
-        k3_hist = []
-        Xc, Hc = X, H_min
+        k3_hist = st.get("k3", [])
+        Xc, Hc = st.get("next_X", X), st.get("next_H", H_min)
         ok = False
-        for attempt in range(3):
+        for attempt in range(len(k3_hist), 3):
             Eh, El = P["Eh"], P["El"]
             rows = None; S = False; it_hist = []
             for it in range(3):
@@ -405,25 +423,29 @@ def clamp(parts=("spec", "W460")):
             ok = bool(c1 and swok and spok and S)
             print("  K3 시도 %d: X %+.3f %%, H_min %.1f V → C1·E %s, 스위치 %s, 오동작 %s, 가정 %s (%.0f s)"
                   % (attempt + 1, 100 * Xc, Hc, c1, swok, spok, S, time.time() - t0), flush=True)
-            if ok or attempt == 2:
+            done = ok or attempt == 2
+            if not done:
+                if not c1:
+                    i = ladder_X.index(Xc)
+                    if i == 0:
+                        done = True
+                    else:
+                        Xc = ladder_X[i - 1]
+                elif not swok or not spok:
+                    nxt = [H for H in H_UP if H > Hc]
+                    if not nxt:
+                        done = True
+                    else:
+                        Hc = nxt[0]
+                else:
+                    done = True
+            st.update(k3=k3_hist, next_X=Xc, next_H=Hc, X_final=k3_hist[-1]["X"], H_min_final=k3_hist[-1]["H_min"], ok=ok, done=done)
+            save()
+            if done:
                 break
-            if not c1:
-                i = ladder_X.index(Xc)
-                if i == 0:
-                    break
-                Xc = ladder_X[i - 1]
-            elif not swok or not spok:
-                nxt = [H for H in H_UP if H > Hc]
-                if not nxt:
-                    break
-                Hc = nxt[0]
-            else:
-                break
-        out[part] = dict(k1=k1, X=X, k2=k2, H_min=H_min, upper6_ok=upper_ok, k3=k3_hist, X_final=Xc, H_min_final=Hc, ok=ok,
-                         lim=P["cfg"]["lim"], on0=P["cfg"]["on"], off0=P["cfg"]["off"], n=P["sel"]["n"], R_b=P["sel"]["R_b"], switch=P["swn"])
-        verdict("(K) %s: 요구(공통 −1.0 … %+.3f %%, 히스테리시스 %.1f–6.0 V, 수동소자 ±10 %%) 결합 모서리 통과" % (part, 100 * Xc, Hc), ok, "")
-        save_json(EID, "clamp", dict(parts=out, passive=PASSIVE))
-    save_json(EID, "clamp", dict(parts=out, passive=PASSIVE))
+        verdict("(K) %s: 요구(공통 −1.0 … %+.3f %%, 히스테리시스 %.1f–6.0 V, 수동소자 ±10 %%) 결합 모서리 통과"
+                % (part, 100 * st["X_final"], st["H_min_final"]), st["ok"], "")
+    save()
 
 
 # ======================================================================================================
