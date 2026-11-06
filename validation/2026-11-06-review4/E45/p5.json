@@ -1,0 +1,138 @@
+{
+ "spec": {
+  "corner": {
+   "corner": {
+    "eps": 0.00075,
+    "H": 3.5,
+    "pas": "P-"
+   },
+   "T_max": 147.6412232936595,
+   "T_event": {
+    "Vbat": 640.0,
+    "P400": 0.0,
+    "PC": 0.0,
+    "arch": "R2",
+    "clamp": true,
+    "prof": "hold",
+    "t_comm": 0.01,
+    "tend": 0.048
+   },
+   "T_combo": "min",
+   "P_at_Tmax": 662.1892892120153,
+   "P_max": 662.1892892120153,
+   "P_event": {
+    "Vbat": 640.0,
+    "P400": 0.0,
+    "PC": 0.0,
+    "arch": "R2",
+    "clamp": true,
+    "prof": "hold",
+    "t_comm": 0.01,
+    "tend": 0.048
+   },
+   "P_combo": "min",
+   "sw_share_at_Tmax": 0.80754068293843
+  },
+  "nominal": {
+   "corner": {
+    "eps": 0.0,
+    "H": 5.0,
+    "pas": "N"
+   },
+   "T_max": 125.09506010382336,
+   "T_event": {
+    "Vbat": 640.0,
+    "P400": 0.0,
+    "PC": 0.0,
+    "arch": "R2",
+    "clamp": true,
+    "prof": "hold",
+    "t_comm": 0.0,
+    "tend": 0.038
+   },
+   "T_combo": "min",
+   "P_at_Tmax": 481.53093031909737,
+   "P_max": 481.53093031909737,
+   "P_event": {
+    "Vbat": 640.0,
+    "P400": 0.0,
+    "PC": 0.0,
+    "arch": "R2",
+    "clamp": true,
+    "prof": "hold",
+    "t_comm": 0.0,
+    "tend": 0.038
+   },
+   "P_combo": "min",
+   "sw_share_at_Tmax": 0.735991124990819
+  }
+ },
+ "W460": {
+  "corner": {
+   "corner": {
+    "eps": 0.01,
+    "H": 4.0,
+    "pas": "P-"
+   },
+   "T_max": 142.57596368665244,
+   "T_event": {
+    "Vbat": 940.8,
+    "P400": 0.0,
+    "PC": 0.0,
+    "arch": "R2W",
+    "clamp": true,
+    "prof": "hold",
+    "t_comm": 0.01,
+    "tend": 0.048
+   },
+   "T_combo": "min",
+   "P_at_Tmax": 621.6022731302279,
+   "P_max": 621.6022731302279,
+   "P_event": {
+    "Vbat": 940.8,
+    "P400": 0.0,
+    "PC": 0.0,
+    "arch": "R2W",
+    "clamp": true,
+    "prof": "hold",
+    "t_comm": 0.01,
+    "tend": 0.048
+   },
+   "P_combo": "min",
+   "sw_share_at_Tmax": 0.7991004007486563
+  },
+  "nominal": {
+   "corner": {
+    "eps": 0.0,
+    "H": 5.0,
+    "pas": "N"
+   },
+   "T_max": 124.86405925389306,
+   "T_event": {
+    "Vbat": 940.8,
+    "P400": 0.0,
+    "PC": 0.0,
+    "arch": "R2W",
+    "clamp": true,
+    "prof": "hold",
+    "t_comm": 0.0,
+    "tend": 0.038
+   },
+   "T_combo": "min",
+   "P_at_Tmax": 479.679961970297,
+   "P_max": 479.679961970297,
+   "P_event": {
+    "Vbat": 940.8,
+    "P400": 0.0,
+    "PC": 0.0,
+    "arch": "R2W",
+    "clamp": true,
+    "prof": "hold",
+    "t_comm": 0.0,
+    "tend": 0.038
+   },
+   "P_combo": "min",
+   "sw_share_at_Tmax": 0.7424457637224635
+  }
+ }
+}

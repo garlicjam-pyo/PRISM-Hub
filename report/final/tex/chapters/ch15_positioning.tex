@@ -56,7 +56,7 @@ E15·E18은 Stage A 기반 구조를 전용 승압기(①)와 전전력 조정�
 ⑥ & \textbf{82.7 W} & ⑤와 같음 & 20(0 + 20) & 보조 18.8 W 작음 \\
 \end{longtable}
 }
-\srcnote{주: 구동 인버터는 모든 구조에 공통이라 세지 않았다. 충전은 375 A 정전류(입력 120·150·172.5 kW)다. ①·⑤의 1200 V SiC 소자(C3M0016120K)는 E\textsubscript{oss} 127 µJ의 시험 전압을 데이터시트 조건(1000 V)으로 정정한 값이다(E44). 자료: 검증 근거 E25, E38, E41, E44.}
+\srcnote{주: 구동 인버터는 모든 구조에 공통이라 세지 않았다. 충전 손실 비교는 375 A 고정 전류(반전압 기준 120·150·172.5 kW)이며, 충전 시험의 충전기 명령 min[375 A, 150 kW/(V\textsubscript{bat}/2)]과 다르다. ①·⑤의 1200 V SiC 소자(C3M0016120K)는 E\textsubscript{oss} 127 µJ의 시험 전압을 데이터시트 조건(1000 V)으로 정정한 값이다(E44). 자료: 검증 근거 E25, E38, E41, E44.}
 
 {\footnotesize
 \begin{longtable}{L{\dimexpr 0.34\linewidth-2\tabcolsep\relax}L{\dimexpr 0.12\linewidth-2\tabcolsep\relax}L{\dimexpr 0.12\linewidth-2\tabcolsep\relax}L{\dimexpr 0.12\linewidth-2\tabcolsep\relax}L{\dimexpr 0.16\linewidth-2\tabcolsep\relax}L{\dimexpr 0.14\linewidth-2\tabcolsep\relax}}
@@ -152,10 +152,10 @@ Stage A 수동소자 저항 × 2 & 102.7 & 100.2 & 82.7 & −2.5 \% & 20.0 W \\
 \bottomrule
 \endlastfoot
 충전 시작 & 충전 전 Stage A 사전 기동, 충전전류 증가 램프 ≥ 600 µs(≤ 0.625 A/µs) & E35(150 kHz 설계 100 µs) \\
-Stage A 공진주파수 & 영전류 게이트에서 150·100 kHz 불성립. 최종 25 kHz, C\textsubscript{A} 2.4 mF & E31, E35 \\
+Stage A 공진주파수 & 영전류 게이트에서 조사한 후보 90개 중 150·100 kHz의 30개 불성립. 최종 25 kHz, C\textsubscript{A} 2.4 mF & E31, E35 \\
 위상 셰딩·모듈 관리 & 셰딩 20/30/53 A, 모듈 추가 70 A/모듈·순시 66 A·충전 요청, 줄임 60 A/모듈·1 ms, 시간 상수 150 kHz 값의 6배 & E28, E32, E35 \\
 모듈 고장 & 고장 모듈 즉시 정지·영구 제외, 동작 모듈 0이면 다음 모듈 즉시 시작 & E30, E35 \\
-V\textsubscript{A} 클램프 & 468/463 V(R2-W460 511/506 V), 지연 ≤ 1 µs, 최대 연속 켜짐 0.5 ms, 가지 3개 × 2.4 Ω(2.7 Ω) + 가지마다 SiC, 문턱 공통 오차 −1.0 … +0.075 \%(+1.0 \%)·히스테리시스 3.5(4.0)–6.0 V & E38–E40, E44 \\
+V\textsubscript{A} 클램프 & 468/463 V(R2-W460 511/506 V), 켬·끔 지연 목표 각각 ≤ 1 µs(하드웨어 목표. 검증 입력 1.0 µs 고정, 0.5 µs 반례 E45), 최대 연속 켜짐 0.5 ms, 가지 3개 × 2.4 Ω(2.7 Ω) + 가지마다 SiC, 문턱 공통 오차 −1.0 … +0.075 \%(+1.0 \%)·히스테리시스 3.5(4.0)–6.0 V & E38–E40, E44 \\
 부품 판정 & 최대 열저항(없으면 × 1.2), 가지 저항 모서리·섞임, 전형값만 있는 손실 인자의 규칙 L & E39, E40 \\
 이중 고장 & Stage A 정지 + 400 V 부하 정지(전용 배선 신호 뒤 ≤ 3 ms) & E29, E38 \\
 H-브리지 고장 강등 & 링크 붕괴·소프트 투입 동안 Stage C 일시 정지(4 kW/ms, ≤ 12.4 ms) & E38 \\

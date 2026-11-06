@@ -1,0 +1,104 @@
+{
+ "source": "archived",
+ "inputs": [
+  {
+   "path": "validation/2026-09-29-controller/corners.json",
+   "kind": "archived",
+   "sha256": "9e4de2b6e2832906925dd6a75a956404355e4d73dd60829814b15883234f400b",
+   "bytes": 178835
+  },
+  {
+   "path": "validation/2026-10-11-matlab-switching/E12/corners.json",
+   "kind": "archived",
+   "sha256": "12c70c1a9027d1a05c406d9d0067b25693a1bae6696197e93fabb749d8e62aa8",
+   "bytes": 302187
+  },
+  {
+   "path": "validation/2026-09-29-controller/grid.json",
+   "kind": "archived",
+   "sha256": "02f67430f8e8b05d07b78687d4a15e8b7517e70f0d9ed11079d26815a139e36e",
+   "bytes": 342406
+  },
+  {
+   "path": "validation/2026-09-29-controller/corners_lh5.json",
+   "kind": "archived",
+   "sha256": "dc19da4e28bc8675f1b61e0cc3fe1043ee607d4302bc3ef34baceda49872e29b",
+   "bytes": 19007
+  },
+  {
+   "path": "validation/2026-10-28-a25r-impact/E36/e16_concurrent.json",
+   "kind": "archived",
+   "sha256": "ed9b35cf484f7283ffb10547a3f852e583b68d276a3e99ce7939e76ff9cc6ba1",
+   "bytes": 464430
+  }
+ ],
+ "E7": {
+  "T1": {
+   "total": 128,
+   "passed": 128,
+   "max_path_A": 89.08227881730406,
+   "delay_us": 3.0,
+   "step": [
+    15000,
+    25000
+   ]
+  },
+  "T2": {
+   "total": 128,
+   "passed": 102,
+   "max_path_A": 95.82375693400112,
+   "delay_us": 0.0,
+   "step": [
+    1000,
+    25000
+   ]
+  }
+ },
+ "E12": {
+  "T1": {
+   "total": 128,
+   "passed": 128,
+   "max_path_inst_A": 90.49377596344222
+  },
+  "T2": {
+   "total": 128,
+   "passed": 128,
+   "max_path_inst_A": 97.32333960768297
+  }
+ },
+ "E7_lh5": {
+  "passed": 18,
+  "total": 26,
+  "max_path_A": 94.32614895567035
+ },
+ "E5_grid_640_920": {
+  "T1": [
+   440,
+   440
+  ],
+  "T2": [
+   88,
+   88
+  ],
+  "T1_max_A": 87.21271491862359,
+  "T2_max_A": 93.74930462565487
+ },
+ "E36_T2_delay": {
+  "n": 14,
+  "passed": 13,
+  "failed": [
+   {
+    "name": "delay+3.0us",
+    "V": 632.0,
+    "info": {
+     "P0": 1000,
+     "P1": 25000
+    },
+    "failed": [
+     "current>93.75A"
+    ]
+   }
+  ]
+ },
+ "H2": "부분 충족"
+}

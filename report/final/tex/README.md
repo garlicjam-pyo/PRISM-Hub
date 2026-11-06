@@ -8,7 +8,7 @@
 ./make.sh            # = latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=build main.tex
 ```
 
-- 결과는 `build/main.pdf`(약 100쪽)다. `build/`는 저장소에 올리지 않는다.
+- 결과는 `build/main.pdf`(2026-11-06 판 114쪽)다. `build/`는 저장소에 올리지 않는다.
 - 필요한 것: TeX Live(XeLaTeX, latexmk), `xetexko`(Debian·Ubuntu는 `texlive-lang-korean`), Noto Serif CJK KR·Noto Sans CJK KR·DejaVu Serif 글꼴.
 - 그림은 저장소의 `docs/fig/report/`, `validation/`, `simulink/tb/` 아래 파일을 그대로 읽는다(`preamble.tex`의 `\repo` = `../../..`). 그래서 이 폴더만 따로 떼어 빌드할 수 없고, 저장소 전체가 있어야 한다.
 
@@ -30,4 +30,4 @@
 - 수치는 최종 설계(A25R) 값을 쓰고, 150 kHz 원설계 값과 바뀐 이유는 14장 대조표에 모은다.
 - 근거는 “검증 근거 E42”, “회로 모델 TB33”처럼 번호로만 적고, 번호별 내용은 부록 C에 둔다. 본문에 저장소 경로·URL을 쓰지 않는다.
 - 판정 기준은 시험 전에 정한 것을 그대로 쓰고, 불통과·부정적 결과를 지우지 않는다.
-- 근거 문서는 `docs/20`(최종판)과 `docs/41`–`docs/48`이다.
+- 근거 문서는 `docs/20`(최종판)과 `docs/41`–`docs/50`이다(E44는 docs/49, 제출 전 통합 수정안 대응 E45는 docs/50).

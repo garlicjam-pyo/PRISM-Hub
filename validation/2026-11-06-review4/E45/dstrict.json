@@ -1,0 +1,42 @@
+{
+ "selftest": {
+  "key_del": true,
+  "str_change": true,
+  "nan": true,
+  "length": true,
+  "bool_flip": true,
+  "num": true,
+  "type_change": true,
+  "same": true
+ },
+ "pairs": {
+  "E38/l1_e15_comparison": {
+   "n": 0,
+   "first": []
+  },
+  "E38/l1_e25_comparison": {
+   "n": 0,
+   "first": []
+  },
+  "E38/l1_e18_A25R_value_map": {
+   "n": 0,
+   "first": []
+  },
+  "E41/fair": {
+   "n": 0,
+   "first": []
+  },
+  "E42/cases": {
+   "n": 0,
+   "first": []
+  },
+  "E42/cells": {
+   "n": 0,
+   "first": []
+  },
+  "E43/loss": {
+   "n": 0,
+   "first": []
+  }
+ }
+}
