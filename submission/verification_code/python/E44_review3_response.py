@@ -51,6 +51,7 @@
       (경로저항 = A25R 4모듈 9.0/4 mΩ + 배선 3 mΩ), TB28 관찰 시간·버스 감소·48 V 범위(CSV), Stage A 위상 첨두(E35 요구 안·고장·금지).
 
 ■ 실행   python E44_review3_response.py scope dev clamp cfly    (2코어: dev 약 30분, clamp 약 3시간, cfly 약 1–2시간)
+         clamp는 clamp:spec, clamp:W460으로 나눠 실행할 수 있다(결과는 같은 clamp.json에 모음).
 ■ 결과   results/E44/*.json
 """
 import json
@@ -304,10 +305,13 @@ def _spur(P, part, eps, H, pas_name):
                 E_max_J=max(x["E_branch_J"] for x in rows), T_max=max([x["T"] for x in rows if x["T"] is not None], default=None), rows=rows)
 
 
-def clamp():
+def clamp(parts=("spec", "W460")):
     import E39_clamp_switch_rejudge as E39
-    out = {}
-    for part in ("spec", "W460"):
+    try:                                                                # 부분별로 따로 실행해도 한 파일에 모은다(실행 방법만, 판정 같음)
+        out = load_json(EID, "clamp")["parts"]
+    except Exception:
+        out = {}
+    for part in parts:
         P = _setup_part(part)
         t0 = time.time()
         print("  == %s: 가지 %d × %.1f Ω, %s, 가정 E_hi %.0f·E_lo %.0f J ==" % (part, P["sel"]["n"], P["sel"]["R_b"], P["swn"], P["Eh"], P["El"]), flush=True)
@@ -519,4 +523,6 @@ if __name__ == "__main__":
     parts = sys.argv[1:] or ["scope", "dev", "clamp", "cfly"]
     for p in parts:
         print("\n==== E44 %s ====" % p, flush=True)
+        if p.startswith("clamp:"):                                      # 예: clamp:spec, clamp:W460 (2시간 실행 한도 때문에 나눠 실행)
+            clamp((p.split(":", 1)[1],)); continue
         {"dev": dev, "clamp": clamp, "cfly": cfly, "scope": scope}[p]()
