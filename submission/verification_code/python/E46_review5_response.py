@@ -539,7 +539,9 @@ def ldab():
     """vmap2 (c)만 다시(실행 경과: 1차 실행의 점 집합 정정)."""
     cnt = _ldab_points()
     v = load_json(EID, "vmap2")
-    v["ldab_run1"] = v.get("ldab"); v["ldab"] = cnt
+    if "ldab_run1" not in v:                     # 1차 실행 기록은 처음 한 번만 보관(다시 실행해도 덮지 않음)
+        v["ldab_run1"] = v.get("ldab")
+    v["ldab"] = cnt
     save_json(EID, "vmap2", v)
     print("  누설 L 정정: 활성 정적점 %d개 중 성립 변화 %d개, %s" % (cnt["points"], cnt["changed"], cnt["by"]))
 
@@ -686,6 +688,8 @@ def fig():
     new = copy.deepcopy(out)
     diff = {}
     for k, pk in new["packs"].items():
+        if not k[:-1].isdigit() or not pk.get("charging"):        # 사양 팩(spec)은 그림 (d)에 없음
+            continue
         ns = int(k[:-1]); ch = pk["charging"]
         vmax = 2 * (E18.CHARGER_VMAX - RA * E18.I_CH)
         P = (3.7 * ns / 2 + RA * E18.I_CH) * E18.I_CH / 1e3
