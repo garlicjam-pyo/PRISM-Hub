@@ -42,6 +42,9 @@ TB25·E31 분모, Stage C 최종 손실과 CV 경계, 보호 분기·부품 한�
       8 kW DAB의 링크 0·1·3 kW, H-브리지 직렬전압 20 V에서 경로전류 0·25·60 A. 저장 E44 breakeven 배율(0.31977)도 적는다(판정 없음).
  (vmap2 c 정정) [실행 경과, 1차 실행 뒤] 1차 실행은 창 정격을 W410 5 kW·W460 4 kW로 고정하고 사양 팩을 빠뜨렸다(141점). E18
       window_rating_W의 팩별 정격과 사양 팩(640–920 V 25점)을 넣어 다시 센다(판정 기준은 같음: 변화 수를 보고).
+ (fig) [추가 등록, 실행 전] 그림 7-1(d)를 충전기 직결 단자 정의로 다시 그린다: 저장된 E44 가치 지도(fix_e42_value_map_fair)의
+      팩별 charging만 R_A = 2.25 mΩ으로 다시 계산(375 A·셀 3.7 V 단자 출력, 500 V 충전기 최대 팩 전압·셀 전압)하고 나머지 패널은
+      저장값 그대로 E18.figure로 그린다(판정 없음). 이전 정의(5.55 mΩ)와의 차를 적는다.
  (ripple) 새 계산: E43 S1 최대 리플 사례를 같은 작업 번호·시드로 다시 계산해 주기평균 열의 마지막 1 ms 폭(원 정의), 같은 구간
       순시 최대−최소, 단일 PWM 주기 최대 폭을 적는다. 재현(gate): 원 정의 값이 저장값과 상대 1e-6.
  (gate) 검증기 오류 주입(E45 fcheck_judge, 복사본에만 적용): 정상 → 통과, 같은 행을 두 파일에서 삭제 → 실패, F-b 제어 주파수만
@@ -676,7 +679,28 @@ def cache():
     verdict("(cache) 열저항 +5 %이면 재개 키가 바뀜", h0 != h1, gate=True)
 
 
-PARTS = dict(power=power, h1=h1, h2d=h2d, h2s=h2s, h4=h4, ramp=ramp, tb25=tb25, e31=e31, c22=c22, tb15=tb15, prot=prot, vmap2=vmap2,
+def fig():
+    import copy
+    import E18_industry_value_map as E18
+    out = load_json("E44", "fix_e42_value_map_fair")
+    new = copy.deepcopy(out)
+    diff = {}
+    for k, pk in new["packs"].items():
+        ns = int(k[:-1]); ch = pk["charging"]
+        vmax = 2 * (E18.CHARGER_VMAX - RA * E18.I_CH)
+        P = (3.7 * ns / 2 + RA * E18.I_CH) * E18.I_CH / 1e3
+        diff[k] = dict(P_old_kW=ch["P_375A_cell3p7_kW"], P_new_kW=P, vmax_old=ch["vbat_max_500V"], vmax_new=vmax,
+                       cell_old=ch["cell_max_500V"], cell_new=min(4.2, vmax / ns))
+        ch.update(vbat_max_500V=vmax, cell_max_500V=min(4.2, vmax / ns), full_charge_ok=bool(4.2 * ns <= vmax), P_375A_cell3p7_kW=P)
+    new["conditions"]["charge_R_ohm"] = RA
+    path = common.outdir(EID) / "fig7_1_value_map_direct.png"
+    E18.figure(new, path)
+    save_json(EID, "fig", dict(R_A=RA, diff=diff, png=str(path.name)))
+    for k, v in diff.items():
+        print("  %s: %.3f → %.3f kW, 최대 팩 %.2f → %.2f V, 셀 %.4f → %.4f V" % (k, v["P_old_kW"], v["P_new_kW"], v["vmax_old"], v["vmax_new"], v["cell_old"], v["cell_new"]))
+
+
+PARTS = dict(fig=fig, power=power, h1=h1, h2d=h2d, h2s=h2s, h4=h4, ramp=ramp, tb25=tb25, e31=e31, c22=c22, tb15=tb15, prot=prot, vmap2=vmap2,
              loss=loss, ripple=ripple, gate=gate, cache=cache, nc=nc, ldab=ldab)
 
 if __name__ == "__main__":
