@@ -45,6 +45,13 @@ TB25·E31 분모, Stage C 최종 손실과 CV 경계, 보호 분기·부품 한�
  (fig) [추가 등록, 실행 전] 그림 7-1(d)를 충전기 직결 단자 정의로 다시 그린다: 저장된 E44 가치 지도(fix_e42_value_map_fair)의
       팩별 charging만 R_A = 2.25 mΩ으로 다시 계산(375 A·셀 3.7 V 단자 출력, 500 V 충전기 최대 팩 전압·셀 전압)하고 나머지 패널은
       저장값 그대로 E18.figure로 그린다(판정 없음). 이전 정의(5.55 mΩ)와의 차를 적는다.
+ (h1s) [추가 등록 2, 실행 전, 독립 확인 지적] 등록문 (h1)의 ‘E4 주행 정상’은 구현에서 빠졌다. 주행 정상 링크전력을
+      E3 steady_sweep(NOMINAL, 25 kW, 640–920 V와 648·788·907 V)으로 계산해 최대값과 전압을 적는다(원고 6.44 kW의 출처).
+      판정 H1-0: 최대 |링크전력| ≤ 8 kW.
+ (stat) [추가 등록 2, 실행 전, 독립 확인 지적] 원고에 검토자 값으로 들어간 정적 노드값을 저장소 코드로 계산한다(판정 없음):
+      (a) 180s 최저 충전 상태·25 kW 정적 버스 E18 va_exact, R = 13.2 mΩ(E18 NOMINAL)·12.0 mΩ(A25R 1모듈 9.0 + 배선 3.0).
+      (b) 바이패스 모드 회생 −3.2 kW, 반전압 V_W + 4.99 V(W410·W460): V_A = va_exact, 부하 버스 = V_A − R_BYP·P/V_A
+      (E15 R_BYP 3.3 mΩ). 부품 상한 420·470 V 이하인지 적는다.
  (ripple) 새 계산: E43 S1 최대 리플 사례를 같은 작업 번호·시드로 다시 계산해 주기평균 열의 마지막 1 ms 폭(원 정의), 같은 구간
       순시 최대−최소, 단일 PWM 주기 최대 폭을 적는다. 재현(gate): 원 정의 값이 저장값과 상대 1e-6.
  (gate) 검증기 오류 주입(E45 fcheck_judge, 복사본에만 적용): 정상 → 통과, 같은 행을 두 파일에서 삭제 → 실패, F-b 제어 주파수만
@@ -704,8 +711,42 @@ def fig():
         print("  %s: %.3f → %.3f kW, 최대 팩 %.2f → %.2f V, 셀 %.4f → %.4f V" % (k, v["P_old_kW"], v["P_new_kW"], v["vmax_old"], v["vmax_new"], v["cell_old"], v["cell_new"]))
 
 
+# ======================================================================================================
+# (h1s)·(stat) 추가 등록 2
+# ======================================================================================================
+def h1s():
+    import E3_steady_state as E3
+    from controller_reference import NOMINAL
+    rows = E3.steady_sweep(NOMINAL, 25000.)
+    rows = [r for r in rows if 640 <= r["vbat"] <= 920]
+    w = max(rows, key=lambda r: abs(r["link_power_W"]))
+    out = dict(n=len(rows), drive_steady_max_W=abs(w["link_power_W"]), at_V=w["vbat"])
+    save_json(EID, "h1s", out)
+    print("  주행 정상(E3, 25 kW) %d점 최대 링크전력 %.2f W @ %d V" % (out["n"], out["drive_steady_max_W"], out["at_V"]))
+    verdict("(h1s H1-0) 주행 정상 링크전력 ≤ 8 kW", out["drive_steady_max_W"] <= 8000, gate=True)
+
+
+def stat():
+    import E18_industry_value_map as window
+    import E15_baseline_loss_rating as base
+    pk = window.pack(180)
+    vmin = {("%.4f" % R): min(window.va_exact(V, 25000., R=R) for V in pk["full"]) for R in (0.0132, 0.0120)}
+    regen = {}
+    for mode, VW in window.WINDOW.items():
+        vh = VW + 4.99
+        va = window.va_exact(2 * vh, -3200.)
+        bus = va - base.RBYP * (-3200.) / va
+        lim = 420. if VW < 450 else 470.
+        regen[mode] = dict(V_W=VW, half_V=vh, V_A=va, bus_V=bus, limit_V=lim, within=bool(bus <= lim))
+    out = dict(static_min_180s_V=vmin, regen_bypass=regen, R_BYP=base.RBYP)
+    save_json(EID, "stat", out)
+    print("  180s 정적 최저 버스:", {k: round(v, 3) for k, v in vmin.items()})
+    for k, v in regen.items():
+        print("  %s 회생 −3.2 kW 반전압 %.2f V: V_A %.3f V, 부하 버스 %.3f V(상한 %.0f V)" % (k, v["half_V"], v["V_A"], v["bus_V"], v["limit_V"]))
+
+
 PARTS = dict(fig=fig, power=power, h1=h1, h2d=h2d, h2s=h2s, h4=h4, ramp=ramp, tb25=tb25, e31=e31, c22=c22, tb15=tb15, prot=prot, vmap2=vmap2,
-             loss=loss, ripple=ripple, gate=gate, cache=cache, nc=nc, ldab=ldab)
+             loss=loss, ripple=ripple, gate=gate, cache=cache, nc=nc, ldab=ldab, h1s=h1s, stat=stat)
 
 if __name__ == "__main__":
     want = sys.argv[1:] or list(PARTS)
