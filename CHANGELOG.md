@@ -9,6 +9,7 @@
   - (p5·brake) 선정식 환산온도 공칭 125.10·124.86 °C·모서리 147.64·142.58 °C(평균손실 481.5·479.7 / 662.2·621.6 W). 제동 51.9 J = 약 57.5 ms의 30회 펄스.
   - (vmap) 판정 함수를 경우별 실제 최소와 비교하도록 고친 재분류: B470 200s ①·④ 같은 수준(R2-W410 제외), 나머지 13칸 같음. (s180) 180s 최저 버스 268.77 V < Stage C 입력 하한 270 V. (power) 충전기 명령과 손실 비교 전력, 216s 두 전력 정의.
   - (dstrict) 엄격 비교기 자체 시험 8종 통과, E44 D 저장 비교 7쌍 차 0.
+  - (repro S1) 같은 프로세스 차례 실행에서 대표 다섯 사례 11개 값이 저장 결과와 상대 차 0. (fcheck S2) 고친 코드의 E44 F 56행 재계산이 저장 결과와 차 0(1차 판정은 직렬화 전 객체와 비교한 판정 코드 오류로 실패, 비교 경로를 고쳐 같은 결과로 재판정).
 - `common.Pool`·`common.Executor`: fork 문맥 명시 또는 같은 프로세스 차례 실행(`PRISM_POOL=fork|serial`). Windows·macOS spawn(Python 3.14 이후 Linux forkserver)에서 부모 설정을 잃던 E44 F-b, E35→E34, E36→E16 경로 수정. `common.input_record`(SHA-256)·`strict_diff`. E44 scope `PRISM_SOURCE=archived|fresh`, H4 미공급 < 정적 예약 직접 검사. 클램프 재개는 설정 해시가 같을 때만. run_all 경로·인수 검사·비정상 종료.
 
 ### 변경(결론·문구)

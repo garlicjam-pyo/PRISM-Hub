@@ -423,7 +423,15 @@ def fcheck():
     captured = {}
     E44.save_json = lambda eid, name, obj: captured.__setitem__(name, obj)
     E44.cfly()
-    new = captured["cfly"]; old = load_json("E44", "cfly")
+    save_json(EID, "cfly_refactor", captured["cfly"])
+    _fcheck_compare(first_run=True)
+
+
+def _fcheck_compare(first_run=False):
+    """(2026-11-06 실행 경과) 1차 fcheck는 직렬화 전 객체(정수 키·튜플)를 JSON에서 읽은 저장 결과(문자열 키·리스트)와 비교해
+    형 차이만으로 실패했다. 판정 기준(엄격 비교 차 0)은 그대로 두고, 저장 결과와 같은 경로(save_json → load_json)로 읽은 새 결과를 비교한다."""
+    import common
+    new = load_json(EID, "cfly_refactor"); old = load_json("E44", "cfly")
     diffs = {}
     n_rows = 0
     for tag in old:
@@ -431,14 +439,20 @@ def fcheck():
             n_rows += len(old[tag][part])
             d = strict_diff(old[tag][part], new[tag][part])
             diffs["%s/%s" % (tag, part)] = dict(n=len(d), first=[list(map(str, x)) for x in d[:5]])
-    save_json(EID, "cfly_refactor", new)
     ok = all(v["n"] == 0 for v in diffs.values())
-    save_json(EID, "fcheck", dict(rows=n_rows, diffs=diffs, S2=ok, pool=common.pool_mode(),
+    save_json(EID, "fcheck", dict(rows=n_rows, diffs=diffs, S2=ok, pool=common.pool_mode(), compared="save_json → load_json 경로(직렬화 뒤)",
+                                  first_run_failed_on_serialization=not first_run,
                                   f_Hz={t: [new[t]["f_control_Hz"], new[t]["f_plant_Hz"]] for t in new}))
     verdict("(fcheck S2) 고친 E44 cfly가 저장 결과 %d행과 같음" % n_rows, ok, json.dumps({k: v["n"] for k, v in diffs.items()}, ensure_ascii=False))
 
 
-PARTS = dict(h2=h2, vmap=vmap, power=power, s180=s180, dstrict=dstrict, delay=delay, p5=p5, brake=brake, repro=repro, fcheck=fcheck)
+def fcheck_rejudge():
+    """저장된 cfly_refactor.json으로 S2를 다시 판정한다(다시 계산하지 않음)."""
+    _fcheck_compare(first_run=False)
+
+
+PARTS = dict(h2=h2, vmap=vmap, power=power, s180=s180, dstrict=dstrict, delay=delay, p5=p5, brake=brake, repro=repro, fcheck=fcheck,
+             fcheck_rejudge=fcheck_rejudge)
 
 if __name__ == "__main__":
     want = sys.argv[1:] or list(PARTS)

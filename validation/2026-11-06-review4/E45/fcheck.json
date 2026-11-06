@@ -1,0 +1,35 @@
+{
+ "rows": 56,
+ "diffs": {
+  "F-a_45.00uF/transient": {
+   "n": 0,
+   "first": []
+  },
+  "F-a_45.00uF/fault": {
+   "n": 0,
+   "first": []
+  },
+  "F-b_42.75uF/transient": {
+   "n": 0,
+   "first": []
+  },
+  "F-b_42.75uF/fault": {
+   "n": 0,
+   "first": []
+  }
+ },
+ "S2": true,
+ "pool": "fork",
+ "compared": "save_json → load_json 경로(직렬화 뒤)",
+ "first_run_failed_on_serialization": true,
+ "f_Hz": {
+  "F-a_45.00uF": [
+   25515.627843745686,
+   25515.627843745686
+  ],
+  "F-b_42.75uF": [
+   25515.627843745686,
+   26178.481807544278
+  ]
+ }
+}

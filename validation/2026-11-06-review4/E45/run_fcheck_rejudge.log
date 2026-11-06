@@ -1,0 +1,4 @@
+
+==== E45 fcheck_rejudge ====
+  → 저장: results/E45/fcheck.json
+  [통과] (fcheck S2) 고친 E44 cfly가 저장 결과 56행과 같음  ({"F-a_45.00uF/transient": 0, "F-a_45.00uF/fault": 0, "F-b_42.75uF/transient": 0, "F-b_42.75uF/fault": 0})

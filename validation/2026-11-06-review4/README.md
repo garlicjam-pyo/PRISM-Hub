@@ -13,7 +13,8 @@
 | `E45/p5.json` | (p5) 선정식 환산온도와 평균손실, 공칭·지정 모서리 |
 | `E45/brake.json` | (brake) 제동 에너지 51.9 J 사건의 펄스 수·기간 |
 | `E45/repro.json` | (repro, S1) 같은 프로세스 차례 실행(Windows와 같은 경로)의 대표 사례 대 저장 결과 |
-| `E45/cfly_refactor.json`, `E45/fcheck.json` | (fcheck, S2) 코드 정리 뒤 E44 F 56행 재실행과 엄격 비교 |
+| `E45/cfly_refactor.json`, `E45/fcheck.json` | (fcheck, S2) 코드 정리 뒤 E44 F 56행 재실행과 엄격 비교(저장 경로로 읽은 비교에서 차 0) |
+| `E45/fcheck_run1_serialization_failed.json`, `E45/run_fcheck_rejudge.log` | S2 1차 판정(직렬화 전 객체와 비교해 형 차이만으로 실패, 실행 경과)과 같은 결과의 재판정 기록 |
 | `E45/run_quick.log` | h2·vmap·power·s180·dstrict 실행 기록 |
 | `E45/run_long1_repro_import_failed.log` | delay·p5·brake 실행 기록. 실행 중에 E16의 병렬 실행기를 바꾼 커밋 때문에 repro에서 ImportError로 멈춤(실행 경과) |
-| `E45/run_long2.log` | repro·fcheck 재실행 기록 |
+| `E45/run_long2.log` | repro·fcheck 재실행 기록(S1 통과, S2 1차 판정 실패의 기록 포함) |

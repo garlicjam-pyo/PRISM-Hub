@@ -63,7 +63,7 @@ STEPS = [
     ("E42", [("E42_value_map_fair.py", ["run"])]),
     ("E43", [("E43_review2_response.py", ["loss", "heat", "sens", "bat"])]),
     ("E44", [("E44_review3_response.py", ["scope", "dev", "bkv", "clamp", "cfly"])]),
-    ("E45", [("E45_review4_response.py", ["h2", "vmap", "power", "s180", "dstrict", "delay", "p5", "brake", "repro", "fcheck"])]),
+    ("E45", [("E45_review4_response.py", ["h2", "vmap", "power", "s180", "dstrict", "delay", "p5", "brake", "repro", "fcheck"])]),   # fcheck는 E44 cfly를 다시 계산(약 1시간)
 ]
 
 DIAG = [("E33_diag_transient.py", []), ("E37_diag_fs.py", []), ("E38_review_repro.py", [])]
