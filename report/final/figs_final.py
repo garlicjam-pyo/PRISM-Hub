@@ -1,7 +1,7 @@
 """최종 보고서 그림: 2-1 최종 구조 R2(E40 클램프·최대 켜짐 시간, C_A 2.4 mF, W460 설정, 400 V 부하 정지, Stage C 일시 정지),
-9-1 보호 강등 순서(최종: Stage C 일시 정지·이중 고장 400 V 부하 정지), 6-2 최종 손실 비교(E41 공정 비교·민감도, 충전 경로).
+9-1 보호 강등 순서(최종: Stage C 일시 정지·이중 고장 400 V 부하 정지), 6-2 최종 손실 비교(E41 공정 비교·민감도, 충전 경로; E44 소자 조건 정정 값).
 
-입력: 제출 검증 코드 결과(results/E40/p5.json, results/E41/fair.json)
+입력: 제출 검증 코드 결과(results/E40/p5.json, results/E44/fix_e41_fair.json·fix_e43_loss.json)
 실행: python3 figs_final.py  → docs/fig/report/fig2_1_r2_final.png, fig9_1_fault_sequence_final.png, fig6_2_loss_final.png
 """
 import json
@@ -85,10 +85,11 @@ def fig9_1():
 
 
 def fig6_2():
-    d = json.loads((RES / "E41" / "fair.json").read_text(encoding="utf-8"))
+    # (E44) 비교 소자 C3M0016120K의 E_oss 시험 전압을 정정한 연쇄 재계산 결과를 쓴다(재검토 2026-11-06)
+    d = json.loads((RES / "E44" / "fix_e41_fair.json").read_text(encoding="utf-8"))
     cases = d["cases"]; fair = cases["공정 기준(F1)"]["drive_typ"]; old = cases["E38 기준(셰딩 없음)"]["drive_typ"]
     # (E43) 스위칭 × 0.7·× 1.5는 Stage A 출력용량 항에도 배율을 준 값으로 바꾼다(외부 검토 2026-11-05)
-    e43 = json.loads((RES / "E43" / "loss.json").read_text(encoding="utf-8"))["e41"]["cases"]
+    e43 = json.loads((RES / "E44" / "fix_e43_loss.json").read_text(encoding="utf-8"))["e41"]["cases"]
     cases = dict(cases)
     for tag in ("스위칭 × 0.7", "스위칭 × 1.5"):
         cases[tag] = e43[tag]["new"]

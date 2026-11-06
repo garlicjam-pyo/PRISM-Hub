@@ -60,6 +60,9 @@ DEV = {
     # 1200 V SiC MOSFET, Wolfspeed C3M0016120K: 16 mΩ(25 °C)·29 mΩ(175 °C) → 125 °C 선형 보간 24.7 mΩ.
     # E_on + E_off(바디 다이오드 환류) = 2552 + 788 µJ @ 800 V·80 A·175 °C. 90 A @ T_C 100 °C. Q_g 223 nC.
     # E_oss 127 µJ @ 800 V(스위치 1개의 출력용량 에너지, 켜짐 손실의 전류 무관 부분)
+    # 〔정정 2026-11-06, E44〕 데이터시트 Rev. 5에서 E_oss 127 µJ는 V_DS 1000 V 값이다(C_oss 묶음 조건, 그림 16). 저장된 E15–E43
+    # 결과를 재현하도록 이 값(Voss=800)은 그대로 두고, 정정 값(Voss=1000)의 연쇄 재계산은 E44_review3_response.py(DEV_FIX)가 한다.
+    # 보고서의 최종 수치는 E44 값이다. UJ4SC075006K4S의 E_total에는 RC 스너버 손실(약 60 µJ)이 들어 있다(데이터시트 조건).
     "SiC1200": dict(V=1200, Ron=0.0247, I100=90., Eref=3340e-6, Vref=800., Iref=80., Eoss=127e-6, Voss=800.,
                     Qg=223e-9, Vg=19., Vsd=4.4, td=100e-9),
     # 750 V SiC FET, onsemi(UnitedSiC) UJ4SC075006K4S: 9.8 mΩ @125 °C. E_total 829 µJ @ 400 V·80 A·150 °C. 120 A. Q_g 164 nC.
