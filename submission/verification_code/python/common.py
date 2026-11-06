@@ -117,6 +117,44 @@ def Pool(processes=None, initializer=None, initargs=(), **kw):
     return _mp.get_context("fork").Pool(processes, initializer, initargs, **kw)
 
 
+class SerialExecutor:
+    """concurrent.futures.ProcessPoolExecutor와 같은 사용법(map·submit·with)을 같은 프로세스에서 차례로 실행한다."""
+
+    def __init__(self, max_workers=None, *a, **k):
+        pass
+
+    def map(self, fn, *iterables, timeout=None, chunksize=1):
+        return iter([fn(*args) for args in zip(*iterables)])
+
+    def submit(self, fn, *args, **kwargs):
+        from concurrent.futures import Future
+        f = Future()
+        try:
+            f.set_result(fn(*args, **kwargs))
+        except BaseException as e:            # noqa: BLE001  (Future에 그대로 담는다)
+            f.set_exception(e)
+        return f
+
+    def shutdown(self, wait=True, **k):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+
+def Executor(max_workers=None, **kw):
+    """ProcessPoolExecutor 대신 쓴다(2026-11-06). fork 문맥을 명시하거나(같은 부모 설정 상속), fork가 없으면 같은 프로세스에서 차례로 실행한다.
+    spawn·forkserver(Windows·macOS 기본, Python 3.14 이후 Linux 기본)에서는 부모의 설정 교체가 자식에 전해지지 않기 때문이다."""
+    if pool_mode() == "serial":
+        return SerialExecutor(max_workers)
+    from concurrent.futures import ProcessPoolExecutor
+    kw.pop("mp_context", None)
+    return ProcessPoolExecutor(max_workers, mp_context=_mp.get_context("fork"), **kw)
+
+
 # ------------------------------------------------------------------------------------------------------
 # 입력 출처 기록과 엄격 비교(통합 수정안 8절)
 # ------------------------------------------------------------------------------------------------------

@@ -45,7 +45,7 @@
   ③이 손실에서 ④와 같아지는 Stage B 비도통 손실 배율 0.23
 """
 import math
-from concurrent.futures import ProcessPoolExecutor
+from common import Executor as ProcessPoolExecutor  # fork 문맥 또는 같은 프로세스 차례 실행(common.py, 2026-11-06)
 
 import numpy as np
 from scipy.optimize import brentq

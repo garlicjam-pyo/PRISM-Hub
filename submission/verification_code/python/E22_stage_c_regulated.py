@@ -661,7 +661,7 @@ def _td_case_job(a):
 def _run_cases(c, jobs):
     """(L_m, 데드타임, 방향, 출력용량 배율) 묶음을 프로세스 병렬로 계산(결과 순서는 jobs와 같음)."""
     import os
-    from concurrent.futures import ProcessPoolExecutor
+    from common import Executor as ProcessPoolExecutor  # fork 문맥 또는 같은 프로세스 차례 실행(common.py, 2026-11-06)
     with ProcessPoolExecutor(max_workers=max(1, min(4, os.cpu_count() or 1))) as ex:
         return list(ex.map(_td_case_job, [(c,) + tuple(j) for j in jobs], chunksize=2))
 
@@ -963,7 +963,7 @@ def both():
     처음 판(문턱 후보 0.5·1·1.5·2 kW, 창 폭 제한 없음)은 0.5 kW·90 ns였고, 0.6·0.7 kW를 더해 문턱을 올렸다.
     처음 안(dcx 'first_try': 모든 부하에서 두 브리지 구동)은 5 kW에서 2차 ZVS가 깨졌다. 그래서 경부하에만 쓴다."""
     import os
-    from concurrent.futures import ProcessPoolExecutor
+    from common import Executor as ProcessPoolExecutor  # fork 문맥 또는 같은 프로세스 차례 실행(common.py, 2026-11-06)
     c = selected()
     print("  설계: L_m %.1f µH, 1차 데드타임 %.0f ns" % (c["Lm"] * 1e6, c["td_p"] * 1e9))
     jobs = [(c, td, k) for k in (1.,) + ZVS_CTOL for td in BOTH_TDS]

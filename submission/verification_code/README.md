@@ -70,7 +70,7 @@ PRISM-Hub_verification_code/
 │  │  ├─ E42_value_map_fair.py        [E42] 가치 지도 공정 기준 재계산(①의 보조 강압기 셰딩, 칸 판정)
 │  │  ├─ E43_review2_response.py      [E43] 제출 전 외부 검토 대응(측정 사양, 민감도 배율, 클램프 자기 가열, 48 V 배터리)
 │  │  ├─ E44_review3_response.py      [E44] 제출 전 재검토 대응(비교 소자 E_oss 조건 정정 연쇄, 클램프 구현 요구, C_fly 후보, 판정 범위)
-│  │  └─ run_all.py                   전체 실행(E1–E44, 진단은 --diag)
+│  │  └─ run_all.py                   전체 실행(E1–E45, 진단은 --diag)
 ├─ data/datasheets/              부품 데이터시트 표 값(JSON, 출처·열람일 포함. E31·E34·E37–E40이 읽는다)
 ├─ matlab/
 │  ├─ prism_sim_array.m          Stage A 어레이 스위칭 ODE(Python model_stage_a.py와 같은 알고리즘)
@@ -99,7 +99,7 @@ PRISM-Hub_verification_code/
 
 ```bash
 cd python
-python run_all.py                 # E1–E44 전체(2코어 기준 약 29시간. E44 약 3.5시간, E12 약 3시간, E17 약 1.5시간, E28 약 75분, E29 약 60분, E33 약 2시간, E35 약 5시간, E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
+python run_all.py                 # E1–E45 전체(2코어 기준 약 30시간. E45 약 1.5시간, E44 약 3.5시간, E12 약 3시간, E17 약 1.5시간, E28 약 75분, E29 약 60분, E33 약 2시간, E35 약 5시간, E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
 python run_all.py E41 E42         # 일부만(앞 시험의 results/가 있어야 한다, 아래 표)
 python E3_steady_state.py         # 개별 실행 예
 python E5_E7_controller.py grid --design reference   # 제어기 파트·설계 선택
@@ -116,6 +116,15 @@ E11_controller_crosscheck % [E11]  python/E11_controller_crosscheck.py export �
 ```
 
 그다음 `python E2c_compare_matlab.py`, `python E11_controller_crosscheck.py compare`로 두 구현을 대조한다. 병렬 작업 수는 환경변수 `PRISM_WORKERS`로 바꿀 수 있다.
+
+**실행 방식과 운영체제(2026-11-06).** 여러 시험이 부모 프로세스에서 설계값을 바꾼 뒤 작업자를 띄운다(예: E44 F-b의 플랜트 C\_fly 42.75 µF·제어 타이밍 45.0 µF, E35 클램프의 C\_A 2.4 mF, E36의 모듈당 R\_A 9.0 mΩ). Windows·macOS의 기본 `spawn`(그리고 Python 3.14 이후 Linux 기본 `forkserver`)은 자식에서 모듈을 새로 읽으므로 이 변경이 사라져, 이전 코드는 Windows에서 E44 F-b가 46.875 µF·C\_A 0.4 mF로, E35→E34 단일 클램프가 C\_A 0.4 mF(5,078.53 J·349.02 °C)로, E36→E16이 10.2 mΩ(7,038.65 W)로 계산되었다(통합 수정안 7절). 지금은 모든 병렬 실행이 `common.Pool`·`common.Executor`를 거치며, `fork`가 있으면 fork 문맥을 명시하고 없으면 같은 프로세스에서 차례로 실행한다. 클램프 사건은 C\_A를 사건 인수(`_bus`)로, E16 충전기 모델은 모듈당 저항을 객체에 저장해 V\_A 후처리까지 같은 값을 쓴다.
+
+```bash
+PRISM_POOL=serial python E45_review4_response.py repro    # 같은 프로세스 차례 실행(Windows와 같은 경로)
+PRISM_POOL=fork   python E44_review3_response.py cfly     # fork 명시(Linux·macOS 기본)
+```
+
+**저장값 재분류와 새 계산의 구분.** E44 `scope`는 기본으로 저장소의 날짜별 `validation/` 사본과 TB28 저장 파형을 읽어 판정 범위를 다시 정리한다(`"source": "archived"`). 이번 실행의 결과를 쓰려면 `PRISM_SOURCE=fresh python E44_review3_response.py scope`로 실행한다. 이때 `results/E8·E35·E36·E38`을 읽어 `scope_fresh.json`에 쓰고, 입력이 없으면 먼저 실행할 시험 번호를 알려 주고 멈춘다. 두 방식 모두 출력의 `inputs`에 입력 파일마다 경로·종류·SHA-256·바이트 수를 남긴다. 회귀 비교는 `common.strict_diff`(키 집합·배열 길이·문자열·불리언·NaN·유한 수, 수치 허용 10⁻⁶ × max(1, |x|), 실행시간 필드만 제외)를 쓰고, 키 삭제·문자열 변경·NaN 주입이 실패하는지 자체 시험한다(E45 `dstrict`).
 
 **의존과 실행 순서(2026-10-29 정리).** 뒤 시험이 앞 시험의 `results/<근거>/*.json`을 읽는다. `run_all.py`의 순서(번호 순, E19는 E17보다 먼저)를 지키면 의존이 맞는다. `results/`는 저장소에 넣지 않으므로 처음부터 재현하려면 전체를 순서대로 실행한다. 이미 있는 `results/`는 빠진 단계를 가릴 수 있으니, 전체 재현 때는 `results/`를 비우고 시작한다. 모든 입력과 출력은 이 폴더(`data/`, `results/`) 안에 있다. 이전에는 일부 스크립트가 저장소의 `validation/` 사본을 읽거나 썼다. 지금은 E17·E28·E36 정정·E38 재현·E39가 모두 `results/`(앞 시험의 결과) 또는 `data/reference/`(고정 기준)를 읽는다.
 
@@ -135,7 +144,8 @@ E11_controller_crosscheck % [E11]  python/E11_controller_crosscheck.py export �
 | E41 | E36 a25_grid·a25_grid_Rpass_x2, E38 l1_e25_comparison·l2, E22 |
 | E42 | E36 a25_grid, E38 l1_e15_comparison·l1_e18_A25R_value_map, E41 fair, E18 stage_a_grid_ext, E22 |
 | E43 | E41 fair, E42 cases·cells(와 그 앞 시험), E40 p5·switches, E38·E39 클램프 모델, E19·E12 스위칭 설정 |
-| E44 | E38 l1·E41·E42·E43 L의 입력(E36, E38 l2, E25), E40 p5·E43 heat(클램프), E35·E33·E32(Stage A 동특성), validation의 sals_contract·E36·E38 l2·E35·TB28 CSV(범위 재분석) |
+| E44 | E38 l1·E41·E42·E43 L의 입력(E36, E38 l2, E25), E40 p5·E43 heat(클램프), E35·E33·E32(Stage A 동특성), validation의 sals_contract·E36·E38 l2·E35·TB28 CSV(범위 재분석, `PRISM_SOURCE=fresh`이면 results/의 E8·E35·E36·E38) |
+| E45 | validation의 E5–E7·E12·E36(h2), E44 fix_e42_cases·fix_e43_loss(vmap), E38 l2(power), E44 dev 쌍(dstrict), E44 클램프 모델(delay·p5), E29·E17(brake), E44 cfly·E35 clamp·E36 e16(repro·fcheck) |
 
 E22의 `zvs.json`·`both.json`이 없으면 조정형 Stage C를 처음 설계로 계산한다(손실 값이 달라진다). 지금은 이때 경고를 낸다.
 

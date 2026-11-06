@@ -513,23 +513,44 @@ def cfly():
 # (R) 재분석
 # ======================================================================================================
 def scope():
-    """(R) 재분석. 입력은 모두 저장 자료(archived: 날짜별 validation과 TB28 저장 파형)이며, 이번 실행에서 새로 계산한 값이 아니다.
+    """(R) 재분석. 기본 입력은 저장 자료(archived: 날짜별 validation과 TB28 저장 파형)이며, 이번 실행에서 새로 계산한 값이 아니다.
+    PRISM_SOURCE=fresh이면 이번 실행의 results/(E8·E35·E36·E38)를 읽어 scope_fresh.json에 쓴다(TB28 파형은 항상 저장본).
     (2026-11-06 통합 수정안 8절) 입력마다 경로·SHA-256·크기를 기록한다. 새 계산을 검증하려면 해당 시험을 다시 실행해 results/와
     엄격 비교한다(E45 S)."""
+    import os
     from pathlib import Path
-    from common import input_record
+    from common import input_record, RESULTS
     root = Path(__file__).resolve().parents[3]
     val = root / "validation"
-    out = {"source": "archived"}
-    ins = [val / "2026-09-28-requirements" / "sals_contract.json", val / "2026-10-28-a25r-impact" / "E36" / "e16_static.json",
-           val / "2026-10-28-a25r-impact" / "E36" / "e16_concurrent.json", val / "2026-10-29-review-response" / "E38" / "l2.json"]
-    ins += [root / "simulink" / "tb" / "TB28_A25R_Charging_Stop" / "results" / ("TB28_%s_avg1us.csv" % cn)
-            for cn in ("A28_920V_pathloss", "B28_640V_pathloss_ramp", "C28_800V_module_fault")]
-    ins += [val / "2026-10-28-stage-a-25k" / "E35" / ("%s.json" % f) for f in ("transient", "fault", "beyond")]
-    out["inputs"] = [input_record(p, "archived") for p in ins]
+    # (2026-11-06 통합 수정안 8절) 입력 출처 선택: PRISM_SOURCE=archived(기본, 저장소 validation 사본) | fresh(이번 실행의 results/)
+    mode = os.environ.get("PRISM_SOURCE", "archived").strip().lower()
+    if mode not in ("archived", "fresh"):
+        raise SystemExit("PRISM_SOURCE는 archived 또는 fresh여야 한다: %r" % mode)
+    if mode == "archived":
+        src = dict(sals=val / "2026-09-28-requirements" / "sals_contract.json",
+                   st=val / "2026-10-28-a25r-impact" / "E36" / "e16_static.json",
+                   co=val / "2026-10-28-a25r-impact" / "E36" / "e16_concurrent.json",
+                   l2=val / "2026-10-29-review-response" / "E38" / "l2.json",
+                   e35=val / "2026-10-28-stage-a-25k" / "E35")
+    else:
+        src = dict(sals=RESULTS / "E8" / "sals_contract.json", st=RESULTS / "E36" / "e16_static.json",
+                   co=RESULTS / "E36" / "e16_concurrent.json", l2=RESULTS / "E38" / "l2.json", e35=RESULTS / "E35")
+        need = dict(sals="E8", st="E36(e16)", co="E36(e16)", l2="E38(l2)")
+        for k, eid in need.items():
+            if not Path(src[k]).exists():
+                raise SystemExit("fresh 입력 없음: %s — 먼저 python run_all.py %s 를 실행" % (src[k], eid.split("(")[0]))
+        for f in ("transient", "fault", "beyond"):
+            if not (Path(src["e35"]) / ("%s.json" % f)).exists():
+                raise SystemExit("fresh 입력 없음: %s — 먼저 python run_all.py E35 를 실행" % (Path(src["e35"]) / ("%s.json" % f)))
+    out = {"source": mode}
+    ins = [src["sals"], src["st"], src["co"], src["l2"]]
+    ins += [Path(src["e35"]) / ("%s.json" % f) for f in ("transient", "fault", "beyond")]
+    tbins = [root / "simulink" / "tb" / "TB28_A25R_Charging_Stop" / "results" / ("TB28_%s_avg1us.csv" % cn)
+             for cn in ("A28_920V_pathloss", "B28_640V_pathloss_ramp", "C28_800V_module_fault")]
+    out["inputs"] = [input_record(p, mode) for p in ins] + [input_record(p, "archived(Simulink 저장 파형)") for p in tbins]
     # H4
-    s = json.loads((val / "2026-09-28-requirements" / "sals_contract.json").read_text(encoding="utf-8"))["summary"]["sals"]
-    ss = json.loads((val / "2026-09-28-requirements" / "sals_contract.json").read_text(encoding="utf-8"))["summary"]
+    ss = json.loads(Path(src["sals"]).read_text(encoding="utf-8"))["summary"]
+    s = ss["sals"]
     static_unmet = ss.get("static", {}).get("d_unmet_fraction", {}).get("total")
     out["H4"] = dict(noloss=s["grant_latency_ms_noloss"], loss=s["grant_latency_ms_loss"], budget_exceed_ms=s["budget_exceed_ms_total"],
                      peak_kW=s["peak_kW"], unmet_total=s["d_unmet_fraction"]["total"], unmet_static=static_unmet, starts=s["compressor_starts"],
@@ -537,8 +558,8 @@ def scope():
                      ok=bool(s["grant_latency_ms_noloss"]["max"] <= 25 and s["grant_latency_ms_loss"]["p99"] <= 50 and s["budget_exceed_ms_total"] == 0
                              and static_unmet is not None and s["d_unmet_fraction"]["total"] < static_unmet))
     # H1
-    st = json.loads((val / "2026-10-28-a25r-impact" / "E36" / "e16_static.json").read_text(encoding="utf-8"))
-    co = json.loads((val / "2026-10-28-a25r-impact" / "E36" / "e16_concurrent.json").read_text(encoding="utf-8"))
+    st = json.loads(Path(src["st"]).read_text(encoding="utf-8"))
+    co = json.loads(Path(src["co"]).read_text(encoding="utf-8"))
     r = co["rows"]
     mx = lambda rows: max(x["dab_power_peak"] for x in rows) / 1e3
     ins = [x for x in r if 640 <= x["V"] <= 920]
@@ -548,7 +569,7 @@ def scope():
                      transient_all_kW=mx(r), transient_632_kW=mx([x for x in r if x["V"] == 632]),
                      failed=[(x["name"], x["V"], x["info"], x["failed"]) for x in r if not x["pass_"]])
     # 팩별 150 kW
-    l2 = json.loads((val / "2026-10-29-review-response" / "E38" / "l2.json").read_text(encoding="utf-8"))
+    l2 = json.loads(Path(src["l2"]).read_text(encoding="utf-8"))
     out["pack150"] = [dict(pack=x["pack"], P_kW=x["P_kW"], nph=x["nph"], iph=x["iph"], I_A=x["iph"] * x["nph"], loss_W=x["loss_W"])
                       for x in l2["rows"]]
     # 500 V 충전기
@@ -572,14 +593,14 @@ def scope():
         tbo[cn] = d
     out["TB28"] = tbo
     # Stage A 첨두(A25R)
-    e35 = val / "2026-10-28-stage-a-25k" / "E35"
+    e35 = Path(src["e35"])
     pk = {}
     for f in ("transient", "fault", "beyond"):
         rows = json.loads((e35 / ("%s.json" % f)).read_text(encoding="utf-8"))["cases"]
         pk[f] = max(x["phase_peak"] for x in rows)
     pk["per_device"] = {k: v / 2 * 1.1 for k, v in list(pk.items())}
     out["stageA_peak"] = pk
-    save_json(EID, "scope", out)
+    save_json(EID, "scope" if mode == "archived" else "scope_fresh", out)
     print(json.dumps(out, ensure_ascii=False, indent=1, default=float)[:4000])
 
 
