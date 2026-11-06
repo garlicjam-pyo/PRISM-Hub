@@ -1,0 +1,37 @@
+{
+ "E5_formal_n": 516,
+ "E5_transient_max_W": 7155.056692123914,
+ "E5_worst": {
+  "V": 640.0,
+  "set": "tau15us",
+  "p0": 1000,
+  "p1": 25000
+ },
+ "E7_n": 256,
+ "E7_max_W": 7124.39210704181,
+ "E36_formal_n": 516,
+ "E36_transient_max_W": 7044.533694895458,
+ "E44_scope_H1": {
+  "static_charge_all_kW": 6.692963545073312,
+  "static_charge_640_25kW": 6.288699715065892,
+  "static_drive_all_kW": 6.835552414040858,
+  "static_drive_640_25kW": 6.426818444431069,
+  "transient_spec_formal_kW": 7.044533694895458,
+  "transient_spec_all_kW": 7.117807481319683,
+  "transient_all_kW": 7.492897083674649,
+  "transient_632_kW": 7.492897083674649,
+  "failed": [
+   [
+    "delay+3.0us",
+    632.0,
+    {
+     "P0": 1000,
+     "P1": 25000
+    },
+    [
+     "current>93.75A"
+    ]
+   ]
+  ]
+ }
+}

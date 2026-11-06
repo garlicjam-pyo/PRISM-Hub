@@ -1,6 +1,6 @@
 """모든 Python 검증을 근거 번호 순서로 실행한다(E19는 E17보다 먼저. 뒤 시험이 앞 시험의 results/를 읽는다).
 
-  python run_all.py            전체 E1–E45(2코어 기준 약 30시간. E12 약 3시간, E17 약 1.5시간, E33 약 2시간, E35 약 5시간,
+  python run_all.py            전체 E1–E46(2코어 기준 약 30시간. E12 약 3시간, E17 약 1.5시간, E33 약 2시간, E35 약 5시간,
                                E36 약 1시간, E38 약 1.5시간, E39·E40 각 약 2–3시간)
   python run_all.py E3 E4      일부만
   python run_all.py --diag     실행 뒤 진단 스크립트(E33_diag_transient, E37_diag_fs, E38_review_repro)도 실행(판정 아님)
@@ -64,6 +64,8 @@ STEPS = [
     ("E43", [("E43_review2_response.py", ["loss", "heat", "sens", "bat"])]),
     ("E44", [("E44_review3_response.py", ["scope", "dev", "bkv", "clamp", "cfly"])]),
     ("E45", [("E45_review4_response.py", ["h2", "vmap", "power", "s180", "dstrict", "delay", "p5", "brake", "repro", "fcheck"])]),   # fcheck는 E44 cfly를 다시 계산(약 1시간)
+    ("E46", [("E46_review5_response.py", ["power", "h1", "h2s", "h4", "tb25", "e31", "tb15", "prot", "loss", "gate", "cache",
+                                          "vmap2", "c22", "ripple", "ramp", "h2d", "nc", "fig"])]),   # h2d 약 5분(2작업자). ldab는 1차 실행 경과 재현용이라 제외(vmap2가 같은 계산)
 ]
 
 DIAG = [("E33_diag_transient.py", []), ("E37_diag_fs.py", []), ("E38_review_repro.py", [])]

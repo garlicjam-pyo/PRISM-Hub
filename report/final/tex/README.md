@@ -8,7 +8,7 @@
 ./make.sh            # = latexmk -xelatex -interaction=nonstopmode -halt-on-error -outdir=build main.tex
 ```
 
-- 결과는 `build/main.pdf`(2026-11-06 판 114쪽)다. `build/`는 저장소에 올리지 않는다.
+- 결과는 `build/main.pdf`(2026-11-06 판 121쪽)다. `build/`는 저장소에 올리지 않는다.
 - 필요한 것: TeX Live(XeLaTeX, latexmk), `xetexko`(Debian·Ubuntu는 `texlive-lang-korean`), Noto Serif CJK KR·Noto Sans CJK KR·DejaVu Serif 글꼴.
 - 그림은 저장소의 `docs/fig/report/`, `validation/`, `simulink/tb/` 아래 파일을 그대로 읽는다(`preamble.tex`의 `\repo` = `../../..`). 그래서 이 폴더만 따로 떼어 빌드할 수 없고, 저장소 전체가 있어야 한다.
 

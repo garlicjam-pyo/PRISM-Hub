@@ -1,0 +1,18 @@
+{
+ "switch": "FF2MR12KM1P",
+ "therm0": [
+  [
+   65.0,
+   0.1248
+  ]
+ ],
+ "therm1": [
+  [
+   65.0,
+   0.13104
+  ]
+ ],
+ "hash0": "1ddd5439425fbb8f18c467866626f14d4454b1dedb373cba649d78b09df7b212",
+ "hash1": "2b5fc9c0eddb75131ccabff611faa3da1ad9406d12e81a1bff851ba67d0402b6",
+ "changed": true
+}

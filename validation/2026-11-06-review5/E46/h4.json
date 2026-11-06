@@ -1,0 +1,15 @@
+{
+ "compressor_requests_noloss": 235,
+ "compressor_requests_loss": 253,
+ "p_loss_range_pct": [
+  0.027339177678273877,
+  19.868836698491066
+ ],
+ "stored_starts": 488,
+ "never_started": 0,
+ "unmet_sals_pct": 6.956569157555287,
+ "unmet_static_pct": 35.205771883167415,
+ "unmet_basis": "지연 가능 히터 2종(PTC·BH)의 요청 에너지 대비",
+ "budget_exceed_ms": 0,
+ "peak_kW": 23.74571031889905
+}

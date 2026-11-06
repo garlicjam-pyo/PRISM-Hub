@@ -1,0 +1,150 @@
+{
+ "R_A_ohm": 0.00225,
+ "packs": {
+  "180s": {
+   "Vbat": 666.0,
+   "half": 333.0,
+   "P_direct_375A_kW": 125.19140625,
+   "P_star_375A_kW": 124.875,
+   "I_direct_150kW": 449.08774905617423,
+   "phases_direct": 10,
+   "I_star_150kW": 450.45045045045043,
+   "phases_star": 10,
+   "P_525_375A_kW": 125.61328125,
+   "I_525_150kW": 447.2961332972134,
+   "P_555_375A_kW": 125.65546875
+  },
+  "192s": {
+   "Vbat": 710.4000000000001,
+   "half": 355.20000000000005,
+   "P_direct_375A_kW": 133.51640625000002,
+   "P_star_375A_kW": 133.20000000000002,
+   "I_direct_150kW": 421.17364502157926,
+   "phases_direct": 10,
+   "I_star_150kW": 422.29729729729723,
+   "phases_star": 10,
+   "P_525_375A_kW": 133.93828125000002,
+   "I_525_150kW": 419.69383361941124,
+   "P_555_375A_kW": 133.98046875000003
+  },
+  "200s": {
+   "Vbat": 740.0,
+   "half": 370.0,
+   "P_direct_375A_kW": 139.06640625,
+   "P_star_375A_kW": 138.75,
+   "I_direct_150kW": 404.4108559031404,
+   "phases_direct": 10,
+   "I_star_150kW": 405.4054054054054,
+   "phases_star": 10,
+   "P_525_375A_kW": 139.48828125,
+   "I_525_150kW": 403.0998117413912,
+   "P_555_375A_kW": 139.53046875
+  },
+  "216s": {
+   "Vbat": 799.2,
+   "half": 399.6,
+   "P_direct_375A_kW": 150.16640625,
+   "P_star_375A_kW": 149.85,
+   "I_direct_150kW": 374.5853181648803,
+   "phases_direct": 8,
+   "I_star_150kW": 375.37537537537537,
+   "phases_star": 10,
+   "P_525_375A_kW": 150.58828125,
+   "I_525_150kW": 373.54216173767304,
+   "P_555_375A_kW": 150.63046875
+  },
+  "224s": {
+   "Vbat": 828.8000000000001,
+   "half": 414.40000000000003,
+   "P_direct_375A_kW": 155.71640625,
+   "P_star_375A_kW": 155.4,
+   "I_direct_150kW": 361.2605077280351,
+   "phases_direct": 8,
+   "I_star_150kW": 361.96911196911196,
+   "phases_star": 8,
+   "P_525_375A_kW": 156.13828125,
+   "I_525_150kW": 360.3242609593627,
+   "P_555_375A_kW": 156.18046875000002
+  },
+  "240s": {
+   "Vbat": 888.0,
+   "half": 444.0,
+   "P_direct_375A_kW": 166.81640625,
+   "P_star_375A_kW": 166.5,
+   "I_direct_150kW": 337.261425999322,
+   "phases_direct": 8,
+   "I_star_150kW": 337.8378378378378,
+   "phases_star": 8,
+   "P_525_375A_kW": 167.23828125,
+   "I_525_150kW": 336.4989513348854,
+   "P_555_375A_kW": 167.28046875
+  }
+ },
+ "charger_reach_pack_V": {
+  "400.0": 798.3125,
+  "500.0": 998.3125
+ },
+ "cell_V_240s_500V": 4.159635416666666,
+ "max_series_500V_4p2": 237,
+ "direct_range_kW": [
+  125.19140625,
+  166.81640625
+ ],
+ "tb28_before_event": {
+  "A28_920V_pathloss": {
+   "n": 401,
+   "V_A": 460.72339516199725,
+   "V_bus": 460.55888773169005,
+   "I_charger": 375.0,
+   "I_path": 54.40793854939372,
+   "I_stageA_out": -320.5981077031542,
+   "I_clamp": 9.214467719808235e-06,
+   "P_VA_from_charger_kW": 172.771273185749,
+   "P_to_path_kW": 25.06701031624533,
+   "P_to_stageA_kW": 147.70704843885463,
+   "input": {
+    "path": "simulink/tb/TB28_A25R_Charging_Stop/results/TB28_A28_920V_pathloss_avg1us.csv",
+    "kind": "archived(Simulink)",
+    "sha256": "21b42d562a2775fc18bafbec341b9efb91bc6fe87b87eb69027da569d92213be",
+    "bytes": 1148054
+   }
+  },
+  "B28_640V_pathloss_ramp": {
+   "n": 401,
+   "V_A": 320.66937998783555,
+   "V_bus": 320.43366376995743,
+   "I_charger": 375.0,
+   "I_path": 78.17538200625755,
+   "I_stageA_out": -296.8188621182334,
+   "I_clamp": 6.413387471415594e-06,
+   "P_VA_from_charger_kW": 120.25101749543833,
+   "P_to_path_kW": 25.06845138171237,
+   "P_to_stageA_kW": 95.18072038333183,
+   "input": {
+    "path": "simulink/tb/TB28_A25R_Charging_Stop/results/TB28_B28_640V_pathloss_ramp_avg1us.csv",
+    "kind": "archived(Simulink)",
+    "sha256": "a79a6082d9c890ac0866707f0462e4c74facce41035b0eb863b6379263311a94",
+    "bytes": 1175270
+   }
+  },
+  "C28_800V_module_fault": {
+   "n": 401,
+   "V_A": 400.70485998063316,
+   "V_bus": 400.5159223713482,
+   "I_charger": 375.0,
+   "I_path": 62.55763544001781,
+   "I_stageA_out": -312.4434363424629,
+   "I_clamp": 8.014097039152436e-06,
+   "P_VA_from_charger_kW": 150.26432249273745,
+   "P_to_path_kW": 25.067148682006405,
+   "P_to_stageA_kW": 125.19760323136447,
+   "input": {
+    "path": "simulink/tb/TB28_A25R_Charging_Stop/results/TB28_C28_800V_module_fault_avg1us.csv",
+    "kind": "archived(Simulink)",
+    "sha256": "085ae607bac7cb4ffe18faecd2dbaacb3c173d6cb71d29811879de46b531c6e4",
+    "bytes": 729083
+   }
+  }
+ },
+ "N1": true
+}

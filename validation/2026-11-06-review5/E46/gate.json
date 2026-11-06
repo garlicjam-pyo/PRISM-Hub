@@ -1,0 +1,42 @@
+{
+ "cases": [
+  {
+   "case": "정상",
+   "S2": true,
+   "expected": true,
+   "problems": []
+  },
+  {
+   "case": "같은 행 삭제",
+   "S2": false,
+   "expected": false,
+   "problems": [
+    "F-a_45.00uF/transient 행 수 11·11(필수 12)",
+    "비교 행 55(필수 56)"
+   ]
+  },
+  {
+   "case": "제어 주파수 20 kHz",
+   "S2": false,
+   "expected": false,
+   "problems": [
+    "F-b_42.75uF f_control_Hz = 20000.0(등록 25515.627844)"
+   ]
+  },
+  {
+   "case": "첨두 +10 A",
+   "S2": false,
+   "expected": false,
+   "problems": [
+    [
+     "[0]/phase_peak",
+     "숫자 차",
+     "34.73589324951172",
+     "44.73589324951172"
+    ]
+   ]
+  }
+ ],
+ "exit_fail": 1,
+ "exit_pass": 0
+}
