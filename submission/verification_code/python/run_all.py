@@ -64,8 +64,8 @@ STEPS = [
     ("E43", [("E43_review2_response.py", ["loss", "heat", "sens", "bat"])]),
     ("E44", [("E44_review3_response.py", ["scope", "dev", "bkv", "clamp", "cfly"])]),
     ("E45", [("E45_review4_response.py", ["h2", "vmap", "power", "s180", "dstrict", "delay", "p5", "brake", "repro", "fcheck"])]),   # fcheck는 E44 cfly를 다시 계산(약 1시간)
-    ("E46", [("E46_review5_response.py", ["power", "h1", "h2s", "h4", "tb25", "e31", "tb15", "prot", "loss", "gate", "cache",
-                                          "vmap2", "c22", "ripple", "ramp", "h2d", "nc", "fig"])]),   # h2d 약 5분(2작업자). ldab는 1차 실행 경과 재현용이라 제외(vmap2가 같은 계산)
+    ("E46", [("E46_review5_response.py", ["power", "h1", "h1s", "h2s", "h4", "tb25", "e31", "tb15", "prot", "loss", "gate", "cache",
+                                          "vmap2", "c22", "ripple", "ramp", "h2d", "nc", "fig", "stat"])]),   # h2d 약 5분(2작업자). ldab는 1차 실행 경과 재현용이라 제외(vmap2가 같은 계산)
 ]
 
 DIAG = [("E33_diag_transient.py", []), ("E37_diag_fs.py", []), ("E38_review_repro.py", [])]

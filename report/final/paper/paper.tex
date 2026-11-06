@@ -62,7 +62,7 @@
 \textbf{요\ \ 약}\quad 본 연구는 400–500 V 충전기 호환, 400 V급 보조부하와 48 V 전원망을 요구하는 800 V급 차량을 대상으로 한다. 2:1 공진 스위치드 커패시터 변환기(Stage A), 직렬 부분전력 조정기(Stage B), 48 V 변환기(Stage C)로 이루어진 통합 직류 전력 허브 PRISM-Hub를 설계하고 해석·평균모델·스위칭 모델, MATLAB/Simulink 소자 수준 회로 모델 33종, 부품 데이터시트 대조로 검증했다. 단계마다 판정 기준을 시험 전에 정하는 것을 원칙으로 하고 불통과 결과를 보존했다. 400 V 버스의 정밀 조정은 조정단의 경부하 고정 손실 때문에 손실·정격 이점이 없어 가설이 기각되었고, 조정을 48 V 단으로 옮긴 개선 구조 R2를 제안했다. Stage A의 출력용량 손실 모델을 정정한 뒤, 그 결과를 반영해 기존 150 kHz 설계를 25 kHz 설계로 변경했다. 최종 설계에서 기존 방식 대비 이점은 375 A 충전 경로 손실(전용 승압기의 0.32–0.51배)에 한정되며, 보조 경로 손실은 400 V급 보조부품을 쓰는 기존 방식과 같은 수준이다. 보조부하 15·25 kW의 충전 램프와 함께, 배터리 경로 상실은 충전전류가 0이 된 뒤 1 ms까지, 단일 모듈 고장은 고장 뒤 2 ms까지 대표 회로에서 관찰했고, 그동안 400 V 버스는 허용 범위 안에 있었고 48 V가 유지되었다.
 
 \vspace{1.5mm}
-\textbf{ABSTRACT}\quad We study an 800 V vehicle with 400 V-class auxiliaries, a 48 V network, and a requirement for 400–500 V charging compatibility. This work designs PRISM-Hub, an integrated DC power hub built from a 2:1 resonant switched-capacitor converter (Stage A), a series partial-power regulator (Stage B) and a 48 V converter (Stage C), and verifies it with analysis, averaged and switching models, 33 device-level MATLAB/Simulink testbenches and datasheet checks, defining acceptance criteria for each stage before testing as a rule and keeping all failed results. Tight 400 V regulation brought no loss or rating benefit because of the regulator's light-load fixed loss, so an improved architecture (R2) moves regulation to the 48 V stage. We corrected the Stage A output-capacitance loss model and selected a 25 kHz design in place of the original 150 kHz design. In the final design the advantage over conventional architectures is limited to the 375 A charging-path loss, 0.32–0.51 times that of a dedicated boost converter; the auxiliary-path loss is on par with conventional 400 V-component architectures. Battery-path loss was observed until 1 ms after charger current reached zero. A separate circuit simulation followed a single-module fault for 2 ms. In these representative circuit simulations and in charging ramps with 15–25 kW auxiliary load, the 400 V bus stayed within its limits and the 48 V output was maintained.
+\textbf{ABSTRACT}\quad We study an 800 V vehicle with 400 V-class auxiliaries, a 48 V network, and a requirement for 400–500 V charging compatibility. This work designs PRISM-Hub, an integrated DC power hub built from a 2:1 resonant switched-capacitor converter (Stage A), a series partial-power regulator (Stage B) and a 48 V converter (Stage C), and verifies it with analysis, averaged and switching models, 33 device-level MATLAB/Simulink testbenches and datasheet checks, defining acceptance criteria for each stage before testing as a rule and keeping all failed results. Tight 400 V regulation brought no loss or rating benefit because of the regulator's light-load fixed loss, so an improved architecture (R2) moves regulation to the 48 V stage. We corrected the Stage A output-capacitance loss model and selected a 25 kHz design in place of the original 150 kHz design. In the final design the advantage over conventional architectures is limited to the 375 A charging-path loss, 0.32–0.51 times that of a dedicated boost converter; the auxiliary-path loss is on par with conventional 400 V-component architectures. Battery-path loss was observed until 1 ms after charger current reached zero. A separate circuit simulation followed a single-module fault for 2 ms. In these representative circuit simulations and in charging ramps with 15 and 25 kW auxiliary load, the 400 V bus stayed within its limits and the 48 V output was maintained.
 
 \vspace{1.5mm}
 \textbf{주제어}\quad 800 V 전기자동차, 공진 스위치드 커패시터, 부분전력 변환, 충전 호환, 보조전원, 고장 강등
@@ -207,7 +207,7 @@ TB33 & 최종 클램프 + 최대 연속 켜짐 & 경로 상실 2/2, 오동작 �
 \subsection{Stage A 출력용량 손실과 설계 수정}
 초기 손실 모델은 출력용량 손실을 위상당 4·E\textsubscript{oss}·f\textsubscript{s}로 두었다. 그러나 Stage A는 공진전류 영교차에서 끄므로 데드타임에 노드를 옮길 전류가 없고, 다음 스위치가 켜질 때 노드 용량을 하드 스위칭한다. 한 전이의 손실은 Q\textsubscript{oss}(V)·V로\cite{r11}, E\textsubscript{oss}만 세면 SiC MOSFET에서 3.2–4.2배 작다. 정정하면 150 kHz 원설계의 위상당 출력용량 손실은 175 W(이전 모델 14 W)였다. 소자 4종의 병렬 구성 15가지 × 공진주파수 6가지, 90안을 계산한 결과 영전류 게이트 조건에서 150·100 kHz의 30안은 당시 전압·전류 정격, 보조 손실, 충전 손실의 네 동시 기준을 0/30 통과했다(고주파 운전의 불가능을 뜻하지는 않음). 위상당 손실은 그림~\ref{fig:loss}(왼쪽)과 같다. 회로 모델의 무부하 출력용량 손실은 세 설계 모두 이 식과 같았다.
 
-25 kHz 설계(A25)는 정상 손실은 지켰으나 공진이 6배 느려져 충전 과도를 통과하지 못했다(과도 1/7, 느린 충전 0/3). 원인은 관리기 논리가 아니라 V\textsubscript{A} 노드의 시간 척도였고, V\textsubscript{A} 노드 커패시터를 2.4 mF로 키운 A25R이 요구 안의 과도·모듈 고장 판정을 모델(6/6, 16/16)과 회로(4/4)에서 모두 통과했다. 다만 수정안을 고르는 데 쓴 사례(느린 충전 3, 부하 계단 2)가 판정 사례에 들어 있고, 요구 밖 조건(20 kW 순간 계단, 100 µs 충전 램프, 사전 기동 없는 충전)은 불통과다. 800 V 정격 충전점 한 사례의 손실은 회로와 모델이 +3.0 \% 차였다. 대가는 충전 램프 요구가 100 µs에서 600 µs로 늘고 C\textsubscript{A}가 약 2.95 L(필름 커패시터 20개)가 된 것이다. 영전압 스위칭 보조 운전은 시험하지 않았다.
+25 kHz 설계(A25)는 정상 손실은 지켰으나 공진이 6배 느려져 충전 과도를 통과하지 못했다(과도 1/7, 느린 충전 0/3). 원인은 관리기 논리가 아니라 V\textsubscript{A} 노드의 시간 척도였고, V\textsubscript{A} 노드 커패시터를 2.4 mF로 키운 A25R이 요구 안의 과도·모듈 고장 판정을 모델(6/6, 16/16)과 회로(TB27 4/4, 모듈 고장 1사례 포함)에서 모두 통과했다. 다만 수정안을 고르는 데 쓴 사례(느린 충전 3, 부하 계단 2)가 판정 사례에 들어 있고, 요구 밖 조건(20 kW 순간 계단, 100 µs 충전 램프, 사전 기동 없는 충전)은 불통과다. 800 V 정격 충전점 한 사례의 손실은 회로와 모델이 +3.0 \% 차였다. 대가는 충전 램프 요구가 100 µs에서 600 µs로 늘고 C\textsubscript{A}가 약 2.95 L(필름 커패시터 20개)가 된 것이다. 영전압 스위칭 보조 운전은 시험하지 않았다.
 
 \begin{figure*}[t]
 \centering
@@ -313,9 +313,9 @@ C\textsubscript{A} 2.4 mF & B32778Z5127 × 20 & 통과(리플 50.6 A, 정격 690
 
 \section{가설 판정과 한계}
 
-판정은 표~\ref{tab:hyp}\와 같다. 모든 결과는 시뮬레이션과 데이터시트 대조이며 하드웨어 시험은 하지 않았다. 표준은 인용한 판본·방식·시험 항목으로 한정해 설계 입력으로 썼고 인증은 주장하지 않는다. 손실 비교는 같은 규칙의 상대 비교로, 측정된 100 kW급 2:1 하드웨어(전부하 97.4 \%)\cite{r6}와 모델의 차가 크고 그 원인은 분해하지 않았다. 충전 중 보조버스의 결론은 정적 등가와 대표 사례로 한정한다(정적 등가의 보수성은 미증명). 새 인터페이스 요구(Stage C 일시 정지, 400 V 부하 3 ms 정지), 클램프 문턱 구현 요구(4.5절)의 실현과 실제 지연 범위·소자별 공차 조합의 확인, 조건부 부품, 충전기별 실제 램프 응답은 하드웨어 단계에서 확인해야 한다. 고전압 팩(224·240s)의 충전 중 정지는 V\textsubscript{A} 수준 모델로만 확인했다.
+판정은 표~\ref{tab:hyp}\와 같다. 모든 결과는 시뮬레이션과 데이터시트 대조이며 하드웨어 시험은 하지 않았다. 표준은 인용한 판본·방식·시험 항목으로 한정해 설계 입력으로 썼고 인증은 주장하지 않는다. 손실 비교는 같은 규칙의 상대 비교이며, 100 kW급 2:1 실물의 측정(전부하 97.4 \%)\cite{r6}과의 차는 분해하지 않았다. 충전 중 보조버스의 결론은 정적 등가와 대표 사례로 한정한다(정적 등가의 보수성은 미증명). 새 인터페이스 요구(Stage C 일시 정지, 400 V 부하 3 ms 정지), 클램프 문턱 구현 요구(4.5절)의 실현과 실제 지연 범위·소자별 공차 조합의 확인, 조건부 부품, 충전기별 실제 램프 응답은 하드웨어 단계에서 확인해야 한다. 고전압 팩의 충전 중 정지는 V\textsubscript{A} 수준 모델만 있다.
 
-후속 과제는 HIL·축소전력 시제품에서 지연·잡음·열·간섭·누설 자장·손실 확인, Stage C 일시 정지·400 V 부하 정지의 실제 응답과 48 V 배터리 결합 시험, 클램프 문턱 검출기의 지연·오차 예산과 오동작 과도 모의, 센서·게이트 지연 범위를 정한 H2 재검사와 경부하 충전 시작 행렬, 150 kHz 설계나 이상 전원으로 한 시험과 225 kW 확장의 A25R 재확인이다.
+후속 과제는 HIL·축소전력 시제품 확인, Stage C 일시 정지·400 V 부하 정지의 실제 응답과 48 V 배터리 결합 시험, 클램프 검출기의 지연·오차 예산, 지연 범위를 정한 H2 재검사와 경부하 충전 시작 행렬, 이전 설계로 한 시험의 A25R 재확인이다.
 
 \begin{table}[t]
 \centering
@@ -327,9 +327,10 @@ C\textsubscript{A} 2.4 mF & B32778Z5127 × 20 & 통과(리플 50.6 A, 정격 690
 가설 & 판정(근거) \\
 \midrule
 H1 정격 분리 & 충족(Stage B가 있는 구조): 링크 주행 정상 6.44·과도 7.16 kW, 충전 중 정적 6.29·과도 7.04 kW(640–920 V), 충전전류 조정단 비경유 \\
-H2 강건 제어 & 부분 충족(Stage B 모델 범위): Tier-1 공차·지연 포함 통과. 640 V 복합 공차 Tier-2는 평균모델(93.75 A) 102/128, 스위칭(순시 100 A) 128/128, +3 µs 추가 시 114/128 \\
+H2 강건 제어 & 부분 충족(Stage B 모델 범위): Tier-1 공차·지연 포함 통과. 640 V 복합 공차 Tier-2는 평균모델(93.75 A) 102/128, 스위칭(순시 100 A) 128/128 \\
+H2 추가 시험 & 같은 조합 + 지연 3 µs: 스위칭 114/128(부분 충족에 포함) \\
 H3 충전 중 보조버스 & 충족(조건: 사전 기동, 램프 ≥ 600 µs(보조 15·25 kW에서 확인); 충전기 입력 한계 + 보조 25 kW) \\
-H4 부하 승인 & 충족(축약 모델): 예산 초과 0 ms, 승인 지연 무손실 최대 17 ms·손실 조건 99백분위 25.44 ms, 미공급 6.96 \% 대 정적 예약 35.21 \%(압축기 승인 235·253건) \\
+H4 부하 승인 & 충족(축약 모델): 예산 초과 0 ms, 승인 지연 무손실 최대 17 ms·손실 99백분위 25.44 ms, 미공급 6.96 \% 대 정적 예약 35.21 \%(압축기 승인 235·253건) \\
 H5 기준 구조 대비 이점 & 기각: ③ 144.5 W 대 ④ 101.5 W \\
 \bottomrule
 \end{tabular}
@@ -337,7 +338,7 @@ H5 기준 구조 대비 이점 & 기각: ③ 144.5 W 대 ④ 101.5 W \\
 
 \section{결론}
 
-PRISM-Hub를 설계하고 시뮬레이션과 데이터시트 대조로 검증했다. Q1(정격 분리)은 긍정적이다. Q2(강건 제어와 부하 관리)는 부분적으로 긍정적이다. Tier-1과 스위칭 모델의 순시 정격은 지켰으나 640 V 복합 공차 Tier-2는 평균모델 기준 102/128, 여기에 +3 µs를 준 스위칭 모델은 114/128이고(H2 부분 충족), 새 인터페이스 요구의 실제 응답 확인이 조건이다. Q3은 처음 구조에 부정적(H5 기각), R2에 제한적이다. R2의 이점은 375 A 충전 경로 손실뿐이다(전용 승압기의 0.32–0.51배, 모터 승압 기준점의 약 절반, 상저항 격자 최소와 같은 수준). 보조 경로 손실은 400 V급 보조부품을 쓰는 기존 방식과 같은 수준이고 800 V급 부품 설계보다 4–33 W 크며, 전력변환 스위치 위치는 더 많다(42 대 12–24). 충전 대전류는 조정단을 지나지 않고, 대표 회로(충전전류 0 뒤 1 ms, 모듈 고장 뒤 2 ms 관찰)에서 400 V 버스와 48 V가 유지되었다. 따라서 R2는 400 V급 보조부품을 그대로 쓰는 차량에서 충전 손실을 줄이는 선택지이며, V\textsubscript{A}가 부품 상한을 넘는 팩에서는 창 조정 모듈이 성립 수단이 된다. 모든 결과는 조건과 한계를 둔 시뮬레이션 기반 설계 연구의 범위에서 유효하다.
+PRISM-Hub를 설계하고 시뮬레이션과 데이터시트 대조로 검증했다. Q1은 긍정적, Q2는 부분적으로 긍정적이다. Tier-1과 추가 지연 없는 스위칭 모델의 순시 정격은 지켰으나 640 V 복합 공차 Tier-2는 평균모델 기준 102/128, 여기에 +3 µs를 준 스위칭 모델은 114/128이고(H2 부분 충족), 새 인터페이스 요구의 실제 응답 확인이 조건이다. Q3은 처음 구조에 부정적(H5 기각), R2에 제한적이다. R2의 이점은 375 A 충전 경로 손실뿐이다(전용 승압기의 0.32–0.51배, 모터 승압 기준점의 약 절반, 상저항 격자 최소와 같은 수준). 보조 경로 손실은 400 V급 보조부품을 쓰는 기존 방식과 같은 수준이고 800 V급 부품 설계보다 4–33 W 크며, 전력변환 스위치 위치는 더 많다(42 대 12–24). 충전 대전류는 조정단을 지나지 않고, 대표 회로(충전전류 0 뒤 1 ms, 모듈 고장 뒤 2 ms 관찰)에서 400 V 버스와 48 V가 유지되었다. 따라서 R2는 400 V급 보조부품을 그대로 쓰는 차량에서 충전 손실을 줄이는 선택지이며, V\textsubscript{A}가 부품 상한을 넘는 팩에서는 창 조정 모듈이 성립 수단이 된다. 모든 결과는 조건과 한계를 둔 시뮬레이션 기반 설계 연구의 범위에서 유효하다.
 
 \begingroup
 \footnotesize
