@@ -29,7 +29,7 @@
 R2는 기능별로 블록을 다시 나눈다(그림 \ref{f:r2}, 표 \ref{t:r2}). 핵심은 조정단이 필요한 팩에만, 필요한 구간에서만 동작하게 하는 것이다.
 
 \begin{itemize}
-\item \textbf{기본형(모든 팩).} Stage A + 버스 RC 감쇠기 + 조정형 Stage C. 400 V 버스는 V\textsubscript{A}를 그대로 따른다. 충전기는 V\textsubscript{A} 노드에 붙는다(H1·H3 결과 그대로).
+\item \textbf{기본형(모든 팩).} Stage A + 버스 RC 감쇠기 + 조정형 Stage C. 400 V 버스는 V\textsubscript{A}를 그대로 따른다. 충전기는 V\textsubscript{A} 노드에 직결되며, 충전기 직결 단자 전압은 V\textsubscript{A}다(H1·H3 결과 그대로).
 \item \textbf{선택 모듈 R2-W.} V\textsubscript{A}가 부품 등급 상한을 넘는 팩에만 둔다. 창 기준 V\textsubscript{W} 아래에서는 바이패스 스위치가 직렬 포트를 단락하고 Stage B는 정지한다(고정 손실 0). V\textsubscript{A} > V\textsubscript{W}에서만 Stage B가 버스를 V\textsubscript{W}로 깎는다.
 \item \textbf{고장 시 우회.} Stage B 고장에서는 바이패스로 우회해 Stage A를 멈추지 않고 Stage C를 통한 48 V 공급을 잇는다(9장, 10.3절). 다만 H-브리지 고장 강등의 링크 붕괴·소프트 투입 동안에는 Stage C가 최대 12.4 ms 멈추고 48 V는 48 V 배터리가 맡는다(10.4절, E43).
 \item \textbf{충전 중 정지 보호.} 충전기는 V\textsubscript{A} 노드에 붙으므로, 충전 중 Stage A가 멈추면 V\textsubscript{A} 클램프가 충전기 전류를 받는 동안 충전기를 멈춘다(2.6절, 12장).
@@ -75,7 +75,7 @@ Stage C & 고정이득 CLLC 3 kW(입력 400±8 V) & 조정형 5 kW: 동기 벅(1
 \item \textbf{바이패스 스위치.} 150 V GaN 2병렬 × 역직렬(3.3 mΩ). 창 조정이 필요 없는 구간과 고장 시 직렬 포트를 단락한다.
 \end{itemize}
 
-모드 논리는 표 \ref{t:modes}와 같다. ±5 V 히스테리시스 안에서는 어느 모드든 버스가 V\textsubscript{W} + 5 V를 넘지 않는다.
+모드 논리는 표 \ref{t:modes}와 같다. ±5 V는 반전압 V\textsubscript{bat}/2에 쓰는 전환 기준이며 부하 단자의 보장 상한이 아니다. 바이패스 모드의 부하 버스는 V\textsubscript{A}에서 경로·바이패스 강하를 뺀 값이라 회생 중에는 반전압보다 조금 높을 수 있다(회생 −3.2 kW, 반전압 414.99·464.99 V에서 버스 415.12·465.10 V). 두 경우 모두 해당 부품 상한 420·470 V 안이다. 이 히스테리시스 때문에 같은 반전압에서도 이전 모드에 따라 창 조정 여부가 달라지며, 가치 지도의 손실은 +0.5 V 단일 경계로 계산했다(7장).
 
 {\footnotesize
 \begin{longtable}{L{\dimexpr 0.1930\linewidth-2\tabcolsep\relax}L{\dimexpr 0.2982\linewidth-2\tabcolsep\relax}L{\dimexpr 0.5088\linewidth-2\tabcolsep\relax}}

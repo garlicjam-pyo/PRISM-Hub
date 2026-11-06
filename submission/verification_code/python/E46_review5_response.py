@@ -38,6 +38,10 @@ TB25·E31 분모, Stage C 최종 손실과 CV 경계, 보호 분기·부품 한�
       운전점의 성립 변화 수(변화가 있으면 가치 지도 성립 판정을 다시 해야 한다).
  (loss) 저장 자료 계산: ④−⑤ 부하별 차, 0.5 kW 운전시간을 23 kW로 옮길 때 순위가 바뀌는 비율, 총손실 교점(보조 손실 차 /
       충전 에너지당 손실 차; 모터 기준점·상저항 ≥ 5 mΩ 격자 최소; 640·800·920 V, 375 A 고정).
+ (nc) [추가 등록, 실행 전] E15 dab_loss·hbridge_loss의 stageB_nc 배율 대상(비도통 손실 항 전체)을 배율 1과 0의 차로 계산:
+      8 kW DAB의 링크 0·1·3 kW, H-브리지 직렬전압 20 V에서 경로전류 0·25·60 A. 저장 E44 breakeven 배율(0.31977)도 적는다(판정 없음).
+ (vmap2 c 정정) [실행 경과, 1차 실행 뒤] 1차 실행은 창 정격을 W410 5 kW·W460 4 kW로 고정하고 사양 팩을 빠뜨렸다(141점). E18
+      window_rating_W의 팩별 정격과 사양 팩(640–920 V 25점)을 넣어 다시 센다(판정 기준은 같음: 변화 수를 보고).
  (ripple) 새 계산: E43 S1 최대 리플 사례를 같은 작업 번호·시드로 다시 계산해 주기평균 열의 마지막 1 ms 폭(원 정의), 같은 구간
       순시 최대−최소, 단일 PWM 주기 최대 폭을 적는다. 재현(gate): 원 정의 값이 저장값과 상대 1e-6.
  (gate) 검증기 오류 주입(E45 fcheck_judge, 복사본에만 적용): 정상 → 통과, 같은 행을 두 파일에서 삭제 → 실패, F-b 제어 주파수만
@@ -489,18 +493,33 @@ def vmap2():
     verdict("(vmap2 b0) 등록 경계(+0.5 V)로 다시 계산한 창 손실이 저장값과 같음", reg_ok, gate=True)
     changed = {d: {k: v for k, v in res[d]["cells"].items() if v != res["registered"]["cells"][k]} for d in ("ascending", "descending")}
     # (c) 누설 L 정정 전후 정적 포트 성립
+    cnt = _ldab_points()
+    out = dict(cells_v2=v2, same_as_E45=same, zero_records=zeros, path=res, changed_cells=changed, ldab=cnt,
+               Ldab_uH={k: 11.1 * (v / 400.) ** 2 for k, v in window.WINDOW.items()})
+    save_json(EID, "vmap2", out)
+    for d in ("registered", "ascending", "descending"):
+        print("  %s: %s" % (d, {k: (v["active"], v["n"], round(v["W"], 2)) for k, v in res[d]["window"].items()}))
+    print("  바뀐 칸:", json.dumps(changed, ensure_ascii=False))
+    print("  누설 L 정정: 활성 정적점 %d개 중 성립 변화 %d개" % (cnt["points"], cnt["changed"]))
+
+
+def _ldab_points():
+    """E18 정적 포트 성립성: 누설 L 11.1 µH(이전) 대 11.1·(V_W/400)² µH. 팩별 창 정격은 E18 window_rating_W, 사양 팩 포함."""
+    import E18_industry_value_map as window
+    import E15_baseline_loss_rating as base
     from controller_reference import NOMINAL
     from model_stage_b import steady_feasible
-    cnt = dict(points=0, changed=0, examples=[])
-    for s_ in sorted(window.PACKS) if hasattr(window, "PACKS") else (180, 192, 200, 216, 224, 240):
-        try:
-            pk = window.pack(int(s_))
-        except Exception:
-            continue
+    cnt = dict(points=0, changed=0, examples=[], by=[])
+    packs = {str(n): window.pack(n) for n in window.CELLS}
+    packs["spec"] = dict(full=np.linspace(640., 920., 25))
+    for k, pk in packs.items():
         for mode, VW in window.WINDOW.items():
-            Pr = 5000. if mode == "W410" else 4000.
+            _, Pr = window.window_rating_W(pk, VW)
+            if not Pr:
+                continue
             p_old = replace(NOMINAL, vref=VW, turns=VW / NOMINAL.vlink, power_max=Pr)
             p_new = replace(p_old, Ldab=NOMINAL.Ldab * (VW / 400.) ** 2)
+            n0 = cnt["points"]
             for V in pk["full"]:
                 if not V / 2 > VW + 0.5:
                     continue
@@ -508,14 +527,39 @@ def vmap2():
                     a = steady_feasible(V, P, p_old, control_reserve=False); b = steady_feasible(V, P, p_new, control_reserve=False)
                     cnt["points"] += 1
                     if bool(a) != bool(b):
-                        cnt["changed"] += 1; cnt["examples"].append([s_, mode, V, P, bool(a), bool(b)])
-    out = dict(cells_v2=v2, same_as_E45=same, zero_records=zeros, path=res, changed_cells=changed, ldab=cnt,
-               Ldab_uH={k: NOMINAL.Ldab * (v / 400.) ** 2 * 1e6 for k, v in window.WINDOW.items()})
-    save_json(EID, "vmap2", out)
-    for d in ("registered", "ascending", "descending"):
-        print("  %s: %s" % (d, {k: (v["active"], v["n"], round(v["W"], 2)) for k, v in res[d]["window"].items()}))
-    print("  바뀐 칸:", json.dumps(changed, ensure_ascii=False))
-    print("  누설 L 정정: 활성 정적점 %d개 중 성립 변화 %d개" % (cnt["points"], cnt["changed"]))
+                        cnt["changed"] += 1; cnt["examples"].append([k, mode, float(V), P, bool(a), bool(b)])
+            cnt["by"].append([k, mode, Pr, cnt["points"] - n0])
+    return cnt
+
+
+def ldab():
+    """vmap2 (c)만 다시(실행 경과: 1차 실행의 점 집합 정정)."""
+    cnt = _ldab_points()
+    v = load_json(EID, "vmap2")
+    v["ldab_run1"] = v.get("ldab"); v["ldab"] = cnt
+    save_json(EID, "vmap2", v)
+    print("  누설 L 정정: 활성 정적점 %d개 중 성립 변화 %d개, %s" % (cnt["points"], cnt["changed"], cnt["by"]))
+
+
+def nc():
+    import E15_baseline_loss_rating as base
+    k0 = base.K["stageB_nc"]
+    out = dict(dab={}, hbridge={})
+    try:
+        for Pl in (0., 1000., 3000.):
+            base.K["stageB_nc"] = 1.; a = base.dab_loss(Pl, 8000.)
+            base.K["stageB_nc"] = 0.; b = base.dab_loss(Pl, 8000.)
+            out["dab"][str(Pl)] = dict(total=a, cond=b, nc=a - b)
+        for ih in (0., 25., 60.):
+            base.K["stageB_nc"] = 1.; a = base.hbridge_loss(20., ih)
+            base.K["stageB_nc"] = 0.; b = base.hbridge_loss(20., ih)
+            out["hbridge"][str(ih)] = dict(total=a, cond=b, nc=a - b)
+    finally:
+        base.K["stageB_nc"] = k0
+    out["breakeven"] = load_json("E44", "fix_l1_e15_comparison").get("breakeven")
+    save_json(EID, "nc", out)
+    print("  DAB 8 kW 비도통 항:", {k: round(v["nc"], 4) for k, v in out["dab"].items()}, " H-브리지 20 V:", {k: round(v["nc"], 4) for k, v in out["hbridge"].items()})
+    print("  저장 배율:", out["breakeven"])
 
 
 # ======================================================================================================
@@ -633,7 +677,7 @@ def cache():
 
 
 PARTS = dict(power=power, h1=h1, h2d=h2d, h2s=h2s, h4=h4, ramp=ramp, tb25=tb25, e31=e31, c22=c22, tb15=tb15, prot=prot, vmap2=vmap2,
-             loss=loss, ripple=ripple, gate=gate, cache=cache)
+             loss=loss, ripple=ripple, gate=gate, cache=cache, nc=nc, ldab=ldab)
 
 if __name__ == "__main__":
     want = sys.argv[1:] or list(PARTS)
