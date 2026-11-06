@@ -126,6 +126,7 @@ def judge_cells_v2(cases, classes=("B_420", "B_470")):
                 margins[t] = (Lt[st] - Lt[b]) / Lt[st]
                 for s in feas:
                     if s == bt:
+                        rel[s] = min(rel.get(s, 9.), 0.)      # (2026-11-06 E46) 그 경우의 최소이면 0을 기록(이전에는 건너뜀)
                         continue
                     r = (Lt[s] - Lt[bt]) / Lt[s]
                     rel[s] = min(rel.get(s, 9.), r)
@@ -362,7 +363,20 @@ def _rel(a, b):
 
 
 def repro():
+    """(2026-11-06 E46 정정) 1차 실행은 PRISM_POOL=serial을 되돌리지 않아, 같은 프로세스에서 이어 실행한 fcheck도 같은 프로세스 차례
+    실행이었다. 이제 끝에서 원래 값으로 되돌린다."""
+    prev = os.environ.get("PRISM_POOL")
     os.environ["PRISM_POOL"] = "serial"
+    try:
+        _repro()
+    finally:
+        if prev is None:
+            os.environ.pop("PRISM_POOL", None)
+        else:
+            os.environ["PRISM_POOL"] = prev
+
+
+def _repro():
     import model_stage_a as A
     import E35_a25r_verify as E35
     import E33_stage_a_25k_dynamics as E33
@@ -411,7 +425,7 @@ def repro():
         print("  %-34s 새 %.6f / 저장 %.6f (상대 차 %.1e)" % (c["name"], float(c["new"]), float(c["stored"]), c["rel"]), flush=True)
     ok = all(c["rel"] <= 1e-6 for c in checks)
     save_json(EID, "repro", dict(pool="serial", checks=checks, S1=ok))
-    verdict("(repro S1) 같은 프로세스 차례 실행에서 대표 사례가 저장 결과와 같음", ok, "%d개" % len(checks))
+    verdict("(repro S1) 같은 프로세스 차례 실행에서 대표 사례가 저장 결과와 같음", ok, "%d개" % len(checks), gate=True)
 
 
 # ======================================================================================================
@@ -423,8 +437,45 @@ def fcheck():
     captured = {}
     E44.save_json = lambda eid, name, obj: captured.__setitem__(name, obj)
     E44.cfly()
-    save_json(EID, "cfly_refactor", captured["cfly"])
+    new = dict(captured["cfly"])
+    new["_meta"] = dict(compute_pool=common.pool_mode(), workers=common.workers())     # (E46) 물리 계산의 실행 방식
+    save_json(EID, "cfly_refactor", new)
     _fcheck_compare(first_run=True)
+
+
+# (2026-11-06 E46, 두 번째 통합 검토 V02) S2 필수 조건. 엄격 비교만으로는 두 파일에서 같은 행을 지우거나(55행), 비교 대상이 아닌
+# 설정(제어 주파수)을 바꿔도 통과했다. 사례 이름 56개 전부·각 사례의 설계/플랜트 주파수를 등록값과 따로 확인한다.
+FCHECK_TAGS = ("F-a_45.00uF", "F-b_42.75uF")
+FCHECK_N = dict(transient=12, fault=16)                  # 사례당 행 수(요구 안 과도 6사례 × 표본 2, 고장 8사례 × 표본 2)
+FCHECK_F_HZ = {"F-a_45.00uF": (25515.627843745686, 25515.627843745686), "F-b_42.75uF": (25515.627843745686, 26178.481807544278)}
+
+
+def fcheck_judge(old, new):
+    """old·new(JSON에서 읽은 E44 cfly 형식)를 비교해 (ok, 상세)를 돌려준다. 파일 경로와 무관한 순수 함수(E46 gate가 오류 주입에 쓴다)."""
+    diffs, problems, n_rows = {}, [], 0
+    for tag in FCHECK_TAGS:
+        if tag not in old or tag not in new:
+            problems.append("사례 묶음 없음: %s" % tag); continue
+        for part, n in FCHECK_N.items():
+            o, w = old[tag].get(part, []), new[tag].get(part, [])
+            keys_o = sorted((x.get("case"), str(x.get("seed"))) for x in o)
+            keys_w = sorted((x.get("case"), str(x.get("seed"))) for x in w)
+            if len(o) != n or len(w) != n:
+                problems.append("%s/%s 행 수 %d·%d(필수 %d)" % (tag, part, len(o), len(w), n))
+            if keys_o != keys_w:
+                problems.append("%s/%s 사례·표본 이름 불일치" % (tag, part))
+            n_rows += min(len(o), len(w))
+            d = strict_diff(o, w)
+            diffs["%s/%s" % (tag, part)] = dict(n=len(d), first=[list(map(str, x)) for x in d[:5]])
+        fc, fp = FCHECK_F_HZ[tag]
+        for k, ref in (("f_control_Hz", fc), ("f_plant_Hz", fp)):
+            v = new[tag].get(k)
+            if v is None or abs(float(v) - ref) > 1e-9 * ref:
+                problems.append("%s %s = %s(등록 %.6f)" % (tag, k, v, ref))
+    if n_rows != 56:
+        problems.append("비교 행 %d(필수 56)" % n_rows)
+    ok = not problems and all(v["n"] == 0 for v in diffs.values())
+    return ok, dict(rows=n_rows, diffs=diffs, problems=problems)
 
 
 def _fcheck_compare(first_run=False):
@@ -432,18 +483,15 @@ def _fcheck_compare(first_run=False):
     형 차이만으로 실패했다. 판정 기준(엄격 비교 차 0)은 그대로 두고, 저장 결과와 같은 경로(save_json → load_json)로 읽은 새 결과를 비교한다."""
     import common
     new = load_json(EID, "cfly_refactor"); old = load_json("E44", "cfly")
-    diffs = {}
-    n_rows = 0
-    for tag in old:
-        for part in ("transient", "fault"):
-            n_rows += len(old[tag][part])
-            d = strict_diff(old[tag][part], new[tag][part])
-            diffs["%s/%s" % (tag, part)] = dict(n=len(d), first=[list(map(str, x)) for x in d[:5]])
-    ok = all(v["n"] == 0 for v in diffs.values())
-    save_json(EID, "fcheck", dict(rows=n_rows, diffs=diffs, S2=ok, pool=common.pool_mode(), compared="save_json → load_json 경로(직렬화 뒤)",
+    ok, det = fcheck_judge(old, new)
+    meta = new.get("_meta", {})
+    save_json(EID, "fcheck", dict(rows=det["rows"], diffs=det["diffs"], problems=det["problems"], S2=ok,
+                                  compute_pool=meta.get("compute_pool", "기록 없음(1차 실행은 repro가 PRISM_POOL=serial을 되돌리지 않아 같은 프로세스 차례 실행)"),
+                                  judge_pool=common.pool_mode(), compared="save_json → load_json 경로(직렬화 뒤)",
                                   first_run_failed_on_serialization=not first_run,
-                                  f_Hz={t: [new[t]["f_control_Hz"], new[t]["f_plant_Hz"]] for t in new}))
-    verdict("(fcheck S2) 고친 E44 cfly가 저장 결과 %d행과 같음" % n_rows, ok, json.dumps({k: v["n"] for k, v in diffs.items()}, ensure_ascii=False))
+                                  f_Hz={t: [new[t]["f_control_Hz"], new[t]["f_plant_Hz"]] for t in FCHECK_TAGS if t in new}))
+    verdict("(fcheck S2) 고친 E44 cfly가 저장 결과 %d행과 같음(필수 56행·사례 이름·설계/플랜트 주파수 포함)" % det["rows"], ok,
+            json.dumps(dict({k: v["n"] for k, v in det["diffs"].items()}, problems=det["problems"]), ensure_ascii=False), gate=True)
 
 
 def fcheck_rejudge():
@@ -462,3 +510,5 @@ if __name__ == "__main__":
     for w in want:
         print("\n==== E45 %s ====" % w, flush=True)
         PARTS[w]()
+    import common as _c
+    sys.exit(_c.exit_status())

@@ -324,10 +324,19 @@ def _clamp_config_hash(part, P):
     from pathlib import Path
     from common import sha256_file
     here = Path(__file__).resolve().parent
-    blob = dict(code={f: sha256_file(here / f) for f in ("E44_review3_response.py", "E26_charging_stop.py", "E39_clamp_switch_rejudge.py",
-                                                       "E40_typ_rule_rejudge.py")},
+    # (2026-11-06 E46, 두 번째 통합 검토 V03) 열 판정 식(E38 thermal)·선택 소자의 전체 파라미터(열저항 포함)·전압 강하 표·
+    # 소자 자료·자기 가열 입력(E43 heat)까지 넣는다. 이전 키는 열저항만 바꾸면 같은 키로 이전 단계를 이어 썼다.
+    import E34_parts_rating as E34
+    from common import RESULTS
+    code = ("E44_review3_response.py", "E26_charging_stop.py", "E39_clamp_switch_rejudge.py", "E40_typ_rule_rejudge.py",
+            "E38_review_response.py", "E34_parts_rating.py", "common.py")
+    data = sorted(p for p in (here.parent / "data").rglob("*") if p.is_file()) if (here.parent / "data").exists() else []
+    blob = dict(code={f: sha256_file(here / f) for f in code},
+                data={str(p.relative_to(here.parent)): sha256_file(p) for p in data},
+                heat=sha256_file(RESULTS / "E43" / "heat.json") if (RESULTS / "E43" / "heat.json").exists() else None,
+                sw=P["sw"], vd=P["vd"],
                 events=P["evf"](), cfg=P["cfg"], sel=P["sel"], eps=EPS_K1[part], H=H_K2, H_up=H_UP, eps_low=EPS_LOW, H0=H0,
-                passive=PASSIVE, DT=E26.DT, delay=E26.CL_DEFAULT["delay"], E0=[P["Eh"], P["El"]])
+                passive=PASSIVE, DT=E26.DT, delay=E26.CL_DEFAULT["delay"], E0=[P["Eh"], P["El"]], T_case=getattr(E34, "T_C_SEMI", None))
     return hashlib.sha256(json.dumps(blob, sort_keys=True, default=str).encode()).hexdigest()
 
 

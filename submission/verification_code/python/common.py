@@ -47,10 +47,24 @@ def load_json(eid, name):
     return json.loads((RESULTS / eid / f"{name}.json").read_text(encoding="utf-8"))
 
 
-def verdict(label, ok, detail=""):
-    """판정 결과를 한 줄로 출력한다."""
+GATE_FAILS = []          # (2026-11-06 두 번째 통합 검토 V02) 필수 판정(gate=True)의 실패 목록. 실행 끝에 exit_status()로 비정상 종료
+
+
+def verdict(label, ok, detail="", gate=False):
+    """판정 결과를 한 줄로 출력한다. gate=True는 저장 결과 재현·검증기처럼 반드시 맞아야 하는 판정이며,
+    실패하면 GATE_FAILS에 남겨 실행 끝에 종료 코드 1을 돌려준다(설계 판정의 '불통과' 결과와 구별)."""
     print(f"  [{'통과' if ok else '실패'}] {label}" + (f"  ({detail})" if detail else ""))
+    if gate and not ok:
+        GATE_FAILS.append(label)
     return bool(ok)
+
+
+def exit_status():
+    """필수 판정이 하나라도 실패했으면 1, 아니면 0."""
+    if GATE_FAILS:
+        print("\n필수 판정 실패 %d건: %s" % (len(GATE_FAILS), "; ".join(GATE_FAILS)))
+        return 1
+    return 0
 
 
 def workers():

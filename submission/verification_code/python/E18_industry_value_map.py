@@ -243,7 +243,9 @@ def feasibility(s, pk, cls, Pr=None):
         VW = WINDOW[s]
         if VW > upper - W_MARGIN:
             reasons.append("V_W %.0f V > 상한 − %.0f V" % (VW, W_MARGIN))
-        p = replace(NOMINAL, vref=VW, turns=VW / NOMINAL.vlink, power_max=Pr or NOMINAL.power_max)
+        # (2026-11-06 E46, 두 번째 통합 검토) 정적 포트 성립성도 E19.plant와 같이 누설 L을 (V_W/400)²로 바꾼다(W410 11.662 µH,
+        # W460 14.680 µH). 이전에는 11.1 µH로 두었다. 168개 활성 점의 성립 판정 변화는 E46 vmap2(c)에서 확인한다.
+        p = replace(NOMINAL, vref=VW, turns=VW / NOMINAL.vlink, Ldab=NOMINAL.Ldab * (VW / 400.) ** 2, power_max=Pr or NOMINAL.power_max)
         bad = []
         for V in pk["full"]:
             for P in P_STATIC:
