@@ -1,0 +1,73 @@
+% PRISM-Hub 졸업작품 상세보고서 - Springer sn-jnl 클래스 기반.
+% Springer Nature sn-jnl.cls(2024년 12월 배포본)를 그대로 쓴다.
+% 졸업작품 보고서 저자 표시: 저자 2명(학번 병기), 같은 소속,
+%   교신저자 지정 없음.
+% - 한국어 조판에 xetexko와 Noto CJK 글꼴이 필요함,
+% - 장별 파일을 \input으로 읽음(투고 시스템이 단일 .tex를 요구하면 병합 필요).
+% float를 클래스(hyperref 포함)보다 먼저 읽어 그림 링크 대상이 두 번 만들어지지 않게 한다.
+\RequirePackage{float}
+\documentclass[sn-mathphys-num]{sn-jnl}
+\makeatletter\providecommand{\headerps@out}[1]{}\makeatother
+\input{prism_sn_compat}
+
+\begin{document}
+
+\title[PRISM-Hub]{800 V급 전기자동차용 통합 직류 전력 허브 PRISM-Hub의 설계 및 검증}
+% ===== 저자·소속(졸업작품 최종보고서) =====
+% 교신저자를 지정하지 않으므로 \author*·\affil*·\email을 쓰지 않는다
+% (별표와 'Corresponding author(s). E-mail(s):' 줄이 첫 쪽에 생기지 않음).
+% 소속이 하나뿐이라 소속 번호(위첨자)는 붙이지 않는다.
+% 저자 사이 구분을 클래스 기본값 'and' 대신 쉼표로 한다.
+\makeatletter\def\au@and{\unskip,}\makeatother
+\author{\fnm{조형준}~(2020073063)}
+\author{\fnm{이아윤}~(2023039798)}
+\affil{\orgname{한양대학교} \orgdiv{전기공학부}}
+\hypersetup{pdftitle={800 V급 전기자동차용 통합 직류 전력 허브 PRISM-Hub의 설계 및 검증},pdfauthor={조형준, 이아윤}}
+
+\abstract{PRISM-Hub는 800 V급 전기자동차의 충전 경로, 400 V급 보조버스 및 48 V 전원망을 통합하는 직류 전력 허브이다. 초기 구조의 전 범위 직렬 조정단은 경부하 고정 손실로 인해 기대한 성능 이점을 얻지 못하였다. 이에 조정단을 필요한 배터리 조건에서만 사용하는 개선 구조 R2를 도출하고, Stage A의 공진주파수와 출력 커패시터를 재설계하였다. 최종 A25R 설계와 보호·고장 강등 동작을 해석, 스위칭 모델 및 MATLAB/Simulink 소자 수준 회로로 비교 검증하였다. 정격 분리, 충전 중 보조버스(사전 기동과 600 µs 램프, 보조부하 25 kW 조건), 부하 승인 가설은 해당 모델 범위에서 충족하였으나, 강건 제어 가설은 640 V 복합 공차 Tier-2의 평균모델 판정(102/128)으로 부분 충족에 그쳤고, 기준 구조 대비 이점 가설은 기각되었다. 이 검증은 하드웨어 실증을 포함하지 않으며, 보고된 통과 결과는 개별 모델과 시험 조건에 한정된다.}
+\keywords{전기자동차, 직류 전력 허브, 전력변환, DAB, 고장 강등, 시뮬레이션}
+\maketitle
+
+% The original report summary and standalone cover are replaced by article
+% front matter above; the detailed 20 original chapters are kept intact.
+\input{chapters/ch01_overview}
+\input{chapters/ch02_architecture}
+\input{chapters/ch03_requirements}
+\input{chapters/ch04_verification}
+\input{chapters/ch05_baseline}
+\input{chapters/ch06_h5}
+\input{chapters/ch07_value_map}
+\input{chapters/ch08_charging}
+\input{chapters/ch09_protection}
+\input{chapters/ch10_stage_c}
+\input{chapters/ch11_stage_a_light}
+\input{chapters/ch12_charging_stop}
+\input{chapters/ch13_stage_a_coss}
+\input{chapters/ch14_recalc}
+\input{chapters/ch15_positioning}
+\input{chapters/ch16_parts}
+\input{chapters/ch17_simulink}
+\input{chapters/ch18_hypotheses}
+\input{chapters/ch19_plan}
+\input{chapters/ch20_conclusion}
+
+% Official-style back matter: appendices first, references last.
+% The body chapter files above are not modified.
+\backmatter
+\clearpage
+\begin{appendices}
+\renewcommand{\theHtable}{appA.\arabic{table}}
+\input{chapters/appA_terms}
+% Reset the longtable counter for Appendix B: Table B1 (not B2).
+\setcounter{table}{0}
+\renewcommand{\theHtable}{appB.\arabic{table}}
+\input{chapters/appC_evidence}
+\end{appendices}
+\clearpage
+\begingroup
+\let\section\PrismArticleSection
+\renewcommand{\chapter}[1]{}% Preserve original bibliography without a second heading.
+\input{chapters/appB_refs}
+\endgroup
+
+\end{document}

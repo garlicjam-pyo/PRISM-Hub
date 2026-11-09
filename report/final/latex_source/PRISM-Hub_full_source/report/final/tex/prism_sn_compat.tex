@@ -1,0 +1,74 @@
+% Conversion support for the user's existing Korean PRISM-Hub manuscript.
+% Official Springer Nature class is sn-jnl.cls (not modified here).
+% This adapter is NOT part of the official Springer Nature template.
+
+\usepackage{fontspec}
+\usepackage{xetexko}
+\setmainfont{Noto Serif CJK KR}[BoldFont={Noto Serif CJK KR Bold}]
+\setsansfont{Noto Sans CJK KR}[BoldFont={Noto Sans CJK KR Bold}]
+\setmonofont{DejaVu Sans Mono}[Scale=0.85]
+\setmainhangulfont{Noto Serif CJK KR}[BoldFont={Noto Serif CJK KR Bold}]
+\setsanshangulfont{Noto Sans CJK KR}[BoldFont={Noto Sans CJK KR Bold}]
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+% The report sometimes fixes image width at 15.5 cm, wider than an article page.
+% Keep its requested size unless it exceeds the actual Springer text width.
+\let\PrismOriginalIncludeGraphics\includegraphics
+\renewcommand\includegraphics[2][]{\PrismOriginalIncludeGraphics[#1,max width=\linewidth]{#2}}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{ragged2e}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{textcomp}
+% Two Unicode ceiling symbols occurring in source chapters are not
+% available in the selected CJK font: map them to LaTeX math symbols.
+\usepackage{newunicodechar}
+\newunicodechar{⌈}{\ensuremath{\lceil}}
+\newunicodechar{⌉}{\ensuremath{\rceil}}
+
+\setlist{itemsep=0.15em,topsep=0.2em,parsep=0.1em,leftmargin=1.6em}
+\newcolumntype{L}[1]{>{\RaggedRight\arraybackslash}p{#1}}
+\newcommand{\tabhead}{\rowcolor{black!8}}
+\newcommand{\srcnote}[1]{\par\vspace{0.5em}{\footnotesize\raggedright #1\par}\vspace{0.6em}}
+\newcommand{\pass}{\textbf{통과}}
+\newcommand{\fail}{\textbf{불통과}}
+\newcommand{\repo}{../../..}
+\newfontfamily\fallbackfont{DejaVu Serif}
+\setlength{\LTpre}{0.4em}
+\setlength{\LTpost}{0.2em}
+\renewcommand{\arraystretch}{1.18}
+
+% The original report is a chapter-based document. For a faithful first
+% transfer into the article class, reinterpret each chapter as a section,
+% each report section as a subsection, and so on, without editing sources.
+\let\PrismArticleSection\section
+\let\PrismArticleSubsection\subsection
+\let\PrismArticleSubsubsection\subsubsection
+\let\PrismArticleParagraph\paragraph
+\providecommand{\chapter}{}
+\renewcommand{\chapter}{\PrismArticleSection}
+\renewcommand{\section}{\PrismArticleSubsection}
+\renewcommand{\subsection}{\PrismArticleSubsubsection}
+\renewcommand{\subsubsection}{\PrismArticleParagraph}
+
+% Let the official class control figure and table numbering and captions.
+% The existing chapter-to-section mapping stays for body compatibility.
+\makeatletter
+\@ifundefined{c@chapter}{\newcounter{chapter}}{}
+\renewcommand{\thechapter}{\thesection}
+\makeatother
+% No per-section figure/table resets, and no report-style Korean caption
+% overrides: Springer Nature's default Fig. N and Table N are retained.
+
+% ===== Table body, caption and notes follow the class table font (8bp/9.5bp) =====
+\usepackage{etoolbox}
+\makeatletter
+\AtBeginEnvironment{longtable}{\tablebodyfont}
+\renewcommand{\srcnote}[1]{\par\vspace{0.5em}{\ifx\@captype\@undefined\tablefootnotefont\else\footnotesize\fi\raggedright #1\par}\vspace{0.6em}}
+\makeatother
+\usepackage{needspace}
